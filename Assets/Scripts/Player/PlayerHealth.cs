@@ -14,7 +14,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     public float reviveTime = 10f;
     private float reviveTimer;
     private bool isDead = false;
-    private bool enemyKilled = false;
+    public bool enemyKilled = false;
     [SerializeField] private AudioClip painClip;
 
     private void Awake()
@@ -36,21 +36,21 @@ public class PlayerHealth : MonoBehaviour, Idamagable
             StartReviveCountdown();
         }
 
-        // Si el jugador está en el estado de revivible, cuenta el tiempo
+        // Si el jugador estÃ¡ en el estado de revivible, cuenta el tiempo
         if (isInReviveState)
         {
             reviveTimer -= Time.deltaTime;
             PlayerMovementAdvanced.instance.walkSpeed = 40;
             PlayerMovementAdvanced.instance.sprintSpeed = 60;
 
-            // Si el jugador mata a un enemigo en el tiempo límite
+            // Si el jugador mata a un enemigo en el tiempo lÃ­mite
             if (enemyKilled)
             {
                 RevivePlayer();
                 life = _maxlife;
             }
 
-            // Si se agota el tiempo y no ha matado a ningún enemigo
+            // Si se agota el tiempo y no ha matado a ningÃºn enemigo
             if (reviveTimer <= 0 && !enemyKilled)
             {
                 GameOver();
@@ -63,14 +63,16 @@ public class PlayerHealth : MonoBehaviour, Idamagable
         isInReviveState = true;
         reviveTimer = reviveTime;
         isDead = true;
-        Debug.Log("¡Estás en estado de revivible! Tienes " + reviveTime + " segundos para matar a un enemigo.");
+        Debug.Log("Â¡EstÃ¡s en estado de revivible! Tienes " + reviveTime + " segundos para matar a un enemigo.");
     }
 
     void RevivePlayer()
     {
         life += _maxlife;
+        healthBar.fillAmount = life / 100;
         PlayerMovementAdvanced.instance.walkSpeed = 12;
         PlayerMovementAdvanced.instance.sprintSpeed = 12;
+        enemyKilled = false;
         isInReviveState = false;
     }
 
@@ -78,11 +80,11 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     {
         isInReviveState = false;
         SceneManager.LoadScene(0);
-        Debug.Log("¡Has muerto definitivamente! Fin del juego.");
+        Debug.Log("Â¡Has muerto definitivamente! Fin del juego.");
 
     }
 
-    // Llamar a este método cuando el jugador mate a un enemigo
+    // Llamar a este mÃ©todo cuando el jugador mate a un enemigo
     public void OnEnemyKilled()
     {
         if (isInReviveState)

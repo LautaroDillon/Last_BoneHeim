@@ -160,10 +160,12 @@
     "m_OutputNode": {
         "m_Id": ""
     },
-    "m_SubDatas": [],
     "m_ActiveTargets": [
         {
             "m_Id": "28e3488cd28d4662b53b4c2434062231"
+        },
+        {
+            "m_Id": "89f660b465d74b3aa2b0c7621815e121"
         }
     ]
 }
@@ -817,6 +819,28 @@
 }
 
 {
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalTarget",
+    "m_ObjectId": "89f660b465d74b3aa2b0c7621815e121",
+    "m_Datas": [],
+    "m_ActiveSubTarget": {
+        "m_Id": "f924546b2e0f4ab3a0b96b5972e564ef"
+    },
+    "m_AllowMaterialOverride": false,
+    "m_SurfaceType": 0,
+    "m_ZTestMode": 4,
+    "m_ZWriteControl": 0,
+    "m_AlphaMode": 0,
+    "m_RenderFace": 2,
+    "m_AlphaClip": false,
+    "m_CastShadows": true,
+    "m_ReceiveShadows": true,
+    "m_SupportsLODCrossFade": false,
+    "m_CustomEditorGUI": "",
+    "m_SupportVFX": false
+}
+
+{
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "8adb38aeeeeb415d92e7408c56f0c738",
@@ -1174,6 +1198,16 @@
     },
     "m_Labels": [],
     "m_Space": 0
+}
+
+{
+    "m_SGVersion": 2,
+    "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalLitSubTarget",
+    "m_ObjectId": "f924546b2e0f4ab3a0b96b5972e564ef",
+    "m_WorkflowMode": 1,
+    "m_NormalDropOffSpace": 0,
+    "m_ClearCoat": false,
+    "m_BlendModePreserveSpecular": true
 }
 
 {

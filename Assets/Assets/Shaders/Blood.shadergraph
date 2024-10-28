@@ -522,10 +522,12 @@
     "m_OutputNode": {
         "m_Id": ""
     },
-    "m_SubDatas": [],
     "m_ActiveTargets": [
         {
             "m_Id": "003fef66fe32470881134c8e7500dfc1"
+        },
+        {
+            "m_Id": "f7ca2b14b66c43b89afcf8d28f3c1982"
         }
     ]
 }
@@ -1293,9 +1295,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 805.0,
-            "y": 1115.0,
-            "width": 151.00006103515626,
+            "x": 924.0,
+            "y": 1150.0,
+            "width": 151.0,
             "height": 34.0
         }
     },
@@ -1879,6 +1881,16 @@
     "m_NormalMapSpace": 0,
     "m_EnableGlobalMipBias": true,
     "m_MipSamplingMode": 0
+}
+
+{
+    "m_SGVersion": 2,
+    "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalLitSubTarget",
+    "m_ObjectId": "5909e69ca05242e6be586566ea7ef166",
+    "m_WorkflowMode": 1,
+    "m_NormalDropOffSpace": 0,
+    "m_ClearCoat": false,
+    "m_BlendModePreserveSpecular": false
 }
 
 {
@@ -3572,6 +3584,28 @@
 }
 
 {
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalTarget",
+    "m_ObjectId": "f7ca2b14b66c43b89afcf8d28f3c1982",
+    "m_Datas": [],
+    "m_ActiveSubTarget": {
+        "m_Id": "5909e69ca05242e6be586566ea7ef166"
+    },
+    "m_AllowMaterialOverride": false,
+    "m_SurfaceType": 1,
+    "m_ZTestMode": 4,
+    "m_ZWriteControl": 0,
+    "m_AlphaMode": 0,
+    "m_RenderFace": 2,
+    "m_AlphaClip": false,
+    "m_CastShadows": true,
+    "m_ReceiveShadows": true,
+    "m_SupportsLODCrossFade": false,
+    "m_CustomEditorGUI": "",
+    "m_SupportVFX": false
+}
+
+{
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "fa2ed057b89c4b6f87cfb5751c1dd664",
@@ -3606,9 +3640,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -197.4500274658203,
-            "y": 1339.5499267578125,
-            "width": 208.0,
+            "x": -163.00003051757813,
+            "y": 1172.0,
+            "width": 208.0000457763672,
             "height": 302.0
         }
     },

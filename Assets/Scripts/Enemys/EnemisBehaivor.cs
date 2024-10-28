@@ -47,6 +47,11 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
 
             SoundManager.instance.PlaySound(deathClip, transform, 0.7f);
 
+            if (PlayerHealth.instance.isInReviveState)
+            {
+                PlayerHealth.instance.enemyKilled = true;
+            }
+
             Destroy(acid);
             Destroy(this.gameObject, 0.1f);
 

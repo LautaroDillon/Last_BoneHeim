@@ -79,6 +79,8 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     void GameOver()
     {
         isInReviveState = false;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         SceneManager.LoadScene(0);
         Debug.Log("¡Has muerto definitivamente! Fin del juego.");
 

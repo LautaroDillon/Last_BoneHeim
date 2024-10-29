@@ -166,7 +166,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &9039647574697128151
 MonoBehaviour:
@@ -188,10 +188,11 @@ MonoBehaviour:
   IsInChaseRange: 0
   player: {fileID: 0}
   cronometro: 0
-  ranged: 50
+  ranged: 80
   deathClip: {fileID: 8300000, guid: e1fe43dcb716a414c9462d70697d9ff9, type: 3}
   blood: {fileID: 8835629220091889797, guid: 8656ce0cd4344a54188b181f56987a93, type: 3}
   pointParticle: {fileID: 2762150081237657527}
+  anim: {fileID: 0}
   radius: 5
   damage: 30
   explosion: {fileID: 4188342101596141807, guid: 7259666089fdab3439a689bd67b470f8, type: 3}

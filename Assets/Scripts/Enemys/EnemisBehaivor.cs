@@ -24,7 +24,8 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
     [SerializeField] protected GameObject blood;
     [SerializeField] protected GameObject pointParticle;
 
-    // [SerializeField] Animator anim;
+    [SerializeField] protected Animator anim;
+
     private void Start()
     {
         player = GameManager.instance.thisIsPlayer;
@@ -53,7 +54,7 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
             }
 
             Destroy(acid);
-            Destroy(this.gameObject, 0.1f);
+            Destroy(this.gameObject, 1f);
 
             Guns.instance.bulletsLeft += Random.Range(1, 3) + gun.killReward;
         }
@@ -69,5 +70,11 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
         {
             currentlife = 100;
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, ranged);
     }
 }

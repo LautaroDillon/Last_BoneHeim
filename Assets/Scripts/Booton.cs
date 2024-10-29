@@ -6,6 +6,7 @@ public class Booton : MonoBehaviour
 {
     public bool isbullet;
     public Doors door;
+    public GameObject oclu;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -14,6 +15,7 @@ public class Booton : MonoBehaviour
         if (whathit == "Bullet" && isbullet)
         {
             door.Activate();
+
         }
         else
         {

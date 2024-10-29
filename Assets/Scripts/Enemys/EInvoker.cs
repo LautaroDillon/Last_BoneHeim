@@ -69,6 +69,8 @@ public class EInvoker : EnemisBehaivor
         }
         else
         {
+            if (!isminiboos)
+            {
 
             var lookpos = transform.position - player.transform.position;
 
@@ -79,6 +81,7 @@ public class EInvoker : EnemisBehaivor
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
             transform.Translate(Vector3.forward * 2 * Time.deltaTime);
 
+            }
             // Cuenta regresiva para invocar enemigos
             summonTimer -= Time.deltaTime;
 

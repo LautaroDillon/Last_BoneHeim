@@ -67,7 +67,7 @@ public class NormalSkeleton : EnemisBehaivor
         else
         {
             // Debug.Log("veo player");
-            if (Vector3.Distance(transform.position, player.transform.position) > 10 && !atacando)
+            if (IsInChaseRange && !atacando)
             {
                 anim.SetBool("idle", false);
                 anim.SetBool("IsShootiing", false);

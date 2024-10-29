@@ -9,6 +9,7 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
     [SerializeField] protected LayerMask whatIsPlayer;
     [SerializeField] protected bool IsInChaseRange;
     [SerializeField] protected Transform player;
+    [SerializeField] public float checkRadius;
 
     [Header("movimiento")]
     protected int rutina;
@@ -58,6 +59,11 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
 
             Guns.instance.bulletsLeft += Random.Range(1, 3) + gun.killReward;
         }
+    }
+
+    public void detection()
+    {
+        IsInChaseRange = Physics.CheckSphere(transform.position, checkRadius, whatIsPlayer);
     }
 
     public void Healing(int heal)

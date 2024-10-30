@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class PlayerHealth : MonoBehaviour, Idamagable
 {
     public static PlayerHealth instance;
-    [SerializeField] float life;
+    [SerializeField] public float life;
     public float _maxlife;
     public Image healthBar;
     public bool isInReviveState = false;
@@ -25,6 +25,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     private void Awake()
     {
         _maxlife = FlyweightPointer.Player.maxLife;
+        berserk.SetFloat("_Active", 0);
 
     }
 
@@ -39,7 +40,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
         if (life <= 0 && !isDead)
         {
             // Inicia el estado de revivible
-            berserk.SetFloat("_Active", turnOn);
+            berserk.SetFloat("_Active", 1);
             StartReviveCountdown();
         }
 
@@ -47,14 +48,16 @@ public class PlayerHealth : MonoBehaviour, Idamagable
         if (isInReviveState)
         {
             reviveTimer -= Time.deltaTime;
-            PlayerMovementAdvanced.instance.walkSpeed = 40;
-            PlayerMovementAdvanced.instance.sprintSpeed = 60;
+            PlayerMovementAdvanced.instance.walkSpeed = 14;
+            PlayerMovementAdvanced.instance.sprintSpeed = 14;
 
             // Si el jugador mata a un enemigo en el tiempo límite
             if (enemyKilled)
             {
                 RevivePlayer();
                 life = _maxlife;
+                PlayerMovementAdvanced.instance.walkSpeed = 10;
+                PlayerMovementAdvanced.instance.sprintSpeed = 10;
             }
 
             // Si se agota el tiempo y no ha matado a ningún enemigo
@@ -80,7 +83,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
         healthBar.fillAmount = life / 100;
         PlayerMovementAdvanced.instance.walkSpeed = 12;
         PlayerMovementAdvanced.instance.sprintSpeed = 12;
-        berserk.SetFloat("_Active", turnOof);
+        berserk.SetFloat("_Active", 0);
         enemyKilled = false;
         isInReviveState = false;
     }
@@ -90,7 +93,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
         isInReviveState = false;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        berserk.SetFloat("_Active", turnOof);
+        berserk.SetFloat("_Active", 0);
         SceneManager.LoadScene(0);
         Debug.Log("¡Has muerto definitivamente! Fin del juego.");
     }

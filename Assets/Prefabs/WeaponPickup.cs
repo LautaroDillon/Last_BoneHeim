@@ -9,6 +9,7 @@ public class WeaponPickup : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
+            Guns.instance.ResetGun();
             Guns.instance.KnuckleBuster();
             Destroy(gameObject);
         }

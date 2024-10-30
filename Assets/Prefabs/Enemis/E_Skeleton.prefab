@@ -290,10 +290,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.2918949
-  m_Height: 2.7672863
+  m_Radius: 0.5052831
+  m_Height: 2.804409
   m_Direction: 1
-  m_Center: {x: -0.001865387, y: 0.38364315, z: -0.028363705}
+  m_Center: {x: -0.001865387, y: 0.3650818, z: 0.1850245}
 --- !u!114 &4139876970188199819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -324,6 +324,7 @@ MonoBehaviour:
   BulletPrefab: {fileID: 8140848138928168744, guid: a421ca5fc1999004191e5eaee526bdb6, type: 3}
   firerate: 1
   NextfireTime: 0
+  isTurret: 0
   projectileSpeed: 10
 --- !u!54 &9215845823402779686
 Rigidbody:

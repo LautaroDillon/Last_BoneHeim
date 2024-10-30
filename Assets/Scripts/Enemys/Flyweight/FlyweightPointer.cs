@@ -8,7 +8,7 @@ public class FlyweightPointer
     {
         speed = 2,
         Damage = 20,
-        maxLife = 100
+        maxLife = 90
     };
 
     public static readonly EnemysFlight Eboomer = new EnemysFlight()
@@ -22,12 +22,12 @@ public class FlyweightPointer
     {
         speed = 2,
         Damage = 20,
-        maxLife = 100
+        maxLife = 120
     };
 
     public static readonly EnemysFlight Player = new EnemysFlight()
     {
-        Damage = 20,
+        Damage = 30,
         maxLife = 100
     };
 

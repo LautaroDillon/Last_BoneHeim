@@ -40,7 +40,7 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
         currentlife -= dmg;
         GameObject acid = Instantiate(blood, pointParticle.transform.position, Quaternion.identity);
 
-        Destroy(acid, 3);
+        Destroy(acid, 15);
 
         if (currentlife <= 0)
         {

@@ -96,10 +96,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16d3049492cff88429cae87d40ede5d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxRadius: 20
-  expansionSpeed: 5
+  maxRadius: 10
+  expansionSpeed: 10
   damageAmount: 30
-  duration: 5
+  duration: 1
   explosionClip: {fileID: 8300000, guid: 6ef83a08b3d1363498e5e681219115e1, type: 3}
 --- !u!212 &4564333507259042515
 SpriteRenderer:

@@ -57,7 +57,7 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
             Destroy(acid);
             Destroy(this.gameObject, 0.1f);
             PlayerHealth.instance.life += 10;
-            Guns.instance.bulletsLeft += Random.Range(4, 7) + gun.killReward;
+            Guns.instance.bulletsLeft += Random.Range(4, 5) + gun.killReward;
         }
     }
 

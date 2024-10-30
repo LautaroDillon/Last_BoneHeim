@@ -7,6 +7,14 @@ public class Booton : MonoBehaviour
     public GameObject oclu;
     [SerializeField] private AudioClip dingClip;
 
+    private void Update()
+    {
+        if(Input.GetKeyUp(KeyCode.Tab))
+        {
+            door.Activate();
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (isbullet)

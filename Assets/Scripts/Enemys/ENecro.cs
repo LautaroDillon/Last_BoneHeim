@@ -21,7 +21,7 @@ public class ENecro : EnemisBehaivor
     public float projectileSpeed;
 
 
-    private float shotTimer;
+    public float shotTimer;
 
     void Awake()
     {
@@ -31,18 +31,16 @@ public class ENecro : EnemisBehaivor
 
     private void Update()
     {
-        if (currentlife > 0)
-        {
-            EnemiMovement();
-        }
+            EnemiMovement(); 
     }
 
     public void EnemiMovement()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
-        if (IsInChaseRange)
+        if (distanceToPlayer <= ranged)
         {
+
             summonTimer -= Time.deltaTime;
             shotTimer -= Time.deltaTime;
 

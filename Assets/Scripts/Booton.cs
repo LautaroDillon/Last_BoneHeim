@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Booton : MonoBehaviour
@@ -10,16 +8,27 @@ public class Booton : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        var whathit = other.gameObject.tag;
-
-        if (whathit == "Bullet" && isbullet)
+        if (isbullet)
         {
-            door.Activate();
+            var whathit = other.gameObject.tag;
 
+            if (whathit == "Bullet")
+            {
+                door.Activate();
+            }
         }
-        else
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (!isbullet)
         {
-            door.Activate();
+            var whathit = collision.gameObject.tag;
+
+            if (whathit == "arm")
+            {
+                door.Activate();
+            }
         }
     }
 }

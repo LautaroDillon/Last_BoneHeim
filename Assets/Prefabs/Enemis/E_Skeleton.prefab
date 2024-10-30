@@ -176,7 +176,7 @@ Transform:
   m_GameObject: {fileID: 3874806860131342012}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.007, y: 0.241, z: -0.963}
+  m_LocalPosition: {x: 0.007, y: 0.974, z: 1.129}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -213,8 +213,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 41.89, y: 2.12, z: -0.14}
-  m_LocalScale: {x: 2, y: 2, z: 2}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7340044938966889703}
   - {fileID: 2024771481236661449}
@@ -313,8 +313,9 @@ MonoBehaviour:
     m_Bits: 2048
   IsInChaseRange: 0
   player: {fileID: 0}
+  checkRadius: 80
   cronometro: 4
-  ranged: 60
+  ranged: 80
   deathClip: {fileID: 8300000, guid: e1fe43dcb716a414c9462d70697d9ff9, type: 3}
   blood: {fileID: 8835629220091889797, guid: 8656ce0cd4344a54188b181f56987a93, type: 3}
   pointParticle: {fileID: 3838514121072607786}
@@ -323,6 +324,7 @@ MonoBehaviour:
   BulletPrefab: {fileID: 8140848138928168744, guid: a421ca5fc1999004191e5eaee526bdb6, type: 3}
   firerate: 1
   NextfireTime: 0
+  projectileSpeed: 10
 --- !u!54 &9215845823402779686
 Rigidbody:
   m_ObjectHideFlags: 0

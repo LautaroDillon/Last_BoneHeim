@@ -12,7 +12,9 @@ public class NormalSkeleton : EnemisBehaivor
     protected float fireForce = 15f;
     [SerializeField] protected GameObject BulletPrefab;
     [SerializeField] protected float firerate, NextfireTime;
+    public bool isTurret;
 
+    public float projectileSpeed;
 
     private void Awake()
     {
@@ -33,41 +35,44 @@ public class NormalSkeleton : EnemisBehaivor
         if (Vector3.Distance(transform.position, player.transform.position) > 15)
         {
             // anim.SetBool("run", false);
-
-            cronometro += 1 * Time.deltaTime;
-            if (cronometro >= 4)
+            if (!isTurret)
             {
-                rutina = Random.Range(0, 2);
-                cronometro = 0;
-            }
-            switch (rutina)
-            {
-                case 0:
-                    anim.SetBool("Moving", false);
-                    anim.SetBool("IsShootiing", false);
-                    anim.SetBool("idle", true);
 
-                    break;
-                case 1:
-                    anim.SetBool("Moving", false);
-                    anim.SetBool("IsShootiing", false);
-                    grado = Random.Range(0, 360);
-                    angulo = Quaternion.Euler(0, grado, 0);
-                    rutina++;
-                    break;
-                case 2:
-                    anim.SetBool("IsShootiing", false);
-                    anim.SetBool("idle", false);
-                    transform.rotation = Quaternion.RotateTowards(transform.rotation, angulo, 0.5f);
-                    transform.Translate(Vector3.forward * 1 * Time.deltaTime);
-                    anim.SetBool("Moving", true);
-                    break;
+                cronometro += 1 * Time.deltaTime;
+                if (cronometro >= 4)
+                {
+                    rutina = Random.Range(0, 2);
+                    cronometro = 0;
+                }
+                switch (rutina)
+                {
+                    case 0:
+                        anim.SetBool("Moving", false);
+                        anim.SetBool("IsShootiing", false);
+                        anim.SetBool("idle", true);
+
+                        break;
+                    case 1:
+                        anim.SetBool("Moving", false);
+                        anim.SetBool("IsShootiing", false);
+                        grado = Random.Range(0, 360);
+                        angulo = Quaternion.Euler(0, grado, 0);
+                        rutina++;
+                        break;
+                    case 2:
+                        anim.SetBool("IsShootiing", false);
+                        anim.SetBool("idle", false);
+                        transform.rotation = Quaternion.RotateTowards(transform.rotation, angulo, 0.5f);
+                        transform.Translate(Vector3.forward * 1 * Time.deltaTime);
+                        anim.SetBool("Moving", true);
+                        break;
+                }
             }
         }
         else
         {
             // Debug.Log("veo player");
-            if (IsInChaseRange && !atacando)
+            if (IsInChaseRange && !atacando && !isTurret)
             {
                 anim.SetBool("idle", false);
                 anim.SetBool("IsShootiing", false);
@@ -109,9 +114,20 @@ public class NormalSkeleton : EnemisBehaivor
 
     public void Shoot()
     {
+        Vector3 directionToPlayer = (player.transform.position - firePoint.position).normalized;
+
         var bullet = BuletManager.instance.GetBullet();
         bullet.transform.position = firePoint.transform.position;
-        bullet.transform.forward = firePoint.transform.forward;
+        bullet.transform.forward = directionToPlayer;
+
+
+        Rigidbody rb = bullet.GetComponent<Rigidbody>();
+
+        if (rb != null)
+        {
+            Debug.Log("hola");
+            rb.velocity = directionToPlayer * projectileSpeed;
+        }
 
         NextfireTime = Time.time + 1f / firerate;
     }

@@ -31,4 +31,9 @@ public class Booton : MonoBehaviour
             }
         }
     }
+
+    public void invi()
+    {
+        oclu.SetActive(false);
+    }
 }

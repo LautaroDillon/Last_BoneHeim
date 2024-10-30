@@ -62,7 +62,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 34.014, y: 2.59, z: 81.447105}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3088951730090558726}
@@ -161,11 +161,13 @@ MonoBehaviour:
     m_Bits: 2048
   IsInChaseRange: 0
   player: {fileID: 0}
+  checkRadius: 0
   cronometro: 4
   ranged: 40
   deathClip: {fileID: 8300000, guid: e1fe43dcb716a414c9462d70697d9ff9, type: 3}
   blood: {fileID: 8835629220091889797, guid: 8656ce0cd4344a54188b181f56987a93, type: 3}
   pointParticle: {fileID: 143324816933256316}
+  anim: {fileID: 0}
   attackRange: 1
   healerBuff: {fileID: 1355562310189139092, guid: 33a85c799f4511d419bfd1b94cbe2887, type: 3}
   canspawn: 1

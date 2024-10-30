@@ -17,9 +17,15 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     public bool enemyKilled = false;
     [SerializeField] private AudioClip painClip;
 
+    [Header ("berserk")]
+    public Material berserk;
+    public float turnOn;
+    public float turnOof;
+
     private void Awake()
     {
         _maxlife = FlyweightPointer.Player.maxLife;
+
     }
 
     void Start()
@@ -33,6 +39,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
         if (life <= 0 && !isDead)
         {
             // Inicia el estado de revivible
+            berserk.SetFloat("_Active", turnOn);
             StartReviveCountdown();
         }
 
@@ -62,6 +69,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     {
         isInReviveState = true;
         reviveTimer = reviveTime;
+        berserk.SetFloat("_Active", turnOn);
         isDead = true;
         Debug.Log("¡Estás en estado de revivible! Tienes " + reviveTime + " segundos para matar a un enemigo.");
     }
@@ -72,6 +80,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
         healthBar.fillAmount = life / 100;
         PlayerMovementAdvanced.instance.walkSpeed = 12;
         PlayerMovementAdvanced.instance.sprintSpeed = 12;
+        berserk.SetFloat("_Active", turnOof);
         enemyKilled = false;
         isInReviveState = false;
     }
@@ -81,9 +90,9 @@ public class PlayerHealth : MonoBehaviour, Idamagable
         isInReviveState = false;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        berserk.SetFloat("_Active", turnOof);
         SceneManager.LoadScene(0);
         Debug.Log("¡Has muerto definitivamente! Fin del juego.");
-
     }
 
     // Llamar a este método cuando el jugador mate a un enemigo

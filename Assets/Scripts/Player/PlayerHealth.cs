@@ -18,7 +18,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     [SerializeField] private AudioClip painClip;
 
     [Header ("berserk")]
-    public Material berserk;
+    [SerializeField] public Material berserk;
     public float turnOn;
     public float turnOof;
 

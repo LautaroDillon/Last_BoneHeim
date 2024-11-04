@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 3780069723521414730}
   - component: {fileID: 6899450205721448877}
   - component: {fileID: 6477080535409990334}
+  - component: {fileID: 6931692671095908253}
   m_Layer: 10
   m_Name: E_Chaman
   m_TagString: Untagged
@@ -198,6 +199,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!195 &6931692671095908253
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2893214813493884941}
+  m_Enabled: 1
+  m_AgentTypeID: -1372625422
+  m_Radius: 0.5
+  m_Speed: 0
+  m_Acceleration: 0
+  avoidancePriority: 50
+  m_AngularSpeed: 0
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &8622140297232797621
 GameObject:
   m_ObjectHideFlags: 0

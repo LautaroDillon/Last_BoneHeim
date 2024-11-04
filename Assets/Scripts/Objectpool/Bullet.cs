@@ -47,8 +47,8 @@ public class Bullet : MonoBehaviour
         {
             Debug.Log("player recibe daño");
             damagableInterface.TakeDamage(FlyweightPointer.Eshoot.Damage);
+        }
             TurnOff(this);
             _objectPool.StockAdd(this);
-        }
     }
 }

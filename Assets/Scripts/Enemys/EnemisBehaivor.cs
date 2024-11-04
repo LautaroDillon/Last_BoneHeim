@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class EnemisBehaivor : MonoBehaviour, Idamagable
 {
+    public static EnemisBehaivor instance;
+
+
     [SerializeField] protected float currentlife;
     [SerializeField] protected float speed;
 
@@ -24,6 +27,7 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
     [Header("particulas")]
     [SerializeField] protected GameObject blood;
     [SerializeField] protected GameObject pointParticle;
+    [SerializeField] public GameObject healParticle;
 
     [SerializeField] protected Animator anim;
 
@@ -31,12 +35,15 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
     {
         player = GameManager.instance.thisIsPlayer;
         gun = GameObject.Find("Gun").GetComponent<Guns>();
+        instance = this;
 
         GameManager.instance.AddToList(this.gameObject);
     }
 
     public virtual void TakeDamage(float dmg)
     {
+        healParticle.SetActive(false);
+
         currentlife -= dmg;
         GameObject acid = Instantiate(blood, pointParticle.transform.position, Quaternion.identity);
 
@@ -68,6 +75,7 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
 
     public void Healing(int heal)
     {
+        healParticle.SetActive(true);
         if (currentlife <= 100)
         {
             currentlife += heal;

@@ -41,6 +41,7 @@ public class Healing : MonoBehaviour
             healer.canspawn = true;
         }
 
+        EnemisBehaivor.instance.healParticle.SetActive(false);
         Destroy(this.gameObject);
     }
 

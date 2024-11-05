@@ -16,6 +16,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     private bool isDead = false;
     public bool enemyKilled = false;
     [SerializeField] private AudioClip painClip;
+    [SerializeField] private AudioClip hornClip;
 
     [Header ("berserk")]
     [SerializeField] public Material berserk;
@@ -70,6 +71,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
 
     void StartReviveCountdown()
     {
+        SoundManager.instance.PlaySound(hornClip, transform, 0.3f);
         isInReviveState = true;
         reviveTimer = reviveTime;
         berserk.SetFloat("_Active", turnOn);
@@ -112,7 +114,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
         healthBar.fillAmount = life / 100;
         SoundManager.instance.PlaySound(painClip, transform, 0.3f);
 
-        if (life <= 0)
+        if (life <= 0 && !isInReviveState)
         {
             StartReviveCountdown();
         }

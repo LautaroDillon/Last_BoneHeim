@@ -71,6 +71,7 @@ public class EBomeer : EnemisBehaivor
             Explosion();
         }
     }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.layer == 11)

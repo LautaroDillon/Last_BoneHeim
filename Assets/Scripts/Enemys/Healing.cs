@@ -8,6 +8,7 @@ public class Healing : MonoBehaviour
     public float healInterval = 0.5f;
     public float healDuration = 4f;
 
+
     private EHealer healer;
 
     void Start()

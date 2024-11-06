@@ -401,6 +401,7 @@ GameObject:
   - component: {fileID: 5586124239210012679}
   - component: {fileID: 2985574096530573759}
   - component: {fileID: 3872259365933004543}
+  - component: {fileID: 1948300839434790894}
   m_Layer: 11
   m_Name: Player
   m_TagString: Player
@@ -508,11 +509,14 @@ MonoBehaviour:
   life: 0
   _maxlife: 0
   healthBar: {fileID: 0}
+  berserkFillBar: {fileID: 0}
+  berserkBar: {fileID: 0}
   isInReviveState: 0
-  reviveTime: 10
+  reviveTime: 7
   enemyKilled: 0
   painClip: {fileID: 8300000, guid: 6205394578c635e4780d17237cee3d70, type: 3}
-  hornClip: {fileID: 8300000, guid: c14f773a85fd02049b1c4c7c9ff81d25, type: 3}
+  berserkStartClip: {fileID: 8300000, guid: a326157640048574abdd7027eb44695c, type: 3}
+  heartbeatClip: {fileID: 8300000, guid: 62599cba177371146a18f77af28505f1, type: 3}
   berserk: {fileID: 2100000, guid: a9c044cabc9f8c84283ee11db3e0b265, type: 2}
   turnOn: 1
   turnOof: 0
@@ -710,6 +714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b41546f3ab56bb409411ec8c50ee7e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  throwClip: {fileID: 8300000, guid: cbd35df4f090a6e4393eba844d01a04b, type: 3}
   cam: {fileID: 7530082752314634801}
   attackPoint: {fileID: 481141950320016334}
   curvePoint: {fileID: 6346215335654622798}
@@ -718,7 +723,7 @@ MonoBehaviour:
   totalThrows: 1
   throwCooldown: 0
   throwKey: 102
-  throwForce: 70
+  throwForce: 50
   throwUpwardForce: 0
 --- !u!114 &3872259365933004543
 MonoBehaviour:
@@ -732,12 +737,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2c6f76446789db4788c3c455bb41349, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isEnabled: 1
-  amplitude: 0.015
-  frequency: 10
-  cam: {fileID: 7530082752314634801}
-  cam_holder: {fileID: 8324901195207601355}
-  campos: {fileID: 6110504055460781260}
+  _enable: 1
+  _Amplitude: 0.0414
+  _frequency: 10
+  _camera: {fileID: 7530082752314634801}
+  _cameraHolder: {fileID: 8324901195207601355}
+--- !u!143 &1948300839434790894
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7424446202622726595}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7539475392141251975
 GameObject:
   m_ObjectHideFlags: 0

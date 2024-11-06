@@ -25,7 +25,7 @@ public class PlayerProyectiles : MonoBehaviour
         }
         else
         {
-            SoundManager.instance.PlaySound(bulletWallClip, transform, 0.5f);
+            SoundManager.instance.PlaySound(bulletWallClip, transform, 0.3f);
             Destroy(this.gameObject);
         }
     }

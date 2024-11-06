@@ -24,7 +24,7 @@ public class Breakable : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Bullet")
+        if(other.gameObject.tag == "Bullet" || other.gameObject.tag == "EnemyBullet")
         {
             Break();
             Invoke("Destroy", 3);

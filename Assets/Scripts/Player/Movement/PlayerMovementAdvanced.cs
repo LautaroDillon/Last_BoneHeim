@@ -35,6 +35,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
     public float crouchSpeed;
     public float crouchYScale;
     private float startYScale;
+    public ParticleSystem slidingDust; 
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
@@ -163,6 +164,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
             transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
             rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
             crouching = true;
+            
         }
 
         //dejar de agacharse
@@ -170,6 +172,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         {
             transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
             crouching = false;
+            
         }
     }
 
@@ -215,7 +218,10 @@ public class PlayerMovementAdvanced : MonoBehaviour
         // Mode - Sliding
         else if (sliding)
         {
+            
             state = MovementState.sliding;
+            if(slidingDust.isStopped)
+            slidingDust.Play(true);
             //incrementa la velocidad cada segundo
             if (OnSlope() && rb.velocity.y < 0.1f)
             {
@@ -225,6 +231,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
             else
                 desiredMoveSpeed = sprintSpeed;
+
         }
 
         // Mode - Crouching
@@ -304,9 +311,9 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
     private void MovePlayer()
     {
-        if (climbingScript.exitingWall) 
+        if (climbingScript.exitingWall)
             return;
-        if (restricted) 
+        if (restricted)
             return;
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
@@ -319,7 +326,11 @@ public class PlayerMovementAdvanced : MonoBehaviour
         }
 
         else if (grounded)
+        {
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+            slidingDust.Stop(true);
+        }
+            
 
         else if (!grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);

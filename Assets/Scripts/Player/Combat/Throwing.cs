@@ -44,17 +44,14 @@ public class Throwing : MonoBehaviour
             if(guns.isSkeleton == true)
             {
                 guns.magazineSize = guns.magazineSize / 2;
-                guns.bulletsLeft = guns.bulletsLeft / 2;
             }
-            else if (guns.isInvoker == true)
+            if (guns.isInvoker == true)
             {
                 guns.magazineSize = guns.magazineSize / 2;
-                guns.bulletsLeft = guns.bulletsLeft / 2;
             }
-            else if (guns.isKnuckle == true)
+            if (guns.isKnuckle == true)
             {
                 guns.magazineSize = guns.magazineSize / 2;
-                guns.bulletsLeft = guns.bulletsLeft / 2;
             }
 
             Debug.Log("Throw!");

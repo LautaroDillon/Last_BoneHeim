@@ -45,16 +45,18 @@ public class ThrowArm : MonoBehaviour
                 PlayerHealth.instance.OnEnemyKilled();
             }
         }
-        if(other.gameObject.tag == "DEBUG" || other.gameObject.tag == "Lava")
-        {
-            Debug.Log("DEBUG: Returned Arm!");
-            Instantiate(gameObject, target.transform.position, Quaternion.identity);
-        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "DEBUG" || collision.gameObject.tag == "Lava")
+        {
+            Debug.Log("DEBUG: Returned Arm!");
+            Instantiate(gameObject, target.transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
+
+        if (collision.gameObject.tag == "Player")
         {
             if(guns.isSkeleton == true)
             {

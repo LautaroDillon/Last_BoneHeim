@@ -33,8 +33,8 @@ public class PlayerCam : MonoBehaviour
     void MouseInput()
     {
         float mouseSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", 1f);
-        sensX = mouseSensitivity * Time.timeScale * 10f; // Scale it to a more reasonable value
-        sensY = mouseSensitivity * Time.timeScale * 10f;
+        sensX = mouseSensitivity * Time.timeScale * 1f; // Scale it to a more reasonable value
+        sensY = mouseSensitivity * Time.timeScale * 1f;
 
         float mouseX = Input.GetAxisRaw("Mouse X") * sensX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * sensY;

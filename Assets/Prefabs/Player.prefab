@@ -424,6 +424,7 @@ Transform:
   - {fileID: 1334493524040493584}
   - {fileID: 8324901195207601355}
   - {fileID: 6110504055460781260}
+  - {fileID: 1992820684832118659}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 3.719, z: 0}
 --- !u!136 &1948533315340932334
@@ -508,11 +509,14 @@ MonoBehaviour:
   life: 0
   _maxlife: 0
   healthBar: {fileID: 0}
+  berserkFillBar: {fileID: 0}
+  berserkBar: {fileID: 0}
   isInReviveState: 0
   reviveTime: 10
   enemyKilled: 0
   painClip: {fileID: 8300000, guid: 6205394578c635e4780d17237cee3d70, type: 3}
-  hornClip: {fileID: 8300000, guid: c14f773a85fd02049b1c4c7c9ff81d25, type: 3}
+  berserkStartClip: {fileID: 0}
+  heartbeatClip: {fileID: 0}
   berserk: {fileID: 2100000, guid: a9c044cabc9f8c84283ee11db3e0b265, type: 2}
   turnOn: 1
   turnOof: 0
@@ -546,6 +550,7 @@ MonoBehaviour:
   airMultiplier: 0.4
   crouchSpeed: 3.5
   crouchYScale: 0.5
+  slidingDust: {fileID: 619520280230330933}
   jumpKey: 32
   sprintKey: 304
   crouchKey: 277
@@ -710,6 +715,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b41546f3ab56bb409411ec8c50ee7e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  throwClip: {fileID: 0}
   cam: {fileID: 7530082752314634801}
   attackPoint: {fileID: 481141950320016334}
   curvePoint: {fileID: 6346215335654622798}
@@ -732,12 +738,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2c6f76446789db4788c3c455bb41349, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isEnabled: 1
-  amplitude: 0.015
-  frequency: 10
-  cam: {fileID: 7530082752314634801}
-  cam_holder: {fileID: 8324901195207601355}
-  campos: {fileID: 6110504055460781260}
+  _enable: 1
+  _Amplitude: 0.015
+  _frequency: 10
+  _camera: {fileID: 0}
+  _cameraHolder: {fileID: 0}
 --- !u!1 &7539475392141251975
 GameObject:
   m_ObjectHideFlags: 0
@@ -1100,3 +1105,70 @@ MonoBehaviour:
   isTeeth: 0
   isInvoker: 0
   isKnuckle: 0
+--- !u!1001 &3179532357478504206
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2097260558498135374}
+    m_Modifications:
+    - target: {fileID: 4014989922630221965, guid: 7b0806122fecc654cb4e798d468fcfdd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014989922630221965, guid: 7b0806122fecc654cb4e798d468fcfdd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.034
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014989922630221965, guid: 7b0806122fecc654cb4e798d468fcfdd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014989922630221965, guid: 7b0806122fecc654cb4e798d468fcfdd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014989922630221965, guid: 7b0806122fecc654cb4e798d468fcfdd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014989922630221965, guid: 7b0806122fecc654cb4e798d468fcfdd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014989922630221965, guid: 7b0806122fecc654cb4e798d468fcfdd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014989922630221965, guid: 7b0806122fecc654cb4e798d468fcfdd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014989922630221965, guid: 7b0806122fecc654cb4e798d468fcfdd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014989922630221965, guid: 7b0806122fecc654cb4e798d468fcfdd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4538091682890156977, guid: 7b0806122fecc654cb4e798d468fcfdd, type: 3}
+      propertyPath: m_Name
+      value: SlideDust
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7b0806122fecc654cb4e798d468fcfdd, type: 3}
+--- !u!198 &619520280230330933 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2632087611901629755, guid: 7b0806122fecc654cb4e798d468fcfdd, type: 3}
+  m_PrefabInstance: {fileID: 3179532357478504206}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1992820684832118659 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4014989922630221965, guid: 7b0806122fecc654cb4e798d468fcfdd, type: 3}
+  m_PrefabInstance: {fileID: 3179532357478504206}
+  m_PrefabAsset: {fileID: 0}

@@ -26,6 +26,7 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
 
     [Header("particulas")]
     [SerializeField] protected GameObject blood;
+    [SerializeField] protected GameObject skeletaldamage;
     [SerializeField] protected GameObject pointParticle;
     [SerializeField] public GameObject healParticle;
 
@@ -46,7 +47,9 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
 
         currentlife -= dmg;
         GameObject acid = Instantiate(blood, pointParticle.transform.position, Quaternion.identity);
+        GameObject debris = Instantiate(skeletaldamage, pointParticle.transform.position, Quaternion.identity);
 
+        Destroy(debris, 5);
         Destroy(acid, 15);
 
         if (currentlife <= 0)

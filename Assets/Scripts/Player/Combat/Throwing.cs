@@ -6,6 +6,7 @@ using TMPro;
 public class Throwing : MonoBehaviour
 {
     [Header("References")]
+    [SerializeField] private AudioClip throwClip;
     public Transform cam;
     public Transform attackPoint;
     public Transform curvePoint;
@@ -39,6 +40,7 @@ public class Throwing : MonoBehaviour
         if(Input.GetKeyDown(throwKey) && readyToThrow && totalThrows > 0)
         {
             Throw();
+            SoundManager.instance.PlaySound(throwClip, transform, 1f);
             if(guns.isSkeleton == true)
             {
                 guns.magazineSize = guns.magazineSize / 2;

@@ -10,12 +10,16 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     [SerializeField] public float life;
     public float _maxlife;
     public Image healthBar;
+    public Image berserkFillBar;
+    public GameObject berserkBar;
     public bool isInReviveState = false;
-    public float reviveTime = 10f;
+    public float reviveTime = 5f;
     private float reviveTimer;
     private bool isDead = false;
     public bool enemyKilled = false;
     [SerializeField] private AudioClip painClip;
+    [SerializeField] private AudioClip berserkStartClip;
+    [SerializeField] private AudioClip heartbeatClip;
 
     [Header ("berserk")]
     [SerializeField] public Material berserk;
@@ -25,6 +29,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     private void Awake()
     {
         _maxlife = FlyweightPointer.Player.maxLife;
+        berserkBar.gameObject.SetActive(false);
         berserk.SetFloat("_Active", 0);
 
     }
@@ -50,6 +55,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
             reviveTimer -= Time.deltaTime;
             PlayerMovementAdvanced.instance.walkSpeed = 14;
             PlayerMovementAdvanced.instance.sprintSpeed = 14;
+            berserkFillBar.fillAmount = reviveTimer / 7;
 
             // Si el jugador mata a un enemigo en el tiempo límite
             if (enemyKilled)
@@ -71,8 +77,10 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     void StartReviveCountdown()
     {
         isInReviveState = true;
+        SoundManager.instance.PlaySound(heartbeatClip, transform, 1f);
         reviveTimer = reviveTime;
         berserk.SetFloat("_Active", turnOn);
+        berserkBar.gameObject.SetActive(true);
         isDead = true;
         Debug.Log("¡Estás en estado de revivible! Tienes " + reviveTime + " segundos para matar a un enemigo.");
     }
@@ -94,7 +102,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         berserk.SetFloat("_Active", 0);
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(2);
         Debug.Log("¡Has muerto definitivamente! Fin del juego.");
     }
 
@@ -115,6 +123,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
         if (life <= 0)
         {
             StartReviveCountdown();
+            SoundManager.instance.PlaySound(berserkStartClip, transform, 1f);
         }
     }
 }

@@ -75,6 +75,8 @@ public class Guns : MonoBehaviour
         ShootInput();
         if (ammunitionDisplay != null)
             ammunitionDisplay.SetText(bulletsLeft + " / " + magazineSize);
+        if (bulletsLeft >= magazineSize)
+            bulletsLeft = magazineSize;
     }
     #endregion
 

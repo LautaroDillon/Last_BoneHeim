@@ -6,6 +6,9 @@ public class ThrowArm : MonoBehaviour
 {
     Guns guns;
     Throwing throwing;
+    [SerializeField] private AudioClip armPickUpClip;
+    [SerializeField] private AudioClip armPickUp2Clip;
+    public GameObject target;
 
     void Awake()
     {
@@ -13,21 +16,39 @@ public class ThrowArm : MonoBehaviour
         guns = GameObject.Find("Gun").GetComponent<Guns>();
     }
 
-    void Update()
+    private void Start()
     {
-        
+        target = GameObject.Find("Player");
     }
-    private void OnTriggerEnter(Collider other)
+
+    public void OnTriggerEnter(Collider other)
     {
         Idamagable damagableInterface = other.gameObject.GetComponent<Idamagable>();
         if (other.gameObject.layer == 10)
         {
             Debug.Log("pego a enemigo");
             damagableInterface.TakeDamage(100);
+            if (guns.isSkeleton == true)
+            {
+                guns.bulletsLeft += 5;
+            }
+            if (guns.isInvoker == true)
+            {
+                guns.bulletsLeft += 3;
+            }
+            if (guns.isKnuckle == true)
+            {
+                guns.bulletsLeft += 20;
+            }
             if (PlayerHealth.instance.isInReviveState)
             {
                 PlayerHealth.instance.OnEnemyKilled();
             }
+        }
+        if(other.gameObject.tag == "DEBUG" || other.gameObject.tag == "Lava")
+        {
+            Debug.Log("DEBUG: Returned Arm!");
+            Instantiate(gameObject, target.transform.position, Quaternion.identity);
         }
     }
 
@@ -38,18 +59,17 @@ public class ThrowArm : MonoBehaviour
             if(guns.isSkeleton == true)
             {
                 guns.magazineSize += 5;
-                guns.bulletsLeft += 5;
             }
             if (guns.isInvoker == true)
             {
                 guns.magazineSize += 3;
-                guns.bulletsLeft += 3;
             }
             if (guns.isKnuckle == true)
             {
                 guns.magazineSize += 20;
-                guns.bulletsLeft += 20;
             }
+            SoundManager.instance.PlaySound(armPickUpClip, transform, 1f);
+            SoundManager.instance.PlaySound(armPickUp2Clip, transform, 1f);
             throwing.totalThrows += 1;
             print("Retrieved Arm!");
             Destroy(gameObject);

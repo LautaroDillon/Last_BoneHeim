@@ -145,7 +145,7 @@ Transform:
   m_GameObject: {fileID: 3838514121072607786}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.555}
+  m_LocalPosition: {x: 0, y: 1.114, z: 0.065}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -292,10 +292,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.51629376
-  m_Height: 2.8048935
+  m_Radius: 0.80616
+  m_Height: 3.000752
   m_Direction: 1
-  m_Center: {x: -0.0073037148, y: 0.37060165, z: 0.0030417442}
+  m_Center: {x: 0.006011963, y: 0.3992598, z: 0.0030417442}
 --- !u!114 &4139876970188199819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -320,6 +320,7 @@ MonoBehaviour:
   ranged: 80
   deathClip: {fileID: 8300000, guid: e1fe43dcb716a414c9462d70697d9ff9, type: 3}
   blood: {fileID: 8835629220091889797, guid: 8656ce0cd4344a54188b181f56987a93, type: 3}
+  skeletaldamage: {fileID: 8594284050758689464, guid: d910f5152f01ac742a45b4578091d443, type: 3}
   pointParticle: {fileID: 3838514121072607786}
   healParticle: {fileID: 6323638799372181553}
   anim: {fileID: 3692176740944948893}

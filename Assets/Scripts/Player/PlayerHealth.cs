@@ -120,7 +120,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
         healthBar.fillAmount = life / 100;
         SoundManager.instance.PlaySound(painClip, transform, 0.3f);
 
-        if (life <= 0)
+        if (life <= 0 && !isInReviveState)
         {
             StartReviveCountdown();
             SoundManager.instance.PlaySound(berserkStartClip, transform, 1f);

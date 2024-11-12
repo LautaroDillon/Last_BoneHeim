@@ -11,17 +11,27 @@ public class ENecro : EnemisBehaivor
     public int maxSummoned;
     public bool isMiniBoss;
 
+    [Header("summon Settings")]
     public float summonTimer;
     int currentEnemiesSummoned;
+    public bool cansummon;
 
     [Header("Shooting Settings")]
     public GameObject projectilePrefab;
     public Transform shotPoint;
     public float shotCooldown;
     public float projectileSpeed;
-
-
     public float shotTimer;
+
+    [Header("abilitys Settings")]
+    //public GameObject lazer;
+   // public GameObject coolDown;
+    public GameObject shield;
+    public float countDown;
+   // public float probabilityLaser;
+    public float probabilityShield;
+    public bool canability;
+
 
     void Awake()
     {
@@ -31,7 +41,7 @@ public class ENecro : EnemisBehaivor
 
     private void Update()
     {
-            EnemiMovement(); 
+        EnemiMovement();
     }
 
     public void EnemiMovement()
@@ -43,8 +53,9 @@ public class ENecro : EnemisBehaivor
 
             summonTimer -= Time.deltaTime;
             shotTimer -= Time.deltaTime;
+            countDown -= Time.deltaTime;
 
-            if (summonTimer <= 0 && currentEnemiesSummoned < maxSummoned)
+            if (summonTimer <= 0 && cansummon)
             {
                 SummonEnemy();
                 summonTimer = summonCooldown;
@@ -54,6 +65,19 @@ public class ENecro : EnemisBehaivor
             {
                 Shoot();
                 shotTimer = shotCooldown;
+            }
+
+            if (countDown <= 0 && canability)
+            {
+                float numeroAleatorio = Random.Range(0f, 11f);
+               /* if (probabilityLaser < numeroAleatorio)
+                {
+                   // coolDown.SetActive(true);
+                }*/
+                if(probabilityShield < numeroAleatorio /*&& probabilityLaser > numeroAleatorio*/)
+                {
+                    shield.SetActive(true);
+                }
             }
         }
     }

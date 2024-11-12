@@ -134,7 +134,7 @@ public class NormalSkeleton : EnemisBehaivor
 
     public void finanim()
     {
-        // anim.SetBool("IsShootiing", false);
+         anim.SetBool("IsShootiing", false);
         atacando = false;
     }
 }

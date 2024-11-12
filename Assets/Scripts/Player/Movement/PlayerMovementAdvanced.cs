@@ -138,6 +138,19 @@ public class PlayerMovementAdvanced : MonoBehaviour
             rb.drag = groundDrag;
         else
             rb.drag = 0;
+
+        if (sliding)
+        {
+            if (!slidingDust.isPlaying)
+            {
+                slidingDust.Play(true);
+            }
+        }
+        else if (slidingDust.isPlaying)
+        {
+            slidingDust.Stop();
+        }
+            
     }
 
     private void FixedUpdate()
@@ -220,8 +233,8 @@ public class PlayerMovementAdvanced : MonoBehaviour
         {
             
             state = MovementState.sliding;
-            if(slidingDust.isStopped)
-            slidingDust.Play(true);
+            
+            
             //incrementa la velocidad cada segundo
             if (OnSlope() && rb.velocity.y < 0.1f)
             {
@@ -328,7 +341,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         else if (grounded)
         {
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
-            slidingDust.Stop(true);
+            
         }
             
 

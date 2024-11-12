@@ -2,21 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shield : MonoBehaviour
+public class Shield : MonoBehaviour, Idamagable
 {
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Arm")
-        {
-            this.gameObject.SetActive(false);
-        }
-    }
+    public GameObject esto;
+    public float _life;
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag ==  "Bullet")
-        {
 
+    public void TakeDamage(float dmg)
+    {
+        _life -= dmg;
+        if (_life <= 0)
+        {
+            esto.SetActive(false);
         }
     }
 }

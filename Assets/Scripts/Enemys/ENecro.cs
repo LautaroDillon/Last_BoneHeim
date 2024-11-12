@@ -28,6 +28,7 @@ public class ENecro : EnemisBehaivor
    // public GameObject coolDown;
     public GameObject shield;
     public float countDown;
+    public float count;
    // public float probabilityLaser;
     public float probabilityShield;
     public bool canability;
@@ -37,6 +38,7 @@ public class ENecro : EnemisBehaivor
     {
         summonTimer = summonCooldown;
         shotTimer = shotCooldown;
+        countDown = count;
     }
 
     private void Update()
@@ -67,7 +69,7 @@ public class ENecro : EnemisBehaivor
                 shotTimer = shotCooldown;
             }
 
-            if (countDown <= 0 && canability)
+            if (countDown <= 0 /*&& canability*/)
             {
                 float numeroAleatorio = Random.Range(0f, 11f);
                /* if (probabilityLaser < numeroAleatorio)
@@ -77,7 +79,10 @@ public class ENecro : EnemisBehaivor
                 if(probabilityShield < numeroAleatorio /*&& probabilityLaser > numeroAleatorio*/)
                 {
                     shield.SetActive(true);
+                    shield.GetComponent<Shield>()._life = 100;
+                   // canability = false;
                 }
+                countDown = count;
             }
         }
     }

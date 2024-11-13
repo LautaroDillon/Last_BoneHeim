@@ -35,7 +35,9 @@ public class PlayerMovementAdvanced : MonoBehaviour
     public float crouchSpeed;
     public float crouchYScale;
     private float startYScale;
-    public ParticleSystem slidingDust; 
+
+    [Header("Particles")]
+    public ParticleSystem slidingDust, speedTrails;
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
@@ -139,17 +141,29 @@ public class PlayerMovementAdvanced : MonoBehaviour
         else
             rb.drag = 0;
 
-        if (sliding)
+        if (sliding || wallrunning)
         {
             if (!slidingDust.isPlaying)
             {
                 slidingDust.Play(true);
             }
+            if (!speedTrails.isPlaying)
+            {
+                speedTrails.Play(true);
+            }
         }
-        else if (slidingDust.isPlaying)
+        else
         {
-            slidingDust.Stop();
+            if (speedTrails.isPlaying)
+            {
+                speedTrails.Stop();
+            }
+            if (slidingDust.isPlaying)
+            {
+                slidingDust.Stop();
+            }
         }
+        
             
     }
 

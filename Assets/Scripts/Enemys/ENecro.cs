@@ -57,7 +57,7 @@ public class ENecro : EnemisBehaivor
             shotTimer -= Time.deltaTime;
             countDown -= Time.deltaTime;
 
-            if (summonTimer <= 0 && cansummon)
+            if (summonTimer <= 0)
             {
                 SummonEnemy();
                 summonTimer = summonCooldown;

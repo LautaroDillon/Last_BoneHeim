@@ -102,7 +102,7 @@ public class Guns : MonoBehaviour
                 if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
                 {
                     bulletsShot = 0;
-                    SoundManager.instance.PlaySound(shootClip, transform, 0.3f);
+                    SoundManager.instance.PlaySound(shootClip, transform, 0.3f, false);
                     Shoot();
                 }
             }

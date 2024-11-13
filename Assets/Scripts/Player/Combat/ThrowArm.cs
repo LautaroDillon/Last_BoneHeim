@@ -70,8 +70,8 @@ public class ThrowArm : MonoBehaviour
             {
                 guns.magazineSize += 20;
             }
-            SoundManager.instance.PlaySound(armPickUpClip, transform, 1f);
-            SoundManager.instance.PlaySound(armPickUp2Clip, transform, 1f);
+            SoundManager.instance.PlaySound(armPickUpClip, transform, 1f, false);
+            SoundManager.instance.PlaySound(armPickUp2Clip, transform, 1f, false);
             throwing.totalThrows += 1;
             print("Retrieved Arm!");
             Destroy(gameObject);

@@ -13,11 +13,12 @@ public class SoundManager : MonoBehaviour
             instance = this;
     }
 
-    public void PlaySound(AudioClip audioClip, Transform spawnTransform, float volume)
+    public void PlaySound(AudioClip audioClip, Transform spawnTransform, float volume, bool looping)
     {
         AudioSource audioSource = Instantiate(soundObject, spawnTransform.position, Quaternion.identity);
         audioSource.clip = audioClip;
         audioSource.volume = volume;
+        audioSource.loop = looping;
         audioSource.pitch = Random.Range(0.9f, 1.2f);
         audioSource.Play();
         float clipLength = audioSource.clip.length;

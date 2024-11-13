@@ -77,7 +77,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     void StartReviveCountdown()
     {
         isInReviveState = true;
-        SoundManager.instance.PlaySound(heartbeatClip, transform, 1f);
+        SoundManager.instance.PlaySound(heartbeatClip, transform, 1f, false);
         reviveTimer = reviveTime;
         berserk.SetFloat("_Active", turnOn);
         berserkBar.gameObject.SetActive(true);
@@ -118,12 +118,12 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     {
         life -= dmg;
         healthBar.fillAmount = life / 100;
-        SoundManager.instance.PlaySound(painClip, transform, 0.3f);
+        SoundManager.instance.PlaySound(painClip, transform, 0.3f, false);
 
         if (life <= 0 && !isInReviveState)
         {
             StartReviveCountdown();
-            SoundManager.instance.PlaySound(berserkStartClip, transform, 1f);
+            SoundManager.instance.PlaySound(berserkStartClip, transform, 1f, false);
         }
     }
 }

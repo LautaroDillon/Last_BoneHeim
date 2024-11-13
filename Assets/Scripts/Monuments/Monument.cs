@@ -25,7 +25,7 @@ public class Monument : MonoBehaviour
     public void Interaction()
     {
         Debug.Log("Spawn Ally");
-        SoundManager.instance.PlaySound(thunderClip, transform, 0.3f);
+        SoundManager.instance.PlaySound(thunderClip, transform, 0.3f, false);
         fuego.SetActive(true);
         Instantiate(ally, point.transform.position, Quaternion.identity);
     }

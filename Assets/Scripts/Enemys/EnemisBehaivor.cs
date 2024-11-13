@@ -28,7 +28,7 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
     [SerializeField] protected GameObject blood;
     [SerializeField] protected GameObject skeletaldamage;
     [SerializeField] protected GameObject pointParticle;
-    [SerializeField] protected GameObject healParticle;
+    [SerializeField] public GameObject healParticle;
 
     [SerializeField] protected Animator anim;
 

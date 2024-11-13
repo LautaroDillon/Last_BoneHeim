@@ -19,6 +19,20 @@ public class ThrowArm : MonoBehaviour
     private void Start()
     {
         target = GameObject.Find("Player");
+        
+    }
+
+    private void Update()
+    {
+        if(throwing.totalThrows == 0)
+            throwing.recoverArmTime -= Time.deltaTime;
+        if (throwing.recoverArmTime <= 0)
+        {
+            throwing.recoverArmTime = throwing.recoverArmMaxTime;
+            throwing.RestoreThrow();
+            SpawnArm();
+            Destroy(gameObject);
+        }
     }
 
     public void OnTriggerEnter(Collider other)
@@ -27,7 +41,7 @@ public class ThrowArm : MonoBehaviour
         if (other.gameObject.layer == 10)
         {
             Debug.Log("pego a enemigo");
-            damagableInterface.TakeDamage(100);
+            damagableInterface.TakeDamage(75);
             if (guns.isSkeleton == true)
             {
                 guns.bulletsLeft += 5;
@@ -52,7 +66,7 @@ public class ThrowArm : MonoBehaviour
         if (collision.gameObject.tag == "DEBUG" || collision.gameObject.tag == "Lava")
         {
             Debug.Log("DEBUG: Returned Arm!");
-            Instantiate(gameObject, target.transform.position, Quaternion.identity);
+            SpawnArm();
             Destroy(gameObject);
         }
 
@@ -70,11 +84,16 @@ public class ThrowArm : MonoBehaviour
             {
                 guns.magazineSize += 20;
             }
-            SoundManager.instance.PlaySound(armPickUpClip, transform, 1f, false);
-            SoundManager.instance.PlaySound(armPickUp2Clip, transform, 1f, false);
+            SoundManager.instance.PlaySound(armPickUpClip, transform, 1.5f, false);
+            SoundManager.instance.PlaySound(armPickUp2Clip, transform, 1.5f, false);
             throwing.totalThrows += 1;
             print("Retrieved Arm!");
             Destroy(gameObject);
         }
+    }
+
+    void SpawnArm()
+    {
+        Instantiate(gameObject, target.transform.position, Quaternion.identity);
     }
 }

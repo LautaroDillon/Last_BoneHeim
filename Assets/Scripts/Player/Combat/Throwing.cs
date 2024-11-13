@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEditor.ShaderGraph.Internal;
 
 public class Throwing : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class Throwing : MonoBehaviour
     [Header("Settings")]
     public int totalThrows;
     public float throwCooldown;
+    public float recoverArmTime = 15;
+    public float recoverArmMaxTime = 15;
 
     [Header("Throwing")]
     public KeyCode throwKey = KeyCode.Mouse0;
@@ -32,19 +35,24 @@ public class Throwing : MonoBehaviour
 
     private void Start()
     {
+        recoverArmTime = recoverArmMaxTime;
         guns = GameObject.Find("Gun").GetComponent<Guns>();
         readyToThrow = true;
     }
 
     private void Update()
     {
-        if (totalThrows == 1)
+        if (totalThrows >= 2)
+        {
+            totalThrows = 1;
             armPrefab.SetActive(true);
+        }
         else
             armPrefab.SetActive(false);
         if(Input.GetKeyDown(throwKey) && readyToThrow && totalThrows > 0)
         {
             Throw();
+            Invoke("RestoreThrow", recoverArmTime);
             SoundManager.instance.PlaySound(throwClip, transform, 1f, false);
             if(guns.isSkeleton == true)
             {
@@ -60,14 +68,6 @@ public class Throwing : MonoBehaviour
             }
 
             Debug.Log("Throw!");
-        }
-        if(isReturning)
-        {
-            if(time < 1.0f)
-            {
-                arm.position = BQCPoint(time, oldPos, curvePoint.position, attackPoint.position);
-                time += Time.deltaTime;
-            }
         }
     }
 
@@ -118,7 +118,7 @@ public class Throwing : MonoBehaviour
         Vector3 p = (uu * p0) + (2 * u * t * p1) + (tt * p2);
         return p;
     }
-    private void RestoreThrow()
+    public void RestoreThrow()
     {
         totalThrows++;
     }

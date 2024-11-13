@@ -140,6 +140,8 @@ public class ENecro : EnemisBehaivor
             }
 
             SceneManager.LoadScene(0);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
 
             Destroy(acid);
             Destroy(this.gameObject, 0.1f);

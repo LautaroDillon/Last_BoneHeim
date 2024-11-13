@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ENecro : EnemisBehaivor
 {
@@ -121,6 +122,27 @@ public class ENecro : EnemisBehaivor
             {
                 rb.velocity = directionToPlayer * projectileSpeed;
             }
+        }
+    }
+
+    public override void TakeDamage(float dmg)
+    {
+        currentlife -= dmg;
+        GameObject acid = Instantiate(blood, pointParticle.transform.position, Quaternion.identity);
+
+        if (currentlife <= 0)
+        {
+            SoundManager.instance.PlaySound(deathClip, transform, 0.7f, false);
+
+            if (PlayerHealth.instance.isInReviveState)
+            {
+                PlayerHealth.instance.enemyKilled = true;
+            }
+
+            SceneManager.LoadScene(0);
+
+            Destroy(acid);
+            Destroy(this.gameObject, 0.1f);
         }
     }
 }

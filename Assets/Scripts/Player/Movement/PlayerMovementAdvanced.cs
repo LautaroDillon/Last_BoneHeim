@@ -154,7 +154,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         if (Input.GetKey(jumpKey) && readyToJump && grounded)
         {
             readyToJump = false;
-            SoundManager.instance.PlaySound(jumpClip, transform, 0.5f);
+            SoundManager.instance.PlaySound(jumpClip, transform, 0.5f, false);
             Jump();
             Invoke(nameof(ResetJump), jumpCooldown);
         }

@@ -16,7 +16,7 @@ public class Booton1 : MonoBehaviour
             if (whathit == "Arm")
             {
                 door.Activate();
-                SoundManager.instance.PlaySound(dingClip, transform, 1f);
+                SoundManager.instance.PlaySound(dingClip, transform, 1f, false);
             }
         }
     }

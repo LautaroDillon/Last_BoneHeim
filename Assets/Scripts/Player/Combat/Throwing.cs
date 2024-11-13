@@ -13,6 +13,7 @@ public class Throwing : MonoBehaviour
     public GameObject objectToThrow;
     public Rigidbody arm;
     Guns guns;
+    public GameObject armPrefab;
 
     [Header("Settings")]
     public int totalThrows;
@@ -37,10 +38,14 @@ public class Throwing : MonoBehaviour
 
     private void Update()
     {
+        if (totalThrows == 1)
+            armPrefab.SetActive(true);
+        else
+            armPrefab.SetActive(false);
         if(Input.GetKeyDown(throwKey) && readyToThrow && totalThrows > 0)
         {
             Throw();
-            SoundManager.instance.PlaySound(throwClip, transform, 1f);
+            SoundManager.instance.PlaySound(throwClip, transform, 1f, false);
             if(guns.isSkeleton == true)
             {
                 guns.magazineSize = guns.magazineSize / 2;

@@ -31,12 +31,12 @@ public class UiControl : MonoBehaviour
             if (_isInventory)
             {
                 InventoryOff();
-                SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f);
+                SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f, false);
             }
             else
             {
                 InventoryOn();
-                SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f);
+                SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f, false);
             }
         }
     }
@@ -66,12 +66,12 @@ public class UiControl : MonoBehaviour
         {
             if (_isPaused)
             {
-                SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f);
+                SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f, false);
                 PauseOff();
             }
             else
             {
-                SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f);
+                SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f, false);
                 PauseOn();
             }
         }

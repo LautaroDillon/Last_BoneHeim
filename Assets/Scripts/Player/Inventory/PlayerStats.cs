@@ -37,7 +37,7 @@ public class PlayerStats : MonoBehaviour
                 break;
             case InterfaceType.Equipment:
                 print(string.Concat("Removed ", _slot.ItemObject, " on ", _slot.parent.inventory.type, ", Allowed Items: ", string.Join(", ", _slot.AllowedItems)));
-                SoundManager.instance.PlaySound(equipmentClip, transform, 1f);
+                SoundManager.instance.PlaySound(equipmentClip, transform, 1f, false);
                 for (int i = 0; i < _slot.item.buffs.Length; i++)
                 {
                     for (int j = 0; j < attributes.Length; j++)
@@ -62,7 +62,7 @@ public class PlayerStats : MonoBehaviour
                 break;
             case InterfaceType.Equipment:
                 print(string.Concat("Placed ", _slot.ItemObject, " on ", _slot.parent.inventory.type, ", Allowed Items: ", string.Join(", ", _slot.AllowedItems)));
-                SoundManager.instance.PlaySound(equipmentClip, transform, 1f);
+                SoundManager.instance.PlaySound(equipmentClip, transform, 1f, false);
                 for (int i = 0; i < _slot.item.buffs.Length; i++)
                 {
                     for (int j = 0; j < attributes.Length; j++)
@@ -87,7 +87,7 @@ public class PlayerStats : MonoBehaviour
             Item _item = new Item(groundItem.item);
             if (inventory.AddItem(_item, 1)) 
             {
-                SoundManager.instance.PlaySound(groundPickUpClip, transform, 1f);
+                SoundManager.instance.PlaySound(groundPickUpClip, transform, 1f, false);
                 Destroy(other.gameObject);
             }
         }

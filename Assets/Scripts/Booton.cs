@@ -24,7 +24,7 @@ public class Booton : MonoBehaviour
             if (whathit == "Bullet")
             {
                 door.Activate();
-                SoundManager.instance.PlaySound(dingClip, transform, 1f);
+                SoundManager.instance.PlaySound(dingClip, transform, 1f, false);
             }
         }
     }
@@ -38,7 +38,7 @@ public class Booton : MonoBehaviour
             if (whathit == "arm")
             {
                 door.Activate();
-                SoundManager.instance.PlaySound(dingClip, transform, 1f);
+                SoundManager.instance.PlaySound(dingClip, transform, 1f, false);
             }
         }
     }

@@ -28,7 +28,7 @@ public class Breakable : MonoBehaviour
         {
             Break();
             Invoke("Destroy", 3);
-            SoundManager.instance.PlaySound(breakClip, transform, 1f);
+            SoundManager.instance.PlaySound(breakClip, transform, 1f, false);
         }
     }
 

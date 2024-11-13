@@ -22,13 +22,13 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
     [SerializeField] protected float ranged;
 
     Guns gun;
-    [SerializeField] private AudioClip deathClip;
+    [SerializeField] protected AudioClip deathClip;
 
     [Header("particulas")]
     [SerializeField] protected GameObject blood;
     [SerializeField] protected GameObject skeletaldamage;
     [SerializeField] protected GameObject pointParticle;
-    [SerializeField] public GameObject healParticle;
+    [SerializeField] protected GameObject healParticle;
 
     [SerializeField] protected Animator anim;
 

@@ -35,7 +35,9 @@ public class PlayerMovementAdvanced : MonoBehaviour
     public float crouchSpeed;
     public float crouchYScale;
     private float startYScale;
-    public ParticleSystem slidingDust; 
+
+    [Header("Particles")]
+    public ParticleSystem slidingDust, speedTrails;
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
@@ -138,6 +140,31 @@ public class PlayerMovementAdvanced : MonoBehaviour
             rb.drag = groundDrag;
         else
             rb.drag = 0;
+
+        if (sliding || wallrunning)
+        {
+            if (!slidingDust.isPlaying)
+            {
+                slidingDust.Play(true);
+            }
+            if (!speedTrails.isPlaying)
+            {
+                speedTrails.Play(true);
+            }
+        }
+        else
+        {
+            if (speedTrails.isPlaying)
+            {
+                speedTrails.Stop();
+            }
+            if (slidingDust.isPlaying)
+            {
+                slidingDust.Stop();
+            }
+        }
+        
+            
     }
 
     private void FixedUpdate()
@@ -220,8 +247,8 @@ public class PlayerMovementAdvanced : MonoBehaviour
         {
             
             state = MovementState.sliding;
-            if(slidingDust.isStopped)
-            slidingDust.Play(true);
+            
+            
             //incrementa la velocidad cada segundo
             if (OnSlope() && rb.velocity.y < 0.1f)
             {
@@ -328,7 +355,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         else if (grounded)
         {
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
-            slidingDust.Stop(true);
+            
         }
             
 

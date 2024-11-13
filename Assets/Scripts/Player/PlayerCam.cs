@@ -16,6 +16,9 @@ public class PlayerCam : MonoBehaviour
     float xRotation;
     float yRotation;
 
+    public float _tiltAmount = 5;
+    public float _rotationSpeed = 0.5f;
+
     private void Start()
     {
         float savedSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", 1f); // Default to 1 if not set
@@ -56,6 +59,14 @@ public class PlayerCam : MonoBehaviour
     public void DoTilt(float zTilt)
     {
         transform.DOLocalRotate(new Vector3(0, 0, zTilt), 0.25f);
+    }
+
+    public void Tilt()
+    {
+        float rotZ = -Input.GetAxis("Horizontal") * _tiltAmount;
+
+        Quaternion finalRot = Quaternion.Euler(xRotation, yRotation, rotZ);
+        transform.localRotation = Quaternion.RotateTowards(transform.localRotation, finalRot, _rotationSpeed);
     }
 
     public void Sensitivity()

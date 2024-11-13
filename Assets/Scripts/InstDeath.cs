@@ -6,11 +6,11 @@ using UnityEngine.SceneManagement;
 
 public class InstDeath : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        PlayerHealth damagableInterface = other.gameObject.GetComponent<PlayerHealth>();
+        PlayerHealth damagableInterface = collision.gameObject.GetComponent<PlayerHealth>();
 
-        if (other.gameObject.layer == 11 && damagableInterface != null)
+        if (collision.gameObject.layer == 11 && damagableInterface != null)
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;

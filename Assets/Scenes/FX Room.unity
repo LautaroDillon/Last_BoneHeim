@@ -668,15 +668,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6039421168743463720, guid: c784ecb12f9a2314db4a2d3a2e22e8ce, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.58
+      value: 4.76
       objectReference: {fileID: 0}
     - target: {fileID: 6039421168743463720, guid: c784ecb12f9a2314db4a2d3a2e22e8ce, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.35
+      value: -2.594
       objectReference: {fileID: 0}
     - target: {fileID: 6039421168743463720, guid: c784ecb12f9a2314db4a2d3a2e22e8ce, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.28
+      value: 1.425
       objectReference: {fileID: 0}
     - target: {fileID: 6039421168743463720, guid: c784ecb12f9a2314db4a2d3a2e22e8ce, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1488,7 +1488,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e3b711de7c454984aa7ce52e844e2b1a, type: 2}
+  - {fileID: 2100000, guid: 49661ad601645c648a59c514bd9e173b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1883,6 +1883,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6135058102173078340, guid: 6e3428cafb7f403479c7cd8051efde12, type: 3}
       propertyPath: m_MeshDistribution
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6135058102173078340, guid: 6e3428cafb7f403479c7cd8051efde12, type: 3}
+      propertyPath: m_UseCustomVertexStreams
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6135058102173078340, guid: 6e3428cafb7f403479c7cd8051efde12, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 49661ad601645c648a59c514bd9e173b, type: 2}
+    - target: {fileID: 6809977334691587996, guid: 6e3428cafb7f403479c7cd8051efde12, type: 3}
+      propertyPath: CustomDataModule.mode0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6809977334691587996, guid: 6e3428cafb7f403479c7cd8051efde12, type: 3}
+      propertyPath: CustomDataModule.enabled
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -119,6 +119,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 479ea5c5e01821e4394840c4463e307f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  acidPrefab: {fileID: 4733726417356664035, guid: bc4b78253033fd241ace7c28ee28bb31, type: 3}
+  acidLifetime: 5
 --- !u!54 &7470108394790043188
 Rigidbody:
   m_ObjectHideFlags: 0

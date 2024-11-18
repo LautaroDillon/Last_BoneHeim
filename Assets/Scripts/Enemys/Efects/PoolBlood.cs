@@ -7,11 +7,11 @@ public class PoolBlood : MonoBehaviour
     public int damagePerSecond = 2;
     public float damageInterval = 1f;
 
-    private void OnTriggerStay(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
-        if (other.CompareTag("Player"))
+        if (other.gameObject.layer == 11)
         {
-            PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
+            PlayerHealth playerHealth = other.gameObject.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
                 StartCoroutine(DamagePlayerOverTime(playerHealth));

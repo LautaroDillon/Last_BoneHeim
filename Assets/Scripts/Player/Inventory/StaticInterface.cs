@@ -12,11 +12,10 @@ public class StaticInterface : UserInterface
         slotsOnInterface = new Dictionary<GameObject, InventorySlot>();
         for (int i = 0; i < inventory.GetSlots.Length; i++)
         {
-
-            if (i >= slots.Length) return;
+            if (i >= slots.Length) 
+                return;
 
             var obj = slots[i];
-
 
             AddEvent(obj, EventTriggerType.PointerEnter, delegate { OnEnter(obj); });
             AddEvent(obj, EventTriggerType.PointerExit, delegate { OnExit(obj); });

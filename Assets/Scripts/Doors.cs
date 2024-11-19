@@ -6,10 +6,19 @@ public class Doors : MonoBehaviour
 {
     public GameObject limit;
     bool openDoor;
+    public bool istab;
     
     public void Activate()
     {
-        openDoor = true;
+        if (!istab)
+        {
+            openDoor = true;
+        }
+        else
+        {
+            openDoor = true;
+
+        }
     }
 
     private void Update()

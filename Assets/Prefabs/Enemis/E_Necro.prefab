@@ -554,9 +554,11 @@ MonoBehaviour:
   shotCooldown: 3
   projectileSpeed: 5
   shotTimer: 0
+  lazer: {fileID: 0}
   shield: {fileID: 7832900096168684786}
   countDown: 10
   count: 10
+  probabilityLaser: 0
   probabilityShield: 4
   canability: 0
 --- !u!1 &6585147999630335620
@@ -613,7 +615,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &40934763114523729
 Transform:
   m_ObjectHideFlags: 0

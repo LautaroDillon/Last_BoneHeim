@@ -25,12 +25,12 @@ public class ENecro : EnemisBehaivor
     public float shotTimer;
 
     [Header("abilitys Settings")]
-    //public GameObject lazer;
+    public GameObject lazer;
    // public GameObject coolDown;
     public GameObject shield;
     public float countDown;
     public float count;
-   // public float probabilityLaser;
+    public float probabilityLaser;
     public float probabilityShield;
     public bool canability;
 
@@ -70,18 +70,17 @@ public class ENecro : EnemisBehaivor
                 shotTimer = shotCooldown;
             }
 
-            if (countDown <= 0 /*&& canability*/)
+            if (countDown <= 0)
             {
-                float numeroAleatorio = Random.Range(0f, 11f);
-               /* if (probabilityLaser < numeroAleatorio)
+                float numeroAleatorio = Random.Range(0f, 10f);
+
+                if (numeroAleatorio < probabilityShield)
                 {
-                   // coolDown.SetActive(true);
-                }*/
-                if(probabilityShield < numeroAleatorio /*&& probabilityLaser > numeroAleatorio*/)
+                    ActivarEscudo();
+                }
+                else 
                 {
-                    shield.SetActive(true);
-                    shield.GetComponent<Shield>()._life = 100;
-                   // canability = false;
+                    InvocarLaser();
                 }
                 countDown = count;
             }
@@ -146,5 +145,19 @@ public class ENecro : EnemisBehaivor
             Destroy(acid);
             Destroy(this.gameObject, 0.1f);
         }
+    }
+
+    void ActivarEscudo()
+    {
+        shield.SetActive(true);
+        shield.GetComponent<Shield>()._life = 100; // Restaura la vida del escudo
+        Debug.Log("Habilidad activada: Escudo");
+    }
+
+    void InvocarLaser()
+    {
+       
+        lazer.SetActive(true); 
+        Debug.Log("Habilidad activada: Láser");
     }
 }

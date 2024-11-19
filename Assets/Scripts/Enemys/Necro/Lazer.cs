@@ -4,5 +4,29 @@ using UnityEngine;
 
 public class Lazer : MonoBehaviour
 {
+    public ENecro necro;
 
+    public float rotationSpeed = 100f;
+    public float lifetime = 5f;     
+
+    private float timer;
+
+    void Start()
+    {
+        necro.canability = false;
+        timer = lifetime;
+    }
+
+    private void Update()
+    {
+        transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);
+
+        timer -= Time.deltaTime;
+
+        
+        if (timer <= 0)
+        {
+            this.gameObject.SetActive(false);
+        }
+    }
 }

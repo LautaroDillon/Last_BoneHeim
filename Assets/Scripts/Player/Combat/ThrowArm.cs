@@ -19,7 +19,7 @@ public class ThrowArm : MonoBehaviour
     private void Start()
     {
         target = GameObject.Find("Player");
-        
+        Destroy(gameObject, throwing.recoverArmMaxTime);
     }
 
     private void Update()
@@ -28,9 +28,9 @@ public class ThrowArm : MonoBehaviour
             throwing.recoverArmTime -= Time.deltaTime;
         if (throwing.recoverArmTime <= 0)
         {
+            SpawnArm();
             throwing.recoverArmTime = throwing.recoverArmMaxTime;
             throwing.RestoreThrow();
-            SpawnArm();
             Destroy(gameObject);
         }
     }

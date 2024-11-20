@@ -19,7 +19,7 @@ public class Throwing : MonoBehaviour
     [Header("Settings")]
     public int totalThrows;
     public float throwCooldown;
-    public float recoverArmTime = 15;
+    public float recoverArmTime;
     public float recoverArmMaxTime = 15;
 
     [Header("Throwing")]
@@ -42,13 +42,8 @@ public class Throwing : MonoBehaviour
 
     private void Update()
     {
-        if (totalThrows >= 2)
-        {
+        if (totalThrows >= 1)
             totalThrows = 1;
-            armPrefab.SetActive(true);
-        }
-        else
-            armPrefab.SetActive(false);
         if(Input.GetKeyDown(throwKey) && readyToThrow && totalThrows > 0)
         {
             Throw();
@@ -66,7 +61,6 @@ public class Throwing : MonoBehaviour
             {
                 guns.magazineSize = guns.magazineSize / 2;
             }
-
             Debug.Log("Throw!");
         }
     }

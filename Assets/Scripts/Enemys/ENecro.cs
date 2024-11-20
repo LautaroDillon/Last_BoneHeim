@@ -156,8 +156,8 @@ public class ENecro : EnemisBehaivor
 
     void InvocarLaser()
     {
-       
-        lazer.SetActive(true); 
+        lazer.SetActive(true);
+        lazer.gameObject.GetComponent<Lazer>().timer = 5;
         Debug.Log("Habilidad activada: Láser");
     }
 }

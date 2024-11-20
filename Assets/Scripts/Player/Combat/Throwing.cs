@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEditor.ShaderGraph.Internal;
 
 public class Throwing : MonoBehaviour
 {
@@ -43,10 +42,14 @@ public class Throwing : MonoBehaviour
     private void Update()
     {
         if (totalThrows >= 1)
+        {
             totalThrows = 1;
+            recoverArmTime = recoverArmMaxTime;
+        }
         if(Input.GetKeyDown(throwKey) && readyToThrow && totalThrows > 0)
         {
             Throw();
+            armPrefab.gameObject.SetActive(false);
             Invoke("RestoreThrow", recoverArmTime);
             SoundManager.instance.PlaySound(throwClip, transform, 1f, false);
             if(guns.isSkeleton == true)

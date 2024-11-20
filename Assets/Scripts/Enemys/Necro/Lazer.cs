@@ -9,7 +9,7 @@ public class Lazer : MonoBehaviour
     public float rotationSpeed = 100f;
     public float lifetime = 5f;     
 
-    private float timer;
+    public float timer;
 
     void Start()
     {

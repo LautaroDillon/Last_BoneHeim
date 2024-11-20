@@ -29,14 +29,16 @@ public class ThrowArm : MonoBehaviour
         if (throwing.recoverArmTime <= 0)
         {
             SpawnArm();
-            throwing.recoverArmTime = throwing.recoverArmMaxTime;
+            
             throwing.RestoreThrow();
+            throwing.armPrefab.gameObject.SetActive(true);
             Destroy(gameObject);
         }
     }
 
     public void OnTriggerEnter(Collider other)
     {
+        
         Idamagable damagableInterface = other.gameObject.GetComponent<Idamagable>();
         if (other.gameObject.layer == 10)
         {
@@ -74,16 +76,18 @@ public class ThrowArm : MonoBehaviour
         {
             if(guns.isSkeleton == true)
             {
-                guns.magazineSize += 5;
+                guns.magazineSize = 10;
             }
             if (guns.isInvoker == true)
             {
-                guns.magazineSize += 3;
+                guns.magazineSize = 6;
             }
             if (guns.isKnuckle == true)
             {
-                guns.magazineSize += 20;
+                guns.magazineSize = 40;
             }
+            throwing.armPrefab.gameObject.SetActive(true);
+            throwing.recoverArmTime = throwing.recoverArmMaxTime;
             SoundManager.instance.PlaySound(armPickUpClip, transform, 1.5f, false);
             SoundManager.instance.PlaySound(armPickUp2Clip, transform, 1.5f, false);
             throwing.totalThrows += 1;

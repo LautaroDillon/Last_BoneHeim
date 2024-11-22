@@ -22,7 +22,11 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
     [SerializeField] protected float ranged;
 
     Guns gun;
-    [SerializeField] protected AudioClip deathClip;
+    [SerializeField] protected AudioClip skeletonDeathClip;
+    [SerializeField] protected AudioClip boomerDeathClip;
+    [SerializeField] protected AudioClip necromancerDeathClip;
+    [SerializeField] protected AudioClip invokerDeathClip;
+    [SerializeField] protected AudioClip chamanDeathClip;
 
     [Header("particulas")]
     [SerializeField] protected GameObject blood;
@@ -57,7 +61,16 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
             Debug.Log("the skeleton received damage ");
             GameManager.instance.enemys.Remove(this.gameObject);
 
-            SoundManager.instance.PlaySound(deathClip, transform, 0.7f, false);
+            if(gameObject.tag == "Skeleton")
+                SoundManager.instance.PlaySound(skeletonDeathClip, transform, 1f, false);
+            if(gameObject.tag == "Boomer")
+                SoundManager.instance.PlaySound(boomerDeathClip, transform, 1f, false);
+            if(gameObject.tag == "Necromancer")
+                SoundManager.instance.PlaySound(necromancerDeathClip, transform, 1f, false);
+            if(gameObject.tag == "Invoker")
+                SoundManager.instance.PlaySound(invokerDeathClip, transform, 1f, false);
+            if(gameObject.tag == "Chaman")
+                SoundManager.instance.PlaySound(chamanDeathClip, transform, 1f, false);
 
             if (PlayerHealth.instance.isInReviveState)
             {

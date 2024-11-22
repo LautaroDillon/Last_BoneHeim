@@ -26,9 +26,7 @@ public class Throwing : MonoBehaviour
     public float throwForce;
     public float throwUpwardForce;
 
-    private bool isReturning = false;
     private Vector3 oldPos;
-    private float time = 0.0f;
 
     bool readyToThrow;
 
@@ -102,7 +100,6 @@ public class Throwing : MonoBehaviour
     private void ReturnThrow()
     {
         oldPos = arm.position;
-        isReturning = true;
         arm.velocity = Vector3.zero;
         arm.isKinematic = true;
     }

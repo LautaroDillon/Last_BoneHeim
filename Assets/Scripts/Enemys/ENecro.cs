@@ -131,7 +131,7 @@ public class ENecro : EnemisBehaivor
 
         if (currentlife <= 0)
         {
-            SoundManager.instance.PlaySound(deathClip, transform, 0.7f, false);
+            SoundManager.instance.PlaySound(necromancerDeathClip, transform, 0.7f, false);
 
             if (PlayerHealth.instance.isInReviveState)
             {

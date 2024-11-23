@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class PoolBlood : MonoBehaviour
 {
-    public int damagePerSecond = 2;
-    public float damageInterval = 1f;
+    public int damagePerSecond;
+    public float damageInterval;
+
+    private Coroutine damageCoroutine;
+    private PlayerHealth currentPlayer;
 
     private void OnCollisionEnter(Collision other)
     {
@@ -14,16 +17,34 @@ public class PoolBlood : MonoBehaviour
             PlayerHealth playerHealth = other.gameObject.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
-                StartCoroutine(DamagePlayerOverTime(playerHealth));
+                currentPlayer = playerHealth; // Guardamos la referencia al jugador
+                if (damageCoroutine == null) // Verificamos que no haya un Coroutine activo
+                {
+                    damageCoroutine = StartCoroutine(DamagePlayerOverTime());
+                }
             }
         }
     }
 
-    IEnumerator DamagePlayerOverTime(PlayerHealth playerHealth)
+    private void OnCollisionExit(Collision other)
     {
-        while (playerHealth != null)
+        if (other.gameObject.layer == 11 && other.gameObject.GetComponent<PlayerHealth>() == currentPlayer)
         {
-            playerHealth.TakeDamage(damagePerSecond);
+            // Detenemos el Coroutine si el jugador actual sale de la trampa
+            if (damageCoroutine != null)
+            {
+                StopCoroutine(damageCoroutine);
+                damageCoroutine = null;
+            }
+            currentPlayer = null;
+        }
+    }
+
+    private IEnumerator DamagePlayerOverTime()
+    {
+        while (currentPlayer != null) // Mientras el jugador esté en la trampa
+        {
+            currentPlayer.TakeDamage(damagePerSecond);
             yield return new WaitForSeconds(damageInterval);
         }
     }

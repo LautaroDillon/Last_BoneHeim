@@ -7,7 +7,7 @@ public class LootBag : MonoBehaviour
     public List<Loot> lootList = new List<Loot>();
     bool candrop;
 
-    Loot GetDroppedLoot()
+    public Loot GetDroppedLoot()
     {
         int randomNumber = Random.Range(1, 101);
 
@@ -45,7 +45,7 @@ public class LootBag : MonoBehaviour
             candrop = true;
             DroppeItemPrefab = droppedItem.lootObject;
             GameObject lootGameobject = Instantiate(DroppeItemPrefab, SpawnPosition, Quaternion.identity);
-           // lootGameobject.GetComponent<Loot>().lootObject = droppedItem.lootObject;
+            lootGameobject.GetComponent<Loot>().lootObject = droppedItem.lootObject;
             lootGameobject.GetComponent<LootColection>().loot = droppedItem;
         }
     }

@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 691831650096087242}
   - component: {fileID: 7960655329518382720}
   - component: {fileID: 3547226837393423689}
+  - component: {fileID: 2438890155032240677}
+  - component: {fileID: 1415341752645206926}
   m_Layer: 0
   m_Name: Jarron Breakable
   m_TagString: Untagged
@@ -29,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -81.59, y: 1.139, z: 0.030035784}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.2475, y: 1.2475, z: 1.2475}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4337730956827158041}
@@ -93,6 +95,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2438890155032240677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266014576462789314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b1651e64503fd34da61b17336fd365d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Bag: {fileID: 1415341752645206926}
+--- !u!114 &1415341752645206926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266014576462789314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0091a8ec81cf19a4c80fe3047c53aa05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DroppeItemPrefab: {fileID: 0}
+  lootList:
+  - {fileID: 11400000, guid: caf76612bbc7e6b4a8d2c5bdeed74b61, type: 2}
+  - {fileID: 11400000, guid: 97ad6c4bc7ecf374c9460da12bb0c1aa, type: 2}
+  - {fileID: 11400000, guid: 4f0733723f9e6fe4390b592909424463, type: 2}
+  - {fileID: 11400000, guid: 3d024aa5a8ffcce468e25816709da447, type: 2}
 --- !u!1001 &4303205042507776498
 PrefabInstance:
   m_ObjectHideFlags: 0

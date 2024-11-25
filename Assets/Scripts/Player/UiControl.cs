@@ -5,11 +5,16 @@ using UnityEngine.UI;
 
 public class UiControl : MonoBehaviour
 {
+    [Header("References")]
     public Canvas pauseMenu;
     public Canvas invMenu;
     public Canvas tooltipMenu;
+
+    [Header("Bools")]
     public static bool _isPaused;
     public static bool _isInventory;
+
+    [Header("Sounds")]
     [SerializeField] private AudioClip menuSoundClip;
 
     private void Start()

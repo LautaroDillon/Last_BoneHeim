@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum ItemType
-{
+{ //Agregar desde abajo de todo, porque agregan desde, por ejemplo, O_Lungs, corre toda la lista y todos los items se van a mover la cantidad de espacios que agregaron.
+  // El default no importa porque no se usa
     O_Heart,
     O_Brain,
     O_Lungs,
@@ -14,6 +15,14 @@ public enum ItemType
     H_Invoker,
     H_Knuckle,
     H_Teeth,
+    O_CursedHeart,
+    O_CursedLungs,
+    O_CursedStomach,
+    O_CursedLiver,
+    O_BlazingHeart,
+    O_BlazingLungs,
+    O_BlazingStomach,
+    O_BlazingLiver,
     Default
     
 }

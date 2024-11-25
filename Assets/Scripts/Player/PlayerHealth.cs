@@ -3,25 +3,47 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerHealth : MonoBehaviour, Idamagable
 {
-    public static PlayerHealth instance;
-    [SerializeField] public float life;
-    public float _maxlife;
+    [Header("References")]
     public Image healthBar;
     public Image berserkFillBar;
     public GameObject berserkBar;
-    public bool isInReviveState = false;
+    public FullscreenController fullscreenController;
+    public static PlayerHealth instance;
+
+    [Header("Variables")]
+    [SerializeField] public float life;
+    public float _maxlife;
     public float reviveTime = 5f;
     private float reviveTimer;
+    
+
+    [Header("Bools")]
+    public bool isInReviveState = false;
     private bool isDead = false;
     public bool enemyKilled = false;
+
+    [Header("Sounds")]
     [SerializeField] private AudioClip painClip;
     [SerializeField] private AudioClip berserkStartClip;
     [SerializeField] private AudioClip heartbeatClip;
 
-    [Header ("berserk")]
+    [Header("Damage Shader")]
+    [SerializeField] private ScriptableRendererFeature _fullScreenDamage;
+    [SerializeField] private Material _material;
+
+    [SerializeField] private float _damageDisplayTime = 1.5f;
+    [SerializeField] private float _damageFadeoutTime = 0.5f;
+    private int _voronoiIntensity = Shader.PropertyToID("_VoronoiIntensity");
+    private int _vignetteIntensity = Shader.PropertyToID("_Intensity");
+
+    private const float VORONOI_INTENSITY_START_AMOUNT = 1f;
+    private const float VIGNETTE_INTENSITY_START_AMOUNT = 1.2f;
+
+    [Header ("Berserk")]
     [SerializeField] public Material berserk;
     public float turnOn;
     public float turnOof;
@@ -31,13 +53,13 @@ public class PlayerHealth : MonoBehaviour, Idamagable
         _maxlife = FlyweightPointer.Player.maxLife;
         berserkBar.gameObject.SetActive(false);
         berserk.SetFloat("_Active", 0);
-
     }
 
     void Start()
     {
         life = _maxlife;
         instance = this;
+        _fullScreenDamage.SetActive(false);
     }
 
     void Update()
@@ -118,6 +140,8 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     {
         life -= dmg;
         healthBar.fillAmount = life / 100;
+        StartCoroutine(HurtShader());
+        CameraShake.Shake(0.2f, 0.2f);
         SoundManager.instance.PlaySound(painClip, transform, 0.3f, false);
 
         if (life <= 0 && !isInReviveState)
@@ -125,5 +149,28 @@ public class PlayerHealth : MonoBehaviour, Idamagable
             StartReviveCountdown();
             SoundManager.instance.PlaySound(berserkStartClip, transform, 1f, false);
         }
+    }
+
+    public IEnumerator HurtShader()
+    {
+        _fullScreenDamage.SetActive(true);
+        _material.SetFloat(_voronoiIntensity, VORONOI_INTENSITY_START_AMOUNT);
+        _material.SetFloat(_vignetteIntensity, VIGNETTE_INTENSITY_START_AMOUNT);
+
+        yield return new WaitForSeconds(_damageDisplayTime);
+
+        float timeElapsed = 0f;
+        while (timeElapsed < _damageFadeoutTime)
+        {
+            timeElapsed += Time.deltaTime;
+            float lerpedVoronoi = Mathf.Lerp(VORONOI_INTENSITY_START_AMOUNT, 0f, (timeElapsed / _damageFadeoutTime));
+            float lerpedVignette = Mathf.Lerp(VIGNETTE_INTENSITY_START_AMOUNT, 0f, (timeElapsed / _damageFadeoutTime));
+
+            _material.SetFloat(_voronoiIntensity, lerpedVoronoi);
+            _material.SetFloat(_vignetteIntensity, lerpedVignette);
+
+            yield return null;
+        }
+        _fullScreenDamage.SetActive(false);
     }
 }

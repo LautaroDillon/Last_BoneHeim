@@ -578,7 +578,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7424446202622726595}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 2
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -665,9 +665,9 @@ MonoBehaviour:
   speedIncreaseMultiplier: 1.5
   slopeIncreaseMultiplier: 2.5
   groundDrag: 4
-  jumpForce: 12
+  jumpForce: 17
   jumpCooldown: 0.25
-  airMultiplier: 0.6
+  airMultiplier: 0.5
   crouchSpeed: 3.5
   crouchYScale: 0.5
   slidingDust: {fileID: 4005516165420872832}
@@ -714,7 +714,7 @@ MonoBehaviour:
   lg: {fileID: 828582496688742172}
   whatIsWall:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 16384
   climbSpeed: 10
   maxClimbTime: 1
   climbJumpUpForce: 14
@@ -845,7 +845,7 @@ MonoBehaviour:
   arm: {fileID: 5608865901135598199, guid: 1a44b35d2ee8bf041ace00ce2209257d, type: 3}
   armPrefab: {fileID: 1783960954000253041}
   totalThrows: 1
-  throwCooldown: 0
+  throwCooldown: 2
   recoverArmTime: 15
   recoverArmMaxTime: 15
   throwKey: 102

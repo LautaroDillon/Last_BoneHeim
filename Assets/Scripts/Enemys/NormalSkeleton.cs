@@ -6,7 +6,7 @@ public class NormalSkeleton : EnemisBehaivor
 
     bool atacando;
 
-    [Header("atack range")]
+    [Header("Attack Range")]
     [SerializeField] protected Transform firePoint;
     protected float DMG;
     protected float fireForce = 15f;

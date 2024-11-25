@@ -3,32 +3,34 @@ using UnityEngine;
 public class EnemisBehaivor : MonoBehaviour, Idamagable
 {
     public static EnemisBehaivor instance;
+    [Header("References")]
+    Guns gun;
 
-
+    [Header("Variables")]
     [SerializeField] protected float currentlife;
     [SerializeField] protected float speed;
 
-    [Header("Detecion del player")]
+    [Header("Player Detection")]
     [SerializeField] protected LayerMask whatIsPlayer;
     [SerializeField] protected bool IsInChaseRange;
     [SerializeField] protected Transform player;
     [SerializeField] public float checkRadius;
 
-    [Header("movimiento")]
+    [Header("Movement")]
     protected int rutina;
     [SerializeField] protected float cronometro;
     protected Quaternion angulo;
     protected float grado;
     [SerializeField] protected float ranged;
 
-    Guns gun;
+    [Header("Sounds")]
     [SerializeField] protected AudioClip skeletonDeathClip;
     [SerializeField] protected AudioClip boomerDeathClip;
     [SerializeField] protected AudioClip necromancerDeathClip;
     [SerializeField] protected AudioClip invokerDeathClip;
     [SerializeField] protected AudioClip chamanDeathClip;
 
-    [Header("particulas")]
+    [Header("Particles")]
     [SerializeField] protected GameObject blood;
     [SerializeField] protected GameObject skeletaldamage;
     [SerializeField] protected GameObject pointParticle;

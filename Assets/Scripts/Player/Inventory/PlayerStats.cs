@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    
+    [Header("References")]
 
     public InventoryObject inventory;
     public InventoryObject equipment;
-
     public Attribute[] attributes;
+
+    [Header("Sounds")]
+
     [SerializeField] private AudioClip groundPickUpClip;
     [SerializeField] private AudioClip equipmentClip;
 

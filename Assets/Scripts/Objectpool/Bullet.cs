@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    [Header("References")]
+    public Rigidbody rb;
+
+    [Header("Variables")]
     public float speed;
     public float counter;
     public float lifetime;
     ObjectPool<Bullet> _objectPool;
-    public Rigidbody rb;
 
     void Update()
     {

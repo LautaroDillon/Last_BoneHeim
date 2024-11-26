@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e67b9a41e19eaff4396b61378b2981a1, type: 3}
   m_Name: C_Heart
   m_EditorClassIdentifier: 
-  uiDisplay: {fileID: 0}
+  uiDisplay: {fileID: 21300000, guid: 65754fb860ec4cf4abd185822d85b938, type: 3}
   characterDisplay: {fileID: 0}
   stackable: 0
   type: 10
   description: 
   data:
     Name: 
-    Id: -1
+    Id: 8
     buffs: []
   boneNames: []

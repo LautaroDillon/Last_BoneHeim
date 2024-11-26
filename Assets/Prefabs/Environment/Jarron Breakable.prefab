@@ -120,12 +120,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0091a8ec81cf19a4c80fe3047c53aa05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DroppeItemPrefab: {fileID: 1109930776020720447, guid: 3fa9da02f1126834cbd8c5703435dd92, type: 3}
+  DroppeItemPrefab: {fileID: 0}
   lootList:
-  - {fileID: 11400000, guid: caf76612bbc7e6b4a8d2c5bdeed74b61, type: 2}
-  - {fileID: 11400000, guid: 97ad6c4bc7ecf374c9460da12bb0c1aa, type: 2}
-  - {fileID: 11400000, guid: 4f0733723f9e6fe4390b592909424463, type: 2}
-  - {fileID: 11400000, guid: 3d024aa5a8ffcce468e25816709da447, type: 2}
+  - {fileID: 11400000, guid: 2a1e72e78fff2c24f9522f58c86645e4, type: 2}
+  - {fileID: 11400000, guid: 3d1b73f3236d8694693fd4ce508234e4, type: 2}
+  - {fileID: 11400000, guid: a7677180d3fd2224eb9c5b8d99161283, type: 2}
+  - {fileID: 11400000, guid: 2b9196e8a57bbb84eb0b0d97270abb21, type: 2}
+  - {fileID: 11400000, guid: 222324bbe41668c4d94512b4c59442e8, type: 2}
+  - {fileID: 11400000, guid: 8711bb9e489c91f4eae16b1b496b476d, type: 2}
+  - {fileID: 11400000, guid: f3611045598106c4e9e7affbd5456ca2, type: 2}
+  - {fileID: 11400000, guid: b32e849a32c36ef4ca3db118d3f2fcb5, type: 2}
+  - {fileID: 11400000, guid: e93baf319678ba943880ffb7a2c3e4b3, type: 2}
+  - {fileID: 11400000, guid: c50a61c150af10946859a52285b6a3fa, type: 2}
+  - {fileID: 11400000, guid: 2a2475d30a75a91459085c9934075454, type: 2}
+  - {fileID: 11400000, guid: 0443cd5db1387fd4484d3228a6ce28b9, type: 2}
 --- !u!1001 &4303205042507776498
 PrefabInstance:
   m_ObjectHideFlags: 0

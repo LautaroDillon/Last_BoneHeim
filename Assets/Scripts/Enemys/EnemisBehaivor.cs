@@ -36,6 +36,7 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
     [SerializeField] protected GameObject pointParticle;
     [SerializeField] public GameObject healParticle;
 
+    [Header("Animation")]
     [SerializeField] protected Animator anim;
 
     private void Start()

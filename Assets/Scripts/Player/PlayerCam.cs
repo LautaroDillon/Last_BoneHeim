@@ -6,18 +6,19 @@ using DG.Tweening;
 
 public class PlayerCam : MonoBehaviour
 {
-    public float sensX;
-    public float sensY;
-
+    [Header("References")]
     public Transform orientation;
     public Transform camHolder;
     public Slider slider;
 
-    float xRotation;
-    float yRotation;
-
+    [Header("Variables")]
+    public float sensX;
+    public float sensY;
     public float _tiltAmount = 5;
     public float _rotationSpeed = 0.5f;
+
+    float yRotation;
+    float xRotation;
 
     private void Start()
     {

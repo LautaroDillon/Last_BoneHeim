@@ -50,6 +50,7 @@ public class PlayerStats : MonoBehaviour
                 SoundManager.instance.PlaySound(equipmentClip, transform, 1f, false);
                 switch (_slot.ItemObject.type)
                 {
+                    #region Organs
                     case ItemType.O_Heart:
                         Debug.Log("HEART DOESNT WORK");
                         SoundManager.instance.PlaySound(unequipClip, transform, 1f, false);
@@ -131,6 +132,7 @@ public class PlayerStats : MonoBehaviour
                         PlayerMovementAdvanced.instance.jumpForce -= 3;
                         PlayerMovementAdvanced.instance.airMultiplier -= 1;
                         break;
+                        #endregion
                 }
                 for (int i = 0; i < _slot.item.buffs.Length; i++)
                 {
@@ -159,6 +161,7 @@ public class PlayerStats : MonoBehaviour
                 SoundManager.instance.PlaySound(equipmentClip, transform, 1.5f, false);
                 switch(_slot.ItemObject.type)
                 {
+                    #region Organs
                     case ItemType.O_Heart:
                         Debug.Log("HEART WORKS");
                         SoundManager.instance.PlaySound(heartEquipClip, transform, 1f, false);
@@ -251,7 +254,31 @@ public class PlayerStats : MonoBehaviour
                         PlayerMovementAdvanced.instance.jumpForce += 3;
                         PlayerMovementAdvanced.instance.airMultiplier += 1;
                         break;
+                    #endregion
 
+                    case ItemType.H_Skeleton:
+                        Debug.Log("SKELETON HAND WORKS");
+                        Guns.instance.ResetGun();
+                        Guns.instance.SkeletonHand();
+                        break;
+
+                    case ItemType.H_Knuckle:
+                        Debug.Log("Knuckle Buster WORKS");
+                        Guns.instance.ResetGun();
+                        Guns.instance.KnuckleBuster();
+                        break;
+
+                    case ItemType.H_Invoker:
+                        Debug.Log("Invoker HAND WORKS");
+                        Guns.instance.ResetGun();
+                        Guns.instance.InvokerHand();
+                        break;
+
+                    case ItemType.H_Teeth:
+                        Debug.Log("TEETH SHOT WORKS");
+                        Guns.instance.ResetGun();
+                        Guns.instance.TeethShot();
+                        break;
                 }
                 for (int i = 0; i < _slot.item.buffs.Length; i++)
                 {

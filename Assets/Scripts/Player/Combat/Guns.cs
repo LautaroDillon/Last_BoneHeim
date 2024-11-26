@@ -259,7 +259,7 @@ public class Guns : MonoBehaviour
         isKnuckle = false;
         isSkeleton = false;
         isTeeth = false;
-
+        FlyweightPointer.Player.Damage = 0;
     }
 
     public void SkeletonHand()
@@ -272,6 +272,7 @@ public class Guns : MonoBehaviour
         bulletsPerTap += 1;
         allowButtonHold = true;
         useGravity = false;
+        FlyweightPointer.Player.Damage += 30;
     }
     public void KnuckleBuster()
     {
@@ -284,6 +285,7 @@ public class Guns : MonoBehaviour
         bulletsPerTap += 1;
         allowButtonHold = true;
         useGravity = false;
+        FlyweightPointer.Player.Damage += 20;
     }
 
     public void InvokerHand()
@@ -299,6 +301,7 @@ public class Guns : MonoBehaviour
         explodeOnTouch = true;
         useGravity = true;
         allowButtonHold = false;
+        FlyweightPointer.Player.Damage += 90;
     }
 
     public void TeethShot()
@@ -312,6 +315,7 @@ public class Guns : MonoBehaviour
         recoilForce += 1.5f;
         spread += 2.5f;
         useGravity = false;
+        FlyweightPointer.Player.Damage += 35;
     }
     #endregion
 }

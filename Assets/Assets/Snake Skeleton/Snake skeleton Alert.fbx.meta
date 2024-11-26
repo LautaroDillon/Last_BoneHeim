@@ -44,8 +44,8 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
+      loopTime: 1
+      loopBlend: 1
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
@@ -111,7 +111,77 @@ ModelImporter:
   humanDescription:
     serializedVersion: 3
     human: []
-    skeleton: []
+    skeleton:
+    - name: Snake Skeleton FBX(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: polySurface16
+      parentName: Snake Skeleton FBX(Clone)
+      position: {x: -0, y: 0.013658764, z: 0.3497621}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Spine_Central
+      parentName: Snake Skeleton FBX(Clone)
+      position: {x: -0, y: 0.020800896, z: -0.03066622}
+      rotation: {x: -0, y: 0.7071068, z: 0, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Spine_Backward
+      parentName: Spine_Central
+      position: {x: 0.09202015, y: -0.00039038068, z: 0}
+      rotation: {x: 0.022418855, y: -0.03499311, z: 0.5389844, w: 0.8412899}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Spine_Backward_2
+      parentName: Spine_Backward
+      position: {x: 0.08752709, y: -0.0011570337, z: -0.0072939238}
+      rotation: {x: 0.014973133, y: 0.6376665, z: -0.0006228592, w: 0.7701668}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Spine_Back_2
+      parentName: Spine_Backward_2
+      position: {x: 0.07645753, y: -0.0018935349, z: 1.9721522e-33}
+      rotation: {x: 0.0042324746, y: 0.09828127, z: 0.0064831455, w: 0.99512863}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Spine_Backward_3
+      parentName: Spine_Back_2
+      position: {x: 0.06955448, y: -0.0029954007, z: 6.902533e-33}
+      rotation: {x: -0, y: -0.7071068, z: 0, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Spine_Tail
+      parentName: Spine_Backward_3
+      position: {x: 3.9443044e-33, y: -0.0025848108, z: -0.054469503}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Spine_Foward
+      parentName: Spine_Central
+      position: {x: -0.091744095, y: -0.0012167178, z: -8.881784e-18}
+      rotation: {x: 0.448693, y: -0.5234314, z: 0.44911525, w: 0.5683218}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Spine_Foward2
+      parentName: Spine_Foward
+      position: {x: 8.881784e-18, y: -0.00082313496, z: 0.08751048}
+      rotation: {x: -0, y: 0.7071068, z: 0, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Spine_Foward_3
+      parentName: Spine_Foward2
+      position: {x: -0.077603884, y: -0.0008380566, z: 0}
+      rotation: {x: -0.44869304, y: -0.5683218, z: -0.44911528, w: 0.5234314}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Skull
+      parentName: Spine_Foward_3
+      position: {x: -0, y: -0.00040300388, z: 0.06256394}
+      rotation: {x: -0, y: 0.7071068, z: 0, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Maxilar_left
+      parentName: Skull
+      position: {x: 0.011939726, y: -0.0048551885, z: 0.023920808}
+      rotation: {x: -0, y: -0.7071068, z: 0, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Maxilar_Right
+      parentName: Skull
+      position: {x: 0.011939428, y: -0.0048552384, z: -0.0239208}
+      rotation: {x: 0.7071068, y: 4.3297806e-17, z: 0.7071068, w: -4.3297806e-17}
+      scale: {x: 1, y: 1, z: 1}
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
@@ -122,13 +192,13 @@ ModelImporter:
     globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: d22cf9b0681927f4fa2c51d458d8f3b0, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 0
+  avatarSetup: 2
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0

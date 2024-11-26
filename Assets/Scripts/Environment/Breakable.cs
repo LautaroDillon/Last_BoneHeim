@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class Breakable : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] GameObject intactObject;
     [SerializeField] GameObject brokenObject;
     BoxCollider bc;
+
+    [Header("Sounds")]
     [SerializeField] private AudioClip breakClip;
+
     private void Awake()
     {
         intactObject.SetActive(true);
@@ -24,7 +28,7 @@ public class Breakable : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Bullet" || other.gameObject.tag == "EnemyBullet")
+        if(other.gameObject.tag == "Bullet" || other.gameObject.tag == "EnemyBullet" || other.gameObject.tag == "Arm")
         {
             Break();
             Invoke("Destroy", 3);

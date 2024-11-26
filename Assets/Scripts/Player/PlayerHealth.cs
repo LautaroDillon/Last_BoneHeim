@@ -19,7 +19,6 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     public float _maxlife;
     public float reviveTime = 5f;
     private float reviveTimer;
-    
 
     [Header("Bools")]
     public bool isInReviveState = false;
@@ -35,13 +34,14 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     [SerializeField] private ScriptableRendererFeature _fullScreenDamage;
     [SerializeField] private Material _material;
 
+    [Header("Shader Values")]
     [SerializeField] private float _damageDisplayTime = 1.5f;
     [SerializeField] private float _damageFadeoutTime = 0.5f;
-    private int _voronoiIntensity = Shader.PropertyToID("_VoronoiIntensity");
-    private int _vignetteIntensity = Shader.PropertyToID("_Intensity");
-
     private const float VORONOI_INTENSITY_START_AMOUNT = 1f;
     private const float VIGNETTE_INTENSITY_START_AMOUNT = 1.2f;
+
+    private int _vignetteIntensity = Shader.PropertyToID("_Intensity");
+    private int _voronoiIntensity = Shader.PropertyToID("_VoronoiIntensity");
 
     [Header ("Berserk")]
     [SerializeField] public Material berserk;
@@ -64,6 +64,8 @@ public class PlayerHealth : MonoBehaviour, Idamagable
 
     void Update()
     {
+        if (life >= _maxlife)
+            life = _maxlife;
         if (life <= 0 && !isDead)
         {
             // Inicia el estado de revivible

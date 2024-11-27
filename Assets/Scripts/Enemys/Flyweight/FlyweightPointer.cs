@@ -27,7 +27,7 @@ public class FlyweightPointer
 
     public static readonly EnemysFlight Player = new EnemysFlight()
     {
-        Damage = 30,
+        Damage = 0,
         maxLife = 100
     };
 }

@@ -62,6 +62,10 @@ public class Throwing : MonoBehaviour
             {
                 guns.magazineSize = guns.magazineSize / 2;
             }
+            if (guns.isTeeth == true)
+            {
+                guns.magazineSize = guns.magazineSize / 2;
+            }
             Debug.Log("Throw!");
         }
     }

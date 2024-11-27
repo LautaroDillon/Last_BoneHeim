@@ -132,6 +132,28 @@ public class PlayerStats : MonoBehaviour
                         PlayerMovementAdvanced.instance.jumpForce -= 3;
                         PlayerMovementAdvanced.instance.airMultiplier -= 1;
                         break;
+                    #endregion
+
+                    #region Hands
+                    case ItemType.H_Skeleton:
+                        Debug.Log("SKELETON HAND DOESNT WORK");
+                        Guns.instance.ResetGun();
+                        break;
+
+                    case ItemType.H_Knuckle:
+                        Debug.Log("KNUCKLE BUSTER DOESNT WORK");
+                        Guns.instance.ResetGun();
+                        break;
+
+                    case ItemType.H_Invoker:
+                        Debug.Log("INVOKER HAND DOESNT WORK");
+                        Guns.instance.ResetGun();
+                        break;
+
+                    case ItemType.H_Teeth:
+                        Debug.Log("TEETH SHOT DOESNT WORK");
+                        Guns.instance.ResetGun();
+                        break;
                         #endregion
                 }
                 for (int i = 0; i < _slot.item.buffs.Length; i++)
@@ -256,6 +278,7 @@ public class PlayerStats : MonoBehaviour
                         break;
                     #endregion
 
+                    #region Hands
                     case ItemType.H_Skeleton:
                         Debug.Log("SKELETON HAND WORKS");
                         Guns.instance.ResetGun();
@@ -279,6 +302,7 @@ public class PlayerStats : MonoBehaviour
                         Guns.instance.ResetGun();
                         Guns.instance.TeethShot();
                         break;
+                        #endregion
                 }
                 for (int i = 0; i < _slot.item.buffs.Length; i++)
                 {

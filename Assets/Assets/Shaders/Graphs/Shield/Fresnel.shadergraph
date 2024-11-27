@@ -73,7 +73,11 @@
             "m_Id": "d5b84e3f6d8b43a795ce171c354afe3f"
         }
     ],
-    "m_GroupDatas": [],
+    "m_GroupDatas": [
+        {
+            "m_Id": "0b82055630b44de5b1d27f8c7fc24e88"
+        }
+    ],
     "m_StickyNoteDatas": [],
     "m_Edges": [
         {
@@ -350,7 +354,7 @@
     "m_Type": "UnityEditor.ShaderGraph.ScreenPositionNode",
     "m_ObjectId": "0a5a192894e140d3bd7c4e3dc3a5780b",
     "m_Group": {
-        "m_Id": ""
+        "m_Id": "0b82055630b44de5b1d27f8c7fc24e88"
     },
     "m_Name": "Screen Position",
     "m_DrawState": {
@@ -377,6 +381,17 @@
         "m_SerializableColors": []
     },
     "m_ScreenSpaceType": 1
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.GroupData",
+    "m_ObjectId": "0b82055630b44de5b1d27f8c7fc24e88",
+    "m_Title": "Fresnel",
+    "m_Position": {
+        "x": 10.0,
+        "y": 10.0
+    }
 }
 
 {
@@ -521,7 +536,7 @@
     "m_Type": "UnityEditor.ShaderGraph.OneMinusNode",
     "m_ObjectId": "2053dd5fb6e04c95bb6cec88bf30f93b",
     "m_Group": {
-        "m_Id": ""
+        "m_Id": "0b82055630b44de5b1d27f8c7fc24e88"
     },
     "m_Name": "One Minus",
     "m_DrawState": {
@@ -561,7 +576,7 @@
     "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
     "m_ObjectId": "2056060f2d534458be2d74dd1d08f4c3",
     "m_Group": {
-        "m_Id": ""
+        "m_Id": "0b82055630b44de5b1d27f8c7fc24e88"
     },
     "m_Name": "Property",
     "m_DrawState": {
@@ -988,7 +1003,7 @@
     "m_Type": "UnityEditor.ShaderGraph.FresnelNode",
     "m_ObjectId": "85c0f1109f884f55a7b944edef131efb",
     "m_Group": {
-        "m_Id": ""
+        "m_Id": "0b82055630b44de5b1d27f8c7fc24e88"
     },
     "m_Name": "Fresnel Effect",
     "m_DrawState": {
@@ -1058,7 +1073,7 @@
     "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
     "m_ObjectId": "875d5499fc35440081f5a2b4b059f80e",
     "m_Group": {
-        "m_Id": ""
+        "m_Id": "0b82055630b44de5b1d27f8c7fc24e88"
     },
     "m_Name": "Property",
     "m_DrawState": {
@@ -1094,7 +1109,7 @@
     "m_Type": "UnityEditor.ShaderGraph.SceneDepthNode",
     "m_ObjectId": "89255c934af24482b7c48025195a3fb0",
     "m_Group": {
-        "m_Id": ""
+        "m_Id": "0b82055630b44de5b1d27f8c7fc24e88"
     },
     "m_Name": "Scene Depth",
     "m_DrawState": {
@@ -1160,7 +1175,7 @@
     "m_Type": "UnityEditor.ShaderGraph.SubtractNode",
     "m_ObjectId": "9a662c4d3ef04db79e7822f0ac8840cb",
     "m_Group": {
-        "m_Id": ""
+        "m_Id": "0b82055630b44de5b1d27f8c7fc24e88"
     },
     "m_Name": "Subtract",
     "m_DrawState": {
@@ -1276,7 +1291,7 @@
     "m_Type": "UnityEditor.ShaderGraph.SmoothstepNode",
     "m_ObjectId": "a374d5f499cc46ba8e510e8076516b27",
     "m_Group": {
-        "m_Id": ""
+        "m_Id": "0b82055630b44de5b1d27f8c7fc24e88"
     },
     "m_Name": "Smoothstep",
     "m_DrawState": {
@@ -1326,17 +1341,17 @@
     "m_Type": "UnityEditor.ShaderGraph.AddNode",
     "m_ObjectId": "a7abad2143994f15bfaec2b067aa093d",
     "m_Group": {
-        "m_Id": ""
+        "m_Id": "0b82055630b44de5b1d27f8c7fc24e88"
     },
     "m_Name": "Add",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -592.2470703125,
-            "y": 255.75296020507813,
+            "x": -547.0,
+            "y": 276.0000305175781,
             "width": 208.0,
-            "height": 302.0
+            "height": 302.0000305175781
         }
     },
     "m_Slots": [
@@ -1417,7 +1432,7 @@
     "m_Type": "UnityEditor.ShaderGraph.SubtractNode",
     "m_ObjectId": "c105fae14b934c8c81999d365abe3267",
     "m_Group": {
-        "m_Id": ""
+        "m_Id": "0b82055630b44de5b1d27f8c7fc24e88"
     },
     "m_Name": "Subtract",
     "m_DrawState": {
@@ -1476,7 +1491,7 @@
     "m_Type": "UnityEditor.ShaderGraph.SplitNode",
     "m_ObjectId": "c505542fe3ae449fb757b5a6e808f021",
     "m_Group": {
-        "m_Id": ""
+        "m_Id": "0b82055630b44de5b1d27f8c7fc24e88"
     },
     "m_Name": "Split",
     "m_DrawState": {
@@ -1595,7 +1610,7 @@
     "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
     "m_ObjectId": "d5b84e3f6d8b43a795ce171c354afe3f",
     "m_Group": {
-        "m_Id": ""
+        "m_Id": "0b82055630b44de5b1d27f8c7fc24e88"
     },
     "m_Name": "Property",
     "m_DrawState": {

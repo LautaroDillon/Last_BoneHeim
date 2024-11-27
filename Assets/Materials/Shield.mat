@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Shield
-  m_Shader: {fileID: -6465566751694194690, guid: a6d0f4a310765c0428b4c9c33b9adb93, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: a37f588f5a11f534d8df4b33181b779a, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -90,19 +90,12 @@ Material:
     - _ClearCoatSmoothness: 0
     - _Cull: 2
     - _Cutoff: 0.5
-    - _DepthOffset: 0.4
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _DisplacementStrenght: 0.1
-    - _Dissolve: 1.3
-    - _DissolveEdge: 0.1
-    - _DissolveEdgeColor: 1
-    - _DissolveStrenght: 1
-    - _DistortionStrenght: 2.6
+    - _DistortionStrenght: 0.05
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
-    - _FresnelPower: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -115,23 +108,15 @@ Material:
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SphereMaskHardness: 0.45
-    - _SphereMaskRadius: 0.17
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
-    - _Zoom: 1
     m_Colors:
     - _BaseColor: {r: 0.38968495, g: 0.5509687, b: 0.5943396, a: 0.65882355}
     - _Color: {r: 0.38968495, g: 0.5509687, b: 0.5943396, a: 0.65882355}
-    - _DissolveEdgeColor: {r: 1, g: 0, b: 0, a: 0}
-    - _DistortionSmoothStep: {r: 0.4, g: 4.3, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _HitPosition: {r: 0, g: 0, b: 0, a: 0}
-    - _ObjectScreenPosition: {r: 0, g: 0, b: 0, a: 0}
-    - _ShieldColor: {r: 0, g: 0.008441046, b: 0.084905684, a: 0}
     - _SmoothStep: {r: 0.43, g: 5, b: 0, a: 0}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []

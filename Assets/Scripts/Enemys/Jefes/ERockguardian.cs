@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class ERockguardian : MonoBehaviour
+public class ERockguardian : MonoBehaviour, Idamagable
 {
     float currentLife;
     public float maxLife;
@@ -31,6 +29,8 @@ public class ERockguardian : MonoBehaviour
     public NavMeshAgent navMeshAgent;
     public Transform player;
 
+    public Animator anim;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -50,15 +50,13 @@ public class ERockguardian : MonoBehaviour
 
         if (!isShieldActivate)
         {
-            if (distancetoplayer  > smashRanged)
+            if (distancetoplayer > smashRanged)
             {
                 MoveToPlayer();
             }
             else if (Time.time >= smashTimer + smashCoolDown)
             {
-                
-                    GroundSmash();
-                
+                GroundSmash();
             }
             if (Time.time >= rocktimer + rockCoolDown)
             {
@@ -71,7 +69,12 @@ public class ERockguardian : MonoBehaviour
     {
         if (navMeshAgent.enabled)
         {
-            navMeshAgent.SetDestination(player.position); 
+            anim.SetBool("Punch", false);
+            anim.SetBool("Walk", true);
+            anim.SetBool("Idle", false);
+            anim.SetBool("Swiping", false);
+
+            navMeshAgent.SetDestination(player.position);
         }
     }
 
@@ -79,10 +82,12 @@ public class ERockguardian : MonoBehaviour
     public void GroundSmash()
     {
         smashTimer = Time.time;
-        //animator.SetTrigger("GroundSmash");
+        anim.SetBool("Idle", false);
+        anim.SetBool("Punch", true);
+        anim.SetBool("Walk", false);
+        anim.SetBool("Swiping", false);
         Debug.Log("El Esqueleto usa Golpe de Tierra");
         //Instantiate(smashEffect, transform.position, Quaternion.identity);
-
         navMeshAgent.isStopped = true;
 
         // Aplica daño en un radio
@@ -91,7 +96,7 @@ public class ERockguardian : MonoBehaviour
         {
             if (hit.gameObject.layer == 11)
             {
-                hit.GetComponent<PlayerHealth>().TakeDamage(50); // Aplica daño al jugador
+                hit.GetComponent<PlayerHealth>().TakeDamage(25);
             }
         }
 
@@ -101,7 +106,10 @@ public class ERockguardian : MonoBehaviour
     public void ThrowRock()
     {
         rocktimer = Time.time;
-       // animator.SetTrigger("ThrowRock");
+        anim.SetBool("Punch", false);
+        anim.SetBool("Walk", false);
+            anim.SetBool("Idle", false);
+        anim.SetBool("Swiping", true);
         Debug.Log("El Esqueleto lanza una roca");
 
         navMeshAgent.isStopped = true;
@@ -152,9 +160,11 @@ public class ERockguardian : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        if (isShieldActivate) return;
-
+        if (isShieldActivate)
+        currentLife -= damage / 2;
+        else
         currentLife -= damage;
+
 
         if (currentLife <= 0)
         {

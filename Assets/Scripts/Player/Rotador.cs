@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Rotador : MonoBehaviour
 {
-    public float rotationSpeed = 50f; // Velocidad de rotación
+    public float rotationSpeedX = 0f; // Velocidad de rotación x
+    public float rotationSpeedY = 0f; // Velocidad de rotación y 
+    public float rotationSpeedZ= 0f; // Velocidad de rotación z
     public float floatAmplitude = 0.5f; // Altura máxima de subida y bajada
     public float floatSpeed = 2f; // Velocidad de movimiento vertical
 
@@ -19,7 +21,7 @@ public class Rotador : MonoBehaviour
     void Update()
     {
         // Rotar el objeto
-        transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
+        transform.Rotate(rotationSpeedX * Time.deltaTime, rotationSpeedY * Time.deltaTime, rotationSpeedZ * Time.deltaTime);
 
         // Subir y bajar suavemente
         float newY = startPosition.y + Mathf.Sin(Time.time * floatSpeed) * floatAmplitude;

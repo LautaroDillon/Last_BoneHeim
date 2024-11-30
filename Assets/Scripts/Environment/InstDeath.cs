@@ -12,9 +12,7 @@ public class InstDeath : MonoBehaviour
 
         if (collision.gameObject.layer == 11 && damagableInterface != null)
         {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            SceneManager.LoadScene(2);
+            damagableInterface.TakeDamage(50);
         }
     }
 }

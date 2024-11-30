@@ -10,6 +10,7 @@ public class SawTrap : MonoBehaviour
     public Vector3 moveDirection = Vector3.forward;
     private Vector3 startPosition;
     [SerializeField] int sawDamage = 40;
+    [SerializeField] float rotationSpeed = 360f;
 
     void Start()
     {
@@ -20,6 +21,7 @@ public class SawTrap : MonoBehaviour
     {
         float distanceMoved = Mathf.PingPong(Time.time * moveSpeed, moveDistance);
         transform.position = startPosition + moveDirection * distanceMoved;
+        transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)

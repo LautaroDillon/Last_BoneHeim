@@ -8,6 +8,7 @@ public class Breakable : MonoBehaviour
     [SerializeField] GameObject intactObject;
     [SerializeField] GameObject brokenObject;
     BoxCollider bc;
+    CapsuleCollider cc;
 
     [Header("Sounds")]
     [SerializeField] private AudioClip breakClip;
@@ -17,13 +18,15 @@ public class Breakable : MonoBehaviour
         intactObject.SetActive(true);
         brokenObject.SetActive(false);
         bc = GetComponent<BoxCollider>();
+        cc = GetComponent<CapsuleCollider>();
     }
 
     private void Break()
     {
-        intactObject.SetActive(false);
+        Destroy(intactObject);
         brokenObject.SetActive(true);
         bc.enabled = false;
+        cc.enabled = false;
     }
 
     public void OnTriggerEnter(Collider other)

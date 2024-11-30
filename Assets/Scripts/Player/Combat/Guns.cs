@@ -79,31 +79,29 @@ public class Guns : MonoBehaviour
     #region GunMethods
     private void ShootInput()
     {
-        if(!UiControl._isPaused)
+        if (GameManager.instance.isRunning == true)
         {
-            if(!UiControl._isInventory)
+            if (allowButtonHold)
+                shooting = Input.GetKey(KeyCode.Mouse0);
+            else
+                shooting = Input.GetKeyDown(KeyCode.Mouse0);
+
+            //Reloading 
+            //if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !reloading)
+            //  Reload();
+            //if (readyToShoot && shooting && !reloading && bulletsLeft <= 0)
+            //  Reload();
+
+            //Shooting
+            if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
             {
-                if (allowButtonHold)
-                    shooting = Input.GetKey(KeyCode.Mouse0);
-                else
-                    shooting = Input.GetKeyDown(KeyCode.Mouse0);
-
-                //Reloading 
-                //if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !reloading)
-                  //  Reload();
-                //if (readyToShoot && shooting && !reloading && bulletsLeft <= 0)
-                  //  Reload();
-
-                //Shooting
-                if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
-                {
-                    bulletsShot = 0;
-                    SoundManager.instance.PlaySound(shootClip, transform, 0.3f, false);
-                    Shoot();
-                }
+                bulletsShot = 0;
+                SoundManager.instance.PlaySound(shootClip, transform, 0.3f, false);
+                Shoot();
             }
         }
-        
+        else
+            Debug.Log("Unpause game!");
     }
     private void Shoot()
     {

@@ -20,6 +20,7 @@ public class TutorialTrigger : MonoBehaviour
             Time.timeScale = 0f;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+            Destroy(gameObject);
         }
     }
 
@@ -29,6 +30,5 @@ public class TutorialTrigger : MonoBehaviour
         tutorial.gameObject.SetActive(false);
         Cursor.visible = false;
         Time.timeScale = 1f;
-        Destroy(gameObject);
     }
 }

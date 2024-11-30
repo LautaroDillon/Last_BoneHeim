@@ -74,7 +74,8 @@ public class ThrowArm : MonoBehaviour
 
         if (collision.gameObject.tag == "Player")
         {
-            if(guns.isSkeleton == true)
+            CameraShake.Shake(0.2f, 0.2f);
+            if (guns.isSkeleton == true)
             {
                 guns.magazineSize = 10;
             }

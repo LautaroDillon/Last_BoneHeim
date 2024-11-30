@@ -6,59 +6,55 @@ public class Guns : MonoBehaviour
 {
 
     #region Variables
+    [Header("References")]
     public static Guns instance;
-    //bullet 
     public GameObject bullet;
-
     public GameObject explosion;
+    PhysicMaterial physics_mat;
+    public Rigidbody rb;
+    public Rigidbody playerRb;
+    public Camera fpsCam;
+    public Transform attackPoint;
+    public LayerMask whatIsEnemies;
+    public GameObject muzzleFlash;
+    public TextMeshProUGUI ammunitionDisplay;
+    public CamShake camShake;
 
-    //bullet force
+    [Header("Bullet Force")]
     public float shootForce, upwardForce;
 
-    //Gun stats
+    [Header("Stats")]
     public float timeBetweenShooting, spread, reloadTime, timeBetweenShots;
     public int magazineSize, bulletsPerTap;
     public bool allowButtonHold;
     [Range(0f, 1f)]
     public float bounciness;
     public bool useGravity;
-
-    public int bulletsLeft, bulletsShot;
-    public int killReward;
-
+    public float bulletsLeft, bulletsShot;
+    public float killReward;
     public int explosionDamage;
     public float explosionRange;
     public float explosionForce;
-
     public int maxCollisions;
     public float maxLifetime;
     public bool explodeOnTouch = false;
-
     int collisions;
-    PhysicMaterial physics_mat;
-
-    public Rigidbody rb;
-    public Rigidbody playerRb;
     public float recoilForce;
 
-    bool shooting, readyToShoot, reloading;
-
-    public Camera fpsCam;
-    public Transform attackPoint;
-    public LayerMask whatIsEnemies;
-
-    public GameObject muzzleFlash;
-    public TextMeshProUGUI ammunitionDisplay;
-    [SerializeField] private AudioClip shootClip;
-
-    public CamShake camShake;
+    [Header("Camera Shake")]
     public float camShakeMagnitude, camShakeDuration;
 
+    [Header("Bools")]
+    bool shooting, readyToShoot, reloading;
     public bool allowInvoke = true;
     public bool isSkeleton = false;
     public bool isTeeth = false;
     public bool isInvoker = false;
     public bool isKnuckle = false;
+
+    [Header("Sounds")]
+    [SerializeField] private AudioClip shootClip;
+
     #endregion
 
     #region Awake/Start/Update

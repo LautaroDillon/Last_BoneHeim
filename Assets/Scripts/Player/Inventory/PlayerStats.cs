@@ -23,6 +23,12 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] protected AudioClip stomachEquipClip;
     [SerializeField] protected AudioClip stomachSecondaryClip;
 
+    private void Awake()
+    {
+        inventory.Clear();
+        equipment.Clear();
+    }
+
     private void Start()
     {
         for (int i = 0; i < attributes.Length; i++)
@@ -47,77 +53,66 @@ public class PlayerStats : MonoBehaviour
                 break;
             case InterfaceType.Equipment:
                 print(string.Concat("Removed ", _slot.ItemObject, " on ", _slot.parent.inventory.type, ", Allowed Items: ", string.Join(", ", _slot.AllowedItems)));
-                SoundManager.instance.PlaySound(equipmentClip, transform, 1f, false);
+                SoundManager.instance.PlaySound(unequipClip, transform, 1f, false);
                 switch (_slot.ItemObject.type)
                 {
                     #region Organs
                     case ItemType.O_Heart:
                         Debug.Log("HEART DOESNT WORK");
-                        SoundManager.instance.PlaySound(unequipClip, transform, 1f, false);
                         PlayerHealth.instance._maxlife -= 20;
                         break;
 
                     case ItemType.O_Liver:
                         Debug.Log("LIVER DOESNT WORK");
-                        SoundManager.instance.PlaySound(unequipClip, transform, 1f, false);
                         FlyweightPointer.Player.Damage -= 5;
                         break;
 
                     case ItemType.O_Lungs:
                         Debug.Log("LUNGS DOESNT WORK");
-                        SoundManager.instance.PlaySound(unequipClip, transform, 1f, false);
                         PlayerMovementAdvanced.instance.sprintSpeed -= 2;
                         break;
 
                     case ItemType.O_Stomach:
                         Debug.Log("STOMACH DOESNT WORK");
-                        SoundManager.instance.PlaySound(unequipClip, transform, 1f, false);
                         PlayerMovementAdvanced.instance.jumpForce -= 3;
                         break;
 
                     case ItemType.O_BlazingHeart:
                         Debug.Log("BLAZING HEART DOESNT WORK");
-                        SoundManager.instance.PlaySound(unequipClip, transform, 1f, false);
                         PlayerHealth.instance._maxlife -= 10;
                         break;
 
                     case ItemType.O_BlazingLiver:
                         Debug.Log("BLAZING LIVER DOESNT WORK");
-                        SoundManager.instance.PlaySound(unequipClip, transform, 1f, false);
                         FlyweightPointer.Player.Damage -= 10;
                         break;
 
                     case ItemType.O_BlazingLungs:
                         Debug.Log("BLAZING LUNGS DOESNT WORK");
-                        SoundManager.instance.PlaySound(unequipClip, transform, 1f, false);
                         PlayerMovementAdvanced.instance.sprintSpeed -= 1;
                         PlayerMovementAdvanced.instance.slideSpeed -= 3;
                         break;
 
                     case ItemType.O_BlazingStomach:
                         Debug.Log("BLAZING STOMACH DOESNT WORK");
-                        SoundManager.instance.PlaySound(unequipClip, transform, 1f, false);
                         PlayerMovementAdvanced.instance.jumpForce -= 1;
                         PlayerMovementAdvanced.instance.airMultiplier -= 1;
                         break;
 
                     case ItemType.O_CursedHeart:
                         Debug.Log("CURSED HEART DOESNT WORK");
-                        SoundManager.instance.PlaySound(unequipClip, transform, 1f, false);
                         PlayerHealth.instance._maxlife += 10;
                         PlayerHealth.instance.reviveTime -= 3;
                         break;
 
                     case ItemType.O_CursedLiver:
                         Debug.Log("CURSED LIVER DOESNT WORK");
-                        SoundManager.instance.PlaySound(unequipClip, transform, 1f, false);
                         PlayerHealth.instance._maxlife += 10;
                         FlyweightPointer.Player.Damage -= 20;
                         break;
 
                     case ItemType.O_CursedLungs:
                         Debug.Log("CURSED LUNGS DOESNT WORK");
-                        SoundManager.instance.PlaySound(unequipClip, transform, 1f, false);
                         PlayerHealth.instance._maxlife += 10;
                         PlayerMovementAdvanced.instance.sprintSpeed -= 1;
                         PlayerMovementAdvanced.instance.slideSpeed -= 1;
@@ -127,7 +122,6 @@ public class PlayerStats : MonoBehaviour
 
                     case ItemType.O_CursedStomach:
                         Debug.Log("CURSED STOMACH DOESNT WORK");
-                        SoundManager.instance.PlaySound(unequipClip, transform, 1f, false);
                         PlayerHealth.instance._maxlife += 10;
                         PlayerMovementAdvanced.instance.jumpForce -= 3;
                         PlayerMovementAdvanced.instance.airMultiplier -= 1;

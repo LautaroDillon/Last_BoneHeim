@@ -9,10 +9,6 @@ public class Turret : MonoBehaviour
     public float shootInterval = 2f; // Time in seconds between each shot
     public float bulletSpeed = 10f;  // Speed of the bullet
     public Transform firePoint;      // Where the bullets should come from (typically a child object)
-
-    [Header("Sounds")]
-    [SerializeField] protected AudioClip turretShotClip;
-
     private void Start()
     {
         // Start shooting at regular intervals
@@ -28,9 +24,7 @@ public class Turret : MonoBehaviour
     {
         while (true)
         {
-            SoundManager.instance.PlaySound(turretShotClip, transform, 1f, false);
             ShootBullet();
-
             yield return new WaitForSeconds(shootInterval);
         }
     }

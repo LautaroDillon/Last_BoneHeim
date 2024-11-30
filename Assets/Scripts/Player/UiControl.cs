@@ -51,6 +51,7 @@ public class UiControl : MonoBehaviour
         invMenu.gameObject.SetActive(true);
         tooltipMenu.gameObject.SetActive(true);
         PauseSlow();
+        GameManager.instance.isRunning = false;
         _isInventory = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -59,6 +60,7 @@ public class UiControl : MonoBehaviour
     {
         invMenu.gameObject.SetActive(false);
         tooltipMenu.gameObject.SetActive(false);
+        GameManager.instance.isRunning = true;
         Time.timeScale = 1.0f;
         _isInventory = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -85,6 +87,7 @@ public class UiControl : MonoBehaviour
     public void PauseOn()
     {
         _isPaused = true;
+        GameManager.instance.isRunning = false;
         pauseMenu.gameObject.SetActive(true);
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
@@ -94,12 +97,14 @@ public class UiControl : MonoBehaviour
     public void PauseSlow()
     {
         Time.timeScale = 0.10f;
+        GameManager.instance.isRunning = false;
     }
 
     public void PauseOff()
     {
         _isPaused = false;
         pauseMenu.gameObject.SetActive(false);
+        GameManager.instance.isRunning = true;
         Time.timeScale = 1.0f;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

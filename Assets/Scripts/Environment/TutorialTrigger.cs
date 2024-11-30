@@ -20,15 +20,17 @@ public class TutorialTrigger : MonoBehaviour
             Time.timeScale = 0f;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            Destroy(gameObject);
+            GameManager.instance.isRunning = false;
         }
     }
 
     public void TutorialEnd()
     {
-        Cursor.lockState = CursorLockMode.Locked;
         tutorial.gameObject.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         Time.timeScale = 1f;
+        GameManager.instance.isRunning = true;
+        Destroy(gameObject);
     }
 }

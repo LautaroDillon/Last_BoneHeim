@@ -2,12 +2,11 @@ using UnityEngine;
 
 public class NormalSkeleton : EnemisBehaivor
 {
-    public static NormalSkeleton instance;
-
     bool atacando;
 
     [Header("Attack Range")]
     [SerializeField] protected Transform firePoint;
+    [SerializeField] protected float shootRange;
     protected float DMG;
     protected float fireForce = 15f;
     [SerializeField] protected GameObject BulletPrefab;
@@ -32,7 +31,7 @@ public class NormalSkeleton : EnemisBehaivor
 
     public void EnemiMovement()
     {
-        if (Vector3.Distance(transform.position, player.transform.position) > 15)
+        if (!canSeePlayer)
         {
             // anim.SetBool("run", false);
             if (!isTurret)
@@ -71,8 +70,10 @@ public class NormalSkeleton : EnemisBehaivor
         }
         else
         {
+            float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+
             // Debug.Log("veo player");
-            if (IsInChaseRange && !atacando && !isTurret)
+            if (distanceToPlayer > shootRange && !atacando && !isTurret)
             {
                 anim.SetBool("idle", false);
                 anim.SetBool("IsShootiing", false);
@@ -85,24 +86,30 @@ public class NormalSkeleton : EnemisBehaivor
 
                 transform.Translate(Vector3.forward * 2 * Time.deltaTime);
             }
-            else
+            else if (distanceToPlayer <= shootRange)
             {
-                anim.SetBool("Moving", false);
-                anim.SetBool("idle", false);
-                Debug.Log("ataco");
-                var lookpos = player.transform.position - transform.position;
-                lookpos.y = 0;
-                var rotation = Quaternion.LookRotation(lookpos);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
-                if (Canfire())
-                {
-                    Shoot();
-                }
-                anim.SetBool("IsShootiing", true);
+                    if (canSeePlayer)
+                    {
+                        anim.SetBool("Moving", false);
+                        anim.SetBool("idle", false);
+                        Debug.Log("Disparando");
 
-                atacando = true;
-                finanim();
-            }
+                        var lookPos = player.transform.position - transform.position;
+                        lookPos.y = 0;
+                        var rotation = Quaternion.LookRotation(lookPos);
+                        transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
+
+                        if (Canfire())
+                        {
+                            Shoot();
+                        }
+
+                        anim.SetBool("IsShootiing", true);
+
+                        atacando = true;
+                        finanim();
+                    }
+                }
 
         }
     }

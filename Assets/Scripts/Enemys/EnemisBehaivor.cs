@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemisBehaivor : MonoBehaviour, Idamagable
@@ -12,16 +14,19 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
 
     [Header("Player Detection")]
     [SerializeField] protected LayerMask whatIsPlayer;
-    [SerializeField] protected bool IsInChaseRange;
+    [SerializeField] protected LayerMask obstructionMask;
     [SerializeField] protected Transform player;
-    [SerializeField] public float checkRadius;
+    [SerializeField] protected float checkRadius;
+    [Range(0,360)]
+    [SerializeField] protected float angle;
+    [SerializeField] protected bool canSeePlayer;
 
     [Header("Movement")]
     protected int rutina;
     [SerializeField] protected float cronometro;
     protected Quaternion angulo;
     protected float grado;
-    [SerializeField] protected float ranged;
+   // [SerializeField] protected float ranged;
 
     [Header("Sounds")]
     [SerializeField] protected AudioClip skeletonDeathClip;
@@ -44,6 +49,7 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
         player = GameManager.instance.thisIsPlayer;
         gun = GameObject.Find("Gun").GetComponent<Guns>();
         instance = this;
+        StartCoroutine(FOVRoutime());
 
         GameManager.instance.AddToList(this.gameObject);
     }
@@ -89,7 +95,7 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
 
     public void detection()
     {
-        IsInChaseRange = Physics.CheckSphere(transform.position, checkRadius, whatIsPlayer);
+       // IsInChaseRange = Physics.CheckSphere(transform.position, checkRadius, whatIsPlayer);
     }
 
     public void Healing(int heal)
@@ -105,9 +111,69 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
         }
     }
 
+    private IEnumerator FOVRoutime()
+    {
+        WaitForSeconds wait = new WaitForSeconds(0.2f);
+
+        while (true)
+        {
+            yield return wait;
+            FieldOfViewCheck();
+        }
+    }
+
+    private void FieldOfViewCheck()
+    {
+        Collider[] rangeChecks = Physics.OverlapSphere(transform.position, checkRadius, whatIsPlayer);
+
+        if (rangeChecks.Length != 0)
+        {
+            Transform target = rangeChecks[0].transform;
+            Vector3 directionToTarget = (target.position - transform.position).normalized;
+
+            if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
+            {
+                float distanceToTarget = Vector3.Distance(transform.position, target.position);
+
+                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
+                {
+                    canSeePlayer = true;
+                }
+                else
+                {
+                    canSeePlayer = false;
+                }
+            }
+            else
+            {
+                canSeePlayer = false;
+            }
+        }
+        else
+        {
+            canSeePlayer = false;
+        }
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, ranged);
+        Gizmos.DrawWireSphere(transform.position, checkRadius);
+
+        Gizmos.color = Color.yellow;
+        Vector3 fovLine1 = DirFromAngle(-angle / 2, false);
+        Vector3 fovLine2 = DirFromAngle(angle / 2, false);
+
+        Gizmos.DrawLine(transform.position, transform.position + fovLine1 * checkRadius);
+        Gizmos.DrawLine(transform.position, transform.position + fovLine2 * checkRadius);
+    }
+
+    private Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
+    {
+        if (!angleIsGlobal)
+        {
+            angleInDegrees += transform.eulerAngles.y;
+        }
+        return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
     }
 }

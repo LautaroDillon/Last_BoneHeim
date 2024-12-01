@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -27,7 +28,15 @@ public class ERockguardian : MonoBehaviour, Idamagable
 
     [Header("NavMesh")]
     public NavMeshAgent navMeshAgent;
-    public Transform player;
+
+    [Header("Player Detection")]
+    [SerializeField] protected LayerMask whatIsPlayer;
+    [SerializeField] protected LayerMask obstructionMask;
+    [SerializeField] protected Transform player;
+    [SerializeField] public float checkRadius;
+    [Range(0, 360)]
+    public float angle;
+    [SerializeField] protected bool canSeePlayer;
 
     public Animator anim;
 
@@ -38,6 +47,8 @@ public class ERockguardian : MonoBehaviour, Idamagable
         player = GameManager.instance.thisIsPlayer;
         navMeshAgent = GetComponent<NavMeshAgent>();
         isShieldActivate = false;
+
+        StartCoroutine(FOVRoutime());
     }
 
     // Update is called once per frame
@@ -50,6 +61,8 @@ public class ERockguardian : MonoBehaviour, Idamagable
 
         if (!isShieldActivate)
         {
+            if(canSeePlayer)
+            { 
             if (distancetoplayer > smashRanged)
             {
                 MoveToPlayer();
@@ -61,6 +74,31 @@ public class ERockguardian : MonoBehaviour, Idamagable
             if (Time.time >= rocktimer + rockCoolDown)
             {
                 ThrowRock();
+            }
+            }
+            else
+            {
+                Patrol();
+            }
+        }
+    }
+
+    void Patrol()
+    {
+        if (navMeshAgent.enabled)
+        {
+            anim.SetBool("Punch", false);
+            anim.SetBool("Walk", true);
+            anim.SetBool("Idle", false);
+            anim.SetBool("Swiping", false);
+
+            // Patrullar de manera aleatoria
+            Vector3 randomDirection = Random.insideUnitSphere * 10f; // Generar un punto aleatorio
+            randomDirection += transform.position;
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(randomDirection, out hit, 10f, 1))
+            {
+                navMeshAgent.SetDestination(hit.position);
             }
         }
     }
@@ -177,5 +215,71 @@ public class ERockguardian : MonoBehaviour, Idamagable
         Debug.Log("El Esqueleto Guardián de Roca ha sido derrotado.");
         navMeshAgent.enabled = false;
         Destroy(gameObject);
+    }
+
+    private IEnumerator FOVRoutime()
+    {
+        WaitForSeconds wait = new WaitForSeconds(0.2f);
+
+        while (true)
+        {
+            yield return wait;
+            FieldOfViewCheck();
+        }
+    }
+
+    private void FieldOfViewCheck()
+    {
+        Collider[] rangeChecks = Physics.OverlapSphere(transform.position, checkRadius, whatIsPlayer);
+
+        if (rangeChecks.Length != 0)
+        {
+            Transform target = rangeChecks[0].transform;
+            Vector3 directionToTarget = (target.position - transform.position).normalized;
+
+            if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
+            {
+                float distanceToTarget = Vector3.Distance(transform.position, target.position);
+
+                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
+                {
+                    canSeePlayer = true;
+                }
+                else
+                {
+                    canSeePlayer = false;
+                }
+            }
+            else
+            {
+                canSeePlayer = false;
+            }
+        }
+        else
+        {
+            canSeePlayer = false;
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, checkRadius);
+
+        Gizmos.color = Color.yellow;
+        Vector3 fovLine1 = DirFromAngle(-angle / 2, false);
+        Vector3 fovLine2 = DirFromAngle(angle / 2, false);
+
+        Gizmos.DrawLine(transform.position, transform.position + fovLine1 * checkRadius);
+        Gizmos.DrawLine(transform.position, transform.position + fovLine2 * checkRadius);
+    }
+
+    private Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
+    {
+        if (!angleIsGlobal)
+        {
+            angleInDegrees += transform.eulerAngles.y;
+        }
+        return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
     }
 }

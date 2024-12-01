@@ -37,7 +37,7 @@ public class ESnake : EnemisBehaivor
 
         detection();
 
-        if (IsInChaseRange)
+        if (canSeePlayer)
         {
             float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 

@@ -38,7 +38,7 @@ public class EInvoker : EnemisBehaivor
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
 
-        if (distanceToPlayer > ranged)
+        if (!canSeePlayer)
         {
             // anim.SetBool("run", false);
             if (!isminiboos)

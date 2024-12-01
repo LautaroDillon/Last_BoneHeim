@@ -6,19 +6,15 @@ using DG.Tweening;
 
 public class PlayerCam : MonoBehaviour
 {
-    [Header("References")]
+    public float sensX;
+    public float sensY;
+
     public Transform orientation;
     public Transform camHolder;
     public Slider slider;
 
-    [Header("Variables")]
-    public float sensX;
-    public float sensY;
-    public float _tiltAmount = 5;
-    public float _rotationSpeed = 0.5f;
-
-    float yRotation;
     float xRotation;
+    float yRotation;
 
     private void Start()
     {
@@ -37,8 +33,8 @@ public class PlayerCam : MonoBehaviour
     void MouseInput()
     {
         float mouseSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", 1f);
-        sensX = mouseSensitivity * Time.timeScale * 0.25f; // Scale it to a more reasonable value
-        sensY = mouseSensitivity * Time.timeScale * 0.25f;
+        sensX = mouseSensitivity * Time.timeScale * 10f; // Scale it to a more reasonable value
+        sensY = mouseSensitivity * Time.timeScale * 10f;
 
         float mouseX = Input.GetAxisRaw("Mouse X") * sensX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * sensY;
@@ -60,14 +56,6 @@ public class PlayerCam : MonoBehaviour
     public void DoTilt(float zTilt)
     {
         transform.DOLocalRotate(new Vector3(0, 0, zTilt), 0.25f);
-    }
-
-    public void Tilt()
-    {
-        float rotZ = -Input.GetAxis("Horizontal") * _tiltAmount;
-
-        Quaternion finalRot = Quaternion.Euler(xRotation, yRotation, rotZ);
-        transform.localRotation = Quaternion.RotateTowards(transform.localRotation, finalRot, _rotationSpeed);
     }
 
     public void Sensitivity()

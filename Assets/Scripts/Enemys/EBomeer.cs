@@ -38,8 +38,6 @@ public class EBomeer : EnemisBehaivor
             switch (rutina)
             {
                 case 0:
-                    anim.SetBool("idle", true);
-                    anim.SetBool("Moving", false);
                     break;
                 case 1:
                     grado = Random.Range(0, 360);
@@ -49,8 +47,6 @@ public class EBomeer : EnemisBehaivor
                 case 2:
                     transform.rotation = Quaternion.RotateTowards(transform.rotation, angulo, 0.5f);
                     transform.Translate(Vector3.forward * 1 * Time.deltaTime);
-                    anim.SetBool("idle", false);
-                    anim.SetBool("Moving", true);
                     break;
             }
         }
@@ -60,8 +56,7 @@ public class EBomeer : EnemisBehaivor
                 lookpos.y = 0;
                 var rotation = Quaternion.LookRotation(lookpos);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
-                 anim.SetBool("walk", true);
-                 anim.SetBool("idle", false);
+                // anim.SetBool("walk", false);
 
                 // anim.SetBool("run", true);
                 transform.Translate(Vector3.forward * 2 * Time.deltaTime);
@@ -76,7 +71,6 @@ public class EBomeer : EnemisBehaivor
             Explosion();
         }
     }
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.layer == 11)

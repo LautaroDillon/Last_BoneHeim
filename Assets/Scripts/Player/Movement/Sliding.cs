@@ -12,7 +12,6 @@ public class Sliding : MonoBehaviour
     public Transform playerObj;
     private Rigidbody rb;
     private PlayerMovementAdvanced pm;
-    [SerializeField] private AudioClip slideClip;
 
     [Header("Sliding")]
     public float maxSlideTime;
@@ -42,15 +41,7 @@ public class Sliding : MonoBehaviour
         verticalInput = Input.GetAxisRaw("Vertical");
 
         if (Input.GetKeyDown(slideKey) && (horizontalInput != 0 || verticalInput != 0))
-        {
-            if (pm.grounded == true)
-            {
-                StartSlide();
-                SoundManager.instance.PlaySound(slideClip, transform, 0.5f, true);
-            }
-            else
-                StartSlide();
-        }
+            StartSlide();
 
         if (Input.GetKeyUp(slideKey) && pm.sliding)
             StopSlide();

@@ -4,75 +4,72 @@ using UnityEngine;
 
 public class Headbob : MonoBehaviour
 {
-     [Header("Configuration")]
-    [SerializeField] private bool _enable = true;
-    [SerializeField, Range(0, 0.1f)] private float _Amplitude = 0.015f; [SerializeField, Range(0, 30)] private float _frequency = 10.0f;
-    [SerializeField] private Transform _camera = null; [SerializeField] private Transform _cameraHolder = null;
+    [Header("Configuration")]
 
-    private float _toggleSpeed = 3.0f;
-    private Vector3 _startPos;
-    private CharacterController _controller;
+    [SerializeField] bool isEnabled = true;
+    [SerializeField, Range(0, 0.1f)] float amplitude = 0.015f;
+    [SerializeField, Range(0, 30)] float frequency = 10f;
+    [SerializeField] Transform cam = null;
+    [SerializeField] Transform cam_holder = null;
+    [SerializeField] Transform campos = null;
+    float togglespeed = 1.0f;
+    Vector3 startpos;
+    Rigidbody controller;
+    PlayerMovementAdvanced movement;
 
-    private void Awake()
+
+
+    void Start()
     {
-        _controller = GetComponent<CharacterController>();
-        _startPos = _camera.localPosition;
+        startpos = campos.localPosition;
+        controller = GetComponent<Rigidbody>();
+        movement = GetComponent<PlayerMovementAdvanced>();
     }
 
-    void Update()
+    void LateUpdate()
     {
-        if (!_enable) return;
+        cam_holder.position = campos.position;
+        cam_holder.position = campos.localPosition + cam_holder.position;
         CheckMotion();
-        ResetPosition();
-        _camera.LookAt(FocusTarget());
+        cam.LookAt(FocusTarget());
     }
 
-    private Vector3 FootStepMotion()
+    Vector3 FootStepMotion()
     {
         Vector3 pos = Vector3.zero;
-        pos.y += Mathf.Sin(Time.time * _frequency) * _Amplitude;
-        pos.x += Mathf.Cos(Time.time * _frequency / 2) * _Amplitude * 2;
+        pos.y += Mathf.Sin(Time.time * frequency) * amplitude / 100f;
+        pos.x += Mathf.Cos(Time.time * frequency / 2) * amplitude / 50f;
         return pos;
     }
 
-    private void CheckMotion()
+    void CheckMotion()
     {
-        float speed = new Vector3(_controller.velocity.x, 0, _controller.velocity.z).magnitude;
-        if (speed < _toggleSpeed) return;
-        if (!_controller.isGrounded) return;
+        float speed = new Vector3(controller.velocity.x, 0f, controller.velocity.z).magnitude;
+        ResetPosition();
+        if (speed < togglespeed)
+            return;
+        if (!movement.grounded)
+            return;
         PlayMotion(FootStepMotion());
     }
 
-    private void PlayMotion(Vector3 motion)
-
+    void ResetPosition()
     {
-
-        _camera.localPosition += motion;
-
+        if (cam.localPosition == startpos)
+            return;
+        cam.localPosition = Vector3.Lerp(cam.localPosition, startpos, 1 * Time.deltaTime);
     }
 
-
-
-    private Vector3 FocusTarget()
-
+    Vector3 FocusTarget()
     {
-
-        Vector3 pos = new Vector3(transform.position.x, transform.position.y + _cameraHolder.localPosition.y, transform.position.z);
-
-        pos += _cameraHolder.forward * 15.0f;
-
+        Vector3 pos = new Vector3(transform.position.x, transform.position.y + campos.localPosition.y, transform.position.z);
+        pos += cam_holder.forward * 15f;
         return pos;
-
     }
 
-    private void ResetPosition()
-
+    void PlayMotion(Vector3 motion)
     {
-
-        if (_camera.localPosition == _startPos) return;
-
-        _camera.localPosition = Vector3.Lerp(_camera.localPosition, _startPos, 1 * Time.deltaTime);
-
+        cam.localPosition += motion;
     }
 
 }

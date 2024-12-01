@@ -4,14 +4,11 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [Header("References")]
-    public Rigidbody rb;
-
-    [Header("Variables")]
     public float speed;
     public float counter;
     public float lifetime;
     ObjectPool<Bullet> _objectPool;
+    public Rigidbody rb;
 
     void Update()
     {
@@ -48,16 +45,10 @@ public class Bullet : MonoBehaviour
 
         if (collision.gameObject.layer == 11 && damagableInterface != null)
         {
-            Debug.Log("player recibe daño"); 
-            TurnOff(this);
-            _objectPool.StockAdd(this);
+            Debug.Log("player recibe daño");
             damagableInterface.TakeDamage(FlyweightPointer.Eshoot.Damage);
-        }
-        else if(collision.gameObject.layer == 6 || collision.gameObject.layer == 7)
-        {
             TurnOff(this);
             _objectPool.StockAdd(this);
         }
-
     }
 }

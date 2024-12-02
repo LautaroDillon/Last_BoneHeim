@@ -12,11 +12,18 @@ public class PlayerStats : MonoBehaviour
 
     [Header("Sounds")]
 
+    //Feedback
     [SerializeField] private AudioClip groundPickUpClip;
     [SerializeField] private AudioClip equipmentClip;
     [SerializeField] private AudioClip unequipClip;
+
+    //Types
     [SerializeField] protected AudioClip blazingOrganClip;
     [SerializeField] protected AudioClip cursedOrganClip;
+    [SerializeField] protected AudioClip blessedOrganClip;
+    [SerializeField] protected AudioClip vengefulOrganClip;
+
+    //Organ Sounds
     [SerializeField] protected AudioClip heartEquipClip;
     [SerializeField] protected AudioClip lungsEquipClip;
     [SerializeField] protected AudioClip liverEquipClip;
@@ -124,6 +131,34 @@ public class PlayerStats : MonoBehaviour
                         Debug.Log("CURSED STOMACH DOESNT WORK");
                         PlayerHealth.instance._maxlife += 10;
                         PlayerMovementAdvanced.instance.jumpForce -= 3;
+                        PlayerMovementAdvanced.instance.airMultiplier -= 1;
+                        break;
+
+                    case ItemType.O_VengefulHeart:
+                        Debug.Log("VENGEFUL HEART DOESNT WORK");
+                        PlayerHealth.instance._maxlife -= 15;
+                        PlayerHealth.instance.lifeSteal -= 2;
+                        break;
+
+                    case ItemType.O_VengefulLiver:
+                        Debug.Log("VENGEFUL LIVER DOESNT WORK");
+                        PlayerHealth.instance.lifeSteal -= 2;
+                        FlyweightPointer.Player.Damage -= 5;
+                        break;
+
+                    case ItemType.O_VengefulLungs:
+                        Debug.Log("VENGEFUL LUNGS DOESNT WORK");
+                        PlayerHealth.instance.lifeSteal -= 2;
+                        PlayerMovementAdvanced.instance.sprintSpeed -= 1;
+                        PlayerMovementAdvanced.instance.slideSpeed -= 1;
+                        PlayerMovementAdvanced.instance.climbSpeed -= 1;
+                        PlayerMovementAdvanced.instance.wallrunSpeed -= 1;
+                        break;
+
+                    case ItemType.O_VengefulStomach:
+                        Debug.Log("VENGEFUL STOMACH DOESNT WORK");
+                        PlayerHealth.instance.lifeSteal -= 2;
+                        PlayerMovementAdvanced.instance.jumpForce -= 1;
                         PlayerMovementAdvanced.instance.airMultiplier -= 1;
                         break;
                     #endregion
@@ -269,6 +304,39 @@ public class PlayerStats : MonoBehaviour
                         PlayerHealth.instance._maxlife -= 10;
                         PlayerMovementAdvanced.instance.jumpForce += 3;
                         PlayerMovementAdvanced.instance.airMultiplier += 1;
+                        break;
+
+                    case ItemType.O_VengefulHeart:
+                        Debug.Log("VENGEFUL HEART WORK");
+                        PlayerHealth.instance._maxlife += 15;
+                        PlayerHealth.instance.lifeSteal += 2;
+                        SoundManager.instance.PlaySound(heartEquipClip, transform, 1f, false);
+                        break;
+
+                    case ItemType.O_VengefulLiver:
+                        Debug.Log("VENGEFUL LIVER WORK");
+                        PlayerHealth.instance.lifeSteal += 2;
+                        FlyweightPointer.Player.Damage += 10;
+                        SoundManager.instance.PlaySound(liverEquipClip, transform, 1f, false);
+                        break;
+
+                    case ItemType.O_VengefulLungs:
+                        Debug.Log("VENGEFUL LUNGS WORK");
+                        SoundManager.instance.PlaySound(lungsEquipClip, transform, 1f, false);
+                        PlayerHealth.instance.lifeSteal += 2;
+                        PlayerMovementAdvanced.instance.sprintSpeed += 1;
+                        PlayerMovementAdvanced.instance.slideSpeed += 1;
+                        PlayerMovementAdvanced.instance.climbSpeed += 1;
+                        PlayerMovementAdvanced.instance.wallrunSpeed += 1;
+                        break;
+
+                    case ItemType.O_VengefulStomach:
+                        Debug.Log("VENGEFUL STOMACH WORK");
+                        PlayerHealth.instance.lifeSteal += 2;
+                        PlayerMovementAdvanced.instance.jumpForce += 1;
+                        PlayerMovementAdvanced.instance.airMultiplier += 1;
+                        SoundManager.instance.PlaySound(stomachEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(stomachSecondaryClip, transform, 1f, false);
                         break;
                     #endregion
 

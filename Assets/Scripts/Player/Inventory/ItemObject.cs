@@ -23,6 +23,14 @@ public enum ItemType
     O_BlazingLungs,
     O_BlazingStomach,
     O_BlazingLiver,
+    O_VengefulHeart,
+    O_VengefulLungs,
+    O_VengefulStomach,
+    O_VengefulLiver,
+    O_BlessedHeart,
+    O_BlessedLungs,
+    O_BlessedStomach,
+    O_BlessedLiver,
     Default
     
 }

@@ -21,16 +21,22 @@ public class Guns : MonoBehaviour
     public CamShake camShake;
 
     [Header("Bullet Force")]
-    public float shootForce, upwardForce;
+    public float shootForce;
+    public float upwardForce;
 
     [Header("Stats")]
-    public float timeBetweenShooting, spread, reloadTime, timeBetweenShots;
-    public int magazineSize, bulletsPerTap;
+    public float timeBetweenShooting;
+    public float spread;
+    public float reloadTime;
+    public float timeBetweenShots;
+    public int magazineSize;
+    public int bulletsPerTap;
     public bool allowButtonHold;
     [Range(0f, 1f)]
     public float bounciness;
     public bool useGravity;
-    public float bulletsLeft, bulletsShot;
+    public float bulletsLeft;
+    public float bulletsShot;
     public float killReward;
     public int explosionDamage;
     public float explosionRange;
@@ -42,15 +48,18 @@ public class Guns : MonoBehaviour
     public float recoilForce;
 
     [Header("Camera Shake")]
-    public float camShakeMagnitude, camShakeDuration;
+    public float camShakeMagnitude;
+    public float camShakeDuration;
 
     [Header("Bools")]
-    bool shooting, readyToShoot, reloading;
     public bool allowInvoke = true;
     public bool isSkeleton = false;
     public bool isTeeth = false;
     public bool isInvoker = false;
     public bool isKnuckle = false;
+    bool shooting;
+    bool readyToShoot;
+    bool reloading;
 
     [Header("Sounds")]
     [SerializeField] private AudioClip shootClip;

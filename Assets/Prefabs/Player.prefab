@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 1380748980612904677}
   - component: {fileID: 6612264195087660162}
   - component: {fileID: 6158000325448451582}
+  - component: {fileID: 7779110875035724698}
   m_Layer: 11
   m_Name: PlayerObj
   m_TagString: Untagged
@@ -223,6 +224,110 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!96 &7779110875035724698
+TrailRenderer:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2320068717706607235}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 239378781582670930, guid: 446648e11dc37c4458f9af0b19ebb9d1, type: 3}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Time: 0.5
+  m_PreviewTimeScale: 1
+  m_Parameters:
+    serializedVersion: 3
+    widthMultiplier: 1
+    widthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0.0059347185
+        value: 0.2837838
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    colorGradient:
+      serializedVersion: 2
+      key0: {r: 1, g: 0.05882, b: 0, a: 1}
+      key1: {r: 1, g: 0.009601339, b: 0, a: 0.29411766}
+      key2: {r: 1, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 31611
+      ctime2: 65535
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_ColorSpace: 0
+      m_NumColorKeys: 3
+      m_NumAlphaKeys: 2
+    numCornerVertices: 0
+    numCapVertices: 0
+    alignment: 0
+    textureMode: 0
+    textureScale: {x: 1, y: 1}
+    shadowBias: 0.5
+    generateLightingData: 0
+  m_MinVertexDistance: 0.1
+  m_MaskInteraction: 0
+  m_Autodestruct: 1
+  m_Emitting: 1
+  m_ApplyActiveColorSpace: 1
 --- !u!1 &2684474571981870248
 GameObject:
   m_ObjectHideFlags: 0
@@ -518,8 +623,8 @@ GameObject:
   - component: {fileID: 6087488830872496826}
   - component: {fileID: 5586124239210012679}
   - component: {fileID: 2985574096530573759}
-  - component: {fileID: 3872259365933004543}
-  - component: {fileID: 5615245523728278824}
+  - component: {fileID: 4470266795033991726}
+  - component: {fileID: 4356829022497299166}
   m_Layer: 11
   m_Name: Player
   m_TagString: Player
@@ -614,6 +719,16 @@ MonoBehaviour:
   attributes: []
   groundPickUpClip: {fileID: 8300000, guid: 9a2e4328bb3e3a34ca5a0956c3e4eaa1, type: 3}
   equipmentClip: {fileID: 8300000, guid: 6da15e4c2c377d34080e497f8bd2c9ac, type: 3}
+  unequipClip: {fileID: 8300000, guid: 85ad44cfdcdc8f541a1469d76463fc34, type: 3}
+  blazingOrganClip: {fileID: 8300000, guid: 982ddfe79b719814e9e6292b40b0b45f, type: 3}
+  cursedOrganClip: {fileID: 8300000, guid: 20a3557d2eb14484287dc3ef80fb346b, type: 3}
+  blessedOrganClip: {fileID: 8300000, guid: 859319bac3024874a8a1de8e2e0025d5, type: 3}
+  vengefulOrganClip: {fileID: 8300000, guid: e111bf6237ddb4441a66a83a19160013, type: 3}
+  heartEquipClip: {fileID: 8300000, guid: cfd349b319c42694295a13ac01eb1f87, type: 3}
+  lungsEquipClip: {fileID: 8300000, guid: d895784f7524d24458779e17f3174bcf, type: 3}
+  liverEquipClip: {fileID: 8300000, guid: 72b5ee5311e242947887e039f76e9ca1, type: 3}
+  stomachEquipClip: {fileID: 8300000, guid: 34e1ac5f0e0a5654f9baed986f58fa80, type: 3}
+  stomachSecondaryClip: {fileID: 8300000, guid: e5d32ffa59710534ca72d1924e3c8ada, type: 3}
 --- !u!114 &5688223597189695458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -626,17 +741,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6efc8cd0521c47b48b60fdd1c401eed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  life: 0
-  _maxlife: 0
   healthBar: {fileID: 0}
   berserkFillBar: {fileID: 0}
   berserkBar: {fileID: 0}
-  isInReviveState: 0
+  fullscreenController: {fileID: 0}
+  life: 0
+  _maxlife: 0
   reviveTime: 7
+  isInReviveState: 0
   enemyKilled: 0
   painClip: {fileID: 8300000, guid: 6205394578c635e4780d17237cee3d70, type: 3}
   berserkStartClip: {fileID: 8300000, guid: a326157640048574abdd7027eb44695c, type: 3}
   heartbeatClip: {fileID: 8300000, guid: 62599cba177371146a18f77af28505f1, type: 3}
+  _fullScreenDamage: {fileID: 1639481442179964315, guid: 62c21de83b66ae541b15870f16eeb865, type: 2}
+  _material: {fileID: -876546973899608171, guid: dbdd3e55627dfab489d93bc830f3f76f, type: 3}
+  _damageDisplayTime: 1.5
+  _damageFadeoutTime: 0.5
   berserk: {fileID: 2100000, guid: a9c044cabc9f8c84283ee11db3e0b265, type: 2}
   turnOn: 1
   turnOof: 0
@@ -851,49 +971,35 @@ MonoBehaviour:
   throwKey: 102
   throwForce: 50
   throwUpwardForce: 0
---- !u!114 &3872259365933004543
+--- !u!114 &4470266795033991726
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7424446202622726595}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2c6f76446789db4788c3c455bb41349, type: 3}
+  m_Script: {fileID: 11500000, guid: 744f69fce56b5c441b6d764cf3fe7930, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enable: 1
-  _Amplitude: 0.0414
-  _frequency: 10
-  _camera: {fileID: 7530082752314634801}
-  _cameraHolder: {fileID: 8324901195207601355}
---- !u!143 &5615245523728278824
-CharacterController:
+  fullscreenController: {fileID: 0}
+  _fullScreenDamage: {fileID: 1639481442179964315, guid: 62c21de83b66ae541b15870f16eeb865, type: 2}
+  _material: {fileID: 2100000, guid: bd54e2ebc5e482e44af43d6c5fb617b5, type: 2}
+  _damageDisplayTime: 1.5
+  _damageFadeoutTime: 0.5
+--- !u!114 &4356829022497299166
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7424446202622726595}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3858ab0d59c12c4a99560f8db1b2561, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7539475392141251975
 GameObject:
   m_ObjectHideFlags: 0
@@ -1008,11 +1114,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbeb9ff899020cf4bba0c367151844ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensX: 0
-  sensY: 0
   orientation: {fileID: 6110504055460781260}
   camHolder: {fileID: 8324901195207601355}
   slider: {fileID: 0}
+  sensX: 0
+  sensY: 0
   _tiltAmount: 5
   _rotationSpeed: 0.5
 --- !u!114 &7091730654760743436
@@ -1113,7 +1219,7 @@ Transform:
   m_GameObject: {fileID: 7638796122453788223}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0.617}
+  m_LocalPosition: {x: -0, y: 0, z: 0.712}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1148,7 +1254,7 @@ Transform:
   m_GameObject: {fileID: 8466023014198017258}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.437, y: 0.229, z: 0.914}
+  m_LocalPosition: {x: 0.437, y: 0.229, z: 0.82}
   m_LocalScale: {x: 0.13402, y: 0.22916, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1240,6 +1346,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bullet: {fileID: 4466020935756555090, guid: f20f98bff19025145b131d6bdb3dc86c, type: 3}
   explosion: {fileID: 4188342101596141807, guid: 7259666089fdab3439a689bd67b470f8, type: 3}
+  rb: {fileID: 5608865901135598199, guid: f20f98bff19025145b131d6bdb3dc86c, type: 3}
+  playerRb: {fileID: 2192302948762650797}
+  fpsCam: {fileID: 1801707606769123791}
+  attackPoint: {fileID: 4013681511912264493}
+  whatIsEnemies:
+    serializedVersion: 2
+    m_Bits: 1024
+  muzzleFlash: {fileID: 0}
+  ammunitionDisplay: {fileID: 0}
+  camShake: {fileID: 7091730654760743436}
   shootForce: 0
   upwardForce: 0
   timeBetweenShooting: 0
@@ -1260,18 +1376,7 @@ MonoBehaviour:
   maxCollisions: 0
   maxLifetime: 0
   explodeOnTouch: 0
-  rb: {fileID: 5608865901135598199, guid: f20f98bff19025145b131d6bdb3dc86c, type: 3}
-  playerRb: {fileID: 2192302948762650797}
   recoilForce: 0
-  fpsCam: {fileID: 1801707606769123791}
-  attackPoint: {fileID: 4013681511912264493}
-  whatIsEnemies:
-    serializedVersion: 2
-    m_Bits: 1024
-  muzzleFlash: {fileID: 0}
-  ammunitionDisplay: {fileID: 0}
-  shootClip: {fileID: 8300000, guid: b6bd1669dd3a0624c8200237927f49e6, type: 3}
-  camShake: {fileID: 7091730654760743436}
   camShakeMagnitude: 0.2
   camShakeDuration: 0.2
   allowInvoke: 1
@@ -1279,6 +1384,7 @@ MonoBehaviour:
   isTeeth: 0
   isInvoker: 0
   isKnuckle: 0
+  shootClip: {fileID: 8300000, guid: b6bd1669dd3a0624c8200237927f49e6, type: 3}
 --- !u!1001 &41220385585339664
 PrefabInstance:
   m_ObjectHideFlags: 0

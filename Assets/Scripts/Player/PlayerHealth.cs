@@ -19,6 +19,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     public float _maxlife;
     public float reviveTime = 5f;
     private float reviveTimer;
+    public float lifeSteal = 0;
 
     [Header("Bools")]
     public bool isInReviveState = false;
@@ -66,6 +67,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     {
         if (life >= _maxlife)
             life = _maxlife;
+        healthBar.fillAmount = life / 100;
         if (life <= 0 && !isDead)
         {
             // Inicia el estado de revivible

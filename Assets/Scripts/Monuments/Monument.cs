@@ -7,6 +7,9 @@ public class Monument : MonoBehaviour
     public  GameObject point;
     public GameObject ally;
     public GameObject fuego;
+
+    [SerializeField] private AudioClip thunderClip;
+
     bool activate;
 
     private void OnTriggerEnter(Collider other)
@@ -21,7 +24,8 @@ public class Monument : MonoBehaviour
 
     public void Interaction()
     {
-        Debug.Log("lala");
+        Debug.Log("Spawn Ally");
+        SoundManager.instance.PlaySound(thunderClip, transform, 0.3f, false);
         fuego.SetActive(true);
         Instantiate(ally, point.transform.position, Quaternion.identity);
     }

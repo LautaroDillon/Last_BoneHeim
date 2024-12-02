@@ -6,7 +6,6 @@ public class Booton : MonoBehaviour
     public Doors door;
     public GameObject oclu;
     public Animation hatchAnim;
-    public ParticleSystem particle;
     [SerializeField] private AudioClip dingClip;
 
     private void Update()
@@ -27,7 +26,6 @@ public class Booton : MonoBehaviour
             {
                 door.Activate();
                 hatchAnim.Play();
-                particle.Play();
                 SoundManager.instance.PlaySound(dingClip, transform, 1f, false);
             }
         }
@@ -43,7 +41,6 @@ public class Booton : MonoBehaviour
             {
                 door.Activate();
                 hatchAnim.Play();
-                particle.Play();
                 SoundManager.instance.PlaySound(dingClip, transform, 1f, false);
             }
         }

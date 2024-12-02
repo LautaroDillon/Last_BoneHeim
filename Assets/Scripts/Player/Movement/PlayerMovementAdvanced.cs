@@ -36,6 +36,9 @@ public class PlayerMovementAdvanced : MonoBehaviour
     public float crouchYScale;
     private float startYScale;
 
+    [Header("Particles")]
+    public ParticleSystem slidingDust, speedTrails;
+
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode sprintKey = KeyCode.LeftShift;
@@ -128,15 +131,41 @@ public class PlayerMovementAdvanced : MonoBehaviour
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
         walkSpeed = sprintSpeed;
 
-        MyInput();
-        SpeedControl();
-        StateHandler();
-        TextStuff();
+        
+            MyInput();
+            SpeedControl();
+            StateHandler();
+            TextStuff();
 
         if (grounded)
             rb.drag = groundDrag;
         else
             rb.drag = 0;
+
+        if (sliding || wallrunning)
+        {
+            if (!slidingDust.isPlaying)
+            {
+                slidingDust.Play(true);
+            }
+            if (!speedTrails.isPlaying)
+            {
+                speedTrails.Play(true);
+            }
+        }
+        else
+        {
+            if (speedTrails.isPlaying)
+            {
+                speedTrails.Stop();
+            }
+            if (slidingDust.isPlaying)
+            {
+                slidingDust.Stop();
+            }
+        }
+        
+            
     }
 
     private void FixedUpdate()
@@ -146,135 +175,152 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
     private void MyInput()
     {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
+        if (GameManager.instance.isRunning == true)
+        {
+            horizontalInput = Input.GetAxisRaw("Horizontal");
+            verticalInput = Input.GetAxisRaw("Vertical");
 
-        //para saltar
-        if (Input.GetKey(jumpKey) && readyToJump && grounded)
-        {
-            readyToJump = false;
-            SoundManager.instance.PlaySound(jumpClip, transform, 0.5f);
-            Jump();
-            Invoke(nameof(ResetJump), jumpCooldown);
-        }
-        //para agacharse
-        if (Input.GetKeyDown(crouchKey) && horizontalInput == 0 && verticalInput == 0)
-        {
-            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
-            crouching = true;
-        }
+            //para saltar
+            if (Input.GetKey(jumpKey) && readyToJump && grounded)
+            {
+                readyToJump = false;
+                SoundManager.instance.PlaySound(jumpClip, transform, 0.5f, false);
+                Jump();
+                Invoke(nameof(ResetJump), jumpCooldown);
+            }
+            //para agacharse
+            if (Input.GetKeyDown(crouchKey) && horizontalInput == 0 && verticalInput == 0)
+            {
+                transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+                rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+                crouching = true;
 
-        //dejar de agacharse
-        if (Input.GetKeyUp(crouchKey))
-        {
-            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
-            crouching = false;
+            }
+
+            //dejar de agacharse
+            if (Input.GetKeyUp(crouchKey))
+            {
+                transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+                crouching = false;
+
+            }
         }
+        else
+            Debug.Log("Unpause game!");
     }
 
     bool keepMomentum;
     private void StateHandler()
     {
-        // Mode - Freeze
-        if (freeze)
+        if (GameManager.instance.isRunning == true)
         {
-            state = MovementState.freeze;
-            rb.velocity = Vector3.zero;
-            desiredMoveSpeed = 0f;
-        }
-
-        // Mode - Unlimited
-        else if (unlimited)
-        {
-            state = MovementState.unlimited;
-            desiredMoveSpeed = 999f;
-        }
-
-        // Mode - Vaulting
-        else if (vaulting)
-        {
-            state = MovementState.vaulting;
-            desiredMoveSpeed = vaultSpeed;
-        }
-
-        // Mode - Climbing
-        else if (climbing)
-        {
-            state = MovementState.climbing;
-            desiredMoveSpeed = climbSpeed;
-        }
-
-        // Mode - Wallrunning
-        else if (wallrunning)
-        {
-            state = MovementState.wallrunning;
-            desiredMoveSpeed = wallrunSpeed;
-        }
-
-        // Mode - Sliding
-        else if (sliding)
-        {
-            state = MovementState.sliding;
-            //incrementa la velocidad cada segundo
-            if (OnSlope() && rb.velocity.y < 0.1f)
+            // Mode - Freeze
+            if (freeze)
             {
-                desiredMoveSpeed = slideSpeed;
-                keepMomentum = true;
+                state = MovementState.freeze;
+                rb.velocity = Vector3.zero;
+                desiredMoveSpeed = 0f;
             }
 
-            else
+            // Mode - Unlimited
+            else if (unlimited)
+            {
+                state = MovementState.unlimited;
+                desiredMoveSpeed = 999f;
+            }
+
+            // Mode - Vaulting
+            else if (vaulting)
+            {
+                state = MovementState.vaulting;
+                desiredMoveSpeed = vaultSpeed;
+            }
+
+            // Mode - Climbing
+            else if (climbing)
+            {
+                state = MovementState.climbing;
+                desiredMoveSpeed = climbSpeed;
+            }
+
+            // Mode - Wallrunning
+            else if (wallrunning)
+            {
+                state = MovementState.wallrunning;
+                desiredMoveSpeed = wallrunSpeed;
+            }
+
+            // Mode - Sliding
+            else if (sliding)
+            {
+
+                state = MovementState.sliding;
+
+
+                //incrementa la velocidad cada segundo
+                if (OnSlope() && rb.velocity.y < 0.1f)
+                {
+                    desiredMoveSpeed = slideSpeed;
+                    keepMomentum = true;
+                }
+
+                else
+                    desiredMoveSpeed = sprintSpeed;
+
+            }
+
+            // Mode - Crouching
+            else if (crouching)
+            {
+                state = MovementState.crouching;
+                desiredMoveSpeed = crouchSpeed;
+            }
+
+            // Mode - Sprinting
+            else if (grounded && Input.GetKey(sprintKey))
+            {
+                state = MovementState.sprinting;
                 desiredMoveSpeed = sprintSpeed;
-        }
-
-        // Mode - Crouching
-        else if (crouching)
-        {
-            state = MovementState.crouching;
-            desiredMoveSpeed = crouchSpeed;
-        }
-
-        // Mode - Sprinting
-        else if (grounded && Input.GetKey(sprintKey))
-        {
-            state = MovementState.sprinting;
-            desiredMoveSpeed = sprintSpeed;
-        }
-
-        // Mode - Walking
-        else if (grounded)
-        {
-            state = MovementState.walking;
-            desiredMoveSpeed = walkSpeed;
-        }
-
-        // Mode - Air
-        else
-        {
-            state = MovementState.air;
-
-            if (moveSpeed < airMinSpeed)
-                desiredMoveSpeed = airMinSpeed;
-        }
-
-        bool desiredMoveSpeedHasChanged = desiredMoveSpeed != lastDesiredMoveSpeed;
-
-        if (desiredMoveSpeedHasChanged)
-        {
-            if (keepMomentum)
-            {
-                StopAllCoroutines();
-                StartCoroutine(SmoothlyLerpMoveSpeed());
             }
+
+            // Mode - Walking
+            else if (grounded)
+            {
+                state = MovementState.walking;
+                desiredMoveSpeed = walkSpeed;
+            }
+
+            // Mode - Air
             else
             {
-                moveSpeed = desiredMoveSpeed;
+                state = MovementState.air;
+
+                if (moveSpeed < airMinSpeed)
+                    desiredMoveSpeed = airMinSpeed;
             }
+
+            bool desiredMoveSpeedHasChanged = desiredMoveSpeed != lastDesiredMoveSpeed;
+
+            if (desiredMoveSpeedHasChanged)
+            {
+                if (keepMomentum)
+                {
+                    StopAllCoroutines();
+                    StartCoroutine(SmoothlyLerpMoveSpeed());
+                }
+                else
+                {
+                    moveSpeed = desiredMoveSpeed;
+                }
+            }
+
+            lastDesiredMoveSpeed = desiredMoveSpeed;
+
+            if (Mathf.Abs(desiredMoveSpeed - moveSpeed) < 0.1f) keepMomentum = false;
         }
-
-        lastDesiredMoveSpeed = desiredMoveSpeed;
-
-        if (Mathf.Abs(desiredMoveSpeed - moveSpeed) < 0.1f) keepMomentum = false;
+        else
+            Debug.Log("Unpause game!");
+        
     }
 
     private IEnumerator SmoothlyLerpMoveSpeed()
@@ -304,47 +350,62 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
     private void MovePlayer()
     {
-        if (climbingScript.exitingWall) 
-            return;
-        if (restricted) 
-            return;
-        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
-
-        if (OnSlope() && !exitingSlope)
+        if (GameManager.instance.isRunning == true)
         {
-            rb.AddForce(GetSlopeMoveDirection(moveDirection) * moveSpeed * 20f, ForceMode.Force);
+            if (climbingScript.exitingWall)
+                return;
+            if (restricted)
+                return;
+            moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
-            if (rb.velocity.y > 0)
-                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+            if (OnSlope() && !exitingSlope)
+            {
+                rb.AddForce(GetSlopeMoveDirection(moveDirection) * moveSpeed * 20f, ForceMode.Force);
+
+                if (rb.velocity.y > 0)
+                    rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+            }
+
+            else if (grounded)
+            {
+                rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+
+            }
+
+
+            else if (!grounded)
+                rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+
+            if (!wallrunning) rb.useGravity = !OnSlope();
         }
-
-        else if (grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
-
-        else if (!grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
-
-        if(!wallrunning) rb.useGravity = !OnSlope();
+        else
+            Debug.Log("Unpause game!");
     }
 
     private void SpeedControl()
     {
-        if (OnSlope() && !exitingSlope)
+        if (GameManager.instance.isRunning == true)
         {
-            if (rb.velocity.magnitude > moveSpeed)
-                rb.velocity = rb.velocity.normalized * moveSpeed;
-        }
-
-        else
-        {
-            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-            if (flatVel.magnitude > moveSpeed)
+            if (OnSlope() && !exitingSlope)
             {
-                Vector3 limitedVel = flatVel.normalized * moveSpeed;
-                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+                if (rb.velocity.magnitude > moveSpeed)
+                    rb.velocity = rb.velocity.normalized * moveSpeed;
+            }
+
+            else
+            {
+                Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+                if (flatVel.magnitude > moveSpeed)
+                {
+                    Vector3 limitedVel = flatVel.normalized * moveSpeed;
+                    rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+                }
             }
         }
+        else
+            Debug.Log("Unpause game!");
+        
     }
 
     private void Jump()

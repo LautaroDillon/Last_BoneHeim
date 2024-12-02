@@ -6,64 +6,67 @@ using TMPro;
 public class Throwing : MonoBehaviour
 {
     [Header("References")]
+    [SerializeField] private AudioClip throwClip;
     public Transform cam;
     public Transform attackPoint;
     public Transform curvePoint;
     public GameObject objectToThrow;
     public Rigidbody arm;
     Guns guns;
+    public GameObject armPrefab;
 
     [Header("Settings")]
     public int totalThrows;
     public float throwCooldown;
+    public float recoverArmTime;
+    public float recoverArmMaxTime = 15;
 
     [Header("Throwing")]
     public KeyCode throwKey = KeyCode.Mouse0;
     public float throwForce;
     public float throwUpwardForce;
 
-    private bool isReturning = false;
     private Vector3 oldPos;
-    private float time = 0.0f;
 
     bool readyToThrow;
 
     private void Start()
     {
+        recoverArmTime = recoverArmMaxTime;
         guns = GameObject.Find("Gun").GetComponent<Guns>();
         readyToThrow = true;
     }
 
     private void Update()
     {
+        if (totalThrows >= 1)
+        {
+            totalThrows = 1;
+            recoverArmTime = recoverArmMaxTime;
+        }
         if(Input.GetKeyDown(throwKey) && readyToThrow && totalThrows > 0)
         {
             Throw();
+            armPrefab.gameObject.SetActive(false);
+            Invoke("RestoreThrow", recoverArmTime);
+            SoundManager.instance.PlaySound(throwClip, transform, 1f, false);
             if(guns.isSkeleton == true)
             {
                 guns.magazineSize = guns.magazineSize / 2;
-                guns.bulletsLeft = guns.bulletsLeft / 2;
             }
-            else if (guns.isInvoker == true)
+            if (guns.isInvoker == true)
             {
                 guns.magazineSize = guns.magazineSize / 2;
-                guns.bulletsLeft = guns.bulletsLeft / 2;
             }
-            else if (guns.isKnuckle == true)
+            if (guns.isKnuckle == true)
             {
                 guns.magazineSize = guns.magazineSize / 2;
-                guns.bulletsLeft = guns.bulletsLeft / 2;
             }
-
+            if (guns.isTeeth == true)
+            {
+                guns.magazineSize = guns.magazineSize / 2;
+            }
             Debug.Log("Throw!");
-        }
-        if(isReturning)
-        {
-            if(time < 1.0f)
-            {
-                arm.position = BQCPoint(time, oldPos, curvePoint.position, attackPoint.position);
-                time += Time.deltaTime;
-            }
         }
     }
 
@@ -101,7 +104,6 @@ public class Throwing : MonoBehaviour
     private void ReturnThrow()
     {
         oldPos = arm.position;
-        isReturning = true;
         arm.velocity = Vector3.zero;
         arm.isKinematic = true;
     }
@@ -114,7 +116,7 @@ public class Throwing : MonoBehaviour
         Vector3 p = (uu * p0) + (2 * u * t * p1) + (tt * p2);
         return p;
     }
-    private void RestoreThrow()
+    public void RestoreThrow()
     {
         totalThrows++;
     }

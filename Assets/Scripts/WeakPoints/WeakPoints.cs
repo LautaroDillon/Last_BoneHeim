@@ -19,6 +19,7 @@ public class WeakPoints : MonoBehaviour, Idamagable
 
     private void Start()
     {
+        /*
         if (nameorg == FlyweightPointer.organs.Heart)
         {
             damage = FlyweightPointer.organs.heart;
@@ -34,6 +35,7 @@ public class WeakPoints : MonoBehaviour, Idamagable
             damage = FlyweightPointer.organs.pulmon;
             Debug.Log("tomo " + nameorg);
         }
+        */
     }
 
 }

@@ -8,6 +8,7 @@ public class Healing : MonoBehaviour
     public float healInterval = 0.5f;
     public float healDuration = 4f;
 
+
     private EHealer healer;
 
     void Start()
@@ -41,6 +42,7 @@ public class Healing : MonoBehaviour
             healer.canspawn = true;
         }
 
+        EnemisBehaivor.instance.healParticle.SetActive(false);
         Destroy(this.gameObject);
     }
 

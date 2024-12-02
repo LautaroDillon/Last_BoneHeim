@@ -27,7 +27,17 @@ public class FlyweightPointer
 
     public static readonly EnemysFlight Player = new EnemysFlight()
     {
-        Damage = 0,
+        Damage = 30,
         maxLife = 100
+    };
+
+    public static readonly Flywigthorgans organs = new Flywigthorgans()
+    {
+        heart = 50,
+        pulmon = 40,
+        higado = 45,
+        Heart = "Heart",
+        Higado = "Higado",
+        Pulmon = "Pulmon"
     };
 }

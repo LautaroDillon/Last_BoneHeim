@@ -5,16 +5,11 @@ using UnityEngine.UI;
 
 public class UiControl : MonoBehaviour
 {
-    [Header("References")]
     public Canvas pauseMenu;
     public Canvas invMenu;
     public Canvas tooltipMenu;
-
-    [Header("Bools")]
     public static bool _isPaused;
     public static bool _isInventory;
-
-    [Header("Sounds")]
     [SerializeField] private AudioClip menuSoundClip;
 
     private void Start()
@@ -36,12 +31,12 @@ public class UiControl : MonoBehaviour
             if (_isInventory)
             {
                 InventoryOff();
-                SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f, false);
+                SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f);
             }
             else
             {
                 InventoryOn();
-                SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f, false);
+                SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f);
             }
         }
     }
@@ -51,7 +46,6 @@ public class UiControl : MonoBehaviour
         invMenu.gameObject.SetActive(true);
         tooltipMenu.gameObject.SetActive(true);
         PauseSlow();
-        GameManager.instance.isRunning = false;
         _isInventory = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -60,7 +54,6 @@ public class UiControl : MonoBehaviour
     {
         invMenu.gameObject.SetActive(false);
         tooltipMenu.gameObject.SetActive(false);
-        GameManager.instance.isRunning = true;
         Time.timeScale = 1.0f;
         _isInventory = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -73,12 +66,12 @@ public class UiControl : MonoBehaviour
         {
             if (_isPaused)
             {
-                SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f, false);
+                SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f);
                 PauseOff();
             }
             else
             {
-                SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f, false);
+                SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f);
                 PauseOn();
             }
         }
@@ -87,7 +80,6 @@ public class UiControl : MonoBehaviour
     public void PauseOn()
     {
         _isPaused = true;
-        GameManager.instance.isRunning = false;
         pauseMenu.gameObject.SetActive(true);
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
@@ -97,14 +89,12 @@ public class UiControl : MonoBehaviour
     public void PauseSlow()
     {
         Time.timeScale = 0.10f;
-        GameManager.instance.isRunning = false;
     }
 
     public void PauseOff()
     {
         _isPaused = false;
         pauseMenu.gameObject.SetActive(false);
-        GameManager.instance.isRunning = true;
         Time.timeScale = 1.0f;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

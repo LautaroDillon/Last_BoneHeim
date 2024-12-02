@@ -11,11 +11,6 @@ public class GroundItem : MonoBehaviour, ISerializationCallbackReceiver
     {
     }
 
-    private void Start()
-    {
-
-    }
-
     public void OnBeforeSerialize()
     {
 #if UNITY_EDITOR

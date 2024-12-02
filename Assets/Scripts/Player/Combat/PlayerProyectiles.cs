@@ -5,9 +5,6 @@ using UnityEngine;
 public class PlayerProyectiles : MonoBehaviour
 {
     public float lifeTime = 2f;
-    [SerializeField] private AudioClip bulletWallClip;
-    [SerializeField] private AudioClip bulletHitClip;
-
     private void Awake()
     {
         Destroy(this.gameObject, lifeTime);
@@ -19,15 +16,15 @@ public class PlayerProyectiles : MonoBehaviour
 
         if (other.gameObject.layer == 10 && damagableInterface != null)
         {
-            Debug.Log("Enemy Hit!");
+            Debug.Log("pego a enemigo");
             damagableInterface.TakeDamage(FlyweightPointer.Player.Damage);
-            SoundManager.instance.PlaySound(bulletHitClip, transform, 0.3f, false);
             Destroy(this.gameObject);
         }
         else
         {
-            SoundManager.instance.PlaySound(bulletWallClip, transform, 0.3f, false);
             Destroy(this.gameObject);
+
         }
     }
+
 }

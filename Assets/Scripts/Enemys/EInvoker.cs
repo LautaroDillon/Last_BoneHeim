@@ -38,7 +38,7 @@ public class EInvoker : EnemisBehaivor
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
 
-        if (!canSeePlayer)
+        if (distanceToPlayer > ranged)
         {
             // anim.SetBool("run", false);
             if (!isminiboos)
@@ -62,8 +62,6 @@ public class EInvoker : EnemisBehaivor
                     case 2:
                         transform.rotation = Quaternion.RotateTowards(transform.rotation, angulo, 0.5f);
                         transform.Translate(Vector3.forward * 1 * Time.deltaTime);
-                        anim.SetBool("idle", false);
-                        anim.SetBool("Moving", true);
                         break;
                 }
             }
@@ -79,10 +77,8 @@ public class EInvoker : EnemisBehaivor
             lookpos.y = 0;
 
             var rotation = Quaternion.LookRotation(lookpos);
-                anim.SetBool("idle", false);
-                anim.SetBool("Moving", true);
 
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
             transform.Translate(Vector3.forward * 2 * Time.deltaTime);
 
             }

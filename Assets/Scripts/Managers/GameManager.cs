@@ -6,16 +6,14 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    [Header("Assign Player")]
     public Transform thisIsPlayer;
+
     public List<GameObject> enemys;
 
-    [Header("Time Scale Check")]
-    public bool isRunning;
+    // Start is called before the first frame update
     void Start()
     {
         instance = this;
-        isRunning = true;
     }
 
     public void AddToList(GameObject t)

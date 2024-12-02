@@ -9,10 +9,9 @@ using System;
 
 public abstract class UserInterface : MonoBehaviour
 {
+
     public InventoryObject inventory;
     public Dictionary<GameObject, InventorySlot> slotsOnInterface = new Dictionary<GameObject, InventorySlot>();
-    [SerializeField] private ConfirmationWindow myConfirmationWindow;
-
     void Start()
     {
         for (int i = 0; i < inventory.GetSlots.Length; i++)
@@ -21,7 +20,6 @@ public abstract class UserInterface : MonoBehaviour
             inventory.GetSlots[i].OnAfterUpdate += OnSlotUpdate;
 
         }
-
         CreateSlots();
         AddEvent(gameObject, EventTriggerType.PointerEnter, delegate { OnEnterInterface(gameObject); });
         AddEvent(gameObject, EventTriggerType.PointerExit, delegate { OnExitInterface(gameObject); });
@@ -42,10 +40,12 @@ public abstract class UserInterface : MonoBehaviour
             _slot.slotDisplay.GetComponentInChildren<TextMeshProUGUI>().text = "";
         }
     }
-    void Update()
-    {
-        slotsOnInterface.UpdateSlotDisplay();
-    }
+
+    //// Update is called once per frame
+    //void Update()
+    //{
+    //    slotsOnInterface.UpdateSlotDisplay();
+    //}
     public abstract void CreateSlots();
 
     protected void AddEvent(GameObject obj, EventTriggerType type, UnityAction<BaseEventData> action)
@@ -97,8 +97,7 @@ public abstract class UserInterface : MonoBehaviour
         Destroy(MouseData.tempItemBeingDragged);
         if (MouseData.interfaceMouseIsOver == null)
         {
-            OpenConfirmationWindow("Are you sure?");
-            MouseData.slotHoveredOver = obj;
+            slotsOnInterface[obj].RemoveItem();
             return;
         }
         if (MouseData.slotHoveredOver)
@@ -113,34 +112,7 @@ public abstract class UserInterface : MonoBehaviour
             MouseData.tempItemBeingDragged.GetComponent<RectTransform>().position = Input.mousePosition;
     }
 
-    private void OpenConfirmationWindow(string message)
-    {
-        myConfirmationWindow.gameObject.SetActive(true);
 
-        myConfirmationWindow.yesButton.onClick.RemoveAllListeners();
-        myConfirmationWindow.noButton.onClick.RemoveAllListeners();
-
-        myConfirmationWindow.yesButton.onClick.AddListener(YesClicked);
-        myConfirmationWindow.noButton.onClick.AddListener(NoClicked);
-
-        myConfirmationWindow.messageText.text = message;
-    }
-
-    private void YesClicked()
-    {
-        myConfirmationWindow.gameObject.SetActive(false);
-        if (MouseData.slotHoveredOver != null)
-        {
-            slotsOnInterface[MouseData.slotHoveredOver].RemoveItem();
-            Debug.Log("Item deleted from the slot.");
-        }
-    }
-
-    private void NoClicked()
-    {
-        myConfirmationWindow.gameObject.SetActive(false);
-        Debug.Log("No Clicked");
-    }
 }
 public static class MouseData
 {

@@ -21,7 +21,7 @@ public class Explosion : MonoBehaviour
         sphereCollider.radius = 0f;
 
         // Crear una esfera visual que se expanda junto con el collider
-        SoundManager.instance.PlaySound(explosionClip, transform, 1f, false);
+        SoundManager.instance.PlaySound(explosionClip, transform, 1f);
         visualSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere).transform;
         visualSphere.SetParent(transform);
         visualSphere.localPosition = Vector3.zero;

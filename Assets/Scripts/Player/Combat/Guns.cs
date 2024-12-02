@@ -6,55 +6,59 @@ public class Guns : MonoBehaviour
 {
 
     #region Variables
-    [Header("References")]
     public static Guns instance;
+    //bullet 
     public GameObject bullet;
-    public GameObject explosion;
-    PhysicMaterial physics_mat;
-    public Rigidbody rb;
-    public Rigidbody playerRb;
-    public Camera fpsCam;
-    public Transform attackPoint;
-    public LayerMask whatIsEnemies;
-    public GameObject muzzleFlash;
-    public TextMeshProUGUI ammunitionDisplay;
-    public CamShake camShake;
 
-    [Header("Bullet Force")]
+    public GameObject explosion;
+
+    //bullet force
     public float shootForce, upwardForce;
 
-    [Header("Stats")]
+    //Gun stats
     public float timeBetweenShooting, spread, reloadTime, timeBetweenShots;
     public int magazineSize, bulletsPerTap;
     public bool allowButtonHold;
     [Range(0f, 1f)]
     public float bounciness;
     public bool useGravity;
-    public float bulletsLeft, bulletsShot;
-    public float killReward;
+
+    public int bulletsLeft, bulletsShot;
+    public int killReward;
+
     public int explosionDamage;
     public float explosionRange;
     public float explosionForce;
+
     public int maxCollisions;
     public float maxLifetime;
     public bool explodeOnTouch = false;
+
     int collisions;
+    PhysicMaterial physics_mat;
+
+    public Rigidbody rb;
+    public Rigidbody playerRb;
     public float recoilForce;
 
-    [Header("Camera Shake")]
+    bool shooting, readyToShoot, reloading;
+
+    public Camera fpsCam;
+    public Transform attackPoint;
+    public LayerMask whatIsEnemies;
+
+    public GameObject muzzleFlash;
+    public TextMeshProUGUI ammunitionDisplay;
+    [SerializeField] private AudioClip shootClip;
+
+    public CamShake camShake;
     public float camShakeMagnitude, camShakeDuration;
 
-    [Header("Bools")]
-    bool shooting, readyToShoot, reloading;
     public bool allowInvoke = true;
     public bool isSkeleton = false;
     public bool isTeeth = false;
     public bool isInvoker = false;
     public bool isKnuckle = false;
-
-    [Header("Sounds")]
-    [SerializeField] private AudioClip shootClip;
-
     #endregion
 
     #region Awake/Start/Update
@@ -71,37 +75,37 @@ public class Guns : MonoBehaviour
         ShootInput();
         if (ammunitionDisplay != null)
             ammunitionDisplay.SetText(bulletsLeft + " / " + magazineSize);
-        if (bulletsLeft >= magazineSize)
-            bulletsLeft = magazineSize;
     }
     #endregion
 
     #region GunMethods
     private void ShootInput()
     {
-        if (GameManager.instance.isRunning == true)
+        if(!UiControl._isPaused)
         {
-            if (allowButtonHold)
-                shooting = Input.GetKey(KeyCode.Mouse0);
-            else
-                shooting = Input.GetKeyDown(KeyCode.Mouse0);
-
-            //Reloading 
-            //if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !reloading)
-            //  Reload();
-            //if (readyToShoot && shooting && !reloading && bulletsLeft <= 0)
-            //  Reload();
-
-            //Shooting
-            if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
+            if(!UiControl._isInventory)
             {
-                bulletsShot = 0;
-                SoundManager.instance.PlaySound(shootClip, transform, 0.3f, false);
-                Shoot();
+                if (allowButtonHold)
+                    shooting = Input.GetKey(KeyCode.Mouse0);
+                else
+                    shooting = Input.GetKeyDown(KeyCode.Mouse0);
+
+                //Reloading 
+                //if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !reloading)
+                  //  Reload();
+                //if (readyToShoot && shooting && !reloading && bulletsLeft <= 0)
+                  //  Reload();
+
+                //Shooting
+                if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
+                {
+                    bulletsShot = 0;
+                    SoundManager.instance.PlaySound(shootClip, transform, 0.3f);
+                    Shoot();
+                }
             }
         }
-        else
-            Debug.Log("Unpause game!");
+        
     }
     private void Shoot()
     {
@@ -253,7 +257,7 @@ public class Guns : MonoBehaviour
         isKnuckle = false;
         isSkeleton = false;
         isTeeth = false;
-        FlyweightPointer.Player.Damage = 0;
+
     }
 
     public void SkeletonHand()
@@ -266,7 +270,6 @@ public class Guns : MonoBehaviour
         bulletsPerTap += 1;
         allowButtonHold = true;
         useGravity = false;
-        FlyweightPointer.Player.Damage += 30;
     }
     public void KnuckleBuster()
     {
@@ -279,7 +282,6 @@ public class Guns : MonoBehaviour
         bulletsPerTap += 1;
         allowButtonHold = true;
         useGravity = false;
-        FlyweightPointer.Player.Damage += 20;
     }
 
     public void InvokerHand()
@@ -295,7 +297,6 @@ public class Guns : MonoBehaviour
         explodeOnTouch = true;
         useGravity = true;
         allowButtonHold = false;
-        FlyweightPointer.Player.Damage += 90;
     }
 
     public void TeethShot()
@@ -309,7 +310,6 @@ public class Guns : MonoBehaviour
         recoilForce += 1.5f;
         spread += 2.5f;
         useGravity = false;
-        FlyweightPointer.Player.Damage += 35;
     }
     #endregion
 }

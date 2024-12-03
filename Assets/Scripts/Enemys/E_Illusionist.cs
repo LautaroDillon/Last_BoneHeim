@@ -36,6 +36,8 @@ public class E_Illusionist : EnemisBehaivor
     void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+        player = GameManager.instance.thisIsPlayer;
+
     }
 
     public void resetAnim()

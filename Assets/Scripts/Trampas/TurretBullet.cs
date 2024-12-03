@@ -14,7 +14,7 @@ public class TurretBullet : MonoBehaviour
         {
             Debug.Log("Hit Player!");
             damagableInterface.TakeDamage(turretDamage);
-            Destroy(gameObject);
         }
+            Destroy(gameObject);
     }
 }

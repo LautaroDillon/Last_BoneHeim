@@ -61,20 +61,20 @@ public class ERockguardian : MonoBehaviour, Idamagable
 
         if (!isShieldActivate)
         {
-            if(canSeePlayer)
-            { 
-            if (distancetoplayer > smashRanged)
+            if (canSeePlayer)
             {
-                MoveToPlayer();
-            }
-            else if (Time.time >= smashTimer + smashCoolDown)
-            {
-                GroundSmash();
-            }
-            if (Time.time >= rocktimer + rockCoolDown)
-            {
-                ThrowRock();
-            }
+                if (distancetoplayer > smashRanged)
+                {
+                    MoveToPlayer();
+                }
+                else if (Time.time >= smashTimer + smashCoolDown)
+                {
+                    GroundSmash();
+                }
+                if (Time.time >= rocktimer + rockCoolDown)
+                {
+                    ThrowRock();
+                }
             }
             else
             {
@@ -146,7 +146,7 @@ public class ERockguardian : MonoBehaviour, Idamagable
         rocktimer = Time.time;
         anim.SetBool("Punch", false);
         anim.SetBool("Walk", false);
-            anim.SetBool("Idle", false);
+        anim.SetBool("Idle", false);
         anim.SetBool("Swiping", true);
         Debug.Log("El Esqueleto lanza una roca");
 
@@ -199,9 +199,9 @@ public class ERockguardian : MonoBehaviour, Idamagable
     public void TakeDamage(float damage)
     {
         if (isShieldActivate)
-        currentLife -= damage / 2;
+            currentLife -= damage / 2;
         else
-        currentLife -= damage;
+            currentLife -= damage;
 
 
         if (currentLife <= 0)

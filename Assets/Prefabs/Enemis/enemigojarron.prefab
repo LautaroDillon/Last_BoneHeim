@@ -88,11 +88,14 @@ MonoBehaviour:
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 2048
-  IsInChaseRange: 0
+  obstructionMask:
+    serializedVersion: 2
+    m_Bits: 16832
   player: {fileID: 0}
-  checkRadius: 0
+  checkRadius: 40
+  angle: 360
+  canSeePlayer: 0
   cronometro: 0
-  ranged: 116.81
   skeletonDeathClip: {fileID: 8300000, guid: a8d98e1cf137e0a4d9a4951cfd283233, type: 3}
   boomerDeathClip: {fileID: 0}
   necromancerDeathClip: {fileID: 0}
@@ -103,7 +106,7 @@ MonoBehaviour:
   pointParticle: {fileID: 4100763811601336290}
   healParticle: {fileID: 2327683558695328114}
   anim: {fileID: 0}
-  dmg: 0
+  dmg: 20
   life: 100
   attackCooldown: 20
   attackRange: 4

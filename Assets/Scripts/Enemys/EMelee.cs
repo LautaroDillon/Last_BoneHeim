@@ -17,6 +17,7 @@ public class EMelee : EnemisBehaivor
     private bool isPatrolling;
 
     [Header("shield")]
+    GameObject ShieldOBJ;
     public float lifeShield;
     float currentlifeShield;
     public bool hasshield = true;
@@ -24,10 +25,13 @@ public class EMelee : EnemisBehaivor
     [Header("NavMesh")]
     private NavMeshAgent navMeshAgent;
 
+    GameObject acid;
+
     private void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         currentlifeShield = lifeShield;
+        hasshield = true;
     }
 
     private void Start()
@@ -60,22 +64,30 @@ public class EMelee : EnemisBehaivor
         }
     }
 
+    public void resetAnim()
+    {
+        anim.SetBool("Walk", false);
+        anim.SetBool("Atack", false);
+        anim.SetBool("Idle", false);
+
+    }
+
     private void ChasePlayer()
     {
         navMeshAgent.isStopped = false;
         navMeshAgent.SetDestination(player.position);
-        anim.SetBool("isMoving", true);
+        resetAnim();
+        anim.SetBool("Walk", true);
     }
 
     private void AttackPlayer()
     {
         navMeshAgent.isStopped = true;
-        anim.SetBool("isMoving", false);
+        resetAnim();
 
         if (Time.time >= lastAttackTime + attackCooldown)
         {
-            anim.SetTrigger("Attack");
-            Debug.Log("La serpiente ataca al jugador");
+            anim.SetBool("Atack", true);
             player.GetComponent<Idamagable>().TakeDamage(attackDamage);
             lastAttackTime = Time.time;
         }
@@ -86,7 +98,8 @@ public class EMelee : EnemisBehaivor
         if (!isPatrolling)
         {
             waitTimer += Time.deltaTime;
-            anim.SetBool("isMoving", false);
+            resetAnim();
+            anim.SetBool("Idle", true);
 
             if (waitTimer >= waitTime)
             {
@@ -97,7 +110,8 @@ public class EMelee : EnemisBehaivor
         else
         {
             navMeshAgent.SetDestination(patrolPoint);
-            anim.SetBool("isMoving", true);
+            resetAnim();
+            anim.SetBool("Walk", true);
 
             if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
             {
@@ -124,9 +138,7 @@ public class EMelee : EnemisBehaivor
     {
         healParticle.SetActive(false);
 
-        GameObject acid;
-
-        if (true)
+        if (hasshield)
         {
             currentlife -= dmg;
             acid = Instantiate(blood, pointParticle.transform.position, Quaternion.identity);
@@ -135,11 +147,22 @@ public class EMelee : EnemisBehaivor
             Destroy(acid, 15);
             Destroy(debris, 5);
         }
+        else
+        {
+            currentlifeShield -= dmg;
+            ShieldOBJ.SetActive(false);
+        }
+
+        if (currentlifeShield <= 0)
+        {
+            hasshield = false;
+        }
 
 
         if (currentlife <= 0)
         {
-            Debug.Log("the skeleton received damage ");
+            resetAnim();
+
             GameManager.instance.enemys.Remove(this.gameObject);
 
             if (gameObject.tag == "Skeleton")
@@ -151,7 +174,8 @@ public class EMelee : EnemisBehaivor
             }
 
             Destroy(acid);
-            Destroy(this.gameObject, 0.1f);
+            anim.SetBool("Death", true);
+            Destroy(this.gameObject, 2f);
             PlayerHealth.instance.life += 10;
             Guns.instance.bulletsLeft += Random.Range(1, 3) + gun.killReward;
 

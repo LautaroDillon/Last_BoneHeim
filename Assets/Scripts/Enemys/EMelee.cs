@@ -22,6 +22,9 @@ public class EMelee : EnemisBehaivor
     float currentlifeShield;
     public bool hasshield = true;
 
+    [Header("Detection")]
+    public float detectionRange;
+
     [Header("NavMesh")]
     private NavMeshAgent navMeshAgent;
 

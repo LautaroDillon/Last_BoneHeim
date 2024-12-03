@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemisBehaivor : MonoBehaviour, Idamagable
 {
+    #region Variables
     public static EnemisBehaivor instance;
     [Header("References")]
     protected Guns gun;
@@ -43,6 +44,7 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
 
     [Header("Animation")]
     [SerializeField] protected Animator anim;
+    #endregion
 
     private void Start()
     {

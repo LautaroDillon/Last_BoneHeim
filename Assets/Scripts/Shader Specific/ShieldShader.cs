@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShieldShader : MonoBehaviour
+public class ShieldShader : MonoBehaviour, Idamagable
 {
     Renderer _renderer;
     [SerializeField] AnimationCurve _DisplacementCurve;
@@ -13,18 +13,16 @@ public class ShieldShader : MonoBehaviour
 
     Coroutine _dissolveCoroutine;
 
-    
-    // Start is called before the first frame update
+    public GameObject esto;
+    public float _life;
+
+
+
     void Start()
     {
         _renderer = GetComponent<Renderer>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void HitShield(Vector3 hitpos)
     {
@@ -72,6 +70,19 @@ public class ShieldShader : MonoBehaviour
             lerp += Time.deltaTime * _DissolveSpeed;
             yield return null;
         }
+        if(_shieldOn == false)
+        {
+            esto.SetActive(false);
+        }
+    }
 
+    public void TakeDamage(float dmg)
+    {
+        _life -= dmg;
+        //HitShield();
+        if (_life <= 0)
+        {
+            OpenCloseShield();
+        }
     }
 }

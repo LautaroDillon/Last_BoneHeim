@@ -34,6 +34,10 @@ public class ENecro : EnemisBehaivor
     public float probabilityShield;
     public bool canability;
 
+    [Header("Shield Shader")]
+    public ShieldShader _shieldshader;
+
+
 
     void Awake()
     {
@@ -149,8 +153,11 @@ public class ENecro : EnemisBehaivor
 
     void ActivarEscudo()
     {
-        shield.SetActive(true);
-        shield.GetComponent<Shield>()._life = 100; // Restaura la vida del escudo
+        _shieldshader.esto.SetActive(true);
+        _shieldshader.OpenCloseShield();
+        _shieldshader._life = 100;
+        //shield.SetActive(true);
+        //shield.GetComponent<Shield>()._life = 100; // Restaura la vida del escudo
         Debug.Log("Habilidad activada: Escudo");
     }
 

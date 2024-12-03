@@ -71,13 +71,21 @@ public class UiControl : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
+            invMenu.gameObject.SetActive(false);
+            tooltipMenu.gameObject.SetActive(false);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             if (_isPaused)
             {
                 SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f, false);
                 PauseOff();
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
             }
             else
             {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
                 SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f, false);
                 PauseOn();
             }

@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 1350460470938901427}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.639}
+  m_LocalPosition: {x: 0, y: 0, z: -0.353}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -87,7 +87,7 @@ Transform:
   m_GameObject: {fileID: 1960667182655237378}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.212, y: -0.756, z: -1.526}
+  m_LocalPosition: {x: 0.21, y: -0.756, z: -2.74}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -238,7 +238,7 @@ Transform:
   m_GameObject: {fileID: 3726714019525956627}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.027, y: -0.756, z: -1.783}
+  m_LocalPosition: {x: 2.94, y: -0.756, z: -1.78}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -378,7 +378,7 @@ GameObject:
   - component: {fileID: 3791145435311854682}
   m_Layer: 10
   m_Name: E_Necro
-  m_TagString: Untagged
+  m_TagString: Necromancer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -393,7 +393,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 74.559654, y: 76.1, z: 130.6}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalScale: {x: 4.4696503, y: 4.4696503, z: 4.4696503}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 557862580218898928}
@@ -488,7 +488,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5138624582558991098}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 9999
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -505,7 +505,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!114 &3791145435311854682
 MonoBehaviour:
@@ -523,13 +523,20 @@ MonoBehaviour:
   speed: 0
   whatIsPlayer:
     serializedVersion: 2
-    m_Bits: 8
-  IsInChaseRange: 0
+    m_Bits: 2056
+  obstructionMask:
+    serializedVersion: 2
+    m_Bits: 16448
   player: {fileID: 0}
   checkRadius: 41
+  angle: 246
+  canSeePlayer: 0
   cronometro: 0
-  ranged: 41
-  deathClip: {fileID: 8300000, guid: e1fe43dcb716a414c9462d70697d9ff9, type: 3}
+  skeletonDeathClip: {fileID: 0}
+  boomerDeathClip: {fileID: 0}
+  necromancerDeathClip: {fileID: 8300000, guid: 02181066414ad7a44b09845359d3dfb6, type: 3}
+  invokerDeathClip: {fileID: 0}
+  chamanDeathClip: {fileID: 0}
   blood: {fileID: 8835629220091889797, guid: 8656ce0cd4344a54188b181f56987a93, type: 3}
   skeletaldamage: {fileID: 8594284050758689464, guid: d910f5152f01ac742a45b4578091d443, type: 3}
   pointParticle: {fileID: 1350460470938901427}
@@ -537,28 +544,27 @@ MonoBehaviour:
   anim: {fileID: 0}
   enemyPrefabs:
   - {fileID: 3215990040059586780, guid: 696bf4f1ed34e3d48af3908c4dff4c4f, type: 3}
-  - {fileID: 2893214813493884941, guid: 8e9614df2c9310c47b68affd23683615, type: 3}
   - {fileID: 4918036841467333950, guid: 6671821c88c16f84da52723a8791ab34, type: 3}
   summonPoints:
   - {fileID: 557862580218898928}
   - {fileID: 321880037320243086}
   - {fileID: 5105735113025142975}
   - {fileID: 8081319052109736709}
-  summonCooldown: 2
-  maxSummoned: 7
+  summonCooldown: 9
+  maxSummoned: 60
   isMiniBoss: 1
   summonTimer: 0
   cansummon: 0
   projectilePrefab: {fileID: 2801812095934599517, guid: d0d5434a6f2349f42be922cc5e9e6b32, type: 3}
   shotPoint: {fileID: 7601052213716906175}
-  shotCooldown: 3
-  projectileSpeed: 5
+  shotCooldown: 5
+  projectileSpeed: 10
   shotTimer: 0
   lazer: {fileID: 0}
   shield: {fileID: 7832900096168684786}
   countDown: 10
   count: 10
-  probabilityLaser: 0
+  probabilityLaser: 4
   probabilityShield: 4
   canability: 0
 --- !u!1 &6585147999630335620
@@ -586,7 +592,7 @@ Transform:
   m_GameObject: {fileID: 6585147999630335620}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.798, y: -0.756, z: -1.378}
+  m_LocalPosition: {x: -2.547, y: -0.756, z: -3.753}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

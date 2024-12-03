@@ -57,6 +57,8 @@ public class Guns : MonoBehaviour
     public bool isTeeth = false;
     public bool isInvoker = false;
     public bool isKnuckle = false;
+    public bool isNail = false;
+    public bool isParasite = false;
     bool shooting;
     bool readyToShoot;
     bool reloading;
@@ -262,6 +264,8 @@ public class Guns : MonoBehaviour
         isKnuckle = false;
         isSkeleton = false;
         isTeeth = false;
+        isNail = false;
+        isParasite = false;
         FlyweightPointer.Player.Damage = 0;
     }
 
@@ -277,6 +281,20 @@ public class Guns : MonoBehaviour
         useGravity = false;
         FlyweightPointer.Player.Damage += 30;
     }
+
+    public void ParasiteHand()
+    {
+        isParasite = true;
+        shootForce += 65;
+        timeBetweenShooting += 0.3f;
+        magazineSize += 12;
+        bulletsLeft = magazineSize;
+        bulletsPerTap += 1;
+        allowButtonHold = true;
+        useGravity = false;
+        FlyweightPointer.Player.Damage += 40;
+    }
+
     public void KnuckleBuster()
     {
         isKnuckle = true;
@@ -305,6 +323,18 @@ public class Guns : MonoBehaviour
         useGravity = true;
         allowButtonHold = false;
         FlyweightPointer.Player.Damage += 90;
+    }
+
+    public void NailHand()
+    {
+        isNail = true;
+        shootForce += 80;
+        timeBetweenShooting += 2f;
+        magazineSize += 4;
+        bulletsLeft = magazineSize;
+        bulletsPerTap += 1;
+        allowButtonHold = false;
+        FlyweightPointer.Player.Damage += 50;
     }
 
     public void TeethShot()

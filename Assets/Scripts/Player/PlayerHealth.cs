@@ -9,7 +9,9 @@ public class PlayerHealth : MonoBehaviour, Idamagable
 {
     [Header("References")]
     public Image healthBar;
+    public Image shieldFillBar;
     public Image berserkFillBar;
+    public GameObject shieldBar;
     public GameObject berserkBar;
     public FullscreenController fullscreenController;
     public static PlayerHealth instance;
@@ -20,6 +22,9 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     public float reviveTime = 5f;
     private float reviveTimer;
     public float lifeSteal = 0;
+    public float shieldAmount = 0;
+    public float shieldMax = 0;
+    public float shieldRegenTime;
 
     [Header("Bools")]
     public bool isInReviveState = false;
@@ -68,13 +73,30 @@ public class PlayerHealth : MonoBehaviour, Idamagable
         if (life >= _maxlife)
             life = _maxlife;
         healthBar.fillAmount = life / 100;
+        shieldFillBar.fillAmount = shieldAmount / 100;
+        BerserkCheck();
+        ReviveState();
+        ShieldCheck();
+    }
+
+    void ShieldCheck()
+    {
+        if (shieldAmount <= 0)
+            shieldBar.gameObject.SetActive(true);
+    }
+
+    void BerserkCheck()
+    {
         if (life <= 0 && !isDead)
         {
             // Inicia el estado de revivible
             berserk.SetFloat("_Active", 1);
             StartReviveCountdown();
         }
+    }
 
+    void ReviveState()
+    {
         // Si el jugador está en el estado de revivible, cuenta el tiempo
         if (isInReviveState)
         {
@@ -142,17 +164,35 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     }
     public void TakeDamage(float dmg)
     {
-        life -= dmg;
-        healthBar.fillAmount = life / 100;
-        StartCoroutine(HurtShader());
-        CameraShake.Shake(0.2f, 0.2f);
-        SoundManager.instance.PlaySound(painClip, transform, 0.3f, false);
+        if(shieldAmount >= dmg)
+        {
+            shieldAmount -= dmg;
+        }
 
+        if(shieldAmount <= 0)
+        {
+            life -= dmg;
+            healthBar.fillAmount = life / 100;
+            StartCoroutine(HurtShader());
+            CameraShake.Shake(0.2f, 0.2f);
+            SoundManager.instance.PlaySound(painClip, transform, 0.3f, false);
+            if(shieldMax >= 0)
+                StartCoroutine(ShieldRegen());
+        }
+        
         if (life <= 0 && !isInReviveState)
         {
             StartReviveCountdown();
             SoundManager.instance.PlaySound(berserkStartClip, transform, 1f, false);
         }
+    }
+
+    public IEnumerator ShieldRegen()
+    {
+        Debug.Log("Regenerating Shield!");
+        yield return new WaitForSeconds(shieldRegenTime);
+        shieldAmount = shieldMax;
+        Debug.Log("Regenerated Shield!");
     }
 
     public IEnumerator HurtShader()

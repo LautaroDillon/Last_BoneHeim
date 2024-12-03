@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 774598926857849149}
   - component: {fileID: 6900187305717295180}
   - component: {fileID: 5608865901135598199}
-  - component: {fileID: -5006787655326691678}
+  - component: {fileID: -5028147030857341630}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Bullet
@@ -134,7 +134,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &-5006787655326691678
+--- !u!114 &-5028147030857341630
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,9 +143,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 4466020935756555090}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 904605eadb9047b4b866da9264bae4f3, type: 3}
+  m_Script: {fileID: 11500000, guid: ddf08bc9a5c33c04c89a517c22741afd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 1024
   lifeTime: 2
+  homingSpeed: 10
   bulletWallClip: {fileID: 8300000, guid: ba0038b7e180df443ba1247e7de7ad15, type: 3}
   bulletHitClip: {fileID: 8300000, guid: e345de2f3229de34297c72251c014884, type: 3}

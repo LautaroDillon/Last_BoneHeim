@@ -31,6 +31,8 @@ public enum ItemType
     O_BlessedLungs,
     O_BlessedStomach,
     O_BlessedLiver,
+    H_Nail,
+    H_Parasite,
     Default
     
 }

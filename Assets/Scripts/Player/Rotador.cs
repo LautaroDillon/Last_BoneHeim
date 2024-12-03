@@ -16,6 +16,7 @@ public class Rotador : MonoBehaviour
     {
         // Guardar la posición inicial
         startPosition = transform.position;
+        rotationSpeedY = Random.Range(-40, 40);
     }
 
     void Update()

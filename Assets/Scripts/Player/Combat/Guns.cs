@@ -344,9 +344,9 @@ public class Guns : MonoBehaviour
         timeBetweenShooting += 1;
         magazineSize += 32;
         bulletsLeft = magazineSize;
-        bulletsPerTap += 8;
+        bulletsPerTap += 4;
         recoilForce += 1.5f;
-        spread += 2.5f;
+        spread += 1.5f;
         useGravity = false;
         FlyweightPointer.Player.Damage += 35;
     }

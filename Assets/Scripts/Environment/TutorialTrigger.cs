@@ -12,6 +12,17 @@ public class TutorialTrigger : MonoBehaviour
         tutorial.gameObject.SetActive(false);
     }
 
+    private void Update()
+    {
+        if (tutorial.gameObject.activeSelf)
+        {
+            if (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Space))
+            {
+                TutorialEnd();
+            }
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")

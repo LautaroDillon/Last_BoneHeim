@@ -56,6 +56,18 @@ public class ThrowArm : MonoBehaviour
             {
                 guns.bulletsLeft += 20;
             }
+            if (guns.isTeeth == true)
+            {
+                guns.bulletsLeft += 16;
+            }
+            if (guns.isNail == true)
+            {
+                guns.bulletsLeft += 2;
+            }
+            if (guns.isParasite == true)
+            {
+                guns.bulletsLeft += 6;
+            }
             if (PlayerHealth.instance.isInReviveState)
             {
                 PlayerHealth.instance.OnEnemyKilled();

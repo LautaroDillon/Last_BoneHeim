@@ -66,6 +66,14 @@ public class Throwing : MonoBehaviour
             {
                 guns.magazineSize = guns.magazineSize / 2;
             }
+            if (guns.isNail == true)
+            {
+                guns.magazineSize = guns.magazineSize / 2;
+            }
+            if (guns.isParasite == true)
+            {
+                guns.magazineSize = guns.magazineSize / 2;
+            }
             Debug.Log("Throw!");
         }
     }

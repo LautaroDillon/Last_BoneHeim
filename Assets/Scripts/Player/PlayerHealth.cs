@@ -19,8 +19,8 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     [Header("Variables")]
     [SerializeField] public float life;
     public float _maxlife;
-    public float reviveTime = 5f;
-    private float reviveTimer;
+    public float reviveTime;
+    [SerializeField] private float reviveTimer;
     public float lifeSteal = 0;
     public float shieldAmount = 0;
     public float shieldMax = 0;
@@ -51,6 +51,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
 
     [Header ("Berserk")]
     [SerializeField] public Material berserk;
+    public float berserkSpeedBuff;
     public float turnOn;
     public float turnOof;
 
@@ -73,7 +74,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
         if (life >= _maxlife)
             life = _maxlife;
         healthBar.fillAmount = life / 100;
-        shieldFillBar.fillAmount = shieldAmount / 100;
+
         BerserkCheck();
         ReviveState();
         ShieldCheck();
@@ -81,8 +82,11 @@ public class PlayerHealth : MonoBehaviour, Idamagable
 
     void ShieldCheck()
     {
-        if (shieldAmount <= 0)
+        shieldFillBar.fillAmount = shieldAmount / 100;
+        if (shieldAmount > 0)
             shieldBar.gameObject.SetActive(true);
+        else
+            shieldBar.gameObject.SetActive(false);
     }
 
     void BerserkCheck()
@@ -97,24 +101,22 @@ public class PlayerHealth : MonoBehaviour, Idamagable
 
     void ReviveState()
     {
-        // Si el jugador está en el estado de revivible, cuenta el tiempo
         if (isInReviveState)
         {
             reviveTimer -= Time.deltaTime;
-            PlayerMovementAdvanced.instance.walkSpeed = 14;
-            PlayerMovementAdvanced.instance.sprintSpeed = 14;
-            berserkFillBar.fillAmount = reviveTimer / 7;
+            berserkFillBar.fillAmount = reviveTimer / reviveTime;
 
-            // Si el jugador mata a un enemigo en el tiempo límite
+            PlayerMovementAdvanced.instance.walkSpeed += berserkSpeedBuff;
+            PlayerMovementAdvanced.instance.sprintSpeed += berserkSpeedBuff;
+
             if (enemyKilled)
             {
                 RevivePlayer();
                 life = _maxlife;
-                PlayerMovementAdvanced.instance.walkSpeed = 10;
-                PlayerMovementAdvanced.instance.sprintSpeed = 10;
+                PlayerMovementAdvanced.instance.walkSpeed -= berserkSpeedBuff;
+                PlayerMovementAdvanced.instance.sprintSpeed -= berserkSpeedBuff;
             }
 
-            // Si se agota el tiempo y no ha matado a ningún enemigo
             if (reviveTimer <= 0 && !enemyKilled)
             {
                 GameOver();
@@ -137,8 +139,6 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     {
         life += _maxlife;
         healthBar.fillAmount = life / 100;
-        PlayerMovementAdvanced.instance.walkSpeed = 12;
-        PlayerMovementAdvanced.instance.sprintSpeed = 12;
         berserk.SetFloat("_Active", 0);
         enemyKilled = false;
         isInReviveState = false;
@@ -176,7 +176,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
             StartCoroutine(HurtShader());
             CameraShake.Shake(0.2f, 0.2f);
             SoundManager.instance.PlaySound(painClip, transform, 0.3f, false);
-            if(shieldMax >= 0)
+            if(shieldMax > 0)
                 StartCoroutine(ShieldRegen());
         }
         

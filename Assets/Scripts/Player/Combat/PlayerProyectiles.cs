@@ -72,24 +72,27 @@ public class PlayerProyectiles : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        Idamagable damagableInterface = other.gameObject.GetComponent<Idamagable>();
-
-        if (other.gameObject.layer == 10 && damagableInterface != null)
+        if (other.gameObject.layer == 12 && other.gameObject != this.gameObject)
         {
-            if(Guns.instance.isNail == true)
+            Physics.IgnoreCollision(other, this.GetComponent<Collider>());
+            return;
+        }
+
+        if (other.gameObject.layer == 10)
+        {
+            Idamagable damagableInterface = other.gameObject.GetComponent<Idamagable>();
+
+            if (damagableInterface != null)
             {
                 Debug.Log("Enemy Hit!");
+
                 damagableInterface.TakeDamage(FlyweightPointer.Player.Damage);
                 SoundManager.instance.PlaySound(bulletHitClip, transform, 0.3f, false);
                 PlayerHealth.instance.life += PlayerHealth.instance.lifeSteal;
-            }
-            else
-            {
-                Debug.Log("Enemy Hit!");
-                damagableInterface.TakeDamage(FlyweightPointer.Player.Damage);
-                SoundManager.instance.PlaySound(bulletHitClip, transform, 0.3f, false);
-                PlayerHealth.instance.life += PlayerHealth.instance.lifeSteal;
-                Destroy(this.gameObject);
+                if (!Guns.instance.isNail)
+                {
+                    Destroy(this.gameObject);
+                }
             }
         }
         else

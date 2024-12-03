@@ -106,15 +106,12 @@ public class PlayerHealth : MonoBehaviour, Idamagable
             reviveTimer -= Time.deltaTime;
             berserkFillBar.fillAmount = reviveTimer / reviveTime;
 
-            PlayerMovementAdvanced.instance.walkSpeed += berserkSpeedBuff;
-            PlayerMovementAdvanced.instance.sprintSpeed += berserkSpeedBuff;
-
             if (enemyKilled)
             {
-                RevivePlayer();
                 life = _maxlife;
                 PlayerMovementAdvanced.instance.walkSpeed -= berserkSpeedBuff;
                 PlayerMovementAdvanced.instance.sprintSpeed -= berserkSpeedBuff;
+                RevivePlayer();
             }
 
             if (reviveTimer <= 0 && !enemyKilled)
@@ -132,6 +129,8 @@ public class PlayerHealth : MonoBehaviour, Idamagable
         berserk.SetFloat("_Active", turnOn);
         berserkBar.gameObject.SetActive(true);
         isDead = true;
+        PlayerMovementAdvanced.instance.walkSpeed += berserkSpeedBuff;
+        PlayerMovementAdvanced.instance.sprintSpeed += berserkSpeedBuff;
         Debug.Log("¡Estás en estado de revivible! Tienes " + reviveTime + " segundos para matar a un enemigo.");
     }
 

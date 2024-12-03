@@ -191,7 +191,7 @@ MonoBehaviour:
     m_Bits: 2048
   obstructionMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 16832
   player: {fileID: 0}
   checkRadius: 24
   angle: 360
@@ -363,7 +363,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0613aab417bcccb4bbb9eb0e84e12c50, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.000005086263
+      value: 0.000010172526
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0613aab417bcccb4bbb9eb0e84e12c50, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1511,7 +1511,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5465940246521907071, guid: 0613aab417bcccb4bbb9eb0e84e12c50, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0007710707
+      value: -0.00077574386
       objectReference: {fileID: 0}
     - target: {fileID: 5465940246521907071, guid: 0613aab417bcccb4bbb9eb0e84e12c50, type: 3}
       propertyPath: m_LocalPosition.y

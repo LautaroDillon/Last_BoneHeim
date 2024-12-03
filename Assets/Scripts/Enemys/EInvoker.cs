@@ -16,11 +16,8 @@ public class EInvoker : EnemisBehaivor
 
     void Awake()
     {
-        if (true)
-        {
             currentlife = FlyweightPointer.Ehealer.maxLife;
-            speed = FlyweightPointer.Ehealer.speed;
-        }
+            speed = FlyweightPointer.Ehealer.speed;    
 
         summonTimer = summonCooldown;
     }

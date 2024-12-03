@@ -78,12 +78,12 @@ public class ERockguardian : MonoBehaviour, Idamagable
             }
             else
             {
-                Patrol();
+               // Patrol();
             }
         }
     }
 
-    void Patrol()
+    /*void Patrol()
     {
         if (navMeshAgent.enabled)
         {
@@ -101,16 +101,22 @@ public class ERockguardian : MonoBehaviour, Idamagable
                 navMeshAgent.SetDestination(hit.position);
             }
         }
+    }*/
+
+    public void resetAnim()
+    {
+        anim.SetBool("Punch", false);
+        anim.SetBool("Idle", false);
+        anim.SetBool("Swiping", false);
+        anim.SetBool("Walking", false);
     }
 
     void MoveToPlayer()
     {
         if (navMeshAgent.enabled)
         {
-            anim.SetBool("Punch", false);
-            anim.SetBool("Walk", true);
-            anim.SetBool("Idle", false);
-            anim.SetBool("Swiping", false);
+            resetAnim();
+            anim.SetBool("Walking", true);
 
             navMeshAgent.SetDestination(player.position);
         }
@@ -120,10 +126,9 @@ public class ERockguardian : MonoBehaviour, Idamagable
     public void GroundSmash()
     {
         smashTimer = Time.time;
-        anim.SetBool("Idle", false);
+            resetAnim();
         anim.SetBool("Punch", true);
-        anim.SetBool("Walk", false);
-        anim.SetBool("Swiping", false);
+
         Debug.Log("El Esqueleto usa Golpe de Tierra");
         //Instantiate(smashEffect, transform.position, Quaternion.identity);
         navMeshAgent.isStopped = true;
@@ -144,10 +149,9 @@ public class ERockguardian : MonoBehaviour, Idamagable
     public void ThrowRock()
     {
         rocktimer = Time.time;
-        anim.SetBool("Punch", false);
-        anim.SetBool("Walk", false);
-        anim.SetBool("Idle", false);
+            resetAnim();
         anim.SetBool("Swiping", true);
+
         Debug.Log("El Esqueleto lanza una roca");
 
         navMeshAgent.isStopped = true;

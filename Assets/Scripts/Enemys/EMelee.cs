@@ -17,7 +17,7 @@ public class EMelee : EnemisBehaivor
     private bool isPatrolling;
 
     [Header("shield")]
-    GameObject ShieldOBJ;
+    public GameObject ShieldOBJ;
     public float lifeShield;
     float currentlifeShield;
     public bool hasshield = true;
@@ -33,13 +33,14 @@ public class EMelee : EnemisBehaivor
     private void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+       // player = GameManager.instance.thisIsPlayer;
         currentlifeShield = lifeShield;
         hasshield = true;
     }
 
     private void Start()
     {
-        GeneratePatrolPoint();
+        //GeneratePatrolPoint();
     }
 
     private void Update()
@@ -63,7 +64,7 @@ public class EMelee : EnemisBehaivor
         }
         else
         {
-            Patrol();
+            //Patrol();
         }
     }
 
@@ -96,7 +97,7 @@ public class EMelee : EnemisBehaivor
         }
     }
 
-    private void Patrol()
+   /* private void Patrol()
     {
         if (!isPatrolling)
         {
@@ -122,7 +123,7 @@ public class EMelee : EnemisBehaivor
                 navMeshAgent.isStopped = true;
             }
         }
-    }
+    }*/
 
     private void GeneratePatrolPoint()
     {
@@ -153,7 +154,11 @@ public class EMelee : EnemisBehaivor
         else
         {
             currentlifeShield -= dmg;
-            ShieldOBJ.SetActive(false);
+
+            if (currentlifeShield <= 0)
+            {
+                ShieldOBJ.SetActive(false);
+            }
         }
 
         if (currentlifeShield <= 0)

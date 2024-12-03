@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8293642641511679309}
   - component: {fileID: 2438890155032240677}
   - component: {fileID: 1415341752645206926}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Jarron Breakable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -81.59, y: 1.139, z: 0.030035784}
-  m_LocalScale: {x: 1.2475, y: 1.2475, z: 1.2475}
+  m_LocalScale: {x: 1.6554325, y: 1.6554325, z: 1.6554325}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4337730956827158041}
@@ -126,16 +126,30 @@ MonoBehaviour:
   lootList:
   - {fileID: 11400000, guid: 2a1e72e78fff2c24f9522f58c86645e4, type: 2}
   - {fileID: 11400000, guid: 3d1b73f3236d8694693fd4ce508234e4, type: 2}
+  - {fileID: 11400000, guid: 8dc9fa1117406c145a963703430b11ee, type: 2}
   - {fileID: 11400000, guid: a7677180d3fd2224eb9c5b8d99161283, type: 2}
+  - {fileID: 11400000, guid: 02398573f99066b42a775564256b364a, type: 2}
   - {fileID: 11400000, guid: 2b9196e8a57bbb84eb0b0d97270abb21, type: 2}
   - {fileID: 11400000, guid: 222324bbe41668c4d94512b4c59442e8, type: 2}
+  - {fileID: 11400000, guid: 7f4dc27ad211f6e46b91aa4bab7064d4, type: 2}
   - {fileID: 11400000, guid: 8711bb9e489c91f4eae16b1b496b476d, type: 2}
+  - {fileID: 11400000, guid: e22e8faf31942a542a16575f3940e71f, type: 2}
   - {fileID: 11400000, guid: f3611045598106c4e9e7affbd5456ca2, type: 2}
   - {fileID: 11400000, guid: b32e849a32c36ef4ca3db118d3f2fcb5, type: 2}
+  - {fileID: 11400000, guid: ec645443c2278be42800a718a1e4612c, type: 2}
   - {fileID: 11400000, guid: e93baf319678ba943880ffb7a2c3e4b3, type: 2}
+  - {fileID: 11400000, guid: b7a486c769b90be41b6ea29cbdce7680, type: 2}
   - {fileID: 11400000, guid: c50a61c150af10946859a52285b6a3fa, type: 2}
   - {fileID: 11400000, guid: 2a2475d30a75a91459085c9934075454, type: 2}
+  - {fileID: 11400000, guid: d46f29a931f98db489b2c82a3b6fd6d8, type: 2}
   - {fileID: 11400000, guid: 0443cd5db1387fd4484d3228a6ce28b9, type: 2}
+  - {fileID: 11400000, guid: 33284f81695eae44986098571b2f92c6, type: 2}
+  - {fileID: 11400000, guid: 396eb7d4a622de849a65185b11045e86, type: 2}
+  - {fileID: 11400000, guid: cc2782eea80aaf748b8e2be104c06912, type: 2}
+  - {fileID: 11400000, guid: d2dfbfbedb1e3b6459b078fa7b1a7934, type: 2}
+  - {fileID: 11400000, guid: 72778f927a77a204dbebf87030ce172c, type: 2}
+  - {fileID: 11400000, guid: ac98fd136ae201e44b28604976cc0fec, type: 2}
+  - {fileID: 11400000, guid: e61cc10bcd5d5fd47b907a45aee5ed4c, type: 2}
 --- !u!1001 &4303205042507776498
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -204,6 +218,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: jarron con uvs
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3f37ac87a18e2e74bbc08d54c224a1d4, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -263,6 +281,10 @@ PrefabInstance:
       propertyPath: m_IncludeLayers.m_Bits
       value: 128
       objectReference: {fileID: 0}
+    - target: {fileID: 883927323453091687, guid: 995e0c7a76c6bba45add3df02bbe0543, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 1538761829254497340, guid: 995e0c7a76c6bba45add3df02bbe0543, type: 3}
       propertyPath: m_IsTrigger
       value: 0
@@ -274,6 +296,10 @@ PrefabInstance:
     - target: {fileID: 1538761829254497340, guid: 995e0c7a76c6bba45add3df02bbe0543, type: 3}
       propertyPath: m_IncludeLayers.m_Bits
       value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 2399428176062685375, guid: 995e0c7a76c6bba45add3df02bbe0543, type: 3}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 3174630905490708649, guid: 995e0c7a76c6bba45add3df02bbe0543, type: 3}
       propertyPath: m_IsTrigger
@@ -298,6 +324,10 @@ PrefabInstance:
     - target: {fileID: 3619084466529308853, guid: 995e0c7a76c6bba45add3df02bbe0543, type: 3}
       propertyPath: m_IncludeLayers.m_Bits
       value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 3923490661072194673, guid: 995e0c7a76c6bba45add3df02bbe0543, type: 3}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 4694331305420033814, guid: 995e0c7a76c6bba45add3df02bbe0543, type: 3}
       propertyPath: m_Mass
@@ -427,9 +457,17 @@ PrefabInstance:
       propertyPath: m_IncludeLayers.m_Bits
       value: 128
       objectReference: {fileID: 0}
+    - target: {fileID: 6492712338371421862, guid: 995e0c7a76c6bba45add3df02bbe0543, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 6561051657866422568, guid: 995e0c7a76c6bba45add3df02bbe0543, type: 3}
       propertyPath: m_Name
       value: jarron_roto
+      objectReference: {fileID: 0}
+    - target: {fileID: 6561051657866422568, guid: 995e0c7a76c6bba45add3df02bbe0543, type: 3}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6561051657866422568, guid: 995e0c7a76c6bba45add3df02bbe0543, type: 3}
       propertyPath: m_IsActive
@@ -471,6 +509,10 @@ PrefabInstance:
       propertyPath: m_IncludeLayers.m_Bits
       value: 128
       objectReference: {fileID: 0}
+    - target: {fileID: 7588573670964928583, guid: 995e0c7a76c6bba45add3df02bbe0543, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 7731525970003122284, guid: 995e0c7a76c6bba45add3df02bbe0543, type: 3}
       propertyPath: m_Mass
       value: 1
@@ -506,6 +548,10 @@ PrefabInstance:
     - target: {fileID: 8568610740907774352, guid: 995e0c7a76c6bba45add3df02bbe0543, type: 3}
       propertyPath: m_IncludeLayers.m_Bits
       value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 8800190478986984442, guid: 995e0c7a76c6bba45add3df02bbe0543, type: 3}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

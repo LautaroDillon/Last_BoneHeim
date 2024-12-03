@@ -174,9 +174,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.80616
-  m_Height: 3.000752
+  m_Height: 2.8880036
   m_Direction: 1
-  m_Center: {x: 0.006011963, y: 0.3992598, z: 0.0030417442}
+  m_Center: {x: 0.006011963, y: 0.455634, z: 0.0030417442}
 --- !u!54 &7658670768432487418
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -268,11 +268,11 @@ MonoBehaviour:
   speed: 6
   whatIsPlayer:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 3072
   obstructionMask:
     serializedVersion: 2
-    m_Bits: 16576
-  player: {fileID: 0}
+    m_Bits: 16704
+  player: {fileID: 2097260558498135374, guid: f5205689751a585429dbcc566f0fedf3, type: 3}
   checkRadius: 50
   angle: 360
   canSeePlayer: 0
@@ -292,8 +292,10 @@ MonoBehaviour:
   attackDamage: 20
   patrolRadius: 10
   waitTime: 5
+  ShieldOBJ: {fileID: 1494498623543214243}
   lifeShield: 50
   hasshield: 1
+  detectionRange: 0
 --- !u!1001 &1222405447533309849
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -367,6 +369,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7106f4dba8f5093408dba2ed905daad5, type: 3}
+--- !u!1 &1494498623543214243 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -8913927875252244678, guid: 7106f4dba8f5093408dba2ed905daad5, type: 3}
+  m_PrefabInstance: {fileID: 1222405447533309849}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1692335562725574770 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7106f4dba8f5093408dba2ed905daad5, type: 3}

@@ -73,7 +73,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     {
         if (life >= _maxlife)
             life = _maxlife;
-        healthBar.fillAmount = life / 100;
+        healthBar.fillAmount = life / _maxlife;
 
         BerserkCheck();
         ReviveState();
@@ -82,7 +82,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
 
     void ShieldCheck()
     {
-        shieldFillBar.fillAmount = shieldAmount / 100;
+        shieldFillBar.fillAmount = shieldAmount / shieldMax;
         if (shieldAmount > 0)
             shieldBar.gameObject.SetActive(true);
         else
@@ -138,7 +138,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     void RevivePlayer()
     {
         life += _maxlife;
-        healthBar.fillAmount = life / 100;
+        healthBar.fillAmount = life / _maxlife;
         berserk.SetFloat("_Active", 0);
         enemyKilled = false;
         isInReviveState = false;
@@ -172,7 +172,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
         if(shieldAmount <= 0)
         {
             life -= dmg;
-            healthBar.fillAmount = life / 100;
+            healthBar.fillAmount = life / _maxlife;
             StartCoroutine(HurtShader());
             CameraShake.Shake(0.2f, 0.2f);
             SoundManager.instance.PlaySound(painClip, transform, 0.3f, false);

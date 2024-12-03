@@ -130,7 +130,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         // ground check
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
         walkSpeed = sprintSpeed;
-
+        
         
             MyInput();
             SpeedControl();
@@ -144,6 +144,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
         if (sliding || wallrunning)
         {
+            FullscreenShader.instance.speedShaderEnabled = true;
             if (!slidingDust.isPlaying)
             {
                 slidingDust.Play(true);
@@ -155,6 +156,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         }
         else
         {
+            FullscreenShader.instance.speedShaderEnabled = false;
             if (speedTrails.isPlaying)
             {
                 speedTrails.Stop();

@@ -6,7 +6,7 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
 {
     public static EnemisBehaivor instance;
     [Header("References")]
-    Guns gun;
+    protected Guns gun;
 
     [Header("Variables")]
     [SerializeField] protected float currentlife;

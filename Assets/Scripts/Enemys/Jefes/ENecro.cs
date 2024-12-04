@@ -50,15 +50,26 @@ public class ENecro : EnemisBehaivor
         EnemiMovement();
     }
 
+    public void ResetAnim()
+    {
+        anim.SetBool("Idle",false);
+        anim.SetBool("Summon",false);
+        anim.SetBool("Atack",false);
+        anim.SetBool("Fuego",false);
+        anim.SetBool("Death",false);
+    }
+
     private void HandlePhases()
     {
         if (currentlife <= phase3Threshold && currentPhase < 3)
         {
             EnterPhase3();
+            TeleportRandomly();
         }
         else if (currentlife <= phase2Threshold && currentPhase < 2)
         {
             EnterPhase2();
+            TeleportRandomly();
         }
     }
 
@@ -103,6 +114,9 @@ public class ENecro : EnemisBehaivor
                 UseRandomAbility();
                 abilityTimer = abilityCooldown;
             }
+
+            anim.SetBool("Idle", true);
+
         }
         else
         {
@@ -113,6 +127,8 @@ public class ENecro : EnemisBehaivor
     private void SummonEnemy()
     {
         if (currentEnemiesSummoned >= maxSummoned) return;
+        ResetAnim();
+        anim.SetBool("Summon", true);
 
         Transform spawnPoint = summonPoints[Random.Range(0, summonPoints.Length)];
         GameObject enemy = Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)], spawnPoint.position, Quaternion.identity);
@@ -147,6 +163,8 @@ public class ENecro : EnemisBehaivor
 
     private void UseLaser()
     {
+        ResetAnim();
+        anim.SetBool("Fuego", true);
         laser.SetActive(true);
         Debug.Log("Láser activado");
     }
@@ -169,10 +187,16 @@ public class ENecro : EnemisBehaivor
 
         if (currentlife <= 0)
         {
-            SceneManager.LoadScene(0);
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            Destroy(gameObject);
+            ResetAnim();
+            anim.SetBool("Death", true);
+            Destroy(gameObject, 5);
         }
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.LoadScene(0);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 }

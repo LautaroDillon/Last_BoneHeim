@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class MagnifyingObject : MonoBehaviour
 {
+    [SerializeField]
     Renderer _renderer;
     Camera _cam;
 
     // Start is called before the first frame update
     private void Start()
     {
-        _renderer = GetComponent<Renderer>();
+        //_renderer = GetComponent<Renderer>();
         _cam = Camera.main;
     }
 

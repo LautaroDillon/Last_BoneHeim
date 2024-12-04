@@ -94,7 +94,7 @@ Material:
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DisplacementStrenght: 0.1
-    - _Dissolve: -0.2
+    - _Dissolve: 1.3
     - _DissolveEdge: 0.05
     - _DissolveStrenght: 1
     - _DistortionStrenght: 2.6
@@ -125,12 +125,12 @@ Material:
     m_Colors:
     - _BaseColor: {r: 0.38968495, g: 0.5509687, b: 0.5943396, a: 0.65882355}
     - _Color: {r: 0.38968495, g: 0.5509687, b: 0.5943396, a: 0.65882355}
-    - _DissolveEdgeColor: {r: 0, g: 0.31684136, b: 1, a: 0}
+    - _DissolveEdgeColor: {r: 1, g: 0, b: 0.10980415, a: 0}
     - _DistortionSmoothStep: {r: 0.4, g: 4.3, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _HitPosition: {r: 0, g: 0, b: 0, a: 0}
     - _ObjectScreenPosition: {r: 0, g: 0, b: 0, a: 0}
-    - _ShieldColor: {r: 0, g: 0.14202714, b: 1, a: 0}
+    - _ShieldColor: {r: 0.4339623, g: 0.0032145353, b: 0, a: 0}
     - _SmoothStep: {r: 0.43, g: 5, b: 0, a: 0}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []

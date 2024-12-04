@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class ShieldShader : MonoBehaviour, Idamagable
 {
+    [SerializeField]
     Renderer _renderer;
     [SerializeField] AnimationCurve _DisplacementCurve;
     [SerializeField] float _DisplacementMagnitude;
     [SerializeField] float _LerpSpeed;
     [SerializeField] float _DissolveSpeed;
-    private bool _shieldOn;
+    [SerializeField] private bool _shieldOn;
 
     Coroutine _dissolveCoroutine;
 
@@ -20,7 +21,8 @@ public class ShieldShader : MonoBehaviour, Idamagable
 
     void Start()
     {
-        _renderer = GetComponent<Renderer>();
+        //_renderer = GetComponent<Renderer>();
+        _shieldOn = true;
     }
 
 
@@ -35,11 +37,11 @@ public class ShieldShader : MonoBehaviour, Idamagable
 
     public void OpenCloseShield()
     {
-        float target = 1;
+        float target = 1.2f;
 
         if (_shieldOn)
         {
-            target = 0;
+            target = -0.2f;
         }
         _shieldOn = !_shieldOn;
         if(_dissolveCoroutine != null)
@@ -70,7 +72,7 @@ public class ShieldShader : MonoBehaviour, Idamagable
             lerp += Time.deltaTime * _DissolveSpeed;
             yield return null;
         }
-        if(_shieldOn == false)
+        if(_shieldOn == true)
         {
             esto.SetActive(false);
         }

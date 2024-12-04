@@ -170,7 +170,7 @@ public class ENecro : EnemisBehaivor
     {
         //shield.SetActive(true);
         
-        if(_shieldShader._shieldOn == false)
+        if(_shieldShader._shieldOn == true)
         {
             _shieldShader.esto.SetActive(true);
             _shieldShader.OpenCloseShield();

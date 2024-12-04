@@ -22,7 +22,7 @@ public class ShieldShader : MonoBehaviour, Idamagable
     void Start()
     {
         _renderer = GetComponent<Renderer>();
-        _shieldOn = true;
+        //_shieldOn = true;
     }
 
 

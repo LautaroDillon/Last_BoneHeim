@@ -33,6 +33,8 @@ public class ENecro : EnemisBehaivor
     public GameObject teleportEffect;
     public Transform[] teleportPoints;
 
+    [Header("Misc Settings")]
+    public float movementSpeed;
 
     private float summonTimer;
     private float shotTimer;
@@ -50,6 +52,15 @@ public class ENecro : EnemisBehaivor
         EnemiMovement();
     }
 
+    public void ResetAnim()
+    {
+        anim.SetBool("Idle", false);
+        anim.SetBool("Summon", false);
+        anim.SetBool("Atack", false);
+        anim.SetBool("Fuego", false);
+        anim.SetBool("Death", false);
+    }
+
     private void HandlePhases()
     {
         if (currentlife <= phase3Threshold && currentPhase < 3)
@@ -65,7 +76,9 @@ public class ENecro : EnemisBehaivor
     private void EnterPhase2()
     {
         currentPhase = 2;
+        Debug.Log("Entrando en Fase 2: Más habilidades defensivas y ofensivas.");
         // Aumentar la velocidad de ataque, reducir cooldowns
+        TeleportRandomly();
         summonCooldown *= 0.8f;
         shotCooldown *= 0.8f;
     }
@@ -73,8 +86,10 @@ public class ENecro : EnemisBehaivor
     private void EnterPhase3()
     {
         currentPhase = 3;
+        Debug.Log("Entrando en Fase 3: Ataques devastadores.");
         // Activar invocaciones rápidas y ataques potentes
-        summonCooldown *= 0.5f;
+        summonCooldown *= 0.5f; 
+        TeleportRandomly();
         abilityCooldown *= 0.5f;
     }
 
@@ -103,9 +118,13 @@ public class ENecro : EnemisBehaivor
                 UseRandomAbility();
                 abilityTimer = abilityCooldown;
             }
+            ResetAnim();
+            anim.SetBool("Idle", true);
         }
         else
         {
+            ResetAnim();
+            anim.SetBool("Idle", true);
             TeleportRandomly();
         }
     }
@@ -113,6 +132,8 @@ public class ENecro : EnemisBehaivor
     private void SummonEnemy()
     {
         if (currentEnemiesSummoned >= maxSummoned) return;
+        ResetAnim();
+        anim.SetBool("Summon", true);
 
         Transform spawnPoint = summonPoints[Random.Range(0, summonPoints.Length)];
         GameObject enemy = Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)], spawnPoint.position, Quaternion.identity);
@@ -122,6 +143,9 @@ public class ENecro : EnemisBehaivor
 
     private void Shoot()
     {
+        ResetAnim();
+        anim.SetBool("Atack", true);
+
         GameObject projectile = Instantiate(projectilePrefab, shotPoint.position, Quaternion.identity);
         Vector3 directionToPlayer = (player.transform.position - shotPoint.position).normalized;
         projectile.GetComponent<Rigidbody>().velocity = directionToPlayer * projectileSpeed;
@@ -147,6 +171,8 @@ public class ENecro : EnemisBehaivor
 
     private void UseLaser()
     {
+        ResetAnim();
+        anim.SetBool("Fuego", true);
         laser.SetActive(true);
         Debug.Log("Láser activado");
     }

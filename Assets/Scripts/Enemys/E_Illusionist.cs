@@ -37,6 +37,8 @@ public class E_Illusionist : EnemisBehaivor
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         player = GameManager.instance.thisIsPlayer;
+        StartCoroutine(FOVRoutime());
+
 
     }
 
@@ -76,13 +78,26 @@ public class E_Illusionist : EnemisBehaivor
         }
         else
         {
-            Patrol();
+            // Patrol();
+            resetAnim();
+            anim.SetBool("Idle", true);
+
+        }
+    }
+
+    private void RotateTowardsMovement()
+    {
+        if (navMeshAgent.velocity.sqrMagnitude > 0.1f) // Si se está moviendo
+        {
+            Vector3 direction = navMeshAgent.velocity.normalized;
+            direction.y = 0; // Asegurarse de no cambiar la inclinación vertical
+            transform.rotation = Quaternion.LookRotation(direction);
         }
     }
 
     private void Patrol()
     {
-        if (!isPatrolling)
+        /*if (!isPatrolling)
         {
             waitTimer += Time.deltaTime;
             resetAnim();
@@ -105,7 +120,7 @@ public class E_Illusionist : EnemisBehaivor
                 isPatrolling = false;
                 navMeshAgent.isStopped = true;
             }
-        }
+        }*/
     }
 
     private void GeneratePatrolPoint()

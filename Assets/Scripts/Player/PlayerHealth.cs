@@ -112,6 +112,8 @@ public class PlayerHealth : MonoBehaviour, Idamagable
                 PlayerMovementAdvanced.instance.walkSpeed -= berserkSpeedBuff;
                 PlayerMovementAdvanced.instance.sprintSpeed -= berserkSpeedBuff;
                 RevivePlayer();
+                berserkBar.gameObject.SetActive(false);
+                reviveTime = reviveTimer;
             }
 
             if (reviveTimer <= 0 && !enemyKilled)

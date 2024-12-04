@@ -296,6 +296,9 @@ MonoBehaviour:
   lifeShield: 50
   hasshield: 1
   detectionRange: 0
+  swordSlashClip: {fileID: 8300000, guid: fdf6ec8563adea04897cf1f68e9d5ed7, type: 3}
+  knightDeathClip: {fileID: 8300000, guid: 8f55bfb4454f08e43a5eb0550dcd4231, type: 3}
+  bulletImpactClip: {fileID: 8300000, guid: 5d4584485710da04787ae065a6a57fd8, type: 3}
 --- !u!1001 &1222405447533309849
 PrefabInstance:
   m_ObjectHideFlags: 0

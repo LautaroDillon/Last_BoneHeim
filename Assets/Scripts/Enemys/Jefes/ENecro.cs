@@ -36,6 +36,13 @@ public class ENecro : EnemisBehaivor
     [Header("Misc Settings")]
     public float movementSpeed;
 
+    [Header("Sounds")]
+    [SerializeField] private AudioClip splatClip;
+    [SerializeField] private AudioClip necroDeathClip;
+    [SerializeField] private AudioClip necroGruntClip;
+    [SerializeField] private AudioClip necroTeleportClip;
+    [SerializeField] private AudioClip necroSummonClip;
+
     private float summonTimer;
     private float shotTimer;
 
@@ -137,7 +144,7 @@ public class ENecro : EnemisBehaivor
 
         Transform spawnPoint = summonPoints[Random.Range(0, summonPoints.Length)];
         GameObject enemy = Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)], spawnPoint.position, Quaternion.identity);
-
+        SoundManager.instance.PlaySound(necroSummonClip, transform, 1f, false);
         currentEnemiesSummoned++;
     }
 
@@ -145,7 +152,7 @@ public class ENecro : EnemisBehaivor
     {
         ResetAnim();
         anim.SetBool("Atack", true);
-
+        SoundManager.instance.PlaySound(splatClip, transform, 1f, false);
         GameObject projectile = Instantiate(projectilePrefab, shotPoint.position, Quaternion.identity);
         Vector3 directionToPlayer = (player.transform.position - shotPoint.position).normalized;
         projectile.GetComponent<Rigidbody>().velocity = directionToPlayer * projectileSpeed;
@@ -182,7 +189,8 @@ public class ENecro : EnemisBehaivor
         if (teleportPoints.Length == 0) return;
 
         Transform randomPoint = teleportPoints[Random.Range(0, teleportPoints.Length)];
-       // Instantiate(teleportEffect, transform.position, Quaternion.identity);
+        // Instantiate(teleportEffect, transform.position, Quaternion.identity);
+        SoundManager.instance.PlaySound(necroTeleportClip, transform, 1f, false);
         transform.position = randomPoint.position;
        // Instantiate(teleportEffect, transform.position, Quaternion.identity);
 
@@ -192,10 +200,12 @@ public class ENecro : EnemisBehaivor
     public override void TakeDamage(float dmg)
     {
         currentlife -= dmg;
+        SoundManager.instance.PlaySound(necroGruntClip, transform, 1f, false);
 
         if (currentlife <= 0)
         {
             anim.SetBool("Death", true);
+            SoundManager.instance.PlaySound(necroDeathClip, transform, 1f, false);
             Destroy(gameObject, 5);
         }
     }

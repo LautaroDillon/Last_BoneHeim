@@ -16,7 +16,11 @@ public class Ejarron : EnemisBehaivor, Idamagable
     private NavMeshAgent agent;
 
     [SerializeField] GameObject intactObject; 
-    [SerializeField] GameObject brokenObject; 
+    [SerializeField] GameObject brokenObject;
+
+    [Header("Sounds")]
+    [SerializeField] private AudioClip jarronLaughClip;
+    [SerializeField] private AudioClip jarronDamageClip;
 
     private void Awake()
     {
@@ -47,6 +51,7 @@ public class Ejarron : EnemisBehaivor, Idamagable
             {
                 player.GetComponent<Idamagable>().TakeDamage(dmg);
                 lastAttackTime = Time.time;
+                SoundManager.instance.PlaySound(jarronLaughClip, transform, 1f, false);
                 Debug.Log("El mímico ataca al jugador.");
             }
         }
@@ -71,7 +76,7 @@ public class Ejarron : EnemisBehaivor, Idamagable
                 GameManager.instance.enemys.Remove(this.gameObject);
 
                 if (gameObject.tag == "Skeleton")
-                    SoundManager.instance.PlaySound(skeletonDeathClip, transform, 1f, false);
+                    SoundManager.instance.PlaySound(jarronDamageClip, transform, 1f, false);
 
                 if (PlayerHealth.instance.isInReviveState)
                 {

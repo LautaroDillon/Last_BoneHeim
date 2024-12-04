@@ -19,6 +19,12 @@ public class FullscreenShader : MonoBehaviour
     private Material armMaterial;
     public bool armShaderEnabled = false;
 
+    [Header("Acid Shader")]
+    [SerializeField] private ScriptableRendererFeature fullscreenAcidShader;
+    public Shader acidShader;
+    private Material acidMaterial;
+    public bool acidShaderEnabled = false;
+
     [Header("Normals Shader")]
     [SerializeField] private ScriptableRendererFeature fullscreenNormalShader;
     public Shader normalShader;
@@ -64,6 +70,7 @@ public class FullscreenShader : MonoBehaviour
         BlazingOrganShader();
         BlessedOrganShader();
         ArmRecoveryShader();
+        AcidShader();
     }
 
     void SpeedShader()
@@ -95,6 +102,23 @@ public class FullscreenShader : MonoBehaviour
         else
         {
             fullscreenArmShader.SetActive(false);
+        }
+    }
+
+    void AcidShader()
+    {
+        if (acidShaderEnabled)
+        {
+            if (acidMaterial != null)
+            {
+                acidMaterial.shader = acidShader;
+            }
+            fullscreenAcidShader.SetActive(true);
+            StartCoroutine("AcidShader", 1.5f);
+        }
+        else
+        {
+            fullscreenAcidShader.SetActive(false);
         }
     }
 
@@ -223,6 +247,13 @@ public class FullscreenShader : MonoBehaviour
         armShaderEnabled = true;
         yield return new WaitForSeconds(triggerTime);
         armShaderEnabled = false;
+    }
+
+    public IEnumerator AcidTrigger(float triggerTime)
+    {
+        acidShaderEnabled = true;
+        yield return new WaitForSeconds(triggerTime);
+        acidShaderEnabled = false;
     }
     #endregion
 }

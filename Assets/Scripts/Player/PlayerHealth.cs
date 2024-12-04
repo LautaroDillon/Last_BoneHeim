@@ -147,12 +147,12 @@ public class PlayerHealth : MonoBehaviour, Idamagable
 
     void GameOver()
     {
+        berserk.SetFloat("_Active", 0);
         isInReviveState = false;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        berserk.SetFloat("_Active", 0);
-        SceneManager.LoadScene(2);
         Debug.Log("¡Has muerto definitivamente! Fin del juego.");
+        SceneManager.LoadScene(2);
     }
 
     // Llamar a este método cuando el jugador mate a un enemigo

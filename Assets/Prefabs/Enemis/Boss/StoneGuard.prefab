@@ -189,6 +189,10 @@ MonoBehaviour:
   timeShield: 6
   isShieldActivate: 0
   navMeshAgent: {fileID: -2452974139463531095}
+  stoneGruntClip: {fileID: 8300000, guid: 499aac37f102bb44c9491f016f5d9daf, type: 3}
+  stoneThrowClip: {fileID: 8300000, guid: 3d6244dc3178b7e4dacec27999e381b8, type: 3}
+  stoneDamageClip: {fileID: 8300000, guid: 6205394578c635e4780d17237cee3d70, type: 3}
+  stoneDeathClip: {fileID: 8300000, guid: 522224df221a3fe4eaa31ae816c9fd23, type: 3}
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 2056

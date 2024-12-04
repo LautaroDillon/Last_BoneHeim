@@ -27,7 +27,12 @@ public class EMelee : EnemisBehaivor
 
     [Header("NavMesh")]
     private NavMeshAgent navMeshAgent;
-     //Transform Player;
+    //Transform Player;
+
+    [Header("Sounds")]
+    [SerializeField] private AudioClip swordSlashClip;
+    [SerializeField] private AudioClip knightDeathClip;
+    [SerializeField] private AudioClip bulletImpactClip;
 
     GameObject acid;
 
@@ -109,6 +114,7 @@ public class EMelee : EnemisBehaivor
             resetAnim();
             anim.SetBool("Atack", true);
             player.GetComponent<Idamagable>().TakeDamage(attackDamage);
+            SoundManager.instance.PlaySound(swordSlashClip, transform, 1f, false);
             lastAttackTime = Time.time;
         }
 
@@ -126,6 +132,7 @@ public class EMelee : EnemisBehaivor
     public override void TakeDamage(float dmg)
     {
         healParticle.SetActive(false);
+        SoundManager.instance.PlaySound(bulletImpactClip, transform, 1f, false);
 
         if (hasshield)
         {

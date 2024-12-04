@@ -113,6 +113,8 @@ MonoBehaviour:
   followSpeed: 5
   intactObject: {fileID: 8416864905694448558}
   brokenObject: {fileID: 5789104231650475226}
+  jarronLaughClip: {fileID: 8300000, guid: 51c92e1c7d247774db1ab1c8911e6ad9, type: 3}
+  jarronDamageClip: {fileID: 0}
 --- !u!54 &4030195757774457802
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -160,7 +162,7 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 1.3
   m_BaseOffset: 0
-  m_WalkableMask: 5
+  m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!136 &3303519304792398756
 CapsuleCollider:

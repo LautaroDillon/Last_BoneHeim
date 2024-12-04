@@ -29,6 +29,12 @@ public class ERockguardian : MonoBehaviour, Idamagable
     [Header("NavMesh")]
     public NavMeshAgent navMeshAgent;
 
+    [Header("Sounds")]
+    [SerializeField] private AudioClip stoneGruntClip;
+    [SerializeField] private AudioClip stoneThrowClip;
+    [SerializeField] private AudioClip stoneDamageClip;
+    [SerializeField] private AudioClip stoneDeathClip;
+
     [Header("Player Detection")]
     [SerializeField] protected LayerMask whatIsPlayer;
     [SerializeField] protected LayerMask obstructionMask;
@@ -63,6 +69,7 @@ public class ERockguardian : MonoBehaviour, Idamagable
         {
             if (canSeePlayer)
             {
+                
                 if (distancetoplayer > smashRanged)
                 {
                     MoveToPlayer();
@@ -157,6 +164,7 @@ public class ERockguardian : MonoBehaviour, Idamagable
         navMeshAgent.isStopped = true;
 
         GameObject rock = Instantiate(rockPrefab, rockSpawnPoint.position, Quaternion.identity);
+        SoundManager.instance.PlaySound(stoneThrowClip, transform, 1f, false);
         Rigidbody rb = rock.GetComponent<Rigidbody>();
         if (rb != null)
         {
@@ -205,11 +213,14 @@ public class ERockguardian : MonoBehaviour, Idamagable
         if (isShieldActivate)
             currentLife -= damage / 2;
         else
+        {
             currentLife -= damage;
-
+            SoundManager.instance.PlaySound(stoneDamageClip, transform, 1f, false);
+        }
 
         if (currentLife <= 0)
         {
+            SoundManager.instance.PlaySound(stoneDeathClip, transform, 1f, false);
             Die();
         }
     }
@@ -247,6 +258,7 @@ public class ERockguardian : MonoBehaviour, Idamagable
 
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
                 {
+                    SoundManager.instance.PlaySound(stoneGruntClip, transform, 1f, false);
                     canSeePlayer = true;
                 }
                 else

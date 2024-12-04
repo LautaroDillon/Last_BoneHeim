@@ -9,9 +9,9 @@ public class B_fire : MonoBehaviour
     {
         PlayerHealth damagableInterface = other.gameObject.GetComponent<PlayerHealth>();
 
-
         if (other.gameObject.layer == 11 && damagableInterface != null)
         {
+            FullscreenShader.instance.acidShaderEnabled = true;
             Destroy(gameObject);
             damagableInterface.TakeDamage(FlyweightPointer.Eshoot.Damage);
         }
@@ -25,7 +25,6 @@ public class B_fire : MonoBehaviour
     void DropAcid()
     {
         GameObject acid = Instantiate(acidPrefab, this.transform.position, Quaternion.identity);
-
         Destroy(acid, acidLifetime);
     }
 }

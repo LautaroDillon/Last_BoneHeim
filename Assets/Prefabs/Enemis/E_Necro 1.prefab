@@ -233,6 +233,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   movementSpeed: 0
+  splatClip: {fileID: 8300000, guid: 52d36c4d3994df44f847b6e37283d0c0, type: 3}
+  necroDeathClip: {fileID: 8300000, guid: 6f5ddd82ec31ad745bf20648c0ca9e5a, type: 3}
+  necroGruntClip: {fileID: 8300000, guid: 45571386cc937884ab2072de0aee0264, type: 3}
+  necroTeleportClip: {fileID: 8300000, guid: 1d65caeb3aca846448ca2ae9dec97f91, type: 3}
+  necroSummonClip: {fileID: 8300000, guid: 2a817ad3f4b70104183856ce89bf142c, type: 3}
 --- !u!1 &1512321038063875141
 GameObject:
   m_ObjectHideFlags: 0

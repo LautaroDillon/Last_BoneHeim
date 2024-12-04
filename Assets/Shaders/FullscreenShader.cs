@@ -13,6 +13,12 @@ public class FullscreenShader : MonoBehaviour
     private Material speedMaterial;
     public bool speedShaderEnabled = false;
 
+    [Header("Arm Shader")]
+    [SerializeField] private ScriptableRendererFeature fullscreenArmShader;
+    public Shader armShader;
+    private Material armMaterial;
+    public bool armShaderEnabled = false;
+
     [Header("Normals Shader")]
     [SerializeField] private ScriptableRendererFeature fullscreenNormalShader;
     public Shader normalShader;
@@ -57,6 +63,7 @@ public class FullscreenShader : MonoBehaviour
         VengefulOrganShader();
         BlazingOrganShader();
         BlessedOrganShader();
+        ArmRecoveryShader();
     }
 
     void SpeedShader()
@@ -72,6 +79,22 @@ public class FullscreenShader : MonoBehaviour
         else
         {
             fullscreenSpeedShader.SetActive(false);
+        }
+    }
+    void ArmRecoveryShader()
+    {
+        if (armShaderEnabled)
+        {
+            if (armMaterial != null)
+            {
+                armMaterial.shader = armShader;
+            }
+            fullscreenArmShader.SetActive(true);
+            StartCoroutine("ArmRecoveryTrigger", 1.5f);
+        }
+        else
+        {
+            fullscreenArmShader.SetActive(false);
         }
     }
 
@@ -193,6 +216,13 @@ public class FullscreenShader : MonoBehaviour
         blazingShaderEnabled = true;
         yield return new WaitForSeconds(triggerTime);
         blazingShaderEnabled = false;
+    }
+
+    public IEnumerator ArmRecoveryTrigger(float triggerTime)
+    {
+        armShaderEnabled = true;
+        yield return new WaitForSeconds(triggerTime);
+        armShaderEnabled = false;
     }
     #endregion
 }

@@ -44,30 +44,7 @@ public class ThrowArm : MonoBehaviour
         {
             Debug.Log("pego a enemigo");
             damagableInterface.TakeDamage(75);
-            if (guns.isSkeleton == true)
-            {
-                guns.bulletsLeft += 5;
-            }
-            if (guns.isInvoker == true)
-            {
-                guns.bulletsLeft += 3;
-            }
-            if (guns.isKnuckle == true)
-            {
-                guns.bulletsLeft += 20;
-            }
-            if (guns.isTeeth == true)
-            {
-                guns.bulletsLeft += 16;
-            }
-            if (guns.isNail == true)
-            {
-                guns.bulletsLeft += 2;
-            }
-            if (guns.isParasite == true)
-            {
-                guns.bulletsLeft += 6;
-            }
+            ModifyAmmoBasedOnWeapon();
             if (PlayerHealth.instance.isInReviveState)
             {
                 PlayerHealth.instance.OnEnemyKilled();
@@ -86,27 +63,53 @@ public class ThrowArm : MonoBehaviour
 
         if (collision.gameObject.tag == "Player")
         {
-            CameraShake.Shake(0.2f, 0.2f);
-            if (guns.isSkeleton == true)
-            {
-                guns.magazineSize = 10;
-            }
-            if (guns.isInvoker == true)
-            {
-                guns.magazineSize = 6;
-            }
-            if (guns.isKnuckle == true)
-            {
-                guns.magazineSize = 40;
-            }
-            throwing.armPrefab.gameObject.SetActive(true);
-            throwing.recoverArmTime = throwing.recoverArmMaxTime;
-            SoundManager.instance.PlaySound(armPickUpClip, transform, 1.5f, false);
-            SoundManager.instance.PlaySound(armPickUp2Clip, transform, 1.5f, false);
+            HandleArmPickup();
+            
             throwing.totalThrows += 1;
             print("Retrieved Arm!");
             Destroy(gameObject);
         }
+    }
+    private void HandleArmPickup()
+    {
+        CameraShake.Shake(0.2f, 0.2f);
+
+        AdjustMagazineSizeForWeapon();
+
+        throwing.armPrefab.gameObject.SetActive(true);
+        throwing.recoverArmTime = throwing.recoverArmMaxTime;
+
+        SoundManager.instance.PlaySound(armPickUpClip, transform, 1.5f, false);
+        SoundManager.instance.PlaySound(armPickUp2Clip, transform, 1.5f, false);
+
+        throwing.totalThrows += 1;
+        Destroy(gameObject);
+    }
+
+    private void ModifyAmmoBasedOnWeapon()
+    {
+        if (guns.isSkeleton)
+            guns.bulletsLeft += 5;
+        else if (guns.isInvoker)
+            guns.bulletsLeft += 3;
+        else if (guns.isKnuckle)
+            guns.bulletsLeft += 20;
+        else if (guns.isTeeth)
+            guns.bulletsLeft += 16;
+        else if (guns.isNail)
+            guns.bulletsLeft += 2;
+        else if (guns.isParasite)
+            guns.bulletsLeft += 6;
+    }
+
+    private void AdjustMagazineSizeForWeapon()
+    {
+        if (guns.isSkeleton) guns.magazineSize = 10;
+        else if (guns.isInvoker) guns.magazineSize = 6;
+        else if (guns.isKnuckle) guns.magazineSize = 40;
+        else if (guns.isTeeth) guns.magazineSize = 32;
+        else if (guns.isNail) guns.magazineSize = 4;
+        else if (guns.isParasite) guns.magazineSize = 12;
     }
 
     void SpawnArm()

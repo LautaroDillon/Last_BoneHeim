@@ -70,7 +70,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 95a0e8d2b7f23364a80ba6d316e528e3, type: 2}
+  - {fileID: 2100000, guid: e6806fab62626fb4eb986154e9b7cc14, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -152,9 +152,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 628823bd4650bc645b645768ed152af0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  guns: {fileID: 0}
+  throwing: {fileID: 0}
   armPickUpClip: {fileID: 8300000, guid: e54420e927b42ba4589287456123061f, type: 3}
   armPickUp2Clip: {fileID: 8300000, guid: ace76f2b083128d46a0bda51e280c6e8, type: 3}
   target: {fileID: 0}
+  moveDuration: 3
 --- !u!96 &8467289120626257952
 TrailRenderer:
   serializedVersion: 3
@@ -385,6 +388,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: brazo izquierdo
       objectReference: {fileID: 0}
+    - target: {fileID: 5917893844142046307, guid: 481671d5608bb914a8c51b2af90c1ab8, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e6806fab62626fb4eb986154e9b7cc14, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

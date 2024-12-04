@@ -37,7 +37,9 @@ public class PlayerMovementAdvanced : MonoBehaviour
     private float startYScale;
 
     [Header("Particles")]
-    public ParticleSystem slidingDust, speedTrails;
+    public ParticleSystem slidingDust;
+    public ParticleSystem speedTrails;
+    public ParticleSystem landingDust;
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
@@ -137,7 +139,10 @@ public class PlayerMovementAdvanced : MonoBehaviour
         TextStuff();
 
         if (grounded)
+        {
             rb.drag = groundDrag;
+            
+        }
         else
             rb.drag = 0;
 
@@ -188,6 +193,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
                 SoundManager.instance.PlaySound(jumpClip, transform, 0.5f, false);
                 Jump();
                 Invoke(nameof(ResetJump), jumpCooldown);
+                landingDust.Play();
             }
             //para agacharse
             if (Input.GetKeyDown(crouchKey) && horizontalInput == 0 && verticalInput == 0)

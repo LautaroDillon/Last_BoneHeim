@@ -10,7 +10,6 @@ public class ThrowArm : MonoBehaviour
     [SerializeField] private AudioClip armPickUpClip;
     [SerializeField] private AudioClip armPickUp2Clip;
     public GameObject target;
-    public Canvas armUI;
 
     void Awake()
     {
@@ -29,21 +28,18 @@ public class ThrowArm : MonoBehaviour
         if(throwing.totalThrows == 0)
         {
             throwing.recoverArmTime -= Time.deltaTime;
-            armUI.gameObject.SetActive(false);
         }
         if (throwing.recoverArmTime <= 0)
         {
             SpawnArm();
             throwing.RestoreThrow();
             throwing.armPrefab.gameObject.SetActive(true);
-            armUI.gameObject.SetActive(true);
             Destroy(gameObject);
         }
     }
 
     public void OnTriggerEnter(Collider other)
     {
-        
         Idamagable damagableInterface = other.gameObject.GetComponent<Idamagable>();
         if (other.gameObject.layer == 10)
         {
@@ -63,16 +59,15 @@ public class ThrowArm : MonoBehaviour
         {
             Debug.Log("DEBUG: Returned Arm!");
             SpawnArm();
-            armUI.gameObject.SetActive(true);
             Destroy(gameObject);
         }
 
         if (collision.gameObject.tag == "Player")
         {
             HandleArmPickup();
-            armUI.gameObject.SetActive(true);
             throwing.totalThrows += 1;
             print("Retrieved Arm!");
+            FullscreenShader.instance.armShaderEnabled = true;
             Destroy(gameObject);
         }
     }

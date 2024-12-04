@@ -113,9 +113,10 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
         }
     }
 
-    private IEnumerator FOVRoutime()
+    public virtual IEnumerator FOVRoutime()
     {
         WaitForSeconds wait = new WaitForSeconds(0.2f);
+        Debug.Log("busco player");
 
         while (true)
         {
@@ -124,7 +125,7 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
         }
     }
 
-    private void FieldOfViewCheck()
+    public virtual void FieldOfViewCheck()
     {
         Collider[] rangeChecks = Physics.OverlapSphere(transform.position, checkRadius, whatIsPlayer);
 
@@ -139,20 +140,25 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
 
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
                 {
+                    Debug.Log("veo player");
                     canSeePlayer = true;
                 }
                 else
                 {
+                    Debug.Log(" no veo player");
+
                     canSeePlayer = false;
                 }
             }
             else
             {
+                    Debug.Log(" no veo player");
                 canSeePlayer = false;
             }
         }
         else
         {
+                    Debug.Log(" no veo player");
             canSeePlayer = false;
         }
     }

@@ -17,9 +17,6 @@ public class Chest : MonoBehaviour
     public GameObject explosion;
     public Transform spawnPoint;
 
-    public GameObject closed;
-    public GameObject open;
-
     //public float curseEffectDuration = 5f;
     private bool isOpened = false;
 
@@ -42,9 +39,8 @@ public class Chest : MonoBehaviour
     private void OpenNormalChest()
     {
         Debug.Log("Cofre abierto: recompensa obtenida");
-        closed.SetActive(false);
-        open.SetActive(true);
         Instantiate(rewardPrefab, rewardSpawnPoint.position, Quaternion.identity);
+        Destroy(gameObject); // Elimina el cofre tras abrirlo
     }
 
     private void ActivateCursedChest()
@@ -72,8 +68,7 @@ public class Chest : MonoBehaviour
                 break;
         }
 
-        closed.SetActive(false);
-        open.SetActive(true);
+        Destroy(gameObject, 2f); // Elimina el cofre después de un tiempo
     }
 
     private void InvokeEnemies()

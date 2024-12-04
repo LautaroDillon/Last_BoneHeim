@@ -5,62 +5,86 @@ using UnityEngine.SceneManagement;
 
 public class ENecro : EnemisBehaivor
 {
+    [Header("Fases de Combate")]
+    public float phase2Threshold = 70f;
+    public float phase3Threshold = 30f;
+    private int currentPhase = 1;
+
     [Header("Invoker Settings")]
     public GameObject[] enemyPrefabs;
     public Transform[] summonPoints;
     public float summonCooldown;
     public int maxSummoned;
-    public bool isMiniBoss;
-
-    [Header("summon Settings")]
-    public float summonTimer;
-    int currentEnemiesSummoned;
-    public bool cansummon;
+    private int currentEnemiesSummoned;
 
     [Header("Shooting Settings")]
     public GameObject projectilePrefab;
     public Transform shotPoint;
     public float shotCooldown;
     public float projectileSpeed;
-    public float shotTimer;
 
-    [Header("abilitys Settings")]
-    public GameObject lazer;
-   // public GameObject coolDown;
+    [Header("Ability Settings")]
+    public GameObject laser;
     public GameObject shield;
-    public float countDown;
-    public float count;
-    public float probabilityLaser;
-    public float probabilityShield;
-    public bool canability;
+    public float abilityCooldown;
+    private float abilityTimer;
 
-    [Header("Shield Shader")]
-    public ShieldShader _shieldshader;
+    [Header("Phase Effects")]
+    public GameObject teleportEffect;
+    public Transform[] teleportPoints;
 
 
+    private float summonTimer;
+    private float shotTimer;
 
-    void Awake()
+    private void Awake()
     {
         summonTimer = summonCooldown;
         shotTimer = shotCooldown;
-        countDown = count;
+        abilityTimer = abilityCooldown;
     }
 
     private void Update()
     {
+        HandlePhases();
         EnemiMovement();
+    }
+
+    private void HandlePhases()
+    {
+        if (currentlife <= phase3Threshold && currentPhase < 3)
+        {
+            EnterPhase3();
+        }
+        else if (currentlife <= phase2Threshold && currentPhase < 2)
+        {
+            EnterPhase2();
+        }
+    }
+
+    private void EnterPhase2()
+    {
+        currentPhase = 2;
+        // Aumentar la velocidad de ataque, reducir cooldowns
+        summonCooldown *= 0.8f;
+        shotCooldown *= 0.8f;
+    }
+
+    private void EnterPhase3()
+    {
+        currentPhase = 3;
+        // Activar invocaciones rápidas y ataques potentes
+        summonCooldown *= 0.5f;
+        abilityCooldown *= 0.5f;
     }
 
     public void EnemiMovement()
     {
-        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
-
         if (canSeePlayer)
         {
-
             summonTimer -= Time.deltaTime;
             shotTimer -= Time.deltaTime;
-            countDown -= Time.deltaTime;
+            abilityTimer -= Time.deltaTime;
 
             if (summonTimer <= 0)
             {
@@ -74,97 +98,81 @@ public class ENecro : EnemisBehaivor
                 shotTimer = shotCooldown;
             }
 
-            if (countDown <= 0)
+            if (abilityTimer <= 0)
             {
-                float numeroAleatorio = Random.Range(0f, 10f);
-
-                if (numeroAleatorio < probabilityShield)
-                {
-                    ActivarEscudo();
-                }
-                else 
-                {
-                    InvocarLaser();
-                }
-                countDown = count;
+                UseRandomAbility();
+                abilityTimer = abilityCooldown;
             }
-        }
-    }
-
-    void SummonEnemy()
-    {
-        Vector3 spawnPosition;
-        if (summonPoints.Length > 0)
-        {
-            int randomIndex = Random.Range(0, summonPoints.Length);
-            spawnPosition = summonPoints[randomIndex].position;
         }
         else
         {
-            // Si no hay puntos de invocación, invoca cerca del enemigo
-            spawnPosition = transform.position + new Vector3(Random.Range(-2f, 2f), 0, Random.Range(-2f, 2f));
+            TeleportRandomly();
         }
+    }
 
-        int randomEnemyIndex = Random.Range(0, enemyPrefabs.Length);
-        GameObject enemyToSummon = enemyPrefabs[randomEnemyIndex];
-        Instantiate(enemyToSummon, spawnPosition, Quaternion.identity);
+    private void SummonEnemy()
+    {
+        if (currentEnemiesSummoned >= maxSummoned) return;
+
+        Transform spawnPoint = summonPoints[Random.Range(0, summonPoints.Length)];
+        GameObject enemy = Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)], spawnPoint.position, Quaternion.identity);
 
         currentEnemiesSummoned++;
     }
 
-    void Shoot()
+    private void Shoot()
     {
-        if (projectilePrefab != null && shotPoint != null)
+        GameObject projectile = Instantiate(projectilePrefab, shotPoint.position, Quaternion.identity);
+        Vector3 directionToPlayer = (player.transform.position - shotPoint.position).normalized;
+        projectile.GetComponent<Rigidbody>().velocity = directionToPlayer * projectileSpeed;
+    }
+
+    private void UseRandomAbility()
+    {
+        if (Random.value > 0.5f)
         {
-            GameObject projectile = Instantiate(projectilePrefab, shotPoint.position, Quaternion.identity);
-
-            Vector3 directionToPlayer = (player.transform.position - shotPoint.position).normalized;
-
-            Rigidbody rb = projectile.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.velocity = directionToPlayer * projectileSpeed;
-            }
+            ActivateShield();
         }
+        else
+        {
+            UseLaser();
+        }
+    }
+
+    private void ActivateShield()
+    {
+        shield.SetActive(true);
+        Debug.Log("Escudo activado");
+    }
+
+    private void UseLaser()
+    {
+        laser.SetActive(true);
+        Debug.Log("Láser activado");
+    }
+
+    private void TeleportRandomly()
+    {
+        if (teleportPoints.Length == 0) return;
+
+        Transform randomPoint = teleportPoints[Random.Range(0, teleportPoints.Length)];
+        Instantiate(teleportEffect, transform.position, Quaternion.identity);
+        transform.position = randomPoint.position;
+        Instantiate(teleportEffect, transform.position, Quaternion.identity);
+
+        Debug.Log("Teletransporte realizado");
     }
 
     public override void TakeDamage(float dmg)
     {
         currentlife -= dmg;
-        GameObject acid = Instantiate(blood, pointParticle.transform.position, Quaternion.identity);
 
         if (currentlife <= 0)
         {
-            SoundManager.instance.PlaySound(necromancerDeathClip, transform, 0.7f, false);
-
-            if (PlayerHealth.instance.isInReviveState)
-            {
-                PlayerHealth.instance.enemyKilled = true;
-            }
-
             SceneManager.LoadScene(0);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-
-            Destroy(acid);
-            Destroy(this.gameObject, 0.1f);
+            Destroy(gameObject);
         }
-    }
-
-    void ActivarEscudo()
-    {
-        _shieldshader.esto.SetActive(true);
-        _shieldshader.OpenCloseShield();
-        _shieldshader._life = 100;
-        //shield.SetActive(true);
-        //shield.GetComponent<Shield>()._life = 100; // Restaura la vida del escudo
-        Debug.Log("Habilidad activada: Escudo");
-    }
-
-    void InvocarLaser()
-    {
-        lazer.SetActive(true);
-        lazer.gameObject.GetComponent<Lazer>().timer = 5;
-        Debug.Log("Habilidad activada: Láser");
     }
 }

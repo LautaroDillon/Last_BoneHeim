@@ -13,7 +13,6 @@ public class Lazer : MonoBehaviour
 
     void Start()
     {
-        necro.canability = false;
         timer = lifetime;
     }
 

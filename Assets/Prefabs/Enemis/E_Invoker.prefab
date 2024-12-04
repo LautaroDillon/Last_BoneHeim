@@ -410,7 +410,7 @@ MonoBehaviour:
   speed: 0
   whatIsPlayer:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 2056
   obstructionMask:
     serializedVersion: 2
     m_Bits: 16832
@@ -431,6 +431,8 @@ MonoBehaviour:
   anim: {fileID: 4359170295557842768}
   enemyPrefabs:
   - {fileID: 4918036841467333950, guid: 6671821c88c16f84da52723a8791ab34, type: 3}
+  - {fileID: 6419601667883113455, guid: e5f96e4d3c521d449bc64b943e11e71a, type: 3}
+  - {fileID: 3215990040059586780, guid: 696bf4f1ed34e3d48af3908c4dff4c4f, type: 3}
   summonPoints:
   - {fileID: 8500935128933997252}
   - {fileID: 7107700701992554635}

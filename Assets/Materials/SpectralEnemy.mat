@@ -140,7 +140,7 @@ Material:
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _Spectral: 1
-    - _SpectralAura: 0
+    - _SpectralAura: 6.4
     - _SpectralAuraMax: 1
     - _Spectral_Aura_Contrast: 1
     - _SpecularHighlights: 1
@@ -153,9 +153,9 @@ Material:
     - _ZWriteControl: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _BaseColorSimple: {r: 0, g: 0, b: 0, a: 0}
+    - _BaseColorSimple: {r: 0.3529412, g: 0.37647063, b: 0.43529415, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EffectColor: {r: 0.7665229, g: 0.37304202, b: 0.7830189, a: 0}
+    - _EffectColor: {r: 0.2392157, g: 0.26666668, b: 0.3529412, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []

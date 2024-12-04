@@ -39,6 +39,12 @@ public class ENecro : EnemisBehaivor
     [Header("Misc Settings")]
     public float movementSpeed;
 
+    [Header("Skull Summon Settings")]
+    public GameObject skullPrefab;
+    public int skullCount = 3;
+    public float skullSpawnRadius = 2f;
+    public float skullSpeed = 5f;
+
     [Header("Sounds")]
     [SerializeField] private AudioClip splatClip;
     [SerializeField] private AudioClip necroDeathClip;
@@ -135,7 +141,6 @@ public class ENecro : EnemisBehaivor
         {
             ResetAnim();
             anim.SetBool("Idle", true);
-            TeleportRandomly();
         }
     }
 
@@ -163,13 +168,41 @@ public class ENecro : EnemisBehaivor
 
     private void UseRandomAbility()
     {
-        if (Random.value > 0.5f)
+        float randomValue = Random.value;
+        if (randomValue < 0.33f)
         {
             ActivateShield();
         }
-        else
+        else if (randomValue < 0.66f)
         {
             UseLaser();
+        }
+        else
+        {
+            UseSkullSummon();
+        }
+    }
+
+    private void UseSkullSummon()
+    {
+        Debug.Log("Habilidad activada: Invocar Calaveras");
+
+        for (int i = 0; i < skullCount; i++)
+        {
+            // Generar posición aleatoria alrededor del necromante
+            Vector3 spawnPosition = transform.position + Random.insideUnitSphere * skullSpawnRadius;
+            spawnPosition.y = transform.position.y; // Asegurar que estén al mismo nivel
+
+            // Instanciar la calavera
+            GameObject skull = Instantiate(skullPrefab, spawnPosition, Quaternion.identity);
+
+            // Configurar el objetivo del jugador
+            SkullBehavior skullBehavior = skull.GetComponent<SkullBehavior>();
+            if (skullBehavior != null)
+            {
+                skullBehavior.SetTarget(player);
+                skullBehavior.speed = skullSpeed;
+            }
         }
     }
 

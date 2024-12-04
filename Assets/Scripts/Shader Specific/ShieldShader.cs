@@ -10,7 +10,7 @@ public class ShieldShader : MonoBehaviour, Idamagable
     [SerializeField] float _DisplacementMagnitude;
     [SerializeField] float _LerpSpeed;
     [SerializeField] float _DissolveSpeed;
-    [SerializeField] private bool _shieldOn;
+    [SerializeField] public bool _shieldOn;
 
     Coroutine _dissolveCoroutine;
 
@@ -21,7 +21,7 @@ public class ShieldShader : MonoBehaviour, Idamagable
 
     void Start()
     {
-        //_renderer = GetComponent<Renderer>();
+        _renderer = GetComponent<Renderer>();
         _shieldOn = true;
     }
 

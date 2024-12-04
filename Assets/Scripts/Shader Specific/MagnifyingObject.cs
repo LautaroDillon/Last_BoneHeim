@@ -11,7 +11,7 @@ public class MagnifyingObject : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        //_renderer = GetComponent<Renderer>();
+        _renderer = GetComponent<Renderer>();
         _cam = Camera.main;
     }
 

@@ -33,6 +33,9 @@ public class ENecro : EnemisBehaivor
     public GameObject teleportEffect;
     public Transform[] teleportPoints;
 
+    [Header("Shield Effect")]
+    public ShieldShader _shieldShader;
+
     [Header("Misc Settings")]
     public float movementSpeed;
 
@@ -165,7 +168,15 @@ public class ENecro : EnemisBehaivor
 
     private void ActivateShield()
     {
-        shield.SetActive(true);
+        //shield.SetActive(true);
+        
+        if(_shieldShader._shieldOn == false)
+        {
+            _shieldShader.esto.SetActive(true);
+            _shieldShader.OpenCloseShield();
+            _shieldShader._life = 100;
+        }
+        
         Debug.Log("Escudo activado");
     }
 

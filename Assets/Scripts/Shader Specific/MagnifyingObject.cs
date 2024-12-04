@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MagnifyingObject : MonoBehaviour
 {
+    [SerializeField]
     Renderer _renderer;
     Camera _cam;
 

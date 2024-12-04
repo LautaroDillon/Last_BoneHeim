@@ -200,7 +200,7 @@ public class ENecro : EnemisBehaivor
             SkullBehavior skullBehavior = skull.GetComponent<SkullBehavior>();
             if (skullBehavior != null)
             {
-                skullBehavior.SetTarget(player);
+                skullBehavior.SetTarget(player.gameObject);
                 skullBehavior.speed = skullSpeed;
             }
         }

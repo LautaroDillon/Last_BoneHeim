@@ -182,9 +182,9 @@ public class ENecro : EnemisBehaivor
         if (teleportPoints.Length == 0) return;
 
         Transform randomPoint = teleportPoints[Random.Range(0, teleportPoints.Length)];
-        Instantiate(teleportEffect, transform.position, Quaternion.identity);
+       // Instantiate(teleportEffect, transform.position, Quaternion.identity);
         transform.position = randomPoint.position;
-        Instantiate(teleportEffect, transform.position, Quaternion.identity);
+       // Instantiate(teleportEffect, transform.position, Quaternion.identity);
 
         Debug.Log("Teletransporte realizado");
     }
@@ -195,10 +195,15 @@ public class ENecro : EnemisBehaivor
 
         if (currentlife <= 0)
         {
-            SceneManager.LoadScene(0);
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            Destroy(gameObject);
+            anim.SetBool("Death", true);
+            Destroy(gameObject, 5);
         }
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.LoadScene(0);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 }

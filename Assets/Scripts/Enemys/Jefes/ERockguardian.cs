@@ -171,7 +171,7 @@ public class ERockguardian : MonoBehaviour, Idamagable
             Debug.LogError("La roca lanzada no tiene Rigidbody");
         }
 
-        Invoke(nameof(ResumeMovement), 1f);
+        Invoke(nameof(ResumeMovement), 2f);
     }
 
     private void ResumeMovement()

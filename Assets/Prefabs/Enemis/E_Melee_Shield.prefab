@@ -174,9 +174,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.80616
-  m_Height: 3.000752
+  m_Height: 2.8880036
   m_Direction: 1
-  m_Center: {x: 0.006011963, y: 0.3992598, z: 0.0030417442}
+  m_Center: {x: 0.006011963, y: 0.455634, z: 0.0030417442}
 --- !u!54 &7658670768432487418
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -214,11 +214,11 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: -1372625422
   m_Radius: 0.5
-  m_Speed: 0
-  m_Acceleration: 0
+  m_Speed: 5
+  m_Acceleration: 6
   avoidancePriority: 50
-  m_AngularSpeed: 6
-  m_StoppingDistance: 0
+  m_AngularSpeed: 120
+  m_StoppingDistance: 3
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -233,7 +233,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6419601667883113455}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0091a8ec81cf19a4c80fe3047c53aa05, type: 3}
   m_Name: 
@@ -268,15 +268,15 @@ MonoBehaviour:
   speed: 6
   whatIsPlayer:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 2056
   obstructionMask:
     serializedVersion: 2
-    m_Bits: 16576
+    m_Bits: 16832
   player: {fileID: 0}
-  checkRadius: 50
-  angle: 360
+  checkRadius: 40
+  angle: 358
   canSeePlayer: 0
-  cronometro: 0
+  cronometro: 3
   skeletonDeathClip: {fileID: 8300000, guid: a8d98e1cf137e0a4d9a4951cfd283233, type: 3}
   boomerDeathClip: {fileID: 0}
   necromancerDeathClip: {fileID: 0}
@@ -292,8 +292,10 @@ MonoBehaviour:
   attackDamage: 20
   patrolRadius: 10
   waitTime: 5
+  ShieldOBJ: {fileID: 1494498623543214243}
   lifeShield: 50
   hasshield: 1
+  detectionRange: 0
 --- !u!1001 &1222405447533309849
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -367,6 +369,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7106f4dba8f5093408dba2ed905daad5, type: 3}
+--- !u!1 &1494498623543214243 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -8913927875252244678, guid: 7106f4dba8f5093408dba2ed905daad5, type: 3}
+  m_PrefabInstance: {fileID: 1222405447533309849}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1692335562725574770 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7106f4dba8f5093408dba2ed905daad5, type: 3}

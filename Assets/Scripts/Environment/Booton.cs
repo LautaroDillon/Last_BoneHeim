@@ -5,13 +5,9 @@ public class Booton : MonoBehaviour
     public bool isbullet;
     public Doors door;
     public GameObject oclu;
-    public Animator anim;
+    public Animation hatchAnim;
+    public ParticleSystem _particle;
     [SerializeField] private AudioClip dingClip;
-
-    private void Start()
-    {
-        
-    }
 
     private void Update()
     {
@@ -30,7 +26,8 @@ public class Booton : MonoBehaviour
             if (whathit == "Bullet")
             {
                 door.Activate();
-                anim.SetBool("isOpen", true);
+                hatchAnim.Play();
+                _particle.Play();
                 SoundManager.instance.PlaySound(dingClip, transform, 1f, false);
             }
         }
@@ -45,7 +42,8 @@ public class Booton : MonoBehaviour
             if (whathit == "arm")
             {
                 door.Activate();
-                anim.SetBool("isOpen", true);
+                hatchAnim.Play();
+                _particle.Play();
                 SoundManager.instance.PlaySound(dingClip, transform, 1f, false);
             }
         }

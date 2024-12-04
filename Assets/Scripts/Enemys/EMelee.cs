@@ -17,7 +17,7 @@ public class EMelee : EnemisBehaivor
     private bool isPatrolling;
 
     [Header("shield")]
-    GameObject ShieldOBJ;
+    public GameObject ShieldOBJ;
     public float lifeShield;
     float currentlifeShield;
     public bool hasshield = true;
@@ -27,26 +27,39 @@ public class EMelee : EnemisBehaivor
 
     [Header("NavMesh")]
     private NavMeshAgent navMeshAgent;
+     //Transform Player;
 
     GameObject acid;
 
     private void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+       // Player = GameManager.instance.thisIsPlayer;
         currentlifeShield = lifeShield;
         hasshield = true;
     }
 
     private void Start()
     {
-        GeneratePatrolPoint();
+        //GeneratePatrolPoint();
+        StartCoroutine(FOVRoutime());
+
+    }
+
+    public void resetAnim()
+    {
+        anim.SetBool("Walk", false);
+        anim.SetBool("Atack", false);
+        anim.SetBool("Idle", false);
     }
 
     private void Update()
     {
-        if (currentlife <= 0) return;
-
-        detection();
+        if (currentlife <= 0)
+        {
+            navMeshAgent.isStopped = true;
+            return;
+        }
 
         if (canSeePlayer)
         {
@@ -63,22 +76,26 @@ public class EMelee : EnemisBehaivor
         }
         else
         {
-            Patrol();
+            //Patrol(); // Si decides habilitar la patrulla, también usará rotación.
         }
+
     }
 
-    public void resetAnim()
+    private void RotateTowardsMovement()
     {
-        anim.SetBool("Walk", false);
-        anim.SetBool("Atack", false);
-        anim.SetBool("Idle", false);
-
+        if (navMeshAgent.velocity.sqrMagnitude > 0.1f) // Si se está moviendo
+        {
+            Vector3 direction = navMeshAgent.velocity.normalized;
+            direction.y = 0; // Asegurarse de no cambiar la inclinación vertical
+            transform.rotation = Quaternion.LookRotation(direction);
+        }
     }
 
     private void ChasePlayer()
     {
         navMeshAgent.isStopped = false;
         navMeshAgent.SetDestination(player.position);
+        RotateTowardsMovement();
         resetAnim();
         anim.SetBool("Walk", true);
     }
@@ -86,54 +103,23 @@ public class EMelee : EnemisBehaivor
     private void AttackPlayer()
     {
         navMeshAgent.isStopped = true;
-        resetAnim();
 
         if (Time.time >= lastAttackTime + attackCooldown)
         {
+            resetAnim();
             anim.SetBool("Atack", true);
             player.GetComponent<Idamagable>().TakeDamage(attackDamage);
             lastAttackTime = Time.time;
         }
+
+        Invoke(nameof(ResumeMovement), 1.5f);
     }
 
-    private void Patrol()
+    private void ResumeMovement()
     {
-        if (!isPatrolling)
+        if (navMeshAgent.enabled)
         {
-            waitTimer += Time.deltaTime;
-            resetAnim();
-            anim.SetBool("Idle", true);
-
-            if (waitTimer >= waitTime)
-            {
-                GeneratePatrolPoint();
-                waitTimer = 0;
-            }
-        }
-        else
-        {
-            navMeshAgent.SetDestination(patrolPoint);
-            resetAnim();
-            anim.SetBool("Walk", true);
-
-            if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
-            {
-                isPatrolling = false;
-                navMeshAgent.isStopped = true;
-            }
-        }
-    }
-
-    private void GeneratePatrolPoint()
-    {
-        Vector3 randomDirection = Random.insideUnitSphere * patrolRadius;
-        randomDirection += transform.position;
-
-        if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, patrolRadius, NavMesh.AllAreas))
-        {
-            patrolPoint = hit.position;
             navMeshAgent.isStopped = false;
-            isPatrolling = true;
         }
     }
 
@@ -143,6 +129,7 @@ public class EMelee : EnemisBehaivor
 
         if (hasshield)
         {
+            Debug.Log("pego enemigo");
             currentlife -= dmg;
             acid = Instantiate(blood, pointParticle.transform.position, Quaternion.identity);
             GameObject debris = Instantiate(skeletaldamage, pointParticle.transform.position, Quaternion.identity);
@@ -152,20 +139,21 @@ public class EMelee : EnemisBehaivor
         }
         else
         {
+            Debug.Log("pego escudo");
             currentlifeShield -= dmg;
-            ShieldOBJ.SetActive(false);
         }
 
         if (currentlifeShield <= 0)
         {
+            ShieldOBJ.SetActive(false);
             hasshield = false;
         }
-
 
         if (currentlife <= 0)
         {
             resetAnim();
 
+            navMeshAgent.enabled = false; // Desactivar movimiento al morir
             GameManager.instance.enemys.Remove(this.gameObject);
 
             if (gameObject.tag == "Skeleton")
@@ -178,10 +166,9 @@ public class EMelee : EnemisBehaivor
 
             Destroy(acid);
             anim.SetBool("Death", true);
-            Destroy(this.gameObject, 2f);
+            Destroy(this.gameObject, 3f);
             PlayerHealth.instance.life += 10;
             Guns.instance.bulletsLeft += Random.Range(1, 3) + gun.killReward;
-
         }
     }
 }

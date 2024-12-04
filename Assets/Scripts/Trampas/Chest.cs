@@ -17,10 +17,13 @@ public class Chest : MonoBehaviour
     public GameObject explosion;
     public Transform spawnPoint;
 
+    public GameObject open;
+    public GameObject closed;
+
     //public float curseEffectDuration = 5f;
     private bool isOpened = false;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collider other)
     {
         if (!isOpened)
         {
@@ -84,6 +87,13 @@ public class Chest : MonoBehaviour
         Destroy(this.gameObject, 0.1f);
         // Añadir lógica para una explosión (ejemplo: daño en área)
     }
+
+    public void Change()
+    {
+        open.SetActive(false);
+        closed.SetActive(true);
+    }
+
 
     /*private void ApplyCurseToPlayer()
     {

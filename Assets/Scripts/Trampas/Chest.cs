@@ -17,6 +17,10 @@ public class Chest : MonoBehaviour
     public GameObject explosion;
     public Transform spawnPoint;
 
+    [Header("Sounds")]
+    [SerializeField] private AudioClip chestOpeningClip;
+    [SerializeField] private AudioClip cursedOpeningClip;
+
     public GameObject open;
     public GameObject closed;
 
@@ -31,10 +35,12 @@ public class Chest : MonoBehaviour
             if (chestType == ChestType.Normal)
             {
                 OpenNormalChest();
+                SoundManager.instance.PlaySound(chestOpeningClip, transform, 1f, false);
             }
             else
             {
                 ActivateCursedChest();
+                SoundManager.instance.PlaySound(cursedOpeningClip, transform, 1f, false);
             }
         }
     }

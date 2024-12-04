@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1966259044546554749}
   - component: {fileID: -1607449284526644126}
+  - component: {fileID: -8800289685485600436}
   m_Layer: 0
   m_Name: Head
   m_TagString: Untagged
@@ -49,6 +50,27 @@ MonoBehaviour:
   speed: 5
   damage: 10
   explosionEffect: {fileID: 4188342101596141807, guid: 7259666089fdab3439a689bd67b470f8, type: 3}
+--- !u!65 &-8800289685485600436
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3869927818336726216}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 1024
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &4561646013685709468
 PrefabInstance:
   m_ObjectHideFlags: 0

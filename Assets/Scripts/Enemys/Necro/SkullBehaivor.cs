@@ -33,12 +33,11 @@ public class SkullBehavior : MonoBehaviour
             {
                 playerHealth.TakeDamage(damage);
             }
-
+        }
             if (explosionEffect != null)
             {
                 Instantiate(explosionEffect, transform.position, Quaternion.identity);
             }
             Destroy(gameObject);
-        }
     }
 }

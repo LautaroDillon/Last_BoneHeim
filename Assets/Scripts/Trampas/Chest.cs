@@ -27,7 +27,7 @@ public class Chest : MonoBehaviour
     //public float curseEffectDuration = 5f;
     private bool isOpened = false;
 
-    private void OnCollisionEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (!isOpened)
         {

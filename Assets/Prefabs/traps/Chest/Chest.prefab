@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4128875476335588944}
   - component: {fileID: 4042386173841422809}
   - component: {fileID: 1455337880626872806}
+  - component: {fileID: 5323180879701003019}
   m_Layer: 0
   m_Name: Chest
   m_TagString: Untagged
@@ -103,12 +104,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.7311478, y: 1.3276824, z: 1.4993305}
-  m_Center: {x: 0.008548737, y: 0.5832985, z: 0.6353016}
+  m_Size: {x: 2.7311478, y: 1.3276824, z: 1.3830919}
+  m_Center: {x: 0.008548737, y: 0.5832985, z: -0.6966777}
 --- !u!114 &1455337880626872806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,15 +122,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0e1b8a4657655c45ab06e87b0e82256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chestType: 1
+  chestType: 0
   rewardPrefab: {fileID: 82724631375391373, guid: 9a9335966b316bf4eb8b5b9f31cfaeb0, type: 3}
   rewardSpawnPoint: {fileID: 849496671469372182}
   cursedEffectPrefab: {fileID: 0}
   enemyPrefab: {fileID: 4918036841467333950, guid: 6671821c88c16f84da52723a8791ab34, type: 3}
   explosion: {fileID: 4188342101596141807, guid: 7259666089fdab3439a689bd67b470f8, type: 3}
   spawnPoint: {fileID: 849496671469372182}
+  chestOpeningClip: {fileID: 8300000, guid: bb6aaae6714aa654c9bcce8f011f7e5a, type: 3}
+  cursedOpeningClip: {fileID: 8300000, guid: a9696a22c6516384ba84be96a6a255f0, type: 3}
   open: {fileID: 3677452038285242425}
   closed: {fileID: 2128737192348442464}
+--- !u!65 &5323180879701003019
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761217384284857464}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.9708824, y: 1.5499911, z: 1.6296463}
+  m_Center: {x: 0.071855545, y: 0.6506134, z: 0.7095995}
 --- !u!1 &7395444994383462688
 GameObject:
   m_ObjectHideFlags: 0

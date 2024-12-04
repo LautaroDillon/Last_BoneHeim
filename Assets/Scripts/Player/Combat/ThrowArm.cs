@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ThrowArm : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class ThrowArm : MonoBehaviour
     [SerializeField] private AudioClip armPickUpClip;
     [SerializeField] private AudioClip armPickUp2Clip;
     public GameObject target;
+    public Canvas armUI;
 
     void Awake()
     {
@@ -25,13 +27,16 @@ public class ThrowArm : MonoBehaviour
     private void Update()
     {
         if(throwing.totalThrows == 0)
+        {
             throwing.recoverArmTime -= Time.deltaTime;
+            armUI.gameObject.SetActive(false);
+        }
         if (throwing.recoverArmTime <= 0)
         {
             SpawnArm();
-            
             throwing.RestoreThrow();
             throwing.armPrefab.gameObject.SetActive(true);
+            armUI.gameObject.SetActive(true);
             Destroy(gameObject);
         }
     }
@@ -58,13 +63,14 @@ public class ThrowArm : MonoBehaviour
         {
             Debug.Log("DEBUG: Returned Arm!");
             SpawnArm();
+            armUI.gameObject.SetActive(true);
             Destroy(gameObject);
         }
 
         if (collision.gameObject.tag == "Player")
         {
             HandleArmPickup();
-            
+            armUI.gameObject.SetActive(true);
             throwing.totalThrows += 1;
             print("Retrieved Arm!");
             Destroy(gameObject);
@@ -72,7 +78,7 @@ public class ThrowArm : MonoBehaviour
     }
     private void HandleArmPickup()
     {
-        CameraShake.Shake(0.2f, 0.2f);
+        CameraShake.Shake(0.4f, 0.4f);
 
         AdjustMagazineSizeForWeapon();
 

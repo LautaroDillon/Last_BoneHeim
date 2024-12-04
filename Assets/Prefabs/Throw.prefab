@@ -152,12 +152,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 628823bd4650bc645b645768ed152af0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  guns: {fileID: 0}
-  throwing: {fileID: 0}
   armPickUpClip: {fileID: 8300000, guid: e54420e927b42ba4589287456123061f, type: 3}
   armPickUp2Clip: {fileID: 8300000, guid: ace76f2b083128d46a0bda51e280c6e8, type: 3}
   target: {fileID: 0}
-  moveDuration: 3
+  armUI: {fileID: 0}
 --- !u!96 &8467289120626257952
 TrailRenderer:
   serializedVersion: 3

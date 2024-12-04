@@ -73,7 +73,7 @@ public class EBomeer : EnemisBehaivor
         if (other.gameObject.tag == "Bullet")
         {
             TakeDamage(1);
-            Explosion();
+            StartCoroutine("Explosion", 1.5f);
         }
     }
 
@@ -82,15 +82,16 @@ public class EBomeer : EnemisBehaivor
         if (collision.gameObject.layer == 11)
         {
             TakeDamage(1);
-            Explosion();
+            StartCoroutine("Explosion", 1.5f);
         }
     }
 
-    public void Explosion()
+    public IEnumerator Explosion(float delay)
     {
+        yield return new WaitForSeconds(delay);
         GameManager.instance.enemys.Remove(this.gameObject);
         Instantiate(explosion, transform.position, Quaternion.identity);
-        Destroy(this.gameObject,0.1f);
+        Destroy(this.gameObject, 0.1f);
     }
 
     public override void TakeDamage(float dmg)

@@ -49,7 +49,7 @@ public class PlayerProyectiles : MonoBehaviour
         Transform closestEnemy = null;
 
         // Use Physics.OverlapSphere to get colliders in a certain radius on the enemy layer
-        Collider[] colliders = Physics.OverlapSphere(transform.position, 200f, enemyLayer); // Adjust radius (100f) as needed
+        Collider[] colliders = Physics.OverlapSphere(transform.position, 300f, enemyLayer); // Adjust radius (100f) as needed
 
         foreach (Collider collider in colliders)
         {

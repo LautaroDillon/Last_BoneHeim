@@ -46,24 +46,24 @@ public class NormalSkeleton : EnemisBehaivor
                 switch (rutina)
                 {
                     case 0:
-                        anim.SetBool("Moving", false);
-                        anim.SetBool("IsShootiing", false);
-                        anim.SetBool("idle", true);
+                        //anim.SetBool("Moving", false);
+                        //anim.SetBool("IsShootiing", false);
+                        //anim.SetBool("idle", true);
 
                         break;
                     case 1:
-                        anim.SetBool("Moving", false);
-                        anim.SetBool("IsShootiing", false);
+                        //anim.SetBool("Moving", false);
+                        //anim.SetBool("IsShootiing", false);
                         grado = Random.Range(0, 360);
                         angulo = Quaternion.Euler(0, grado, 0);
                         rutina++;
                         break;
                     case 2:
-                        anim.SetBool("IsShootiing", false);
-                        anim.SetBool("idle", false);
+                        //anim.SetBool("IsShootiing", false);
+                        //anim.SetBool("idle", false);
                         transform.rotation = Quaternion.RotateTowards(transform.rotation, angulo, 0.5f);
                         transform.Translate(Vector3.forward * 1 * Time.deltaTime);
-                        anim.SetBool("Moving", true);
+                        //anim.SetBool("Moving", true);
                         break;
                 }
             }
@@ -75,14 +75,14 @@ public class NormalSkeleton : EnemisBehaivor
             // Debug.Log("veo player");
             if (distanceToPlayer > shootRange && !atacando && !isTurret)
             {
-                anim.SetBool("idle", false);
-                anim.SetBool("IsShootiing", false);
+                //anim.SetBool("idle", false);
+                //anim.SetBool("IsShootiing", false);
 
                 var lookpos = player.transform.position - transform.position;
                 lookpos.y = 0;
                 var rotation = Quaternion.LookRotation(lookpos);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
-                anim.SetBool("Moving", true);
+                //anim.SetBool("Moving", true);
 
                 transform.Translate(Vector3.forward * 2 * Time.deltaTime);
             }
@@ -90,8 +90,8 @@ public class NormalSkeleton : EnemisBehaivor
             {
                     if (canSeePlayer)
                     {
-                        anim.SetBool("Moving", false);
-                        anim.SetBool("idle", false);
+                        //anim.SetBool("Moving", false);
+                        //anim.SetBool("idle", false);
                         Debug.Log("Disparando");
 
                         var lookPos = player.transform.position - transform.position;
@@ -104,7 +104,7 @@ public class NormalSkeleton : EnemisBehaivor
                             Shoot();
                         }
 
-                        anim.SetBool("IsShootiing", true);
+                        //anim.SetBool("IsShootiing", true);
 
                         atacando = true;
                         finanim();

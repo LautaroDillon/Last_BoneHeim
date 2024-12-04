@@ -27,22 +27,26 @@ public class Chest : MonoBehaviour
     //public float curseEffectDuration = 5f;
     private bool isOpened = false;
 
-    private void OnCollisionEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (!isOpened)
+        if(collision.gameObject.tag == "Player")
         {
-            isOpened = true;
-            if (chestType == ChestType.Normal)
+            if (!isOpened)
             {
-                OpenNormalChest();
-                SoundManager.instance.PlaySound(chestOpeningClip, transform, 1f, false);
-            }
-            else
-            {
-                ActivateCursedChest();
-                SoundManager.instance.PlaySound(cursedOpeningClip, transform, 1f, false);
+                isOpened = true;
+                if (chestType == ChestType.Normal)
+                {
+                    OpenNormalChest();
+                    SoundManager.instance.PlaySound(chestOpeningClip, transform, 1f, false);
+                }
+                else
+                {
+                    ActivateCursedChest();
+                    SoundManager.instance.PlaySound(cursedOpeningClip, transform, 1f, false);
+                }
             }
         }
+        
     }
 
     private void OpenNormalChest()

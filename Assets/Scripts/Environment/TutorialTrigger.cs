@@ -16,7 +16,7 @@ public class TutorialTrigger : MonoBehaviour
     {
         if (tutorial.gameObject.activeSelf)
         {
-            if (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.Escape))
             {
                 TutorialEnd();
             }

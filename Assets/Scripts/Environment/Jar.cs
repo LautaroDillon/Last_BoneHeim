@@ -17,7 +17,7 @@ public class Jar : MonoBehaviour
         if (other.gameObject.tag == "Bullet")
         {
             guns.bulletsLeft += Random.Range(1, 3);
-            Bag.intanceLoot(gameObject.transform.position);
         }
+            Bag.intanceLoot(gameObject.transform.position);
     }
 }

@@ -60,7 +60,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 954498774537632540}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 109.02, y: 50.32, z: -52.6}
   m_LocalScale: {x: 4.469651, y: 4.4696503, z: 4.469651}
   m_ConstrainProportionsScale: 1
@@ -207,7 +207,7 @@ MonoBehaviour:
   skeletaldamage: {fileID: 8594284050758689464, guid: d910f5152f01ac742a45b4578091d443, type: 3}
   pointParticle: {fileID: 7860017871997964042}
   healParticle: {fileID: 4475025229226224005, guid: e904da14d1a25e84cadadde9dc8fd545, type: 3}
-  anim: {fileID: 0}
+  anim: {fileID: 5511627805584338429}
   phase2Threshold: 70
   phase3Threshold: 30
   enemyPrefabs:
@@ -228,7 +228,10 @@ MonoBehaviour:
   shield: {fileID: 3458147775848443653}
   abilityCooldown: 10
   teleportEffect: {fileID: 0}
-  teleportPoints: []
+  teleportPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   movementSpeed: 0
 --- !u!1 &1512321038063875141
 GameObject:
@@ -777,6 +780,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Boos
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: f3a059be99e678047ae3d545eb91a3f3, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 6ea05e3360b9f494c92ab47b23a1d320, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -785,5 +792,10 @@ PrefabInstance:
 --- !u!4 &1917707283018086279 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f3a059be99e678047ae3d545eb91a3f3, type: 3}
+  m_PrefabInstance: {fileID: 2096330933077905516}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &5511627805584338429 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: f3a059be99e678047ae3d545eb91a3f3, type: 3}
   m_PrefabInstance: {fileID: 2096330933077905516}
   m_PrefabAsset: {fileID: 0}

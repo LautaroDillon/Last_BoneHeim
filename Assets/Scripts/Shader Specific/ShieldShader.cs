@@ -15,6 +15,7 @@ public class ShieldShader : MonoBehaviour, Idamagable
     Coroutine _dissolveCoroutine;
 
     public GameObject esto;
+    public Collider _shieldCollider;
     public float _life;
 
 
@@ -37,7 +38,7 @@ public class ShieldShader : MonoBehaviour, Idamagable
 
     public void OpenCloseShield()
     {
-        float target = 1.2f;
+        float target = 1.3f;
 
         if (_shieldOn)
         {
@@ -72,10 +73,10 @@ public class ShieldShader : MonoBehaviour, Idamagable
             lerp += Time.deltaTime * _DissolveSpeed;
             yield return null;
         }
-        if(_shieldOn == true)
-        {
-            esto.SetActive(false);
-        }
+        //if(_shieldOn == true)
+        //{
+        //    esto.SetActive(false);
+        //}
     }
 
     public void TakeDamage(float dmg)
@@ -84,6 +85,7 @@ public class ShieldShader : MonoBehaviour, Idamagable
         //HitShield();
         if (_life <= 0)
         {
+            _shieldCollider.enabled = false;
             OpenCloseShield();
         }
     }

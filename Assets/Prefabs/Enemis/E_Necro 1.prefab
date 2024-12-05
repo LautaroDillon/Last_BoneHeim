@@ -235,6 +235,10 @@ MonoBehaviour:
   - {fileID: 0}
   _shieldShader: {fileID: 7706391204924304070}
   movementSpeed: 0
+  skullPrefab: {fileID: 0}
+  skullCount: 3
+  skullSpawnRadius: 2
+  skullSpeed: 5
   splatClip: {fileID: 8300000, guid: 52d36c4d3994df44f847b6e37283d0c0, type: 3}
   necroDeathClip: {fileID: 8300000, guid: 6f5ddd82ec31ad745bf20648c0ca9e5a, type: 3}
   necroGruntClip: {fileID: 8300000, guid: 45571386cc937884ab2072de0aee0264, type: 3}
@@ -720,6 +724,7 @@ MonoBehaviour:
   _DissolveSpeed: 1
   _shieldOn: 1
   esto: {fileID: 4068162482202855995}
+  _shieldCollider: {fileID: 6950210261444499334}
   _life: 0
 --- !u!114 &3938866059265742757
 MonoBehaviour:

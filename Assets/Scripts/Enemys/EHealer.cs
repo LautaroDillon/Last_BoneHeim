@@ -11,6 +11,9 @@ public class EHealer : EnemisBehaivor, Idamagable
     private NavMeshAgent agent;
     private Vector3 wanderTarget;
 
+    public float patrolWaitTime = 3f;
+    private float patrolTimer = 0f;
+
     void Awake()
     {
         currentlife = FlyweightPointer.Ehealer.maxLife;

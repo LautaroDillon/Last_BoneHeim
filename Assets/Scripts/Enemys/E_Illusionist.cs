@@ -32,6 +32,8 @@ public class E_Illusionist : EnemisBehaivor
 
     [Header("Movement")]
     public NavMeshAgent navMeshAgent;
+    public float patrolWaitTime = 3f;
+    private float patrolTimer = 0f;
 
     void Start()
     {
@@ -45,7 +47,6 @@ public class E_Illusionist : EnemisBehaivor
     public void resetAnim()
     {
         anim.SetBool("Walk", false);
-        anim.SetBool("Atack", false);
         anim.SetBool("Idle", false);
 
     }
@@ -97,30 +98,23 @@ public class E_Illusionist : EnemisBehaivor
 
     private void Patrol()
     {
-        /*if (!isPatrolling)
+        if (navMeshAgent != null && !navMeshAgent.hasPath)
         {
-            waitTimer += Time.deltaTime;
-            resetAnim();
-            anim.SetBool("Idle", true);
+            patrolTimer += Time.deltaTime;
 
-            if (waitTimer >= waitTime)
+            if (patrolTimer >= patrolWaitTime)
             {
-                GeneratePatrolPoint();
-                waitTimer = 0;
+                Vector3 randomDirection = Random.insideUnitSphere * 10f;
+                randomDirection += transform.position;
+
+                if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, 10f, NavMesh.AllAreas))
+                {
+                    navMeshAgent.SetDestination(hit.position);
+                }
+
+                patrolTimer = 0f;
             }
         }
-        else
-        {
-            navMeshAgent.SetDestination(patrolPoint);
-            resetAnim();
-            anim.SetBool("Walk", true);
-
-            if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
-            {
-                isPatrolling = false;
-                navMeshAgent.isStopped = true;
-            }
-        }*/
     }
 
     private void GeneratePatrolPoint()

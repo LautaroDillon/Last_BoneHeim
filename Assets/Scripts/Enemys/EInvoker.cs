@@ -1,30 +1,44 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EInvoker : EnemisBehaivor
 {
-    [Header("invoker")]
+    [Header("Invoker Settings")]
     public GameObject[] enemyPrefabs;
     public Transform[] summonPoints;
     public float summonCooldown;
     public int maxSummoned;
-    public bool isminiboos;
+    public bool isMiniboss;
 
+    [Header("NavMesh Settings")]
+    private NavMeshAgent agent;
 
-    public float summonTimer;
-    int currentEnemisSumoned;
+    private float summonTimer;
+    private int currentEnemiesSummoned;
 
+    private float patrolWaitTime = 3f;
+    private float patrolTimer = 0f;
 
     void Awake()
     {
-            currentlife = FlyweightPointer.Ehealer.maxLife;
-            speed = FlyweightPointer.Ehealer.speed;    
-
+        currentlife = FlyweightPointer.Ehealer.maxLife;
+        speed = FlyweightPointer.Ehealer.speed;
         summonTimer = summonCooldown;
+
+        agent = GetComponent<NavMeshAgent>();
+        if (agent != null)
+        {
+            agent.speed = speed;
+        }
+        else
+        {
+            Debug.LogWarning("NavMeshAgent component is missing!");
+        }
     }
 
     private void Update()
     {
-        if (currentlife >= 0)
+        if (currentlife > 0)
         {
             EnemiMovement();
         }
@@ -34,66 +48,65 @@ public class EInvoker : EnemisBehaivor
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
-
         if (!canSeePlayer)
         {
-            // anim.SetBool("run", false);
-            if (!isminiboos)
-            {
-
-                cronometro += 1 * Time.deltaTime;
-                if (cronometro >= 4)
-                {
-                    rutina = Random.Range(0, 2);
-                    cronometro = 0;
-                }
-                switch (rutina)
-                {
-                    case 0:
-                        break;
-                    case 1:
-                        grado = Random.Range(0, 360);
-                        angulo = Quaternion.Euler(0, grado, 0);
-                        rutina++;
-                        break;
-                    case 2:
-                        transform.rotation = Quaternion.RotateTowards(transform.rotation, angulo, 0.5f);
-                        transform.Translate(Vector3.forward * 1 * Time.deltaTime);
-                        anim.SetBool("idle", false);
-                        anim.SetBool("Moving", true);
-                        break;
-                }
-            }
-
+            Patrol();
         }
         else
         {
-            if (!isminiboos)
+            if (!isMiniboss)
             {
-
-            var lookpos = transform.position - player.transform.position;
-
-            lookpos.y = 0;
-
-            var rotation = Quaternion.LookRotation(lookpos);
-                anim.SetBool("idle", false);
-                anim.SetBool("Moving", true);
-
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
-            transform.Translate(Vector3.forward * 2 * Time.deltaTime);
-
+                ChasePlayer();
             }
+
             // Cuenta regresiva para invocar enemigos
             summonTimer -= Time.deltaTime;
 
-            // Si es tiempo de invocar y no ha alcanzado el máximo de invocados
-            if (summonTimer <= 0 && currentEnemisSumoned < maxSummoned)
+            // Invocar enemigos si hay oportunidad
+            if (summonTimer <= 0 && currentEnemiesSummoned < maxSummoned)
             {
-
                 SummonEnemy();
                 summonTimer = summonCooldown;
             }
         }
+    }
+
+
+
+    private void Patrol()
+    {
+        if (agent != null && !agent.hasPath)
+        {
+            patrolTimer += Time.deltaTime;
+
+            if (patrolTimer >= patrolWaitTime)
+            {
+                Vector3 randomDirection = Random.insideUnitSphere * 10f;
+                randomDirection += transform.position;
+
+                if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, 10f, NavMesh.AllAreas))
+                {
+                    agent.SetDestination(hit.position);
+                }
+
+                patrolTimer = 0f;
+            }
+        }
+
+        // Configura las animaciones en base al movimiento del agente
+        anim.SetBool("idle", agent.velocity.magnitude < 0.1f);
+        anim.SetBool("Moving", agent.velocity.magnitude > 0.1f);
+    }
+
+    private void ChasePlayer()
+    {
+        if (agent != null)
+        {
+            agent.SetDestination(player.position);
+        }
+
+        anim.SetBool("idle", false);
+        anim.SetBool("Moving", true);
     }
 
     void SummonEnemy()
@@ -108,7 +121,7 @@ public class EInvoker : EnemisBehaivor
         }
         else
         {
-            // Si no hay puntos invoca cerca de el
+            // Si no hay puntos definidos, invoca cerca del invocador
             spawnPosition = transform.position + new Vector3(Random.Range(-2f, 2f), 0, Random.Range(-2f, 2f));
         }
 
@@ -116,9 +129,8 @@ public class EInvoker : EnemisBehaivor
         int randomEnemyIndex = Random.Range(0, enemyPrefabs.Length);
         GameObject enemyToSummon = enemyPrefabs[randomEnemyIndex];
 
-        GameObject newEnemy = Instantiate(enemyToSummon, spawnPosition, Quaternion.identity);
+        Instantiate(enemyToSummon, spawnPosition, Quaternion.identity);
 
-        currentEnemisSumoned++;
-
+        currentEnemiesSummoned++;
     }
 }

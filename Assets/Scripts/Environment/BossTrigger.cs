@@ -9,6 +9,9 @@ public class BossTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
+        {
             SoundManager.instance.PlaySound(bossTriggerClip, transform, 0.5f, false);
+            Destroy(gameObject);
+        }
     }
 }

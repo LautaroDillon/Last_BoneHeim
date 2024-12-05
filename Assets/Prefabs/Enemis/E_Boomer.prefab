@@ -207,7 +207,7 @@ MonoBehaviour:
   skeletaldamage: {fileID: 8594284050758689464, guid: d910f5152f01ac742a45b4578091d443, type: 3}
   pointParticle: {fileID: 2762150081237657527}
   healParticle: {fileID: 3304549016305056580}
-  anim: {fileID: 4339707123468054415}
+  anim: {fileID: 7632139131834306362}
   radius: 5
   damage: 30
   explosion: {fileID: 4188342101596141807, guid: 7259666089fdab3439a689bd67b470f8, type: 3}
@@ -403,6 +403,11 @@ PrefabInstance:
 --- !u!4 &4542692548550481216 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e512c32f1aee13942862bcf1ddab050c, type: 3}
+  m_PrefabInstance: {fileID: 4071354889624040107}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &7632139131834306362 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: e512c32f1aee13942862bcf1ddab050c, type: 3}
   m_PrefabInstance: {fileID: 4071354889624040107}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7877685301098517022
@@ -1882,11 +1887,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0613aab417bcccb4bbb9eb0e84e12c50, type: 3}
---- !u!95 &4339707123468054415 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 0613aab417bcccb4bbb9eb0e84e12c50, type: 3}
-  m_PrefabInstance: {fileID: 7877685301098517022}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7699343875906106869 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0613aab417bcccb4bbb9eb0e84e12c50, type: 3}

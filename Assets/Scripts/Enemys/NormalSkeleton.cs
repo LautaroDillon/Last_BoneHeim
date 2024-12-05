@@ -39,6 +39,14 @@ public class NormalSkeleton : EnemisBehaivor
         }
     }
 
+    public void resetAnim()
+    {
+        anim.SetBool("Walk", false);
+        anim.SetBool("Idle", false);
+        anim.SetBool("Atack", false);
+
+    }
+
     private void EnemiMovement()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
@@ -75,10 +83,15 @@ public class NormalSkeleton : EnemisBehaivor
             switch (rutina)
             {
                 case 0:
+                    anim.SetBool("Idle", true);
+                    resetAnim();
                     // No hace nada (idle)
                     break;
                 case 1:
                     // Se mueve hacia una dirección aleatoria
+                    resetAnim();
+                    anim.SetBool("Walk", true);
+
                     Vector3 randomDirection = Random.insideUnitSphere * 5f;
                     randomDirection += transform.position;
                     if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, 5f, NavMesh.AllAreas))
@@ -94,6 +107,9 @@ public class NormalSkeleton : EnemisBehaivor
     {
         if (agent != null)
         {
+                    resetAnim();
+            anim.SetBool("Walk", true);
+
             agent.isStopped = false; // Permite el movimiento
             agent.SetDestination(player.transform.position); // Persigue al jugador
         }
@@ -111,6 +127,10 @@ public class NormalSkeleton : EnemisBehaivor
         lookPos.y = 0; // Ignora el eje Y
         Quaternion rotation = Quaternion.LookRotation(lookPos);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 5 * Time.deltaTime);
+
+                    resetAnim();
+        anim.SetBool("Atack", true);
+
 
         // Ataca si puede disparar
         if (CanFire())

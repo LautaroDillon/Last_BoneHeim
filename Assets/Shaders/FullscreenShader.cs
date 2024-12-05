@@ -114,7 +114,7 @@ public class FullscreenShader : MonoBehaviour
                 acidMaterial.shader = acidShader;
             }
             fullscreenAcidShader.SetActive(true);
-            StartCoroutine("AcidShader", 1.5f);
+            StartCoroutine("AcidTrigger", 1.5f);
         }
         else
         {

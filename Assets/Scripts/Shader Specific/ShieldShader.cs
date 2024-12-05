@@ -15,6 +15,7 @@ public class ShieldShader : MonoBehaviour, Idamagable
     Coroutine _dissolveCoroutine;
 
     public GameObject esto;
+    public Collider _shieldCollider;
     public float _life;
 
 

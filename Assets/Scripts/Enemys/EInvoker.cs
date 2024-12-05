@@ -16,7 +16,7 @@ public class EInvoker : EnemisBehaivor
     private float summonTimer;
     private int currentEnemiesSummoned;
 
-    private float patrolWaitTime = 3f;
+    public float patrolWaitTime = 3f;
     private float patrolTimer = 0f;
 
     void Awake()
@@ -56,7 +56,7 @@ public class EInvoker : EnemisBehaivor
         {
             if (!isMiniboss)
             {
-                ChasePlayer();
+                EscapePlayer();
             }
 
             // Cuenta regresiva para invocar enemigos
@@ -70,8 +70,6 @@ public class EInvoker : EnemisBehaivor
             }
         }
     }
-
-
 
     private void Patrol()
     {
@@ -98,15 +96,50 @@ public class EInvoker : EnemisBehaivor
         anim.SetBool("Moving", agent.velocity.magnitude > 0.1f);
     }
 
-    private void ChasePlayer()
+    private void EscapePlayer()
     {
         if (agent != null)
         {
-            agent.SetDestination(player.position);
+            // Calcula la dirección opuesta al jugador
+            Vector3 directionAwayFromPlayer = transform.position - player.position;
+            directionAwayFromPlayer.Normalize();
+
+            // Define un punto de destino alejado del jugador
+            Vector3 escapeDestination = transform.position + directionAwayFromPlayer * 10f;
+
+            // Verifica si el punto es válido dentro del NavMesh
+            if (NavMesh.SamplePosition(escapeDestination, out NavMeshHit hit, 10f, NavMesh.AllAreas))
+            {
+                agent.SetDestination(hit.position);
+            }
+            else
+            {
+                // Si no se encuentra una posición válida, elige una dirección aleatoria
+                Vector3 randomDirection = Random.insideUnitSphere * 10f;
+                randomDirection += transform.position;
+
+                if (NavMesh.SamplePosition(randomDirection, out NavMeshHit randomHit, 10f, NavMesh.AllAreas))
+                {
+                    agent.SetDestination(randomHit.position);
+                }
+            }
         }
 
         anim.SetBool("idle", false);
         anim.SetBool("Moving", true);
+
+        // Verifica si el agente está atascado
+        if (agent.velocity.sqrMagnitude < 0.01f && !agent.pathPending)
+        {
+            // Recalcula la ruta si no está avanzando
+            Vector3 randomDirection = Random.insideUnitSphere * 10f;
+            randomDirection += transform.position;
+
+            if (NavMesh.SamplePosition(randomDirection, out NavMeshHit randomHit, 10f, NavMesh.AllAreas))
+            {
+                agent.SetDestination(randomHit.position);
+            }
+        }
     }
 
     void SummonEnemy()

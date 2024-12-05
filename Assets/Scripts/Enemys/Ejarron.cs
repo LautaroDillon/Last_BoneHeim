@@ -15,7 +15,7 @@ public class Ejarron : EnemisBehaivor, Idamagable
     private bool isAwake = false; // Controla si el mímico está activo
     private NavMeshAgent agent;
 
-    [SerializeField] GameObject intactObject; 
+    [SerializeField] GameObject intactObject;
     [SerializeField] GameObject brokenObject;
 
     [Header("Sounds")]
@@ -26,27 +26,43 @@ public class Ejarron : EnemisBehaivor, Idamagable
     {
         currentlife = FlyweightPointer.Eshoot.maxLife + life;
         agent = GetComponent<NavMeshAgent>();
+        if (agent != null)
+        {
+            agent.speed = followSpeed;
+            agent.isStopped = true; // El mímico no se mueve hasta que despierte
+        }
     }
-
 
     private void Update()
     {
         if (isAwake && currentlife > 0)
         {
-            AttackOrFollowPlayer(); 
+            AttackOrFollowPlayer();
         }
     }
 
     private void AttackOrFollowPlayer()
     {
-        if (Vector3.Distance(transform.position, player.position) > attackRange)
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+        if (distanceToPlayer > attackRange)
         {
-            
+            // Persigue al jugador
+            if (agent != null && agent.isStopped)
+            {
+                agent.isStopped = false; // Habilita el movimiento
+            }
             agent.SetDestination(player.position);
         }
         else
         {
-            
+            // Detén al agente al estar dentro del rango de ataque
+            if (agent != null && !agent.isStopped)
+            {
+                agent.isStopped = true;
+            }
+
+            // Ataca al jugador si el cooldown lo permite
             if (Time.time >= lastAttackTime + attackCooldown)
             {
                 player.GetComponent<Idamagable>().TakeDamage(dmg);
@@ -59,43 +75,40 @@ public class Ejarron : EnemisBehaivor, Idamagable
 
     public override void TakeDamage(float dmg)
     {
-        if (isAwake) 
+        if (!isAwake)
         {
-            healParticle.SetActive(false);
-
-            currentlife -= dmg;
-            GameObject acid = Instantiate(blood, pointParticle.transform.position, Quaternion.identity);
-            GameObject debris = Instantiate(skeletaldamage, pointParticle.transform.position, Quaternion.identity);
-
-            Destroy(debris, 5);
-            Destroy(acid, 15);
-
-            if (currentlife <= 0)
-            {
-                Debug.Log("the skeleton received damage ");
-                GameManager.instance.enemys.Remove(this.gameObject);
-
-                if (gameObject.tag == "Skeleton")
-                    SoundManager.instance.PlaySound(jarronDamageClip, transform, 1f, false);
-
-                if (PlayerHealth.instance.isInReviveState)
-                {
-                    PlayerHealth.instance.enemyKilled = true;
-                }
-
-                Destroy(acid);
-                Break();
-                Destroy(this.gameObject, 1f);
-                PlayerHealth.instance.life += 10;
-                //Guns.instance.bulletsLeft += Random.Range(4, 5) + gun.killReward;
-            }
+            isAwake = true; // Despierta al mímico
+            agent.isStopped = false; // Activa el movimiento
         }
-        else
+
+        currentlife -= dmg;
+
+        healParticle.SetActive(false);
+
+        GameObject acid = Instantiate(blood, pointParticle.transform.position, Quaternion.identity);
+        GameObject debris = Instantiate(skeletaldamage, pointParticle.transform.position, Quaternion.identity);
+
+        Destroy(debris, 5);
+        Destroy(acid, 15);
+
+        if (currentlife <= 0)
         {
-            isAwake = true;
+            Debug.Log("El mímico ha sido destruido.");
+            GameManager.instance.enemys.Remove(this.gameObject);
+
+            if (gameObject.tag == "Skeleton")
+                SoundManager.instance.PlaySound(jarronDamageClip, transform, 1f, false);
+
+            if (PlayerHealth.instance.isInReviveState)
+            {
+                PlayerHealth.instance.enemyKilled = true;
+            }
+
+            Break();
+            Destroy(this.gameObject, 1f);
+            PlayerHealth.instance.life += 10;
         }
     }
-
 
     private void Break()
     {

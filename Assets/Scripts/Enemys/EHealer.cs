@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EHealer : EnemisBehaivor, Idamagable
 {
@@ -7,15 +8,22 @@ public class EHealer : EnemisBehaivor, Idamagable
     public GameObject healerBuff;
     public bool canspawn = true;
 
+    private NavMeshAgent agent;
+    private Vector3 wanderTarget;
+
     void Awake()
     {
         currentlife = FlyweightPointer.Ehealer.maxLife;
         speed = FlyweightPointer.Ehealer.speed;
+
+        // Configurar NavMeshAgent
+        agent = GetComponent<NavMeshAgent>();
+        agent.speed = speed;
     }
 
     private void Update()
     {
-        if (currentlife >= 0)
+        if (currentlife > 0)
         {
             EnemiMovement();
         }
@@ -23,47 +31,55 @@ public class EHealer : EnemisBehaivor, Idamagable
 
     public void EnemiMovement()
     {
-        if (Vector3.Distance(transform.position, player.transform.position) > 20)
+        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+
+        if (distanceToPlayer > 20)
         {
-            // anim.SetBool("run", false);
-
-            cronometro += 1 * Time.deltaTime;
-            if (cronometro >= 4)
-            {
-                rutina = Random.Range(0, 2);
-                cronometro = 0;
-            }
-            switch (rutina)
-            {
-                case 0:
-                    anim.SetBool("idle", true);
-                    anim.SetBool("Moving", false);
-
-                    break;
-                case 1:
-                    grado = Random.Range(0, 360);
-                    angulo = Quaternion.Euler(0, grado, 0);
-                    rutina++;
-                    break;
-                case 2:
-                    transform.rotation = Quaternion.RotateTowards(transform.rotation, angulo, 0.5f);
-                    transform.Translate(Vector3.forward * 1 * Time.deltaTime);
-                    anim.SetBool("idle", false);
-                    anim.SetBool("Moving", true);
-                    break;
-            }
+            Wander(); // Movimiento aleatorio si está lejos del jugador.
         }
         else
         {
-            var lookpos = transform.position - player.transform.position;
-            lookpos.y = 0;
-            var rotation = Quaternion.LookRotation(lookpos);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
-            anim.SetBool("Moving", true);
-            anim.SetBool("idle", false);
-
-            transform.Translate(Vector3.forward * 2 * Time.deltaTime);
+            FleeFromPlayer(); // Huir del jugador si está cerca.
         }
+    }
+
+    private void Wander()
+    {
+        if (!agent.hasPath || agent.remainingDistance < 1f)
+        {
+            wanderTarget = GetRandomWanderPosition();
+            agent.SetDestination(wanderTarget);
+        }
+
+        anim.SetBool("Moving", true);
+        anim.SetBool("idle", false);
+    }
+
+    private Vector3 GetRandomWanderPosition()
+    {
+        Vector3 randomDirection = Random.insideUnitSphere * 10f; // Generar un punto aleatorio.
+        randomDirection += transform.position;
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(randomDirection, out hit, 10f, NavMesh.AllAreas))
+        {
+            return hit.position;
+        }
+        return transform.position; // En caso de no encontrar un punto válido, quedarse en el lugar.
+    }
+
+    private void FleeFromPlayer()
+    {
+        Vector3 directionAwayFromPlayer = transform.position - player.position;
+        Vector3 fleePosition = transform.position + directionAwayFromPlayer.normalized * 10f;
+
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(fleePosition, out hit, 10f, NavMesh.AllAreas))
+        {
+            agent.SetDestination(hit.position);
+        }
+
+        anim.SetBool("Moving", true);
+        anim.SetBool("idle", false);
     }
 
     void OnTriggerEnter(Collider other)
@@ -75,7 +91,6 @@ public class EHealer : EnemisBehaivor, Idamagable
         }
     }
 
-
     void Heal()
     {
         if (currentlife <= 50 && canspawn)
@@ -86,4 +101,3 @@ public class EHealer : EnemisBehaivor, Idamagable
         }
     }
 }
-

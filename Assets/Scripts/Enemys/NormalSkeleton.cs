@@ -1,147 +1,154 @@
 using UnityEngine;
+using UnityEngine.AI; 
 
 public class NormalSkeleton : EnemisBehaivor
 {
-    bool atacando;
+    [Header("NavMesh Settings")]
+    private NavMeshAgent agent; 
+    [SerializeField] private float stoppingDistance; // Distancia para detenerse cerca del jugador
 
-    [Header("Attack Range")]
-    [SerializeField] protected Transform firePoint;
-    [SerializeField] protected float shootRange;
-    protected float DMG;
-    protected float fireForce = 15f;
-    [SerializeField] protected GameObject BulletPrefab;
-    [SerializeField] protected float firerate, NextfireTime;
-    public bool isTurret;
+    [Header("Attack Settings")]
+    [SerializeField] private Transform firePoint; // Punto desde el cual dispara
+    [SerializeField] private float shootRange; // Rango de disparo
+    [SerializeField] private GameObject BulletPrefab; // Prefab de la bala
+    [SerializeField] private float fireRate; // Velocidad de disparo
+    [SerializeField] private float projectileSpeed; // Velocidad de la bala
 
-    public float projectileSpeed;
+    [Header("Movement Settings")]
+    public bool isTurret; // Si el esqueleto es fijo
+    private bool isAttacking;
+    private float nextFireTime;
 
     private void Awake()
     {
         currentlife = FlyweightPointer.Eshoot.maxLife;
+        agent = GetComponent<NavMeshAgent>(); // Obtiene el NavMeshAgent
         instance = this;
+
+        if (agent != null)
+        {
+            agent.stoppingDistance = stoppingDistance; // Define la distancia mínima para detenerse
+        }
     }
 
     private void Update()
     {
-        if (currentlife >= 0)
+        if (currentlife > 0)
         {
             EnemiMovement();
         }
     }
 
-    public void EnemiMovement()
+    private void EnemiMovement()
     {
-        if (!canSeePlayer)
+        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+
+        if (!canSeePlayer) // Si no ve al jugador
         {
-            // anim.SetBool("run", false);
-            if (!isTurret)
-            {
-
-                cronometro += 1 * Time.deltaTime;
-                if (cronometro >= 4)
-                {
-                    rutina = Random.Range(0, 2);
-                    cronometro = 0;
-                }
-                switch (rutina)
-                {
-                    case 0:
-                        //anim.SetBool("Moving", false);
-                        //anim.SetBool("IsShootiing", false);
-                        //anim.SetBool("idle", true);
-
-                        break;
-                    case 1:
-                        //anim.SetBool("Moving", false);
-                        //anim.SetBool("IsShootiing", false);
-                        grado = Random.Range(0, 360);
-                        angulo = Quaternion.Euler(0, grado, 0);
-                        rutina++;
-                        break;
-                    case 2:
-                        //anim.SetBool("IsShootiing", false);
-                        //anim.SetBool("idle", false);
-                        transform.rotation = Quaternion.RotateTowards(transform.rotation, angulo, 0.5f);
-                        transform.Translate(Vector3.forward * 1 * Time.deltaTime);
-                        //anim.SetBool("Moving", true);
-                        break;
-                }
-            }
+            Patrol();
         }
         else
         {
-            float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
-
-            // Debug.Log("veo player");
-            if (distanceToPlayer > shootRange && !atacando && !isTurret)
+            if (distanceToPlayer > shootRange && !isAttacking && !isTurret)
             {
-                //anim.SetBool("idle", false);
-                //anim.SetBool("IsShootiing", false);
-
-                var lookpos = player.transform.position - transform.position;
-                lookpos.y = 0;
-                var rotation = Quaternion.LookRotation(lookpos);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
-                //anim.SetBool("Moving", true);
-
-                transform.Translate(Vector3.forward * 2 * Time.deltaTime);
+                ChasePlayer();
             }
             else if (distanceToPlayer <= shootRange)
             {
-                    if (canSeePlayer)
-                    {
-                        //anim.SetBool("Moving", false);
-                        //anim.SetBool("idle", false);
-                        Debug.Log("Disparando");
-
-                        var lookPos = player.transform.position - transform.position;
-                        lookPos.y = 0;
-                        var rotation = Quaternion.LookRotation(lookPos);
-                        transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
-
-                        if (Canfire())
-                        {
-                            Shoot();
-                        }
-
-                        //anim.SetBool("IsShootiing", true);
-
-                        atacando = true;
-                        finanim();
-                    }
-                }
-
+                AttackPlayer();
+            }
         }
     }
 
-    bool Canfire()
+    private void Patrol()
     {
-        return Time.time >= NextfireTime;
+        // Patrulla aleatoria
+        if (agent != null && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        {
+            cronometro += Time.deltaTime;
+            if (cronometro >= 4)
+            {
+                rutina = Random.Range(0, 2);
+                cronometro = 0;
+            }
+
+            switch (rutina)
+            {
+                case 0:
+                    // No hace nada (idle)
+                    break;
+                case 1:
+                    // Se mueve hacia una dirección aleatoria
+                    Vector3 randomDirection = Random.insideUnitSphere * 5f;
+                    randomDirection += transform.position;
+                    if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, 5f, NavMesh.AllAreas))
+                    {
+                        agent.SetDestination(hit.position);
+                    }
+                    break;
+            }
+        }
     }
 
-    public void Shoot()
+    private void ChasePlayer()
     {
+        if (agent != null)
+        {
+            agent.isStopped = false; // Permite el movimiento
+            agent.SetDestination(player.transform.position); // Persigue al jugador
+        }
+    }
+
+    private void AttackPlayer()
+    {
+        if (agent != null)
+        {
+            agent.isStopped = true; // Detiene el movimiento mientras ataca
+        }
+
+        // Gira hacia el jugador
+        Vector3 lookPos = player.transform.position - transform.position;
+        lookPos.y = 0; // Ignora el eje Y
+        Quaternion rotation = Quaternion.LookRotation(lookPos);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 5 * Time.deltaTime);
+
+        // Ataca si puede disparar
+        if (CanFire())
+        {
+            Shoot();
+        }
+
+        isAttacking = true;
+        EndAttack();
+    }
+
+    private bool CanFire()
+    {
+        return Time.time >= nextFireTime;
+    }
+
+    private void Shoot()
+    {
+        // Calcula la dirección hacia el jugador
         Vector3 directionToPlayer = (player.transform.position - firePoint.position).normalized;
 
+        // Obtiene una bala del Bullet Manager
         var bullet = BuletManager.instance.GetBullet();
         bullet.transform.position = firePoint.transform.position;
         bullet.transform.forward = directionToPlayer;
 
-
+        // Añade velocidad a la bala
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
-
         if (rb != null)
         {
-            Debug.Log("hola");
             rb.velocity = directionToPlayer * projectileSpeed;
         }
 
-        NextfireTime = Time.time + 1f / firerate;
+        nextFireTime = Time.time + 1f / fireRate;
     }
 
-    public void finanim()
+    private void EndAttack()
     {
-         //anim.SetBool("IsShootiing", false);
-        atacando = false;
+        isAttacking = false;
     }
 }

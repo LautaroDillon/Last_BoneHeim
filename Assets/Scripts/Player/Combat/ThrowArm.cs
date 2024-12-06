@@ -31,6 +31,7 @@ public class ThrowArm : MonoBehaviour
         }
         if (throwing.recoverArmTime <= 0)
         {
+            AdjustMagazineSizeForWeapon();
             SpawnArm();
             throwing.RestoreThrow();
             throwing.armPrefab.gameObject.SetActive(true);

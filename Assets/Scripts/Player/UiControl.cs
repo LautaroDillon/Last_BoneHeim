@@ -17,6 +17,11 @@ public class UiControl : MonoBehaviour
     [Header("Sounds")]
     [SerializeField] private AudioClip menuSoundClip;
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
+
     private void Start()
     {
         pauseMenu.gameObject.SetActive(false);

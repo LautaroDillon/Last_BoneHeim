@@ -33,7 +33,6 @@ public class ShieldShader : MonoBehaviour, Idamagable
         StopAllCoroutines();
         StartCoroutine(Coroutine_HitDisplacement());
 
-
     }
 
     public void OpenCloseShield()

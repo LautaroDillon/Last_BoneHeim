@@ -59,8 +59,8 @@ public class ENecro : EnemisBehaivor
     [SerializeField] private AudioClip necroTeleportClip;
     [SerializeField] private AudioClip necroSummonClip;
 
-    private float summonTimer;
-    private float shotTimer;
+    [SerializeField]  private float summonTimer;
+    [SerializeField]  private float shotTimer;
 
     private void Awake()
     {
@@ -133,7 +133,6 @@ public class ENecro : EnemisBehaivor
     {
         if (canSeePlayer)
         {
-            Debug.Log("veo player");
             summonTimer -= Time.deltaTime;
             shotTimer -= Time.deltaTime;
             abilityTimer -= Time.deltaTime;
@@ -146,8 +145,8 @@ public class ENecro : EnemisBehaivor
 
             if (shotTimer <= 0)
             {
+                shotTimer = shotCooldown;
                 Shoot();
-                shotTimer = shotCooldown > 0 ? shotCooldown : 1f;
             }
 
             if (abilityTimer <= 0)
@@ -155,6 +154,7 @@ public class ENecro : EnemisBehaivor
                 UseRandomAbility();
                 abilityTimer = abilityCooldown;
             }
+
             ResetAnim();
             anim.SetBool("Idle", true);
         }
@@ -254,10 +254,9 @@ public class ENecro : EnemisBehaivor
         if (teleportPoints.Length == 0) return;
 
         Transform randomPoint = teleportPoints[Random.Range(0, teleportPoints.Length)];
-        // Instantiate(teleportEffect, transform.position, Quaternion.identity);
+        Instantiate(teleportEffect, transform.position, Quaternion.identity);
         SoundManager.instance.PlaySound(necroTeleportClip, transform, 1f, false);
         transform.position = randomPoint.position;
-       // Instantiate(teleportEffect, transform.position, Quaternion.identity);
 
         Debug.Log("Teletransporte realizado");
     }

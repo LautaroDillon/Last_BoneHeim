@@ -27,7 +27,7 @@ public class StatsUI : MonoBehaviour
         wallrunningSpeed.text = "Wallrunning Speed: " + PlayerMovementAdvanced.instance.wallrunSpeed;
         additionalReviveTimer.text = "Revive Time: " + PlayerHealth.instance.reviveTime;
         additionalDamage.text = "Damage: " + FlyweightPointer.Player.Damage;
-        shieldAmount.text = "Shield Amount: " + PlayerHealth.instance.shieldAmount;
+      //  shieldAmount.text = "Shield Amount: " + PlayerHealth.instance.shieldAmount;
         lifestealAmount.text = "Lifesteal: " + PlayerHealth.instance.lifeSteal;
     }
 }

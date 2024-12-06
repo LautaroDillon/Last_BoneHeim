@@ -177,7 +177,6 @@ public class PlayerHealth : MonoBehaviour, Idamagable
             if(dmg > shieldAmount)
             {
                 dmg -= shieldAmount;
-                dmg -= life;
             }
         }
 

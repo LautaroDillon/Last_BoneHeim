@@ -70,6 +70,8 @@ public class ENecro : EnemisBehaivor
         instanse = this;
         maxHealth = necroLife;
         healthBar.fillAmount = necroLife / maxHealth;
+        StartCoroutine(FOVRoutime());
+
     }
 
     private void Start()

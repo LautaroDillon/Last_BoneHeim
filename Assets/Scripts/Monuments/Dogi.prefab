@@ -33,7 +33,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 3645321052506357870}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6553148670508784447
@@ -51,7 +52,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7894497691579527191}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -157,3 +158,75 @@ MonoBehaviour:
   _enemies: []
   timeLife: 30
   attackCooldown: 1
+  anim: {fileID: 7239225215578331668}
+--- !u!1001 &3827058386874689413
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7898168041341161040}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 9e1f542936513684eb0f0c80d0253800, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9e1f542936513684eb0f0c80d0253800, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.91
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9e1f542936513684eb0f0c80d0253800, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9e1f542936513684eb0f0c80d0253800, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9e1f542936513684eb0f0c80d0253800, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9e1f542936513684eb0f0c80d0253800, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9e1f542936513684eb0f0c80d0253800, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9e1f542936513684eb0f0c80d0253800, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9e1f542936513684eb0f0c80d0253800, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9e1f542936513684eb0f0c80d0253800, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9e1f542936513684eb0f0c80d0253800, type: 3}
+      propertyPath: m_Name
+      value: Demon T Wiezzorek
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 9e1f542936513684eb0f0c80d0253800, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: f9b7e05a1dc28f74e8ba1bcff9d922ad, type: 2}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9e1f542936513684eb0f0c80d0253800, type: 3}
+--- !u!4 &3645321052506357870 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9e1f542936513684eb0f0c80d0253800, type: 3}
+  m_PrefabInstance: {fileID: 3827058386874689413}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &7239225215578331668 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 9e1f542936513684eb0f0c80d0253800, type: 3}
+  m_PrefabInstance: {fileID: 3827058386874689413}
+  m_PrefabAsset: {fileID: 0}

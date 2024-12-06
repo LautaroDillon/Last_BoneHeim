@@ -12,11 +12,14 @@ public class Ally : MonoBehaviour, Idamagable
     public float _followSpeed;
     public float _stopDistance;
     public List<GameObject> _enemies;
-    public float timeLife; 
+    public float timeLife;
     public float attackCooldown = 1.0f;
 
     private GameObject _targetEnemy;
-    private float lastAttackTime; 
+    private float lastAttackTime;
+
+    [SerializeField] public Animator anim;
+
 
     public void TakeDamage(float dmg)
     {
@@ -33,8 +36,8 @@ public class Ally : MonoBehaviour, Idamagable
     {
         intance = this;
         _enemies = GameManager.instance.enemys;
-        _player = GameManager.instance.thisIsPlayer; 
-        Destroy(this.gameObject, timeLife); 
+        _player = GameManager.instance.thisIsPlayer;
+        Destroy(this.gameObject, timeLife);
     }
 
     private void Update()
@@ -43,7 +46,7 @@ public class Ally : MonoBehaviour, Idamagable
 
         if (_currentLife > 0)
         {
-            FindClosestEnemy(); 
+            FindClosestEnemy();
 
             if (_targetEnemy != null)
             {
@@ -51,9 +54,16 @@ public class Ally : MonoBehaviour, Idamagable
             }
             else
             {
-                FollowPlayer(); 
+                FollowPlayer();
             }
         }
+    }
+
+    public void resetAnims()
+    {
+        anim.SetBool("Idle", false);
+        anim.SetBool("Punch", false);
+        anim.SetBool("Walk", false);
     }
 
     public void FollowPlayer()
@@ -62,18 +72,22 @@ public class Ally : MonoBehaviour, Idamagable
 
         if (distanceToPlayer > _stopDistance)
         {
+            resetAnims();
+            anim.SetBool("Walk", true);
             transform.position = Vector3.MoveTowards(transform.position, _player.transform.position, _followSpeed * Time.deltaTime);
         }
         else
         {
-            Debug.Log("El aliado está cerca del jugador y se ha detenido.");
+            resetAnims();
+            anim.SetBool("Idle", true);
+
         }
     }
 
     public void FindClosestEnemy()
     {
-        _targetEnemy = null; 
-        float closestDistance = Mathf.Infinity; 
+        _targetEnemy = null;
+        float closestDistance = Mathf.Infinity;
 
         foreach (GameObject enemy in _enemies)
         {
@@ -82,7 +96,7 @@ public class Ally : MonoBehaviour, Idamagable
             if (distanceToEnemy < closestDistance && distanceToEnemy <= _attackRange)
             {
                 closestDistance = distanceToEnemy;
-                _targetEnemy = enemy; 
+                _targetEnemy = enemy;
             }
         }
     }
@@ -95,6 +109,8 @@ public class Ally : MonoBehaviour, Idamagable
         {
             if (Time.time >= lastAttackTime + attackCooldown)
             {
+                resetAnims();
+                anim.SetBool("Punch", true);
                 Debug.Log("Atacando al enemigo " + _targetEnemy.name);
                 _targetEnemy.GetComponent<Idamagable>().TakeDamage(_dmg);
                 lastAttackTime = Time.time;

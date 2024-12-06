@@ -91,6 +91,12 @@ public class Ally : MonoBehaviour, Idamagable
 
         foreach (GameObject enemy in _enemies)
         {
+            if(enemy == null)
+            {
+                _enemies.Remove(enemy);
+                return;
+            }
+
             float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
 
             if (distanceToEnemy < closestDistance && distanceToEnemy <= _attackRange)

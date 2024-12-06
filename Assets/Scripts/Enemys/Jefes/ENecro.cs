@@ -66,23 +66,24 @@ public class ENecro : EnemisBehaivor
         summonTimer = summonCooldown;
         shotTimer = shotCooldown;
         abilityTimer = abilityCooldown;
+        currentlife = necroLife;
 
-        maxHealth = currentlife;
-        healthBar.fillAmount = currentlife / maxHealth;
+        maxHealth = necroLife;
+        healthBar.fillAmount = necroLife / maxHealth;
     }
 
     private void Start()
     {
         BossTrigger.instance.defeatText.gameObject.SetActive(false);
-        phase2Threshold = currentlife / 2;
-        phase3Threshold = currentlife / 3;
+        phase2Threshold = necroLife / 2;
+        phase3Threshold = necroLife / 3;
     }
 
     private void Update()
     {
         HandlePhases();
         EnemiMovement();
-        healthBar.fillAmount = currentlife / maxHealth;
+        healthBar.fillAmount = necroLife / maxHealth;
     }
 
     public void ResetAnim()
@@ -260,8 +261,8 @@ public class ENecro : EnemisBehaivor
 
     public override void TakeDamage(float dmg)
     {
-        currentlife -= dmg;
-        healthBar.fillAmount = currentlife / maxHealth;
+        necroLife -= dmg;
+        healthBar.fillAmount = necroLife / maxHealth;
         SoundManager.instance.PlaySound(necroGruntClip, transform, 1f, false);
 
         if (currentlife <= 0)

@@ -245,6 +245,7 @@ public class ENecro : EnemisBehaivor
     {
         ResetAnim();
         anim.SetBool("Fuego", true);
+        laser.GetComponent<Lazer>().timer = 5;
         laser.SetActive(true);
         Debug.Log("Láser activado");
     }

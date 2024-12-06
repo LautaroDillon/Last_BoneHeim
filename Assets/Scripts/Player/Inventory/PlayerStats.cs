@@ -34,6 +34,7 @@ public class PlayerStats : MonoBehaviour
     {
         inventory.Clear();
         equipment.Clear();
+        DontDestroyOnLoad(this);
     }
 
     private void Start()

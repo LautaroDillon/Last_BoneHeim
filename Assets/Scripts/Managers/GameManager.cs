@@ -12,10 +12,14 @@ public class GameManager : MonoBehaviour
 
     [Header("Time Scale Check")]
     public bool isRunning;
+
+    private void Awake()
+    {
+        isRunning = true;
+    }
     void Start()
     {
         instance = this;
-        isRunning = true;
     }
 
     public void AddToList(GameObject t)

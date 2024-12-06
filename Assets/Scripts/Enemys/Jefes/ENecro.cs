@@ -99,11 +99,11 @@ public class ENecro : EnemisBehaivor
 
     private void HandlePhases()
     {
-        if (currentlife <= phase3Threshold && currentPhase < 3)
+        if (necroLife <= phase3Threshold && currentPhase < 3)
         {
             EnterPhase3();
         }
-        else if (currentlife <= phase2Threshold && currentPhase < 2)
+        else if (necroLife <= phase2Threshold && currentPhase < 2)
         {
             EnterPhase2();
         }

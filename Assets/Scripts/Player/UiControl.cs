@@ -36,19 +36,27 @@ public class UiControl : MonoBehaviour
 
     void Inventory()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if(_isPaused == true)
         {
-            if (_isInventory)
+            Debug.Log("Unpause game!");
+        }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.Tab))
             {
-                InventoryOff();
-                SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f, false);
-            }
-            else
-            {
-                InventoryOn();
-                SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f, false);
+                if (_isInventory)
+                {
+                    InventoryOff();
+                    SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f, false);
+                }
+                else
+                {
+                    InventoryOn();
+                    SoundManager.instance.PlaySound(menuSoundClip, transform, 0.5f, false);
+                }
             }
         }
+        
     }
 
     void InventoryOn()

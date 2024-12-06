@@ -85,6 +85,7 @@ public class ShieldShader : MonoBehaviour, Idamagable
         if (_life <= 0)
         {
             _shieldCollider.enabled = false;
+            Debug.Log("escudo destruido");
             OpenCloseShield();
         }
     }

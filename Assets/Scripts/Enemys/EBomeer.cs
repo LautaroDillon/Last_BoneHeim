@@ -139,6 +139,7 @@ public class EBomeer : EnemisBehaivor
 
         if (currentlife <= 0)
         {
+            if(Ally.intance != null)
             Ally.intance._enemies.Remove(this.gameObject);
             Destroy(acid);
             Destroy(this.gameObject, 0.1f);

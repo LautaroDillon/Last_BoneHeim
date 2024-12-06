@@ -19,7 +19,7 @@ public class BossTrigger : MonoBehaviour
 
     private void Update()
     {
-        if(ENecro.instance.necroLife <= 0)
+        if(ENecro.instanse.necroLife <= 0)
         {
             StartCoroutine("DeathEnd", 1);
             defeatText.gameObject.SetActive(true);

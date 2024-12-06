@@ -7,7 +7,13 @@ using UnityEngine.SceneManagement;
 public class FullscreenShader : MonoBehaviour
 {
     public static FullscreenShader instance;
-    
+
+    void Start()
+    {
+        instance = this;
+        fullscreenSpeedShader.SetActive(false);
+    }
+
     [Header("Speed Shader")]
     [SerializeField] private ScriptableRendererFeature fullscreenSpeedShader;
     public Shader speedShader; 
@@ -56,11 +62,7 @@ public class FullscreenShader : MonoBehaviour
     private Material blazingMaterial;
     public bool blazingShaderEnabled = false;
 
-    void Start()
-    {
-        instance = this;
-        fullscreenSpeedShader.SetActive(false);
-    }
+
 
     void Update()
     {

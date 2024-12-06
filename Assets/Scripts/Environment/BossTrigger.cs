@@ -19,10 +19,10 @@ public class BossTrigger : MonoBehaviour
 
     private void Update()
     {
-        if(ENecro.instance.currentlife <= 0)
+        if(ENecro.instance.necroLife <= 0)
         {
-            defeatText.gameObject.SetActive(true);
             StartCoroutine("DeathEnd", 1);
+            defeatText.gameObject.SetActive(true);
             Debug.Log("Bitch is dead!");
         }
     }

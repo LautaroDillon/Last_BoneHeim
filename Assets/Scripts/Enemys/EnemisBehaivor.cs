@@ -11,6 +11,7 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
 
     [Header("Variables")]
     [SerializeField] public float currentlife;
+    [SerializeField] public float necroLife = 1500;
     [SerializeField] protected float speed;
 
     [Header("Player Detection")]

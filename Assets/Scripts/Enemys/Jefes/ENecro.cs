@@ -147,7 +147,7 @@ public class ENecro : EnemisBehaivor
             if (shotTimer <= 0)
             {
                 Shoot();
-                shotTimer = shotCooldown;
+                shotTimer = shotCooldown > 0 ? shotCooldown : 1f;
             }
 
             if (abilityTimer <= 0)

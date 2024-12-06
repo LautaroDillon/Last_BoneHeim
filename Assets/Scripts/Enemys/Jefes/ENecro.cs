@@ -10,6 +10,8 @@ public class ENecro : EnemisBehaivor
     public float maxHealth;
     public Image healthBar;
 
+    public static ENecro instanse;
+
     [Header("Fases de Combate")]
     public float phase2Threshold;
     public float phase3Threshold;
@@ -65,9 +67,11 @@ public class ENecro : EnemisBehaivor
         summonTimer = summonCooldown;
         shotTimer = shotCooldown;
         abilityTimer = abilityCooldown;
-
+        instanse = this;
         maxHealth = necroLife;
         healthBar.fillAmount = necroLife / maxHealth;
+        StartCoroutine(FOVRoutime());
+
     }
 
     private void Start()
@@ -129,6 +133,7 @@ public class ENecro : EnemisBehaivor
     {
         if (canSeePlayer)
         {
+            Debug.Log("veo player");
             summonTimer -= Time.deltaTime;
             shotTimer -= Time.deltaTime;
             abilityTimer -= Time.deltaTime;

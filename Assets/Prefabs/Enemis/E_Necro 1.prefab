@@ -186,7 +186,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 832ce239e6f6f9948baa4bd64d259e94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentlife: 1500
+  currentlife: 0
+  necroLife: 1500
   speed: 0
   whatIsPlayer:
     serializedVersion: 2
@@ -209,7 +210,6 @@ MonoBehaviour:
   pointParticle: {fileID: 7860017871997964042}
   healParticle: {fileID: 4475025229226224005, guid: e904da14d1a25e84cadadde9dc8fd545, type: 3}
   anim: {fileID: 5511627805584338429}
-  necroLife: 1500
   maxHealth: 0
   healthBar: {fileID: 0}
   phase2Threshold: 70

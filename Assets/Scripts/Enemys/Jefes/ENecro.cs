@@ -7,7 +7,6 @@ using TMPro;
 
 public class ENecro : EnemisBehaivor
 {
-    public float necroLife;
     public float maxHealth;
     public Image healthBar;
 
@@ -66,7 +65,6 @@ public class ENecro : EnemisBehaivor
         summonTimer = summonCooldown;
         shotTimer = shotCooldown;
         abilityTimer = abilityCooldown;
-        currentlife = necroLife;
 
         maxHealth = necroLife;
         healthBar.fillAmount = necroLife / maxHealth;
@@ -265,7 +263,7 @@ public class ENecro : EnemisBehaivor
         healthBar.fillAmount = necroLife / maxHealth;
         SoundManager.instance.PlaySound(necroGruntClip, transform, 1f, false);
 
-        if (currentlife <= 0)
+        if (necroLife <= 0)
         {
             BossTrigger.instance.bossHealth.gameObject.SetActive(false);
             anim.SetBool("Death", true);

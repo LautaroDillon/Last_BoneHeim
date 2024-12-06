@@ -10,7 +10,7 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
     protected Guns gun;
 
     [Header("Variables")]
-    [SerializeField] protected float currentlife;
+    [SerializeField] public float currentlife;
     [SerializeField] protected float speed;
 
     [Header("Player Detection")]

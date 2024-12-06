@@ -2,12 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
 
 public class ENecro : EnemisBehaivor
 {
+    public float necroLife;
+    public float maxHealth;
+    public Image healthBar;
+
     [Header("Fases de Combate")]
-    public float phase2Threshold = 70f;
-    public float phase3Threshold = 30f;
+    public float phase2Threshold;
+    public float phase3Threshold;
     private int currentPhase = 1;
 
     [Header("Invoker Settings")]
@@ -60,12 +66,23 @@ public class ENecro : EnemisBehaivor
         summonTimer = summonCooldown;
         shotTimer = shotCooldown;
         abilityTimer = abilityCooldown;
+
+        maxHealth = currentlife;
+        healthBar.fillAmount = currentlife / maxHealth;
+    }
+
+    private void Start()
+    {
+        BossTrigger.instance.defeatText.gameObject.SetActive(false);
+        phase2Threshold = currentlife / 2;
+        phase3Threshold = currentlife / 3;
     }
 
     private void Update()
     {
         HandlePhases();
         EnemiMovement();
+        healthBar.fillAmount = currentlife / maxHealth;
     }
 
     public void ResetAnim()
@@ -244,20 +261,16 @@ public class ENecro : EnemisBehaivor
     public override void TakeDamage(float dmg)
     {
         currentlife -= dmg;
+        healthBar.fillAmount = currentlife / maxHealth;
         SoundManager.instance.PlaySound(necroGruntClip, transform, 1f, false);
 
         if (currentlife <= 0)
         {
+            BossTrigger.instance.bossHealth.gameObject.SetActive(false);
             anim.SetBool("Death", true);
             SoundManager.instance.PlaySound(necroDeathClip, transform, 1f, false);
-            Destroy(gameObject, 5);
+            BossTrigger.instance.defeatText.gameObject.SetActive(true);
+            Destroy(gameObject, 1);
         }
-    }
-
-    private void OnDestroy()
-    {
-        SceneManager.LoadScene(0);
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
     }
 }

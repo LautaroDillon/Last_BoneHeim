@@ -215,7 +215,6 @@ public class ERockguardian : MonoBehaviour, Idamagable
         else
         {
             currentLife -= damage;
-            SoundManager.instance.PlaySound(stoneDamageClip, transform, 1f, false);
         }
 
         if (currentLife <= 0)

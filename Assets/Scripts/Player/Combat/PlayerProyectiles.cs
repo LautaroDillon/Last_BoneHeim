@@ -72,7 +72,7 @@ public class PlayerProyectiles : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 12 && other.gameObject != this.gameObject)
+        if (other.gameObject.layer == 12 && other.gameObject != this.gameObject && other.gameObject.tag == "Organ" && other.gameObject.tag == "Hand")
         {
             Physics.IgnoreCollision(other, this.GetComponent<Collider>());
             return;

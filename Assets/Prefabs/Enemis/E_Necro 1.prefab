@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 18122929681904575}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.747}
+  m_LocalPosition: {x: -0, y: 0.271, z: 0.491}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -209,6 +209,9 @@ MonoBehaviour:
   pointParticle: {fileID: 7860017871997964042}
   healParticle: {fileID: 4475025229226224005, guid: e904da14d1a25e84cadadde9dc8fd545, type: 3}
   anim: {fileID: 5511627805584338429}
+  necroLife: 1500
+  maxHealth: 0
+  healthBar: {fileID: 0}
   phase2Threshold: 70
   phase3Threshold: 30
   enemyPrefabs:
@@ -235,7 +238,7 @@ MonoBehaviour:
   - {fileID: 0}
   _shieldShader: {fileID: 7706391204924304070}
   movementSpeed: 0
-  skullPrefab: {fileID: 0}
+  skullPrefab: {fileID: 3869927818336726216, guid: b36cce2e407e202438bd2db1d6316651, type: 3}
   skullCount: 3
   skullSpawnRadius: 2
   skullSpeed: 5
@@ -824,7 +827,7 @@ Transform:
   m_GameObject: {fileID: 7860017871997964042}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.353}
+  m_LocalPosition: {x: -0, y: 0.295, z: -0.007}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

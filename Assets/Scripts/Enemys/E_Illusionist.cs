@@ -47,7 +47,7 @@ public class E_Illusionist : EnemisBehaivor
     public void resetAnim()
     {
         anim.SetBool("Walk", false);
-        anim.SetBool("Idle", false);
+        anim.SetBool("idle", false);
 
     }
 
@@ -81,7 +81,7 @@ public class E_Illusionist : EnemisBehaivor
         {
             // Patrol();
             resetAnim();
-            anim.SetBool("Idle", true);
+            anim.SetBool("idle", true);
 
         }
     }
@@ -134,7 +134,9 @@ public class E_Illusionist : EnemisBehaivor
     {
         if (navMeshAgent.enabled)
         {
-            anim.SetBool("Walking", true);
+            resetAnim();
+
+            anim.SetBool("walk", true);
             navMeshAgent.SetDestination(player.position);
         }
     }
@@ -142,7 +144,7 @@ public class E_Illusionist : EnemisBehaivor
     private void AttackPlayer()
     {
         attackTimer = Time.time;
-        anim.SetBool("Attack", true);
+       // anim.SetBool("Attack", true);
         Debug.Log("Illusionist attacks!");
 
         // Detectar al jugador dentro del rango de ataque.

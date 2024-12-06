@@ -64,7 +64,7 @@ public class EBomeer : EnemisBehaivor
             {
                 case 0:
                     anim.SetBool("idle", true);
-                    anim.SetBool("Moving", false);
+                    anim.SetBool("walking", false);
                     break;
                 case 1:
                     // Mueve hacia una posición aleatoria en el NavMesh
@@ -77,7 +77,7 @@ public class EBomeer : EnemisBehaivor
                     }
 
                     anim.SetBool("idle", false);
-                    anim.SetBool("Moving", true);
+                    anim.SetBool("walking", true);
                     break;
             }
         }
@@ -90,7 +90,7 @@ public class EBomeer : EnemisBehaivor
             agent.isStopped = false; // Activa el movimiento
             agent.SetDestination(player.transform.position); // Persigue al jugador
 
-            anim.SetBool("walk", true);
+            anim.SetBool("walking", true);
             anim.SetBool("idle", false);
         }
 

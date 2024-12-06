@@ -68,7 +68,6 @@ public class Ejarron : EnemisBehaivor, Idamagable
                 player.GetComponent<Idamagable>().TakeDamage(dmg);
                 lastAttackTime = Time.time;
                 SoundManager.instance.PlaySound(jarronLaughClip, transform, 1f, false);
-                Debug.Log("El mímico ataca al jugador.");
             }
         }
     }

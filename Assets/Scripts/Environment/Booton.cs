@@ -3,11 +3,17 @@ using UnityEngine;
 public class Booton : MonoBehaviour
 {
     public bool isbullet;
+    private bool alreadyActivated;
     public Doors door;
     public GameObject oclu;
     public Animation hatchAnim;
     public ParticleSystem _particle;
     [SerializeField] private AudioClip dingClip;
+
+    private void Awake()
+    {
+        alreadyActivated = false;
+    }
 
     private void Update()
     {
@@ -19,34 +25,45 @@ public class Booton : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (isbullet)
+        if(alreadyActivated == false)
         {
-            var whathit = other.gameObject.tag;
-
-            if (whathit == "Bullet")
+            if (isbullet)
             {
-                door.Activate();
-                hatchAnim.Play();
-                _particle.Play();
-                SoundManager.instance.PlaySound(dingClip, transform, 1f, false);
+                var whathit = other.gameObject.tag;
+
+                if (whathit == "Bullet")
+                {
+                    alreadyActivated = true;
+                    door.Activate();
+                    hatchAnim.Play();
+                    _particle.Play();
+                    SoundManager.instance.PlaySound(dingClip, transform, 1f, false);
+                }
             }
         }
+        
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!isbullet)
-        {
-            var whathit = collision.gameObject.tag;
 
-            if (whathit == "arm")
+        if(alreadyActivated == false)
+        {
+            if (!isbullet)
             {
-                door.Activate();
-                hatchAnim.Play();
-                _particle.Play();
-                SoundManager.instance.PlaySound(dingClip, transform, 1f, false);
+                var whathit = collision.gameObject.tag;
+
+                if (whathit == "arm")
+                {
+                    alreadyActivated = true;
+                    door.Activate();
+                    hatchAnim.Play();
+                    _particle.Play();
+                    SoundManager.instance.PlaySound(dingClip, transform, 1f, false);
+                }
             }
         }
+        
     }
 
     public void invi()

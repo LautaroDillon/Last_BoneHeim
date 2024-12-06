@@ -75,6 +75,8 @@ public class Guns : MonoBehaviour
         readyToShoot = true;
         SkeletonHand();
         instance = this;
+        if (magazineSize == 0)
+            isSkeleton = true;
     }
 
     private void Update()
@@ -84,6 +86,8 @@ public class Guns : MonoBehaviour
             ammunitionDisplay.SetText(bulletsLeft + " / " + magazineSize);
         if (bulletsLeft >= magazineSize)
             bulletsLeft = magazineSize;
+        if (magazineSize == 0)
+            isSkeleton = true;
     }
     #endregion
 

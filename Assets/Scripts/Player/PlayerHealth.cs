@@ -177,12 +177,12 @@ public class PlayerHealth : MonoBehaviour, Idamagable
             if(dmg > shieldAmount)
             {
                 dmg -= shieldAmount;
+                dmg -= life;
             }
         }
 
         if(shieldAmount <= 0)
         {
-            
             life -= dmg;
             healthBar.fillAmount = life / _maxlife;
             StartCoroutine(HurtShader());

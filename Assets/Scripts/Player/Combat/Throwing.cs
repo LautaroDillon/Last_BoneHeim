@@ -29,10 +29,13 @@ public class Throwing : MonoBehaviour
     private Vector3 oldPos;
 
     bool readyToThrow;
+    private void Awake()
+    {
+        recoverArmTime = recoverArmMaxTime;
+    }
 
     private void Start()
     {
-        recoverArmTime = recoverArmMaxTime;
         guns = GameObject.Find("Gun").GetComponent<Guns>();
         readyToThrow = true;
     }

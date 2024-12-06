@@ -7,6 +7,9 @@ using UnityEngine.Rendering.Universal;
 
 public class PlayerHealth : MonoBehaviour, Idamagable
 {
+    public InventoryObject inventory;
+    public InventoryObject equipment;
+
     [Header("References")]
     public Image healthBar;
     public Image shieldFillBar;
@@ -148,6 +151,8 @@ public class PlayerHealth : MonoBehaviour, Idamagable
 
     void GameOver()
     {
+        inventory.Clear();
+        equipment.Clear();
         berserk.SetFloat("_Active", 0);
         isInReviveState = false;
         Cursor.lockState = CursorLockMode.None;
@@ -172,12 +177,12 @@ public class PlayerHealth : MonoBehaviour, Idamagable
             if(dmg > shieldAmount)
             {
                 dmg -= shieldAmount;
+                dmg -= life;
             }
         }
 
         if(shieldAmount <= 0)
         {
-            
             life -= dmg;
             healthBar.fillAmount = life / _maxlife;
             StartCoroutine(HurtShader());

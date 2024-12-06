@@ -143,6 +143,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
         berserk.SetFloat("_Active", 0);
         enemyKilled = false;
         isInReviveState = false;
+        reviveTimer = reviveTime;
     }
 
     void GameOver()

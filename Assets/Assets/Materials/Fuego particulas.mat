@@ -45,12 +45,13 @@ Material:
     - _BUILTIN_QueueOffset: 0
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _StepPower: 0.3
     - _distortionStrength: -2.62
     - _scrollspeed: 0.3
     - _twirlstring: 2.1
     m_Colors: []
   m_BuildTextureStacks: []
---- !u!114 &125759454012521838
+--- !u!114 &8575276929212282566
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

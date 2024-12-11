@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 2372052408354267466}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.069, y: -17.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -106,6 +106,7 @@ GameObject:
   - component: {fileID: 5855062712528889798}
   - component: {fileID: 866227684134549138}
   - component: {fileID: 3761100203204085387}
+  - component: {fileID: 5605058262752018867}
   m_Layer: 7
   m_Name: SpikeTrap
   m_TagString: Untagged
@@ -241,6 +242,23 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!111 &5605058262752018867
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9004880118450874989}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 74efba5c358993a46ab0d371970258f8, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 74efba5c358993a46ab0d371970258f8, type: 2}
+  - {fileID: 7400000, guid: 73a86a9a075598145a55391be4dc4b4f, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1001 &90301516197834732
 PrefabInstance:
   m_ObjectHideFlags: 0

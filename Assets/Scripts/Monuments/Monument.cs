@@ -7,6 +7,8 @@ public class Monument : MonoBehaviour
     public  GameObject point;
     public GameObject ally;
     public GameObject fuego;
+    public ParticleSystem particles;
+    public Animation Orb;
 
     [SerializeField] private AudioClip thunderClip;
 
@@ -26,7 +28,9 @@ public class Monument : MonoBehaviour
     {
         Debug.Log("Spawn Ally");
         SoundManager.instance.PlaySound(thunderClip, transform, 0.3f, false);
+        particles.Play();
         fuego.SetActive(true);
+        Orb.Play();
         Instantiate(ally, point.transform.position, Quaternion.identity);
     }
 

@@ -104,7 +104,9 @@ Material:
     - _GlossyReflections: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
-    - _OrbAura: 4
+    - _OrbAura: 0
+    - _OrbDissolve: 1.2
+    - _OrbDissolveEdge: 0.11
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0

@@ -5,6 +5,7 @@ public class FireTrap : MonoBehaviour
 {
     public int damagePerSecond; 
     public float damageInterval;
+    public ParticleSystem _firemain;
 
     private Coroutine damageCoroutine;
     private PlayerHealth currentPlayer;
@@ -20,6 +21,7 @@ public class FireTrap : MonoBehaviour
                 if (damageCoroutine == null) // Verificamos que no haya un Coroutine activo
                 {
                     damageCoroutine = StartCoroutine(DamagePlayerOverTime());
+                    _firemain.Play(true);
                 }
             }
         }
@@ -34,6 +36,7 @@ public class FireTrap : MonoBehaviour
             {
                 StopCoroutine(damageCoroutine);
                 damageCoroutine = null;
+                _firemain.Stop(true);
             }
             currentPlayer = null;
         }

@@ -112,7 +112,8 @@ public class EMelee : EnemisBehaivor
         if (Time.time >= lastAttackTime + attackCooldown)
         {
             resetAnim();
-            anim.SetBool("Atack", true);
+            //anim.SetBool("Atack", true);
+            anim.SetTrigger("Attack");
             player.GetComponent<Idamagable>().TakeDamage(attackDamage);
             SoundManager.instance.PlaySound(swordSlashClip, transform, 1f, false);
             lastAttackTime = Time.time;

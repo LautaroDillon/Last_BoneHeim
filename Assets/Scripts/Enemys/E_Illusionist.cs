@@ -136,7 +136,7 @@ public class E_Illusionist : EnemisBehaivor
         {
             resetAnim();
 
-            anim.SetBool("walk", true);
+            anim.SetBool("Walk", true);
             navMeshAgent.SetDestination(player.position);
         }
     }

@@ -310,7 +310,7 @@ public class Guns : MonoBehaviour
         bulletsPerTap += 1;
         allowButtonHold = true;
         useGravity = false;
-        FlyweightPointer.Player.Damage += 20;
+        FlyweightPointer.Player.Damage += 10;
     }
 
     public void InvokerHand()

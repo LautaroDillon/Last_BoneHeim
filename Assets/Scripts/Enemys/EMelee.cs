@@ -176,7 +176,7 @@ public class EMelee : EnemisBehaivor
             anim.SetBool("Death", true);
             Destroy(this.gameObject, 3f);
             PlayerHealth.instance.life += 10;
-            Guns.instance.bulletsLeft += Random.Range(1, 3);
+            Guns.instance.bulletsLeft += Random.Range(3, 5);
         }
     }
 }

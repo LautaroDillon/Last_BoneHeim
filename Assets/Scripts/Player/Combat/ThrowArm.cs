@@ -11,6 +11,8 @@ public class ThrowArm : MonoBehaviour
     [SerializeField] private AudioClip armPickUp2Clip;
     public GameObject target;
 
+    private bool ammoCharged;
+
     void Awake()
     {
         throwing = GameObject.Find("Player").GetComponent<Throwing>();
@@ -19,6 +21,7 @@ public class ThrowArm : MonoBehaviour
 
     private void Start()
     {
+        ammoCharged = false;
         target = GameObject.Find("Player");
         Destroy(gameObject, throwing.recoverArmMaxTime);
     }
@@ -47,6 +50,7 @@ public class ThrowArm : MonoBehaviour
             Debug.Log("pego a enemigo");
             damagableInterface.TakeDamage(75);
             ModifyAmmoBasedOnWeapon();
+            ammoCharged = true;
             if (PlayerHealth.instance.isInReviveState)
             {
                 PlayerHealth.instance.OnEnemyKilled();
@@ -66,6 +70,8 @@ public class ThrowArm : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             HandleArmPickup();
+            if (ammoCharged == true)
+                ModifyAmmoBasedOnWeapon();
             throwing.totalThrows += 1;
             print("Retrieved Arm!");
             FullscreenShader.instance.armShaderEnabled = true;

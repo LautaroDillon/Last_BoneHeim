@@ -5,10 +5,10 @@ using UnityEngine;
 public class Doors : MonoBehaviour
 {
     public GameObject limit;
-    bool openDoor;
+    protected bool openDoor;
     public bool istab;
     
-    public void Activate()
+    public virtual void Activate()
     {
         if (!istab)
         {
@@ -21,7 +21,7 @@ public class Doors : MonoBehaviour
         }
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (openDoor)
         {

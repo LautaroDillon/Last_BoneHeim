@@ -1,10 +1,10 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class E_Illusionist : EnemisBehaivor
 {
+    #region variables
     [Header("Patrol Settings")]
     public float patrolRadius;
     public float waitTime;
@@ -31,17 +31,24 @@ public class E_Illusionist : EnemisBehaivor
     private bool isCreatingIllusions = false;
 
     [Header("Movement")]
-    public NavMeshAgent navMeshAgent;
     public float patrolWaitTime = 3f;
     private float patrolTimer = 0f;
 
+    float distanceToPlayer;
+    #endregion
+
     void Start()
     {
-        navMeshAgent = GetComponent<NavMeshAgent>();
+        agent = GetComponent<NavMeshAgent>();
         player = GameManager.instance.thisIsPlayer;
         StartCoroutine(FOVRoutime());
+        distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-
+        fsm = new FSM();
+        fsm.CreateState("Attack", new AttackEnemy(fsm, this));
+        fsm.CreateState("Escape", new Escape(fsm, this));
+        fsm.CreateState("Walk", new Walk(fsm, this));
+        fsm.ChangeState("Walk");
     }
 
     public void resetAnim()
@@ -56,104 +63,135 @@ public class E_Illusionist : EnemisBehaivor
         if (currentlife <= 0)
             return;
 
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        /* float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-        if (canSeePlayer)
-        {
-            if (distanceToPlayer > attackRange)
-            {
-                MoveToPlayer();
-            }
-            else
-            {
-                if (Time.time >= attackTimer + attackCooldown)
-                {
-                    AttackPlayer();
-                }
-            }
+         if (canSeePlayer)
+         {
+             if (distanceToPlayer > attackRange)
+             {
+                 MoveToPlayer();
+             }
+             else
+             {
+                 if (Time.time >= attackTimer + attackCooldown)
+                 {
+                     AttackPlayer();
+                 }
+             }
 
-            if (!isCreatingIllusions && Random.Range(0, 100) < 10) // Probabilidad de crear ilusiones.
-            {
-                StartCoroutine(CreateIllusions());
-            }
-        }
-        else
-        {
-            // Patrol();
-            resetAnim();
-            anim.SetBool("idle", true);
+             if (!isCreatingIllusions && Random.Range(0, 100) < 10) // Probabilidad de crear ilusiones.
+             {
+                 StartCoroutine(CreateIllusions());
+             }
+         }
+         else
+         {
+              Patrol();
+             resetAnim();
+             anim.SetBool("idle", true);
 
-        }
+         }*/
+
+        firstNode.Execute(this);
+        fsm.Execute();
     }
 
-    private void RotateTowardsMovement()
-    {
-        if (navMeshAgent.velocity.sqrMagnitude > 0.1f) // Si se está moviendo
-        {
-            Vector3 direction = navMeshAgent.velocity.normalized;
-            direction.y = 0; // Asegurarse de no cambiar la inclinación vertical
-            transform.rotation = Quaternion.LookRotation(direction);
-        }
-    }
+    /* private void RotateTowardsMovement()
+     {
+         if (navMeshAgent.velocity.sqrMagnitude > 0.1f) // Si se está moviendo
+         {
+             Vector3 direction = navMeshAgent.velocity.normalized;
+             direction.y = 0; // Asegurarse de no cambiar la inclinación vertical
+             transform.rotation = Quaternion.LookRotation(direction);
+         }
+     }*/
 
-    private void Patrol()
-    {
-        if (navMeshAgent != null && !navMeshAgent.hasPath)
-        {
-            patrolTimer += Time.deltaTime;
-
-            if (patrolTimer >= patrolWaitTime)
-            {
-                Vector3 randomDirection = Random.insideUnitSphere * 10f;
-                randomDirection += transform.position;
-
-                if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, 10f, NavMesh.AllAreas))
-                {
-                    navMeshAgent.SetDestination(hit.position);
-                }
-
-                patrolTimer = 0f;
-            }
-        }
-    }
-
-    private void GeneratePatrolPoint()
+    private Vector3 GenerateRandomPatrolPoint()
     {
         Vector3 randomDirection = Random.insideUnitSphere * patrolRadius;
         randomDirection += transform.position;
 
-        if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, patrolRadius, NavMesh.AllAreas))
+        NavMeshHit navHit;
+        if (NavMesh.SamplePosition(randomDirection, out navHit, patrolRadius, NavMesh.AllAreas))
         {
-            patrolPoint = hit.position;
-            navMeshAgent.isStopped = false;
+            return navHit.position;
+        }
+
+        return transform.position;
+    }
+
+    public override void Patrol()
+    {
+        // Si no está patrullando, genera un nuevo punto de patrulla
+        if (!isPatrolling)
+        {
+            patrolPoint = GenerateRandomPatrolPoint();
+            agent.SetDestination(patrolPoint);
+            agent.isStopped = false;
             isPatrolling = true;
+            resetAnim();
+            anim.SetBool("Walk", true);
+        }
+
+        // Si llega al destino, inicia el temporizador de espera
+        if (agent.remainingDistance <= agent.stoppingDistance)
+        {
+            agent.isStopped = true; // Detiene el movimiento
+            anim.SetBool("Walk", false);   // Cambia la animación a idle o similar
+
+            waitTimer += Time.deltaTime;
+
+            if (waitTimer >= waitTime) // Si el temporizador supera el tiempo de espera
+            {
+                isPatrolling = false;  // Permite generar un nuevo destino
+                waitTimer = 0f;        // Reinicia el temporizador
+                agent.isStopped = false;
+            }
         }
     }
 
     private void MoveToPlayer()
     {
-        if (navMeshAgent.enabled)
+        if (agent.enabled)
         {
             resetAnim();
 
-            anim.SetBool("Walk", true);
-            navMeshAgent.SetDestination(player.position);
+            anim.SetBool("walk", true);
+            agent.SetDestination(player.position);
         }
     }
 
-    private void AttackPlayer()
+    public override void Escape()
     {
-        attackTimer = Time.time;
-       // anim.SetBool("Attack", true);
-        Debug.Log("Illusionist attacks!");
+        MoveToHealer();
+    }
 
-        // Detectar al jugador dentro del rango de ataque.
-        Collider[] hits = Physics.OverlapSphere(transform.position, attackRange, whatIsPlayer);
-        foreach (Collider hit in hits)
+    public override void AttackPlayer()
+    {
+        if (distanceToPlayer > attackRange)
         {
-            if (hit.CompareTag("Player"))
+            MoveToPlayer();
+        }
+
+        if (!isCreatingIllusions && Random.Range(0, 100) < 10) // Probabilidad de crear ilusiones.
+        {
+            StartCoroutine(CreateIllusions());
+        }
+
+        if (distanceToPlayer > attackRange)
+        {
+            attackTimer = Time.time;
+            // anim.SetBool("Attack", true);
+            Debug.Log("Illusionist attacks!");
+
+            // Detectar al jugador dentro del rango de ataque.
+            Collider[] hits = Physics.OverlapSphere(transform.position, attackRange, whatIsPlayer);
+            foreach (Collider hit in hits)
             {
-                hit.GetComponent<PlayerHealth>()?.TakeDamage(damage);
+                if (hit.CompareTag("Player"))
+                {
+                    hit.GetComponent<PlayerHealth>()?.TakeDamage(damage);
+                }
             }
         }
     }

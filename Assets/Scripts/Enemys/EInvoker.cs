@@ -3,6 +3,7 @@ using UnityEngine.AI;
 
 public class EInvoker : EnemisBehaivor
 {
+    #region variables
     [Header("Invoker Settings")]
     public GameObject[] enemyPrefabs;
     public Transform[] summonPoints;
@@ -10,14 +11,16 @@ public class EInvoker : EnemisBehaivor
     public int maxSummoned;
     public bool isMiniboss;
 
-    [Header("NavMesh Settings")]
-    private NavMeshAgent agent;
-
     private float summonTimer;
     private int currentEnemiesSummoned;
 
-    public float patrolWaitTime = 3f;
-    private float patrolTimer = 0f;
+    [Header("Patrol Settings")]
+    public float patrolRadius;
+    public float waitTime;
+    private float waitTimer;
+    private Vector3 patrolPoint;
+    private bool isPatrolling;
+#endregion
 
     void Awake()
     {
@@ -70,30 +73,57 @@ public class EInvoker : EnemisBehaivor
             }
         }
     }
+    public void resetAnim()
+    {
+        anim.SetBool("Walk", false);
+        anim.SetBool("Idle", false);
+        anim.SetBool("Atack", false);
+
+    }
+
+    private Vector3 GenerateRandomPatrolPoint()
+    {
+        Vector3 randomDirection = Random.insideUnitSphere * patrolRadius;
+        randomDirection += transform.position;
+
+        NavMeshHit navHit;
+        if (NavMesh.SamplePosition(randomDirection, out navHit, patrolRadius, NavMesh.AllAreas))
+        {
+            return navHit.position;
+        }
+
+        return transform.position;
+    }
 
     private void Patrol()
     {
-        if (agent != null && !agent.hasPath)
+        // Si no está patrullando, genera un nuevo punto de patrulla
+        if (!isPatrolling)
         {
-            patrolTimer += Time.deltaTime;
-
-            if (patrolTimer >= patrolWaitTime)
-            {
-                Vector3 randomDirection = Random.insideUnitSphere * 10f;
-                randomDirection += transform.position;
-
-                if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, 10f, NavMesh.AllAreas))
-                {
-                    agent.SetDestination(hit.position);
-                }
-
-                patrolTimer = 0f;
-            }
+            patrolPoint = GenerateRandomPatrolPoint();
+            agent.SetDestination(patrolPoint);
+            agent.isStopped = false;
+            isPatrolling = true;
+            resetAnim();
+            anim.SetBool("Walk", true);
         }
 
-        // Configura las animaciones en base al movimiento del agente
-        anim.SetBool("idle", agent.velocity.magnitude < 0.1f);
-        anim.SetBool("Moving", agent.velocity.magnitude > 0.1f);
+        // Si llega al destino, inicia el temporizador de espera
+        if (agent.remainingDistance <= agent.stoppingDistance)
+        {
+            agent.isStopped = true; // Detiene el movimiento
+            resetAnim();
+            anim.SetBool("Idle", false);
+
+            waitTimer += Time.deltaTime;
+
+            if (waitTimer >= waitTime)
+            {
+                isPatrolling = false;
+                waitTimer = 0f;
+                agent.isStopped = false;
+            }
+        }
     }
 
     private void EscapePlayer()
@@ -125,7 +155,7 @@ public class EInvoker : EnemisBehaivor
             }
         }
 
-        anim.SetBool("idle", false);
+        resetAnim();
         anim.SetBool("Moving", true);
 
         // Verifica si el agente está atascado

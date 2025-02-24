@@ -35,8 +35,6 @@ public class ESnake : EnemisBehaivor
     {
         if (currentlife <= 0) return;
 
-        detection();
-
         if (canSeePlayer)
         {
             float distanceToPlayer = Vector3.Distance(transform.position, player.position);

@@ -13,7 +13,6 @@ public class Ejarron : EnemisBehaivor, Idamagable
 
     private float lastAttackTime;
     private bool isAwake = false; // Controla si el mímico está activo
-    private NavMeshAgent agent;
 
     [SerializeField] GameObject intactObject;
     [SerializeField] GameObject brokenObject;

@@ -4,14 +4,21 @@ using UnityEngine.AI;
 
 public class EBomeer : EnemisBehaivor
 {
-    [Header("NavMesh Settings")]
-    private NavMeshAgent agent;
+    #region variables
 
     [Header("EBomeer Settings")]
     [SerializeField] private float radius; // Radio de explosión
     [SerializeField] private int damage; // Daño de explosión
     [SerializeField] private GameObject explosion; // Prefab de la explosión
     [SerializeField] private float chaseRange = 15f; // Rango para perseguir al jugador
+
+    [Header("Patrol Settings")]
+    public float patrolRadius;
+    public float waitTime;
+    private float waitTimer;
+    private Vector3 patrolPoint;
+    private bool isPatrolling;
+    #endregion
 
     private void Awake()
     {
@@ -21,6 +28,12 @@ public class EBomeer : EnemisBehaivor
         // Obtén el componente NavMeshAgent
         agent = GetComponent<NavMeshAgent>();
 
+        fsm = new FSM();
+        fsm.CreateState("Attack", new AttackEnemy(fsm, this));
+        fsm.CreateState("Escape", new Escape(fsm, this));
+        fsm.CreateState("Walk", new Walk(fsm, this));
+        fsm.ChangeState("Walk");
+
         if (agent != null)
         {
             agent.speed = speed; // Configura la velocidad del NavMeshAgent
@@ -29,69 +42,76 @@ public class EBomeer : EnemisBehaivor
 
     private void Update()
     {
-        if (currentlife > 0)
+        if (currentlife <= 0)
         {
-            EnemiMovement();
+            return;
         }
+
+        firstNode.Execute(this);
+        fsm.Execute();
     }
 
-    private void EnemiMovement()
+    private Vector3 GenerateRandomPatrolPoint()
     {
-        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+        Vector3 randomDirection = Random.insideUnitSphere * patrolRadius;
+        randomDirection += transform.position;
 
-        if (distanceToPlayer > chaseRange)
+        NavMeshHit navHit;
+        if (NavMesh.SamplePosition(randomDirection, out navHit, patrolRadius, NavMesh.AllAreas))
         {
-            Patrol(); // Patrulla cuando está lejos del jugador
+            return navHit.position;
         }
-        else
-        {
-            ChaseAndExplode(); // Persigue al jugador y explota al estar cerca
-        }
+
+        return transform.position;
     }
-
-    private void Patrol()
+    public void resetAnim()
     {
-        if (agent != null && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        anim.SetBool("Walk", false);
+        anim.SetBool("Idle", false);
+        anim.SetBool("Atack", false);
+
+    }
+
+    public override void Patrol()
+    {
+        // Si no está patrullando, genera un nuevo punto de patrulla
+        if (!isPatrolling)
         {
-            cronometro += Time.deltaTime;
-            if (cronometro >= 4)
+            patrolPoint = GenerateRandomPatrolPoint();
+            agent.SetDestination(patrolPoint);
+            agent.isStopped = false;
+            isPatrolling = true;
+            resetAnim();
+            anim.SetBool("Walk", true);
+        }
+
+        // Si llega al destino, inicia el temporizador de espera
+        if (agent.remainingDistance <= agent.stoppingDistance)
+        {
+            agent.isStopped = true; // Detiene el movimiento
+            resetAnim();
+            anim.SetBool("Idle", false);
+
+            waitTimer += Time.deltaTime;
+
+            if (waitTimer >= waitTime)
             {
-                rutina = Random.Range(0, 2);
-                cronometro = 0;
-            }
-
-            switch (rutina)
-            {
-                case 0:
-                    anim.SetBool("idle", true);
-                    anim.SetBool("walking", false);
-                    break;
-                case 1:
-                    // Mueve hacia una posición aleatoria en el NavMesh
-                    Vector3 randomDirection = Random.insideUnitSphere * 5f;
-                    randomDirection += transform.position;
-
-                    if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, 5f, NavMesh.AllAreas))
-                    {
-                        agent.SetDestination(hit.position);
-                    }
-
-                    anim.SetBool("idle", false);
-                    anim.SetBool("walking", true);
-                    break;
+                isPatrolling = false;
+                waitTimer = 0f;
+                agent.isStopped = false;
             }
         }
     }
 
-    private void ChaseAndExplode()
+    public override void AttackPlayer()
     {
         if (agent != null)
         {
             agent.isStopped = false; // Activa el movimiento
             agent.SetDestination(player.transform.position); // Persigue al jugador
 
+            resetAnim();
             anim.SetBool("walking", true);
-            anim.SetBool("idle", false);
         }
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);

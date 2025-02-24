@@ -1,16 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemisBehaivor : MonoBehaviour, Idamagable
 {
     #region Variables
+    public FSM fsm;
+    protected NavMeshAgent agent;
+    public EnemyType enemyType;
+
     public static EnemisBehaivor instance;
     [Header("References")]
     protected Guns gun;
 
     [Header("Variables")]
     [SerializeField] public float currentlife;
+    [SerializeField] public float maxlife;
     [SerializeField] public float necroLife = 1500;
     [SerializeField] protected float speed;
 
@@ -45,6 +51,10 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
 
     [Header("Animation")]
     [SerializeField] protected Animator anim;
+
+    [Header("Fsm")]
+    public Node firstNode;
+
     #endregion
 
     private void Start()
@@ -54,9 +64,24 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
         instance = this;
         StartCoroutine(FOVRoutime());
 
+        maxlife = currentlife;
+
         GameManager.instance.AddToList(this.gameObject);
+
+        /* fsm = new FSM();
+         fsm.CreateState("Attack", new AttackEnemy(fsm, this));
+         fsm.CreateState("Escape", new Escape(fsm, this));
+         fsm.CreateState("Walk", new Walk(fsm, this));
+         fsm.ChangeState("Walk");*/
     }
 
+    public virtual void AttackPlayer() { }
+
+    public virtual void Patrol() { }
+
+    public virtual void Escape() { }
+
+    #region Life
     public virtual void TakeDamage(float dmg)
     {
         healParticle.SetActive(false);
@@ -93,41 +118,37 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
             Destroy(this.gameObject, 0.1f);
             PlayerHealth.instance.life += 10;
             if(gun != null)
-            Guns.instance.bulletsLeft += Random.Range(2, 6) + gun.killReward;
+            Guns.instance.bulletsLeft += Random.Range(1, 3) + gun.killReward;
         }
-    }
-
-    public void detection()
-    {
-       // IsInChaseRange = Physics.CheckSphere(transform.position, checkRadius, whatIsPlayer);
     }
 
     public void Healing(int heal)
     {
         healParticle.SetActive(true);
-        if (currentlife <= 100)
+        if (currentlife <= maxlife)
         {
             currentlife += heal;
         }
         else
         {
-            currentlife = 100;
+            return;
         }
     }
+    #endregion
 
+    #region Fov
     public virtual IEnumerator FOVRoutime()
     {
         WaitForSeconds wait = new WaitForSeconds(0.2f);
-        Debug.Log("busco player");
+       // Debug.Log("busco player");
 
         while (true)
         {
             yield return wait;
-            FieldOfViewCheck();
+            canSeePlayer = FieldOfViewCheck();
         }
     }
-
-    public virtual void FieldOfViewCheck()
+    public virtual bool FieldOfViewCheck()
     {
         Collider[] rangeChecks = Physics.OverlapSphere(transform.position, checkRadius, whatIsPlayer);
 
@@ -142,28 +163,97 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
 
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
                 {
-                    Debug.Log("veo player");
-                    canSeePlayer = true;
+                   // Debug.Log("veo player");
+                    return true;
                 }
                 else
                 {
-                    Debug.Log(" no veo player");
+                   // Debug.Log(" no veo player");
 
-                    canSeePlayer = false;
+                    return false;
                 }
             }
             else
             {
-                    Debug.Log(" no veo player");
-                canSeePlayer = false;
+                    //Debug.Log(" no veo player");
+                return false;
             }
         }
         else
         {
-                    Debug.Log(" no veo player");
-            canSeePlayer = false;
+                    //Debug.Log(" no veo player");
+            return false;
         }
     }
+    #endregion
+
+    #region MoveHealer
+    public bool CanReachTarget(Vector3 targetPosition)
+    {
+        NavMeshPath path = new NavMeshPath();
+        bool hasPath = agent.CalculatePath(targetPosition, path);
+
+        if (hasPath && path.status == NavMeshPathStatus.PathComplete)
+        {
+            return true; // Hay un camino válido sin obstáculos
+        }
+
+        Debug.Log("No se puede alcanzar al sanador, el camino está bloqueado.");
+        return false; // No hay un camino claro en el NavMesh
+    }
+
+    public EnemisBehaivor FindClosestHealer()
+    {
+        EnemisBehaivor closestHealer = null;
+        float minDistance = Mathf.Infinity;
+
+        foreach (EnemisBehaivor enemy in GameManager.instance.Healers)
+        {
+                float distance = Vector3.Distance(transform.position, enemy.transform.position);
+
+                if (distance < minDistance && CanReachTarget(enemy.transform.position)) // Verifica si el camino está libre en NavMesh
+                {
+                    minDistance = distance;
+                    closestHealer = enemy;
+                }           
+        }
+        return closestHealer;
+    }
+
+    public void MoveToHealer()
+    {
+        EnemisBehaivor healer = FindClosestHealer();
+        if (healer != null)
+        {
+            agent.SetDestination(healer.transform.position);
+            fsm.ChangeState("Escape"); // Cambia a estado de escape hacia el sanador
+        }
+        else
+        {
+            Debug.Log("No hay sanadores disponibles o el camino está bloqueado, huyendo normalmente.");
+            FleeFromPlayer();
+        }
+    }
+
+    public virtual void FleeFromPlayer()
+    {
+        Vector3 directionAwayFromPlayer = transform.position - player.position;
+        Vector3 fleePosition = transform.position + directionAwayFromPlayer.normalized * 10f;
+
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(fleePosition, out hit, 10f, NavMesh.AllAreas))
+        {
+            agent.SetDestination(hit.position);
+        }
+
+        resetAnim();
+        anim.SetBool("Moving", true);
+    }
+    #endregion
+
+    public virtual void resetAnim() { }
+
+    public virtual bool HasEnoughNearbyAllies() { return false; }
 
     private void OnDrawGizmos()
     {
@@ -186,4 +276,10 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
         }
         return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
     }
+}
+
+public enum EnemyType
+{
+    atack,
+    Healer
 }

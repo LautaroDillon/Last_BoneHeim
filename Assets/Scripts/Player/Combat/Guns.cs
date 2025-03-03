@@ -4,7 +4,6 @@ using TMPro;
 
 public class Guns : MonoBehaviour
 {
-
     #region Variables
     [Header("References")]
     public static Guns instance;
@@ -51,6 +50,14 @@ public class Guns : MonoBehaviour
     public float camShakeMagnitude;
     public float camShakeDuration;
 
+    [Header("Special Stats")]
+    public float rottenDamage = 0;
+    public float rottenChance = 0;
+    public float lightningDamage = 0;
+    public float lightningChance = 0;
+    public float infernalDamage = 0;
+    public float infernalChance = 0;
+
     [Header("Bools")]
     public bool allowInvoke = true;
     public bool isSkeleton = false;
@@ -59,6 +66,11 @@ public class Guns : MonoBehaviour
     public bool isKnuckle = false;
     public bool isNail = false;
     public bool isParasite = false;
+    public bool isRotten = false;
+    public bool isLightning = false;
+    public bool isInfernal = false;
+    public bool isSpawn = false;
+    public bool isAbysmal = false;
     bool shooting;
     bool readyToShoot;
     bool reloading;
@@ -353,6 +365,45 @@ public class Guns : MonoBehaviour
         spread += 1.5f;
         useGravity = false;
         FlyweightPointer.Player.Damage += 35;
+    }
+
+    public void LightningHand()
+    {
+        isLightning = true;
+        shootForce += 65;
+        timeBetweenShooting += 0.4f;
+        magazineSize += 12;
+        bulletsLeft = magazineSize;
+        bulletsPerTap += 1;
+        allowButtonHold = true;
+        useGravity = false;
+        FlyweightPointer.Player.Damage += 40 + lightningDamage;
+    }
+
+    public void InfernalHand()
+    {
+        isInfernal = true;
+        shootForce += 50;
+        timeBetweenShooting += 0.6f;
+        magazineSize += 8;
+        bulletsLeft = magazineSize;
+        bulletsPerTap += 1;
+        allowButtonHold = true;
+        useGravity = false;
+        FlyweightPointer.Player.Damage += 30 + infernalDamage;
+    }
+
+    public void RottenHand()
+    {
+        isRotten = true;
+        shootForce += 70;
+        timeBetweenShooting += 0.2f;
+        magazineSize += 14;
+        bulletsLeft = magazineSize;
+        bulletsPerTap += 1;
+        allowButtonHold = true;
+        useGravity = false;
+        FlyweightPointer.Player.Damage += 20;
     }
     #endregion
 }

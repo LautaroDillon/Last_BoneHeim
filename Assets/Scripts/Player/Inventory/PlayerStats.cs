@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
+    int forgottenBonus = 0;
+    int forgottenHeartStat;
+    int forgottenLiverStat;
+    int forgottenStomachStat;
+    int forgottenLungsStat;
     [Header("References")]
 
     public InventoryObject inventory;
@@ -34,6 +39,10 @@ public class PlayerStats : MonoBehaviour
     {
         inventory.Clear();
         equipment.Clear();
+        forgottenHeartStat = Random.Range(-15, 25);
+        forgottenLiverStat = Random.Range(-15, 15);
+        forgottenStomachStat = Random.Range(-4, 4);
+        forgottenLungsStat = Random.Range(-5, 5);
     }
 
     private void Start()
@@ -48,7 +57,6 @@ public class PlayerStats : MonoBehaviour
             equipment.GetSlots[i].OnAfterUpdate += OnAfterSlotUpdate;
         }
     }
-
 
     public void OnBeforeSlotUpdate(InventorySlot _slot)
     {
@@ -203,6 +211,186 @@ public class PlayerStats : MonoBehaviour
                         break;
                     #endregion
 
+                    #region Forgotten Organs
+
+                    case ItemType.O_ForgottenHeart:
+                        Debug.Log("FORGOTTEN HEART WORKS");
+                        PlayerHealth.instance._maxlife -= forgottenHeartStat;
+                        forgottenBonus -= 5;
+                        break;
+
+                    case ItemType.O_ForgottenLungs:
+                        Debug.Log("FORGOTTEN LUNGS WORK");
+                        PlayerMovementAdvanced.instance.sprintSpeed -= forgottenLungsStat - forgottenBonus;
+                        PlayerMovementAdvanced.instance.slideSpeed -= forgottenLungsStat - forgottenBonus;
+                        PlayerMovementAdvanced.instance.climbSpeed -= forgottenLungsStat - forgottenBonus;
+                        PlayerMovementAdvanced.instance.wallrunSpeed -= forgottenLungsStat - forgottenBonus;
+                        forgottenBonus -= 5;
+                        break;
+
+                    case ItemType.O_ForgottenLiver:
+                        Debug.Log("FORGOTTEN LIVER WORKS");
+                        FlyweightPointer.Player.Damage -= forgottenLiverStat;
+                        forgottenBonus -= 5;
+                        break;
+
+                    case ItemType.O_ForgottenStomach:
+                        Debug.Log("FORGOTTEN STOMACH WORKS");
+                        PlayerMovementAdvanced.instance.jumpForce -= forgottenStomachStat;
+                        PlayerMovementAdvanced.instance.airMultiplier -= forgottenStomachStat;
+                        forgottenBonus -= 5;
+                        break;
+
+                    #endregion
+
+                    #region Spectral Organs
+
+                    case ItemType.O_SpectralHeart:
+                        Debug.Log("SPECTRAL HEART WORKS");
+                        PlayerHealth.instance._maxlife -= 15;
+                        PlayerHealth.instance.dodgeChance -= 14;
+                        break;
+
+                    case ItemType.O_SpectralLungs:
+                        Debug.Log("SPECTRAL LUNGS WORK");
+                        PlayerMovementAdvanced.instance.sprintSpeed -= 2;
+                        PlayerMovementAdvanced.instance.slideSpeed -= 2;
+                        PlayerMovementAdvanced.instance.climbSpeed -= 2;
+                        PlayerMovementAdvanced.instance.wallrunSpeed -= 2;
+                        PlayerHealth.instance.dodgeChance -= 7;
+                        break;
+
+                    case ItemType.O_SpectralLiver:
+                        Debug.Log("SPECTRAL LIVER WORKS");
+                        FlyweightPointer.Player.Damage -= 15;
+                        PlayerHealth.instance.dodgeChance -= 7;
+                        break;
+
+                    case ItemType.O_SpectralStomach:
+                        Debug.Log("SPECTRAL STOMACH WORKS");
+                        PlayerMovementAdvanced.instance.jumpForce -= 1;
+                        PlayerMovementAdvanced.instance.airMultiplier -= 1;
+                        PlayerHealth.instance.dodgeChance -= 7;
+                        break;
+
+                    #endregion
+
+                    #region Lightning Organs
+
+                    case ItemType.O_LightningHeart:
+                        Debug.Log("LIGHTNING HEART WORKS");
+                        PlayerHealth.instance._maxlife -= 35;
+                        Guns.instance.lightningDamage -= 5;
+                        Guns.instance.lightningChance -= 7;
+                        break;
+
+                    case ItemType.O_LightningLungs:
+                        Debug.Log("LIGHTNING LUNGS WORK");
+                        PlayerMovementAdvanced.instance.sprintSpeed -= 3;
+                        PlayerMovementAdvanced.instance.slideSpeed -= 3;
+                        PlayerMovementAdvanced.instance.climbSpeed -= 1;
+                        PlayerMovementAdvanced.instance.wallrunSpeed -= 1;
+                        Guns.instance.lightningDamage -= 5;
+                        Guns.instance.lightningChance -= 7;
+                        break;
+
+                    case ItemType.O_LightningLiver:
+                        Debug.Log("LIGHTNING LIVER WORKS");
+                        FlyweightPointer.Player.Damage -= 15;
+                        Guns.instance.lightningDamage -= 5;
+                        Guns.instance.lightningChance -= 7;
+                        break;
+
+                    case ItemType.O_LightningStomach:
+                        Debug.Log("LIGHTING STOMACH WORKS");
+                        PlayerMovementAdvanced.instance.jumpForce -= 1;
+                        PlayerMovementAdvanced.instance.airMultiplier -= 2;
+                        Guns.instance.lightningDamage -= 5;
+                        Guns.instance.lightningChance -= 7;
+                        break;
+
+                    #endregion
+
+                    #region Infernal Organs
+
+                    case ItemType.O_InfernalHeart:
+                        Debug.Log("INFERNAL HEART WORKS");
+                        PlayerHealth.instance._maxlife -= 10;
+                        Guns.instance.infernalDamage -= 5;
+                        Guns.instance.infernalChance -= 7;
+                        SoundManager.instance.PlaySound(heartEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    case ItemType.O_InfernalLungs:
+                        Debug.Log("INFERNAL LUNGS WORK");
+                        PlayerMovementAdvanced.instance.sprintSpeed -= 1;
+                        PlayerMovementAdvanced.instance.slideSpeed -= 1;
+                        PlayerMovementAdvanced.instance.climbSpeed -= 2;
+                        PlayerMovementAdvanced.instance.wallrunSpeed -= 2;
+                        Guns.instance.infernalDamage -= 5;
+                        Guns.instance.infernalChance -= 7;
+                        SoundManager.instance.PlaySound(lungsEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    case ItemType.O_InfernalLiver:
+                        Debug.Log("INFERNAL LIVER WORKS");
+                        FlyweightPointer.Player.Damage -= 25;
+                        Guns.instance.infernalDamage -= 5;
+                        Guns.instance.infernalChance -= 7;
+                        SoundManager.instance.PlaySound(liverEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    case ItemType.O_InfernalStomach:
+                        Debug.Log("INFERNAL STOMACH WORKS");
+                        PlayerMovementAdvanced.instance.jumpForce -= 2;
+                        PlayerMovementAdvanced.instance.airMultiplier -= 1;
+                        Guns.instance.infernalDamage -= 5;
+                        Guns.instance.infernalChance -= 7;
+                        SoundManager.instance.PlaySound(stomachEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    #endregion
+
+                    #region Rotten Organs
+
+                    case ItemType.O_RottenHeart:
+                        Debug.Log("ROTTEN HEART WORKS");
+                        PlayerHealth.instance._maxlife -= 10;
+                        Guns.instance.rottenDamage -= 5;
+                        Guns.instance.rottenChance -= 7;
+                        break;
+
+                    case ItemType.O_RottenLungs:
+                        Debug.Log("ROTTEN LUNGS WORK");
+                        PlayerMovementAdvanced.instance.sprintSpeed -= 1;
+                        PlayerMovementAdvanced.instance.slideSpeed -= 1;
+                        PlayerMovementAdvanced.instance.climbSpeed -= 2;
+                        PlayerMovementAdvanced.instance.wallrunSpeed -= 2;
+                        Guns.instance.rottenDamage -= 5;
+                        Guns.instance.rottenChance -= 7;
+                        break;
+
+                    case ItemType.O_RottenLiver:
+                        Debug.Log("ROTTEN LIVER WORKS");
+                        FlyweightPointer.Player.Damage -= 25;
+                        Guns.instance.rottenDamage -= 5;
+                        Guns.instance.rottenChance -= 7;
+                        break;
+
+                    case ItemType.O_RottenStomach:
+                        Debug.Log("ROTTEN STOMACH WORKS");
+                        PlayerMovementAdvanced.instance.jumpForce -= 2;
+                        PlayerMovementAdvanced.instance.airMultiplier -= 1;
+                        Guns.instance.rottenDamage -= 5;
+                        Guns.instance.rottenChance -= 7;
+                        break;
+
+                    #endregion
+
                     #region Hands
                     case ItemType.H_Skeleton:
                         Debug.Log("SKELETON HAND DOESNT WORK");
@@ -249,6 +437,7 @@ public class PlayerStats : MonoBehaviour
                 break;
         }
     }
+
     public void OnAfterSlotUpdate(InventorySlot _slot)
     {
         if (_slot.ItemObject == null)
@@ -463,6 +652,217 @@ public class PlayerStats : MonoBehaviour
                         break;
                     #endregion
 
+                    #region Forgotten Organs
+
+                    case ItemType.O_ForgottenHeart:
+                        Debug.Log("FORGOTTEN HEART WORKS");
+                        PlayerHealth.instance._maxlife += forgottenHeartStat + forgottenBonus;
+                        forgottenBonus += 5;
+                        SoundManager.instance.PlaySound(heartEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    case ItemType.O_ForgottenLungs:
+                        Debug.Log("FORGOTTEN LUNGS WORK");
+                        PlayerMovementAdvanced.instance.sprintSpeed += forgottenLungsStat + forgottenBonus;
+                        PlayerMovementAdvanced.instance.slideSpeed += forgottenLungsStat + forgottenBonus;
+                        PlayerMovementAdvanced.instance.climbSpeed += forgottenLungsStat + forgottenBonus;
+                        PlayerMovementAdvanced.instance.wallrunSpeed += forgottenLungsStat + forgottenBonus;
+                        forgottenBonus += 5;
+                        SoundManager.instance.PlaySound(lungsEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    case ItemType.O_ForgottenLiver:
+                        Debug.Log("FORGOTTEN LIVER WORKS");
+                        FlyweightPointer.Player.Damage += forgottenLiverStat + forgottenBonus;
+                        forgottenBonus += 5;
+                        SoundManager.instance.PlaySound(liverEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    case ItemType.O_ForgottenStomach:
+                        Debug.Log("FORGOTTEN STOMACH WORKS");
+                        PlayerMovementAdvanced.instance.jumpForce += forgottenStomachStat + forgottenBonus;
+                        PlayerMovementAdvanced.instance.airMultiplier += forgottenStomachStat + forgottenBonus;
+                        SoundManager.instance.PlaySound(stomachEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    #endregion
+
+                    #region Spectral Organs
+
+                    case ItemType.O_SpectralHeart:
+                        Debug.Log("SPECTRAL HEART WORKS");
+                        PlayerHealth.instance._maxlife += 15;
+                        PlayerHealth.instance.dodgeChance += 14;
+                        SoundManager.instance.PlaySound(heartEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    case ItemType.O_SpectralLungs:
+                        Debug.Log("SPECTRAL LUNGS WORK");
+                        PlayerMovementAdvanced.instance.sprintSpeed += 2;
+                        PlayerMovementAdvanced.instance.slideSpeed += 2;
+                        PlayerMovementAdvanced.instance.climbSpeed += 2;
+                        PlayerMovementAdvanced.instance.wallrunSpeed += 2;
+                        PlayerHealth.instance.dodgeChance += 7;
+                        SoundManager.instance.PlaySound(lungsEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    case ItemType.O_SpectralLiver:
+                        Debug.Log("SPECTRAL LIVER WORKS");
+                        FlyweightPointer.Player.Damage += 15;
+                        PlayerHealth.instance.dodgeChance += 7;
+                        SoundManager.instance.PlaySound(liverEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    case ItemType.O_SpectralStomach:
+                        Debug.Log("SPECTRAL STOMACH WORKS");
+                        PlayerMovementAdvanced.instance.jumpForce += 1;
+                        PlayerMovementAdvanced.instance.airMultiplier += 1;
+                        PlayerHealth.instance.dodgeChance += 7;
+                        SoundManager.instance.PlaySound(stomachEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    #endregion
+
+                    #region Lightning Organs
+
+                    case ItemType.O_LightningHeart:
+                        Debug.Log("LIGHTNING HEART WORKS");
+                        PlayerHealth.instance._maxlife += 35;
+                        Guns.instance.lightningDamage += 5;
+                        Guns.instance.lightningChance += 7;
+                        SoundManager.instance.PlaySound(heartEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    case ItemType.O_LightningLungs:
+                        Debug.Log("LIGHTNING LUNGS WORK");
+                        PlayerMovementAdvanced.instance.sprintSpeed += 3;
+                        PlayerMovementAdvanced.instance.slideSpeed += 3;
+                        PlayerMovementAdvanced.instance.climbSpeed += 1;
+                        PlayerMovementAdvanced.instance.wallrunSpeed += 1;
+                        Guns.instance.lightningDamage += 5;
+                        Guns.instance.lightningChance += 7;
+                        SoundManager.instance.PlaySound(lungsEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    case ItemType.O_LightningLiver:
+                        Debug.Log("LIGHTNING LIVER WORKS");
+                        FlyweightPointer.Player.Damage += 15;
+                        Guns.instance.lightningDamage += 5;
+                        Guns.instance.lightningChance += 7;
+                        SoundManager.instance.PlaySound(liverEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    case ItemType.O_LightningStomach:
+                        Debug.Log("LIGHTING STOMACH WORKS");
+                        PlayerMovementAdvanced.instance.jumpForce += 1;
+                        PlayerMovementAdvanced.instance.airMultiplier += 2;
+                        Guns.instance.lightningDamage += 5;
+                        Guns.instance.lightningChance += 7;
+                        SoundManager.instance.PlaySound(stomachEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    #endregion
+
+                    #region Infernal Organs
+
+                    case ItemType.O_InfernalHeart:
+                        Debug.Log("INFERNAL HEART WORKS");
+                        PlayerHealth.instance._maxlife += 10;
+                        Guns.instance.infernalDamage += 5;
+                        Guns.instance.infernalChance += 7;
+                        SoundManager.instance.PlaySound(heartEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    case ItemType.O_InfernalLungs:
+                        Debug.Log("INFERNAL LUNGS WORK");
+                        PlayerMovementAdvanced.instance.sprintSpeed += 1;
+                        PlayerMovementAdvanced.instance.slideSpeed += 1;
+                        PlayerMovementAdvanced.instance.climbSpeed += 2;
+                        PlayerMovementAdvanced.instance.wallrunSpeed += 2;
+                        Guns.instance.infernalDamage += 5;
+                        Guns.instance.infernalChance += 7;
+                        SoundManager.instance.PlaySound(lungsEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    case ItemType.O_InfernalLiver:
+                        Debug.Log("INFERNAL LIVER WORKS");
+                        FlyweightPointer.Player.Damage += 25;
+                        Guns.instance.infernalDamage += 5;
+                        Guns.instance.infernalChance += 7;
+                        SoundManager.instance.PlaySound(liverEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    case ItemType.O_InfernalStomach:
+                        Debug.Log("INFERNAL STOMACH WORKS");
+                        PlayerMovementAdvanced.instance.jumpForce += 2;
+                        PlayerMovementAdvanced.instance.airMultiplier += 1;
+                        Guns.instance.infernalDamage += 5;
+                        Guns.instance.infernalChance += 7;
+                        SoundManager.instance.PlaySound(stomachEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    #endregion
+
+                    #region Rotten Organs
+
+                    case ItemType.O_RottenHeart:
+                        Debug.Log("ROTTEN HEART WORKS");
+                        PlayerHealth.instance._maxlife += 10;
+                        Guns.instance.rottenDamage += 5;
+                        Guns.instance.rottenChance += 7;
+                        SoundManager.instance.PlaySound(heartEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    case ItemType.O_RottenLungs:
+                        Debug.Log("ROTTEN LUNGS WORK");
+                        PlayerMovementAdvanced.instance.sprintSpeed += 1;
+                        PlayerMovementAdvanced.instance.slideSpeed += 1;
+                        PlayerMovementAdvanced.instance.climbSpeed += 2;
+                        PlayerMovementAdvanced.instance.wallrunSpeed += 2;
+                        Guns.instance.rottenDamage += 5;
+                        Guns.instance.rottenChance += 7;
+                        SoundManager.instance.PlaySound(lungsEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    case ItemType.O_RottenLiver:
+                        Debug.Log("ROTTEN LIVER WORKS");
+                        FlyweightPointer.Player.Damage += 25;
+                        Guns.instance.rottenDamage += 5;
+                        Guns.instance.rottenChance += 7;
+                        SoundManager.instance.PlaySound(liverEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    case ItemType.O_RottenStomach:
+                        Debug.Log("ROTTEN STOMACH WORKS");
+                        PlayerMovementAdvanced.instance.jumpForce += 2;
+                        PlayerMovementAdvanced.instance.airMultiplier += 1;
+                        Guns.instance.rottenDamage += 5;
+                        Guns.instance.rottenChance += 7;
+                        SoundManager.instance.PlaySound(stomachEquipClip, transform, 1f, false);
+                        SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
+                        break;
+
+                    #endregion
+
                     #region Hands
                     case ItemType.H_Skeleton:
                         Debug.Log("SKELETON HAND WORKS");
@@ -516,7 +916,6 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-
     public void OnTriggerEnter(Collider other)
     {
         var groundItem = other.GetComponent<GroundItem>();
@@ -529,20 +928,6 @@ public class PlayerStats : MonoBehaviour
                 Destroy(other.gameObject);
             }
         }
-    }
-    private void Update()
-    {
-        /*if (Input.GetKeyDown(KeyCode.Space))
-        {
-            inventory.Save();
-            equipment.Save();
-        }
-        if (Input.GetKeyDown(KeyCode.KeypadEnter))
-        {
-            inventory.Load();
-            equipment.Load();
-        }
-        */
     }
 
     public void AttributeModified(Attribute attribute)

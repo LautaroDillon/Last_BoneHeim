@@ -58,6 +58,5 @@ public class Bullet : MonoBehaviour
             TurnOff(this);
             _objectPool.StockAdd(this);
         }
-
     }
 }

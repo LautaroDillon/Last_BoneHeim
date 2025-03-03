@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class PlayerProyectiles : MonoBehaviour
@@ -68,6 +69,33 @@ public class PlayerProyectiles : MonoBehaviour
 
         // Set the closest enemy as the target
         targetEnemy = closestEnemy;
+    }
+
+    public void ApplyLightningEffect(EnemisBehaivor hitEnemy, float lightningDamage, float radius, float chainChance, EnemisBehaivor[] allEnemies)
+    {
+        lightningDamage = Guns.instance.lightningDamage;
+        chainChance = Guns.instance.lightningChance;
+        hitEnemy.TakeDamage(lightningDamage);
+
+        foreach (var enemy in allEnemies)
+        {
+            // Skip the hit enemy itself
+            if (enemy != hitEnemy && IsInRange(hitEnemy, enemy, radius))
+            {
+                float chance = UnityEngine.Random.Range(1, 101);
+                if (chance <= chainChance) // Chance to hit nearby enemy
+                {
+                    enemy.TakeDamage(lightningDamage);
+                }
+            }
+        }
+    }
+
+    // Function to check if two enemies are within a certain radius
+    private bool IsInRange(EnemisBehaivor firstEnemy, EnemisBehaivor secondEnemy, float radius)
+    {
+        float distance = (float)Math.Sqrt(Math.Pow(firstEnemy.transform.position.x - secondEnemy.transform.position.x, 2) + Math.Pow(firstEnemy.transform.position.y - secondEnemy.transform.position.y, 2));
+        return distance <= radius;
     }
 
     public void OnTriggerEnter(Collider other)

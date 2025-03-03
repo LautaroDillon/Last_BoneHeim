@@ -25,6 +25,7 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     public float reviveTime;
     [SerializeField] private float reviveTimer;
     public float lifeSteal = 0;
+    public float dodgeChance = 0;
    /* public float shieldAmount = 0;
     public float shieldMax = 0;
     public float shieldRegenTime;*/
@@ -171,30 +172,39 @@ public class PlayerHealth : MonoBehaviour, Idamagable
     }
     public void TakeDamage(float dmg)
     {
-        /*if(shieldAmount >= dmg)
+        int chance = Random.Range(1, 101);
+        if(chance <= dodgeChance)
         {
-            shieldAmount -= dmg;
-            if(dmg > shieldAmount)
-            {
-                dmg -= shieldAmount;
-            }
-        }*/
-
-       // if(shieldAmount <= 0)
-        {
-            life -= dmg;
-            healthBar.fillAmount = life / _maxlife;
-            StartCoroutine(HurtShader());
-            CameraShake.Shake(0.2f, 0.2f);
-            SoundManager.instance.PlaySound(painClip, transform, 0.3f, false);
-            /*if(shieldMax > 0)
-                StartCoroutine(ShieldRegen());*/
+            Debug.Log("Successfully dodged!");
         }
-        
-        if (life <= 0 && !isInReviveState)
+        else
         {
-            StartReviveCountdown();
-            SoundManager.instance.PlaySound(berserkStartClip, transform, 1f, false);
+            Debug.Log("Failed to dodge!");
+            /*if(shieldAmount >= dmg)
+                    {
+                        shieldAmount -= dmg;
+                        if(dmg > shieldAmount)
+                        {
+                            dmg -= shieldAmount;
+                        }
+                    }*/
+
+            // if(shieldAmount <= 0)
+            {
+                life -= dmg;
+                healthBar.fillAmount = life / _maxlife;
+                StartCoroutine(HurtShader());
+                CameraShake.Shake(0.2f, 0.2f);
+                SoundManager.instance.PlaySound(painClip, transform, 0.3f, false);
+                /*if(shieldMax > 0)
+                    StartCoroutine(ShieldRegen());*/
+            }
+
+            if (life <= 0 && !isInReviveState)
+            {
+                StartReviveCountdown();
+                SoundManager.instance.PlaySound(berserkStartClip, transform, 1f, false);
+            }
         }
     }
 

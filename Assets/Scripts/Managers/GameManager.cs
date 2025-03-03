@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     [Header("Assign Player")]
     public Transform thisIsPlayer;
     public List<GameObject> enemys;
+    public List<EHealer> Healers;
 
     [Header("Time Scale Check")]
     public bool isRunning;
@@ -20,6 +21,16 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         instance = this;
+    }
+
+    public void RegisterHealer(EHealer a)
+    {
+        Healers.Add(a);
+    }
+
+    public void UnregisterHealer(EHealer a)
+    {
+        Healers.Remove(a);
     }
 
     public void AddToList(GameObject t)

@@ -13,6 +13,7 @@ public class Healing : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("Healing");
         StartCoroutine(HealOverTime());
     }
 
@@ -21,7 +22,7 @@ public class Healing : MonoBehaviour
         healer = healerInstance;
     }
 
-    IEnumerator HealOverTime()
+    public IEnumerator HealOverTime()
     {
         float timer = 0f;
 
@@ -37,16 +38,11 @@ public class Healing : MonoBehaviour
             timer += healInterval;
         }
 
-        if (healer != null)
-        {
-            healer.canspawn = true;
-        }
-
         EnemisBehaivor.instance.healParticle.SetActive(false);
         Destroy(this.gameObject);
     }
 
-    void HealNearbyEntities()
+    public void HealNearbyEntities()
     {
         var healPosition = transform.position;
 

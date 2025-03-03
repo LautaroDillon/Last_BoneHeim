@@ -3,6 +3,7 @@ using UnityEngine.AI;
 
 public class EMelee : EnemisBehaivor
 {
+    #region Variables
     [Header("Attack Settings")]
     public float attackRange;
     public float attackCooldown;
@@ -25,23 +26,27 @@ public class EMelee : EnemisBehaivor
     [Header("Detection")]
     public float detectionRange;
 
-    [Header("NavMesh")]
-    private NavMeshAgent navMeshAgent;
-    //Transform Player;
-
     [Header("Sounds")]
     [SerializeField] private AudioClip swordSlashClip;
     [SerializeField] private AudioClip knightDeathClip;
     [SerializeField] private AudioClip bulletImpactClip;
 
     GameObject acid;
+    #endregion
 
+    #region basics
     private void Awake()
     {
-        navMeshAgent = GetComponent<NavMeshAgent>();
+        agent = GetComponent<NavMeshAgent>();
        // Player = GameManager.instance.thisIsPlayer;
         currentlifeShield = lifeShield;
         hasshield = true;
+
+        fsm = new FSM();
+        fsm.CreateState("Attack", new AttackEnemy(fsm, this));
+        fsm.CreateState("Escape", new Escape(fsm, this));
+        fsm.CreateState("Walk", new Walk(fsm, this));
+        fsm.ChangeState("Walk");
     }
 
     private void Start()
@@ -50,6 +55,19 @@ public class EMelee : EnemisBehaivor
         StartCoroutine(FOVRoutime());
 
     }
+    private void Update()
+    {
+        /*if (currentlife <= 0)
+        {
+            navMeshAgent.isStopped = true;
+            return;
+        }*/
+
+        firstNode.Execute(this);
+        fsm.Execute();
+
+    }
+    #endregion
 
     public void resetAnim()
     {
@@ -58,39 +76,12 @@ public class EMelee : EnemisBehaivor
         anim.SetBool("Idle", false);
     }
 
-    private void Update()
-    {
-        if (currentlife <= 0)
-        {
-            navMeshAgent.isStopped = true;
-            return;
-        }
-
-        if (canSeePlayer)
-        {
-            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-
-            if (distanceToPlayer > attackRange)
-            {
-                ChasePlayer();
-            }
-            else
-            {
-                AttackPlayer();
-            }
-        }
-        else
-        {
-            //Patrol(); // Si decides habilitar la patrulla, también usará rotación.
-        }
-
-    }
-
+    #region movement
     private void RotateTowardsMovement()
     {
-        if (navMeshAgent.velocity.sqrMagnitude > 0.1f) // Si se está moviendo
+        if (agent.velocity.sqrMagnitude > 0.1f) // Si se está moviendo
         {
-            Vector3 direction = navMeshAgent.velocity.normalized;
+            Vector3 direction = agent.velocity.normalized;
             direction.y = 0; // Asegurarse de no cambiar la inclinación vertical
             transform.rotation = Quaternion.LookRotation(direction);
         }
@@ -98,36 +89,94 @@ public class EMelee : EnemisBehaivor
 
     private void ChasePlayer()
     {
-        navMeshAgent.isStopped = false;
-        navMeshAgent.SetDestination(player.position);
+        agent.isStopped = false;
+        agent.SetDestination(player.position);
         RotateTowardsMovement();
         resetAnim();
         anim.SetBool("Walk", true);
     }
 
-    private void AttackPlayer()
+    private Vector3 GenerateRandomPatrolPoint()
     {
-        navMeshAgent.isStopped = true;
+        Vector3 randomDirection = Random.insideUnitSphere * patrolRadius;
+        randomDirection += transform.position;
 
-        if (Time.time >= lastAttackTime + attackCooldown)
+        NavMeshHit navHit;
+
+        if (NavMesh.SamplePosition(randomDirection, out navHit, patrolRadius, NavMesh.AllAreas))
         {
+            return navHit.position;
+        }
+
+        return transform.position;
+    }
+
+    public override void Patrol()
+    {
+        // Si no está patrullando, genera un nuevo punto de patrulla
+        if (!isPatrolling)
+        {
+            patrolPoint = GenerateRandomPatrolPoint();
+            agent.SetDestination(patrolPoint);
+            agent.isStopped = false;
+            isPatrolling = true;
             resetAnim();
-            //anim.SetBool("Atack", true);
-            anim.SetTrigger("Attack");
+            anim.SetBool("Walk", true);
+        }
+
+        // Si llega al destino, inicia el temporizador de espera
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        {
+            agent.isStopped = true; // Detiene el movimiento
+            anim.SetBool("Walk", false);   // Cambia la animación a idle o similar
+
+            waitTimer += Time.deltaTime;
+
+            if (waitTimer >= waitTime) // Si el temporizador supera el tiempo de espera
+            {
+                isPatrolling = false;  // Permite generar un nuevo destino
+                waitTimer = 0f;        // Reinicia el temporizador
+                agent.isStopped = false;
+            }
+        }
+    }
+
+    private void ResumeMovement()
+    {
+        if (agent.enabled)
+        {
+            agent.isStopped = false;
+        }
+    }
+
+    public override void Escape()
+    {
+        MoveToHealer();
+    }
+    #endregion
+
+    public override void AttackPlayer()
+    {
+        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+
+        agent.isStopped = true;
+
+        if (attackRange < distanceToPlayer)
+        {
+            ChasePlayer();
+        }
+        else if (Time.time >= lastAttackTime + attackCooldown)
+        {
+            Debug.Log("Atacando");
+            resetAnim();
+            anim.SetBool("Atack", true);
+            //anim.SetTrigger("Attack");
             player.GetComponent<Idamagable>().TakeDamage(attackDamage);
             SoundManager.instance.PlaySound(swordSlashClip, transform, 1f, false);
             lastAttackTime = Time.time;
         }
 
         Invoke(nameof(ResumeMovement), 1.5f);
-    }
-
-    private void ResumeMovement()
-    {
-        if (navMeshAgent.enabled)
-        {
-            navMeshAgent.isStopped = false;
-        }
     }
 
     public override void TakeDamage(float dmg)
@@ -161,7 +210,7 @@ public class EMelee : EnemisBehaivor
         {
             resetAnim();
 
-            navMeshAgent.enabled = false; // Desactivar movimiento al morir
+            agent.enabled = false; // Desactivar movimiento al morir
             GameManager.instance.enemys.Remove(this.gameObject);
 
             if (gameObject.tag == "Skeleton")

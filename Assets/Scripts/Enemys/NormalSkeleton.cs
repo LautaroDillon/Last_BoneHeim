@@ -1,145 +1,104 @@
 using UnityEngine;
-using UnityEngine.AI; 
+using UnityEngine.AI;
 
 public class NormalSkeleton : EnemisBehaivor
 {
+    #region variables
     [Header("NavMesh Settings")]
-    private NavMeshAgent agent; 
-    [SerializeField] private float stoppingDistance; // Distancia para detenerse cerca del jugador
+    [SerializeField] private float stoppingDistance;
 
     [Header("Attack Settings")]
-    [SerializeField] private Transform firePoint; // Punto desde el cual dispara
-    [SerializeField] private float shootRange; // Rango de disparo
-    [SerializeField] private GameObject BulletPrefab; // Prefab de la bala
-    [SerializeField] private float fireRate; // Velocidad de disparo
-    [SerializeField] private float projectileSpeed; // Velocidad de la bala
+    [SerializeField] private Transform firePoint;
+    [SerializeField] private float shootRange;
+    [SerializeField] private GameObject BulletPrefab;
+    [SerializeField] private float fireRate;
+    [SerializeField] private float projectileSpeed;
 
     [Header("Movement Settings")]
-    public bool isTurret; // Si el esqueleto es fijo
+    public bool isTurret;
     private bool isAttacking;
     private float nextFireTime;
 
+    [Header("Strafe Settings")]
+    [SerializeField] private float strafeDistance = 2.5f;
+    [SerializeField] private float strafeCooldown = 1.5f;
+    private bool canStrafe = true;
+
+    private Vector3 currentStrafeTarget;
+    private bool isStrafing;
+
+    #endregion
+
+    #region basics
     private void Awake()
     {
         currentlife = FlyweightPointer.Eshoot.maxLife;
-        agent = GetComponent<NavMeshAgent>(); // Obtiene el NavMeshAgent
+        agent = GetComponent<NavMeshAgent>();
         instance = this;
+
+        fsm = new FSM();
+        fsm.CreateState("Attack", new AttackEnemy(fsm, this));
+        fsm.CreateState("Escape", new Escape(fsm, this));
+        fsm.CreateState("Walk", new Walk(fsm, this));
+        fsm.ChangeState("Walk");
 
         if (agent != null)
         {
-            agent.stoppingDistance = stoppingDistance; // Define la distancia mínima para detenerse
+            agent.stoppingDistance = stoppingDistance;
         }
     }
 
     private void Update()
     {
-        if (currentlife > 0)
-        {
-            EnemiMovement();
-        }
+        firstNode.Execute(this);
+        fsm.Execute();
     }
+    #endregion
 
-    public void resetAnim()
+    public override void resetAnim()
     {
         anim.SetBool("Walk", false);
         anim.SetBool("Idle", false);
         anim.SetBool("Atack", false);
-
     }
 
-    private void EnemiMovement()
+    #region Attack
+    public override void AttackPlayer()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
-        if (!canSeePlayer) // Si no ve al jugador
+        if (distanceToPlayer > shootRange && !isAttacking && !isTurret)
         {
-            Patrol();
+            ChasePlayer();
         }
-        else
+        else if (distanceToPlayer <= shootRange)
         {
-            if (distanceToPlayer > shootRange && !isAttacking && !isTurret)
+            /*if (agent != null)
             {
-                ChasePlayer();
-            }
-            else if (distanceToPlayer <= shootRange)
-            {
-                AttackPlayer();
-            }
-        }
-    }
+                agent.isStopped = false;
+                agent.velocity = Vector3.zero;
+            }*/
 
-    private void Patrol()
-    {
-        // Patrulla aleatoria
-        if (agent != null && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
-        {
-            cronometro += Time.deltaTime;
-            if (cronometro >= 4)
+            // Gira hacia el jugador
+            Vector3 lookPos = player.transform.position - transform.position;
+            lookPos.y = 0;
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookPos), 360 * Time.deltaTime);
+
+            resetAnim();
+            anim.SetBool("Atack", true);
+
+            if (CanFire())
             {
-                rutina = Random.Range(0, 2);
-                cronometro = 0;
+                Shoot();
             }
 
-            switch (rutina)
+            // Inicia el strafe continuo mientras dispara
+            if (!isStrafing)
             {
-                case 0:
-                    anim.SetBool("Idle", true);
-                    resetAnim();
-                    // No hace nada (idle)
-                    break;
-                case 1:
-                    // Se mueve hacia una dirección aleatoria
-                    resetAnim();
-                    anim.SetBool("Walk", true);
-
-                    Vector3 randomDirection = Random.insideUnitSphere * 5f;
-                    randomDirection += transform.position;
-                    if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, 5f, NavMesh.AllAreas))
-                    {
-                        agent.SetDestination(hit.position);
-                    }
-                    break;
+                isStrafing = true;
+                InvokeRepeating(nameof(StrafeWhileShooting), 0f, strafeCooldown);
             }
         }
-    }
-
-    private void ChasePlayer()
-    {
-        if (agent != null)
-        {
-                    resetAnim();
-            anim.SetBool("Walk", true);
-
-            agent.isStopped = false; // Permite el movimiento
-            agent.SetDestination(player.transform.position); // Persigue al jugador
-        }
-    }
-
-    private void AttackPlayer()
-    {
-        if (agent != null)
-        {
-            agent.isStopped = true; // Detiene el movimiento mientras ataca
-        }
-
-        // Gira hacia el jugador
-        Vector3 lookPos = player.transform.position - transform.position;
-        lookPos.y = 0; // Ignora el eje Y
-        Quaternion rotation = Quaternion.LookRotation(lookPos);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 5 * Time.deltaTime);
-
-                    resetAnim();
-        anim.SetBool("Atack", true);
-
-
-        // Ataca si puede disparar
-        if (CanFire())
-        {
-            Shoot();
-        }
-
-        isAttacking = true;
-        EndAttack();
     }
 
     private bool CanFire()
@@ -149,15 +108,12 @@ public class NormalSkeleton : EnemisBehaivor
 
     private void Shoot()
     {
-        // Calcula la dirección hacia el jugador
         Vector3 directionToPlayer = (player.transform.position - firePoint.position).normalized;
 
-        // Obtiene una bala del Bullet Manager
         var bullet = BuletManager.instance.GetBullet();
         bullet.transform.position = firePoint.transform.position;
         bullet.transform.forward = directionToPlayer;
 
-        // Añade velocidad a la bala
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         if (rb != null)
         {
@@ -166,9 +122,49 @@ public class NormalSkeleton : EnemisBehaivor
 
         nextFireTime = Time.time + 1f / fireRate;
     }
+    #endregion
 
-    private void EndAttack()
+    #region Strafe Movement
+    private void StrafeWhileShooting()
     {
-        isAttacking = false;
+        Debug.Log("Intentando hacer strafe mientras dispara...");
+
+        float shortStrafeDistance = Random.Range(5f, 7f);
+        Vector3 strafeDirection = transform.right * (Random.Range(0, 2) == 0 ? 1 : -1);
+        Vector3 strafeTarget = transform.position + strafeDirection * shortStrafeDistance;
+
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(strafeTarget, out hit, 8f, NavMesh.AllAreas)) // Aumenta radio de búsqueda
+        {
+            Debug.Log($"Destino de strafe encontrado: {hit.position}");
+
+            agent.isStopped = false; // Asegura que pueda moverse
+            agent.ResetPath(); // Borra cualquier ruta anterior
+            agent.SetDestination(hit.position);
+            agent.speed = 2f; // Asegura que tenga velocidad
+
+            Debug.Log($"Moviendo al enemigo al punto de strafe: {agent.destination}");
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró un punto válido en el NavMesh para el strafe.");
+        }
+    }
+    #endregion
+
+    public void ChasePlayer()
+    {
+        if (agent != null)
+        {
+            resetAnim();
+            anim.SetBool("Walk", true);
+
+            agent.isStopped = false;
+            agent.SetDestination(player.transform.position);
+        }
+
+        // Detenemos el strafe si empieza a moverse hacia el jugador
+        isStrafing = false;
+        CancelInvoke(nameof(StrafeWhileShooting));
     }
 }

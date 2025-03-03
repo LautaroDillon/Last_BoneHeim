@@ -51,7 +51,7 @@ public class E_Illusionist : EnemisBehaivor
         fsm.ChangeState("Walk");
     }
 
-    public void resetAnim()
+    public override void resetAnim()
     {
         anim.SetBool("Walk", false);
         anim.SetBool("idle", false);

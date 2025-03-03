@@ -7,6 +7,7 @@ using TMPro;
 
 public class ENecro : EnemisBehaivor
 {
+    #region Variables
     public float maxHealth;
     public Image healthBar;
 
@@ -61,7 +62,9 @@ public class ENecro : EnemisBehaivor
 
     [SerializeField]  private float summonTimer;
     [SerializeField]  private float shotTimer;
+    #endregion
 
+    #region basics
     private void Awake()
     {
         summonTimer = summonCooldown;
@@ -86,7 +89,18 @@ public class ENecro : EnemisBehaivor
         HandlePhases();
         EnemiMovement();
         healthBar.fillAmount = necroLife / maxHealth;
+
+        if (canSeePlayer && player != null) // Solo mira si detecta al jugador
+        {
+            Vector3 direction = (player.position - transform.position).normalized;
+            direction.y = 0;
+
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 2f);
+        }
+
     }
+    #endregion
 
     public void ResetAnim()
     {
@@ -97,6 +111,7 @@ public class ENecro : EnemisBehaivor
         anim.SetBool("Death", false);
     }
 
+    #region phases
     private void HandlePhases()
     {
         if (necroLife <= phase3Threshold && currentPhase < 3)
@@ -112,22 +127,35 @@ public class ENecro : EnemisBehaivor
     private void EnterPhase2()
     {
         currentPhase = 2;
-        Debug.Log("Entrando en Fase 2: Más habilidades defensivas y ofensivas.");
-        // Aumentar la velocidad de ataque, reducir cooldowns
-        TeleportRandomly();
+        Debug.Log("Fase 2: Invoca más y ataca más rápido.");
         summonCooldown *= 0.8f;
         shotCooldown *= 0.8f;
+        skullSpeed += 2f; // Calaveras más rápidas
+       // movementSpeed *= 1.2f; // Se mueve más rápido
+        TeleportRandomly();
     }
 
     private void EnterPhase3()
     {
         currentPhase = 3;
-        Debug.Log("Entrando en Fase 3: Ataques devastadores.");
-        // Activar invocaciones rápidas y ataques potentes
-        summonCooldown *= 0.5f; 
+        Debug.Log("Fase 3: Se vuelve agresivo y teletransporta más.");
+        summonCooldown *= 0.7f;  // En lugar de 0.5f
+        shotCooldown *= 0.8f;    // No dispara tan rápido
+        abilityCooldown *= 0.7f;
+        // movementSpeed *= 1.5f;
+        StartCoroutine(Phase3Aggression());
         TeleportRandomly();
-        abilityCooldown *= 0.5f;
     }
+
+    private IEnumerator Phase3Aggression()
+    {
+        while (currentPhase == 3 && necroLife > 0)
+        {
+            UseRandomAbility();
+            yield return new WaitForSeconds(abilityCooldown / 2);
+        }
+    }
+    #endregion
 
     public void EnemiMovement()
     {
@@ -165,6 +193,7 @@ public class ENecro : EnemisBehaivor
         }
     }
 
+    #region Ability Methods
     private void SummonEnemy()
     {
         if (currentEnemiesSummoned >= maxSummoned) return;
@@ -187,26 +216,30 @@ public class ENecro : EnemisBehaivor
         projectile.GetComponent<Rigidbody>().velocity = directionToPlayer * projectileSpeed;
     }
 
+
     private void UseRandomAbility()
     {
         float randomValue = Random.value;
-        if (randomValue < 0.33f)
+        if (necroLife > maxHealth * 0.2f)  // Solo activa escudo si está por morir
         {
-            ActivateShield();
-        }
-        else if (randomValue < 0.66f)
-        {
-            UseLaser();
+            if (randomValue < 0.4f)
+            {
+                UseLaser();
+            }
+            else
+            {
+                UseSkullSummon();
+            }
         }
         else
         {
-            UseSkullSummon();
+            ActivateShield();  // Solo se activa en momentos críticos
         }
     }
 
     private void UseSkullSummon()
     {
-        Debug.Log("Habilidad activada: Invocar Calaveras");
+       // Debug.Log("Habilidad activada: Invocar Calaveras");
 
         for (int i = 0; i < skullCount; i++)
         {
@@ -261,6 +294,7 @@ public class ENecro : EnemisBehaivor
 
         Debug.Log("Teletransporte realizado");
     }
+    #endregion
 
     public override void TakeDamage(float dmg)
     {
@@ -271,6 +305,7 @@ public class ENecro : EnemisBehaivor
         if (necroLife <= 0)
         {
             BossTrigger.instance.bossHealth.gameObject.SetActive(false);
+            ResetAnim();
             anim.SetBool("Death", true);
             SoundManager.instance.PlaySound(necroDeathClip, transform, 1f, false);
             BossTrigger.instance.defeatText.gameObject.SetActive(true);

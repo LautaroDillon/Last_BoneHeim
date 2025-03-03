@@ -185,7 +185,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaf54569ea6205045b6fe616907512cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyType: 0
   currentlife: 0
+  maxlife: 0
+  necroLife: 1500
   speed: 0
   whatIsPlayer:
     serializedVersion: 2
@@ -208,10 +211,13 @@ MonoBehaviour:
   pointParticle: {fileID: 2762150081237657527}
   healParticle: {fileID: 3304549016305056580}
   anim: {fileID: 7632139131834306362}
+  firstNode: {fileID: 8238390433150840885, guid: 592f06138d7ca234891510ab9903f8cd, type: 3}
   radius: 5
   damage: 30
   explosion: {fileID: 4188342101596141807, guid: 7259666089fdab3439a689bd67b470f8, type: 3}
   chaseRange: 15
+  patrolRadius: 0
+  waitTime: 0
 --- !u!195 &4482505228056228684
 NavMeshAgent:
   m_ObjectHideFlags: 0

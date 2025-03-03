@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public Transform thisIsPlayer;
     public List<GameObject> enemys;
     public List<EHealer> Healers;
+    public Node firstquestion;
 
     [Header("Time Scale Check")]
     public bool isRunning;

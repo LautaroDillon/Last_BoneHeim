@@ -27,6 +27,8 @@ public class EBomeer : EnemisBehaivor
 
         // Obtén el componente NavMeshAgent
         agent = GetComponent<NavMeshAgent>();
+        firstNode = GameManager.instance.firstquestion;
+
 
         fsm = new FSM();
         fsm.CreateState("Attack", new AttackEnemy(fsm, this));

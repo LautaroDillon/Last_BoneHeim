@@ -28,30 +28,38 @@ public class ESnake : EnemisBehaivor
 
     private void Start()
     {
-        GeneratePatrolPoint();
+        // GeneratePatrolPoint();
+        StartCoroutine(FOVRoutime());
     }
 
     private void Update()
     {
         if (currentlife <= 0) return;
 
-        if (canSeePlayer)
-        {
-            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        /* if (canSeePlayer)
+         {
+             float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-            if (distanceToPlayer > attackRange)
-            {
-                ChasePlayer();
-            }
-            else
-            {
-                AttackPlayer();
-            }
-        }
-        else
-        {
-            Patrol();
-        }
+             if (distanceToPlayer > attackRange)
+             {
+                 ChasePlayer();
+             }
+             else
+             {
+                 AttackPlayer();
+             }
+         }
+         else
+         {
+             Patrol();
+         }*/
+        firstNode = GameManager.instance.firstquestion;
+
+        fsm = new FSM();
+        fsm.CreateState("Attack", new AttackEnemy(fsm, this));
+        fsm.CreateState("Escape", new Escape(fsm, this));
+        fsm.CreateState("Walk", new Walk(fsm, this));
+        fsm.ChangeState("Walk");
     }
 
     private void ChasePlayer()
@@ -61,21 +69,37 @@ public class ESnake : EnemisBehaivor
         anim.SetBool("isMoving", true);
     }
 
-    private void AttackPlayer()
+    public override void AttackPlayer()
     {
-        navMeshAgent.isStopped = true;
-        anim.SetBool("isMoving", false);
+        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
-        if (Time.time >= lastAttackTime + attackCooldown)
+        agent.isStopped = true;
+
+        if (attackRange < distanceToPlayer)
         {
-            anim.SetTrigger("Attack");
-            Debug.Log("La serpiente ataca al jugador");
+            ChasePlayer();
+        }
+        else if (Time.time >= lastAttackTime + attackCooldown)
+        {
+            Debug.Log("Atacando");
+            resetAnim();
+            anim.SetBool("Atack", true);
             player.GetComponent<Idamagable>().TakeDamage(attackDamage);
             lastAttackTime = Time.time;
         }
+
+        Invoke(nameof(ResumeMovement), 1.5f);
     }
 
-    private void Patrol()
+    private void ResumeMovement()
+    {
+        if (agent.enabled)
+        {
+            agent.isStopped = false;
+        }
+    }
+
+    public override void Patrol()
     {
         if (!isPatrolling)
         {

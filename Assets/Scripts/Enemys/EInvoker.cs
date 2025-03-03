@@ -27,6 +27,8 @@ public class EInvoker : EnemisBehaivor
         currentlife = FlyweightPointer.Ehealer.maxLife;
         speed = FlyweightPointer.Ehealer.speed;
         summonTimer = summonCooldown;
+        firstNode = GameManager.instance.firstquestion;
+
 
         agent = GetComponent<NavMeshAgent>();
         if (agent != null)

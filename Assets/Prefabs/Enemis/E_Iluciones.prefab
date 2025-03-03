@@ -385,7 +385,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f93ae30be4135b8498862b749740d5f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyType: 0
   currentlife: 75
+  maxlife: 0
+  necroLife: 1500
   speed: 4
   whatIsPlayer:
     serializedVersion: 2
@@ -408,6 +411,7 @@ MonoBehaviour:
   pointParticle: {fileID: 2717994540297956786}
   healParticle: {fileID: 1890095514254850321}
   anim: {fileID: 4149545225833157655}
+  firstNode: {fileID: 8238390433150840885, guid: 592f06138d7ca234891510ab9903f8cd, type: 3}
   patrolRadius: 30
   waitTime: 4
   attackRange: 4
@@ -419,7 +423,6 @@ MonoBehaviour:
   illusionSpawnRadius: 5
   timeIllusions: 3
   detectionRange: 20
-  navMeshAgent: {fileID: 0}
   patrolWaitTime: 3
 --- !u!1001 &1416324338637175772
 PrefabInstance:

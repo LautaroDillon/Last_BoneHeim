@@ -24,6 +24,14 @@ PrefabInstance:
       propertyPath: anim
       value: 
       objectReference: {fileID: 8066991809064542272}
+    - target: {fileID: 3827893840607070826, guid: e5f96e4d3c521d449bc64b943e11e71a, type: 3}
+      propertyPath: firstNode
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3827893840607070826, guid: e5f96e4d3c521d449bc64b943e11e71a, type: 3}
+      propertyPath: hasshield
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5515832083140018978, guid: e5f96e4d3c521d449bc64b943e11e71a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -73.871

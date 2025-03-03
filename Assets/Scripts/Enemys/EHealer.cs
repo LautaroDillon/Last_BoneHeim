@@ -36,7 +36,9 @@ public class EHealer : EnemisBehaivor, Idamagable
         agent = GetComponent<NavMeshAgent>();
         agent.speed = speed;
 
-        GameManager.instance.RegisterHealer(this);
+        firstNode = GameManager.instance.firstquestion;
+
+        GameManager.instance.Healers.Add(this);
 
         fsm = new FSM();
         fsm.CreateState("Attack", new AttackEnemy(fsm, this));

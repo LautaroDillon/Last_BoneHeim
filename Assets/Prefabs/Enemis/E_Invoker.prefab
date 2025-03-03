@@ -406,7 +406,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4026d776103e9594493f93d37f86c33d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyType: 0
   currentlife: 0
+  maxlife: 0
+  necroLife: 1500
   speed: 0
   whatIsPlayer:
     serializedVersion: 2
@@ -429,6 +432,7 @@ MonoBehaviour:
   pointParticle: {fileID: 2064665069092367697}
   healParticle: {fileID: 8139027117200023087}
   anim: {fileID: 1790386495961829860}
+  firstNode: {fileID: 8238390433150840885, guid: 592f06138d7ca234891510ab9903f8cd, type: 3}
   enemyPrefabs:
   - {fileID: 4918036841467333950, guid: 6671821c88c16f84da52723a8791ab34, type: 3}
   - {fileID: 6419601667883113455, guid: e5f96e4d3c521d449bc64b943e11e71a, type: 3}
@@ -441,7 +445,8 @@ MonoBehaviour:
   summonCooldown: 5
   maxSummoned: 4
   isMiniboss: 0
-  patrolWaitTime: 3
+  patrolRadius: 10
+  waitTime: 5
 --- !u!54 &6553199860139285694
 Rigidbody:
   m_ObjectHideFlags: 0

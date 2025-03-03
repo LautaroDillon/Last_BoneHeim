@@ -40,7 +40,7 @@ public class Question_Node : Node
                     falseNode.Execute(enemys);
                 break;
             case TypeQuest.HasNearbyAllies:
-                Debug.Log("Verificando si el enemigo tiene aliados cercanos...");
+               // Debug.Log("Verificando si el enemigo tiene aliados cercanos...");
                 if (enemys.enemyType == EnemyType.Healer)
                 {
                     Debug.Log("El enemigo es un curandero, verificando aliados cercanos...");

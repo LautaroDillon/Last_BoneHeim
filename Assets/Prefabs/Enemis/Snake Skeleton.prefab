@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.057, y: 0.9499999, z: -4.036}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.1591, y: 1.1591, z: 1.1591}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4296009587843272249}
@@ -48,7 +48,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c467fe39a7e4ee1449af36c2a38f9e38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyType: 0
   currentlife: 100
+  maxlife: 0
   necroLife: 1500
   speed: 3
   whatIsPlayer:
@@ -72,6 +74,7 @@ MonoBehaviour:
   pointParticle: {fileID: 8594284050758689464, guid: d910f5152f01ac742a45b4578091d443, type: 3}
   healParticle: {fileID: 4475025229226224005, guid: e904da14d1a25e84cadadde9dc8fd545, type: 3}
   anim: {fileID: 7889832803644200003}
+  firstNode: {fileID: 8238390433150840885, guid: 592f06138d7ca234891510ab9903f8cd, type: 3}
   attackRange: 2
   attackCooldown: 4
   attackDamage: 7
@@ -145,10 +148,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.22
-  m_Height: 2.27
+  m_Radius: 0.7395836
+  m_Height: 2.5479727
   m_Direction: 2
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.519584, z: -0.13898604}
 --- !u!1001 &4329301230299867602
 PrefabInstance:
   m_ObjectHideFlags: 0

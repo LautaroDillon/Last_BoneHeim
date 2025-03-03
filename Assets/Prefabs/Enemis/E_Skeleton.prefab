@@ -310,7 +310,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cd2e6df99fc16d44b9684e04ca8a474, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyType: 0
   currentlife: 0
+  maxlife: 0
+  necroLife: 1500
   speed: 0
   whatIsPlayer:
     serializedVersion: 2
@@ -333,13 +336,18 @@ MonoBehaviour:
   pointParticle: {fileID: 3838514121072607786}
   healParticle: {fileID: 6323638799372181553}
   anim: {fileID: 3692176740944948893}
-  stoppingDistance: 0
+  firstNode: {fileID: 0}
+  stoppingDistance: 5
+  patrolRadius: 10
+  waitTime: 5
   firePoint: {fileID: 2024771481236661449}
   shootRange: 16
   BulletPrefab: {fileID: 8140848138928168744, guid: a421ca5fc1999004191e5eaee526bdb6, type: 3}
   fireRate: 1
   projectileSpeed: 10
   isTurret: 0
+  strafeDistance: 2.5
+  strafeCooldown: 1.5
 --- !u!54 &9215845823402779686
 Rigidbody:
   m_ObjectHideFlags: 0

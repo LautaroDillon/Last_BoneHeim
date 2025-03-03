@@ -41,6 +41,7 @@ public class EMelee : EnemisBehaivor
        // Player = GameManager.instance.thisIsPlayer;
         currentlifeShield = lifeShield;
         hasshield = true;
+        firstNode = GameManager.instance.firstquestion;
 
         fsm = new FSM();
         fsm.CreateState("Attack", new AttackEnemy(fsm, this));
@@ -69,7 +70,7 @@ public class EMelee : EnemisBehaivor
     }
     #endregion
 
-    public void resetAnim()
+    public override void resetAnim()
     {
         anim.SetBool("Walk", false);
         anim.SetBool("Atack", false);
@@ -127,8 +128,9 @@ public class EMelee : EnemisBehaivor
         // Si llega al destino, inicia el temporizador de espera
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
-            agent.isStopped = true; // Detiene el movimiento
-            anim.SetBool("Walk", false);   // Cambia la animación a idle o similar
+            agent.isStopped = true;
+            resetAnim();
+            anim.SetBool("Walk", false);
 
             waitTimer += Time.deltaTime;
 
@@ -170,7 +172,6 @@ public class EMelee : EnemisBehaivor
             Debug.Log("Atacando");
             resetAnim();
             anim.SetBool("Atack", true);
-            //anim.SetTrigger("Attack");
             player.GetComponent<Idamagable>().TakeDamage(attackDamage);
             SoundManager.instance.PlaySound(swordSlashClip, transform, 1f, false);
             lastAttackTime = Time.time;
@@ -184,7 +185,7 @@ public class EMelee : EnemisBehaivor
         healParticle.SetActive(false);
         SoundManager.instance.PlaySound(bulletImpactClip, transform, 1f, false);
 
-        if (hasshield)
+        if (!hasshield)
         {
             Debug.Log("pego enemigo");
             currentlife -= dmg;

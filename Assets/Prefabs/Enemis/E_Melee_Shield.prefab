@@ -264,7 +264,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6995d370279b18342a742ec8ef0cfe2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyType: 0
   currentlife: 100
+  maxlife: 0
+  necroLife: 1500
   speed: 6
   whatIsPlayer:
     serializedVersion: 2
@@ -287,6 +290,7 @@ MonoBehaviour:
   pointParticle: {fileID: 1156222567539574345}
   healParticle: {fileID: 6056306590398683296}
   anim: {fileID: 4727740496640283144}
+  firstNode: {fileID: 8238390433150840885, guid: 592f06138d7ca234891510ab9903f8cd, type: 3}
   attackRange: 3
   attackCooldown: 3
   attackDamage: 20

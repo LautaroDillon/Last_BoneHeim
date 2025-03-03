@@ -14,7 +14,7 @@ public class SpikeTrap : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Spikes Triggered!");
+        //Debug.Log("Spikes Triggered!");
         if(other.gameObject.tag == "Player" && _spikesActive == false)
         {
             Invoke("SpikeActivated", 1.5f);

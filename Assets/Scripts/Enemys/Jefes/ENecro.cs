@@ -262,16 +262,18 @@ public class ENecro : EnemisBehaivor
 
     private void ActivateShield()
     {
-        //shield.SetActive(true);
-        
-        if(_shieldShader._shieldOn == true)
+        float shieldChance = (currentPhase == 3) ? 0.5f : 0.3f; // 50% en fase 3, 30% antes
+
+        if (Random.value <= shieldChance)
         {
-            _shieldShader._shieldCollider.enabled = true;
-            _shieldShader.OpenCloseShield();
-            _shieldShader._life = 100;
+            if (_shieldShader._shieldOn == true)
+            {
+                _shieldShader._shieldCollider.enabled = true;
+                _shieldShader.OpenCloseShield();
+                _shieldShader._life = 100;
+            }
+            //Debug.Log("Escudo ACTIVADO");
         }
-        
-        Debug.Log("Escudo activado");
     }
 
     private void UseLaser()

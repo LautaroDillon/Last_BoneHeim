@@ -41,7 +41,6 @@ public class EMelee : EnemisBehaivor
        // Player = GameManager.instance.thisIsPlayer;
         currentlifeShield = lifeShield;
         hasshield = true;
-        firstNode = GameManager.instance.firstquestion;
 
         fsm = new FSM();
         fsm.CreateState("Attack", new AttackEnemy(fsm, this));
@@ -52,6 +51,10 @@ public class EMelee : EnemisBehaivor
 
     private void Start()
     {
+        player = GameManager.instance.thisIsPlayer;
+
+        firstNode = GameManager.instance.firstquestion;
+
         //GeneratePatrolPoint();
         StartCoroutine(FOVRoutime());
 

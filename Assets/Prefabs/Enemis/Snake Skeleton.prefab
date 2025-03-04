@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2748451053984370637}
-  - component: {fileID: 2135856113179208917}
   - component: {fileID: 3456814981122373154}
   - component: {fileID: 6511418495593442605}
   - component: {fileID: 820955824444838471}
+  - component: {fileID: 2487073889042929510}
   m_Layer: 10
   m_Name: Snake Skeleton
   m_TagString: Untagged
@@ -34,52 +34,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4296009587843272249}
+  - {fileID: 6083101746798022036}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2135856113179208917
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1191025337264418550}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c467fe39a7e4ee1449af36c2a38f9e38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyType: 0
-  currentlife: 100
-  maxlife: 0
-  necroLife: 1500
-  speed: 3
-  whatIsPlayer:
-    serializedVersion: 2
-    m_Bits: 8
-  obstructionMask:
-    serializedVersion: 2
-    m_Bits: 16704
-  player: {fileID: 0}
-  checkRadius: 10
-  angle: 90
-  canSeePlayer: 0
-  cronometro: 0
-  skeletonDeathClip: {fileID: 0}
-  boomerDeathClip: {fileID: 0}
-  necromancerDeathClip: {fileID: 0}
-  invokerDeathClip: {fileID: 0}
-  chamanDeathClip: {fileID: 0}
-  blood: {fileID: 4733726417356664035, guid: bc4b78253033fd241ace7c28ee28bb31, type: 3}
-  skeletaldamage: {fileID: 8594284050758689464, guid: d910f5152f01ac742a45b4578091d443, type: 3}
-  pointParticle: {fileID: 8594284050758689464, guid: d910f5152f01ac742a45b4578091d443, type: 3}
-  healParticle: {fileID: 4475025229226224005, guid: e904da14d1a25e84cadadde9dc8fd545, type: 3}
-  anim: {fileID: 7889832803644200003}
-  firstNode: {fileID: 8238390433150840885, guid: 592f06138d7ca234891510ab9903f8cd, type: 3}
-  attackRange: 2
-  attackCooldown: 4
-  attackDamage: 7
-  patrolRadius: 10
-  waitTime: 7
 --- !u!195 &3456814981122373154
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -88,18 +45,18 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1191025337264418550}
   m_Enabled: 1
-  m_AgentTypeID: 1479372276
+  m_AgentTypeID: -1372625422
   m_Radius: 0.5
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 3
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 0.5
-  m_BaseOffset: 0.25
+  m_BaseOffset: 0.22
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!54 &6511418495593442605
@@ -152,6 +109,88 @@ CapsuleCollider:
   m_Height: 2.5479727
   m_Direction: 2
   m_Center: {x: 0, y: 0.519584, z: -0.13898604}
+--- !u!114 &2487073889042929510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1191025337264418550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6995d370279b18342a742ec8ef0cfe2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyType: 0
+  currentlife: 100
+  maxlife: 0
+  necroLife: 1500
+  speed: 6
+  whatIsPlayer:
+    serializedVersion: 2
+    m_Bits: 2056
+  obstructionMask:
+    serializedVersion: 2
+    m_Bits: 16832
+  player: {fileID: 0}
+  checkRadius: 40
+  angle: 358
+  canSeePlayer: 0
+  cronometro: 3
+  skeletonDeathClip: {fileID: 8300000, guid: a8d98e1cf137e0a4d9a4951cfd283233, type: 3}
+  boomerDeathClip: {fileID: 0}
+  necromancerDeathClip: {fileID: 0}
+  invokerDeathClip: {fileID: 0}
+  chamanDeathClip: {fileID: 0}
+  blood: {fileID: 8835629220091889797, guid: 8656ce0cd4344a54188b181f56987a93, type: 3}
+  skeletaldamage: {fileID: 8594284050758689464, guid: d910f5152f01ac742a45b4578091d443, type: 3}
+  pointParticle: {fileID: 1444470871242872001, guid: 775237c42a8104349bfb8708bbbdae18, type: 3}
+  healParticle: {fileID: 5768022707890948648, guid: 775237c42a8104349bfb8708bbbdae18, type: 3}
+  anim: {fileID: 8066991809064542272, guid: 775237c42a8104349bfb8708bbbdae18, type: 3}
+  firstNode: {fileID: 0}
+  attackRange: 3
+  attackCooldown: 3
+  attackDamage: 20
+  patrolRadius: 10
+  waitTime: 5
+  ShieldOBJ: {fileID: 7202802028698873469}
+  lifeShield: 50
+  hasshield: 0
+  detectionRange: 0
+  swordSlashClip: {fileID: 8300000, guid: fdf6ec8563adea04897cf1f68e9d5ed7, type: 3}
+  knightDeathClip: {fileID: 8300000, guid: 8f55bfb4454f08e43a5eb0550dcd4231, type: 3}
+  bulletImpactClip: {fileID: 8300000, guid: 5d4584485710da04787ae065a6a57fd8, type: 3}
+--- !u!1 &7202802028698873469
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6083101746798022036}
+  m_Layer: 10
+  m_Name: flase
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6083101746798022036
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7202802028698873469}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2748451053984370637}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4329301230299867602
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -576,8 +615,3 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.065
   m_Center: {x: 0, y: -0.02, z: 0}
---- !u!95 &7889832803644200003 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: c45a6d0b3913f044ba64001641de9ee4, type: 3}
-  m_PrefabInstance: {fileID: 4329301230299867602}
-  m_PrefabAsset: {fileID: 0}

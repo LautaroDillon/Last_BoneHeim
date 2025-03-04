@@ -59,6 +59,7 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
 
     private void Start()
     {
+        firstNode = GameManager.instance.firstquestion;
         player = GameManager.instance.thisIsPlayer;
         gun = GameObject.Find("Gun").GetComponent<Guns>();
         instance = this;

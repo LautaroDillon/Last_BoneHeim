@@ -42,7 +42,7 @@ public class NormalSkeleton : EnemisBehaivor
         currentlife = FlyweightPointer.Eshoot.maxLife;
         agent = GetComponent<NavMeshAgent>();
         instance = this;
-        firstNode = GameManager.instance.firstquestion;
+        //firstNode = GameManager.instance.firstquestion;
 
 
         fsm = new FSM();

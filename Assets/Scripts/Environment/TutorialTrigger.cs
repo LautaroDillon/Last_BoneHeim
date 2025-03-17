@@ -6,10 +6,12 @@ using UnityEngine.UI;
 public class TutorialTrigger : MonoBehaviour
 {
     [SerializeField] GameObject tutorial;
+    public bool invTutorialDone;
 
     private void Start()
     {
         tutorial.gameObject.SetActive(false);
+        invTutorialDone = false;
     }
 
     private void Update()

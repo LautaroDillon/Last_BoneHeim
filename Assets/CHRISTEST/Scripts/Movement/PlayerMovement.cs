@@ -152,6 +152,8 @@ public class PlayerMovement : MonoBehaviour
         {
             readyToJump = false;
 
+            counterMovement = 0.8f;
+
             rb.AddForce(Vector2.up * jumpForce * 1.5f);
             rb.AddForce(normalVector * jumpForce * 0.5f);
 
@@ -251,6 +253,7 @@ public class PlayerMovement : MonoBehaviour
                 grounded = true;
                 cancellingGrounded = false;
                 normalVector = normal;
+                counterMovement = 0.4f;
                 CancelInvoke(nameof(StopGrounded));
             }
         }

@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class PositionFollower : MonoBehaviour
 {
-    public Transform TargetTransform;
-    public Vector3 Offset;
+    public Transform targetTransform;
+    public Vector3 offset;
 
     void Update()
     {
-        transform.position = TargetTransform.position + Offset;
+        transform.position = targetTransform.position + offset;
     }
 }

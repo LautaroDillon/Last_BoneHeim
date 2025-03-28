@@ -7,15 +7,19 @@ public class Guns : MonoBehaviour
     #region Variables
     [Header("References")]
     public static Guns instance;
+    public GunKickback gk;
+
     public GameObject bullet;
     public GameObject explosion;
+    public GameObject muzzleFlash;
+
     PhysicMaterial physics_mat;
+
     public Rigidbody rb;
     public Rigidbody playerRb;
     public Camera fpsCam;
     public Transform attackPoint;
     public LayerMask whatIsEnemies;
-    public GameObject muzzleFlash;
     public TextMeshProUGUI ammunitionDisplay;
     public CamShake camShake;
 
@@ -125,6 +129,7 @@ public class Guns : MonoBehaviour
                 bulletsShot = 0;
                 SoundManager.instance.PlaySound(shootClip, transform, 0.3f, false);
                 Shoot();
+                gk.ApplyKickback();
             }
         }
         else

@@ -5369,6 +5369,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6990212778841044598}
+  - {fileID: 9206427014804766403}
   m_Father: {fileID: 7530082752314634801}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5243784597940246766
@@ -5628,6 +5629,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6efc8cd0521c47b48b60fdd1c401eed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventory: {fileID: 0}
+  equipment: {fileID: 0}
   healthBar: {fileID: 0}
   shieldFillBar: {fileID: 0}
   berserkFillBar: {fileID: 0}
@@ -5639,9 +5642,7 @@ MonoBehaviour:
   reviveTime: 7
   reviveTimer: 0
   lifeSteal: 0
-  shieldAmount: 0
-  shieldMax: 0
-  shieldRegenTime: 5
+  dodgeChance: 0
   isInReviveState: 0
   enemyKilled: 0
   painClip: {fileID: 8300000, guid: 6205394578c635e4780d17237cee3d70, type: 3}
@@ -5931,7 +5932,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 9206427014804766403}
   - {fileID: 1407999018384653003}
   - {fileID: 855671335909782702}
   - {fileID: 481141950320016334}
@@ -6240,8 +6240,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc3097d7b834b7f42b6829fc3b4e02fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gk: {fileID: 0}
   bullet: {fileID: 4466020935756555090, guid: f20f98bff19025145b131d6bdb3dc86c, type: 3}
   explosion: {fileID: 4188342101596141807, guid: 7259666089fdab3439a689bd67b470f8, type: 3}
+  muzzleFlash: {fileID: 0}
   rb: {fileID: 5608865901135598199, guid: f20f98bff19025145b131d6bdb3dc86c, type: 3}
   playerRb: {fileID: 2192302948762650797}
   fpsCam: {fileID: 1801707606769123791}
@@ -6249,7 +6251,6 @@ MonoBehaviour:
   whatIsEnemies:
     serializedVersion: 2
     m_Bits: 1024
-  muzzleFlash: {fileID: 0}
   ammunitionDisplay: {fileID: 0}
   camShake: {fileID: 7091730654760743436}
   shootForce: 0
@@ -6275,6 +6276,12 @@ MonoBehaviour:
   recoilForce: 0
   camShakeMagnitude: 0.2
   camShakeDuration: 0.2
+  rottenDamage: 0
+  rottenChance: 0
+  lightningDamage: 0
+  lightningChance: 0
+  infernalDamage: 0
+  infernalChance: 0
   allowInvoke: 1
   isSkeleton: 0
   isTeeth: 0
@@ -6282,6 +6289,11 @@ MonoBehaviour:
   isKnuckle: 0
   isNail: 0
   isParasite: 0
+  isRotten: 0
+  isLightning: 0
+  isInfernal: 0
+  isSpawn: 0
+  isAbysmal: 0
   shootClip: {fileID: 8300000, guid: b6bd1669dd3a0624c8200237927f49e6, type: 3}
 --- !u!1001 &41220385585339664
 PrefabInstance:
@@ -6551,7 +6563,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 7530082752314634801}
+    m_TransformParent: {fileID: 855671335909782702}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 481671d5608bb914a8c51b2af90c1ab8, type: 3}
       propertyPath: m_LocalScale.x
@@ -6567,31 +6579,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 481671d5608bb914a8c51b2af90c1ab8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.6872324
+      value: 0.4380008
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 481671d5608bb914a8c51b2af90c1ab8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.5150001
+      value: 0.2249999
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 481671d5608bb914a8c51b2af90c1ab8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.380927
+      value: 1.4009994
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 481671d5608bb914a8c51b2af90c1ab8, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.5792599
+      value: 0.5792264
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 481671d5608bb914a8c51b2af90c1ab8, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.5791961
+      value: 0.5792296
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 481671d5608bb914a8c51b2af90c1ab8, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.40553427
+      value: -0.40558213
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 481671d5608bb914a8c51b2af90c1ab8, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.4056254
+      value: -0.40557754
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 481671d5608bb914a8c51b2af90c1ab8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

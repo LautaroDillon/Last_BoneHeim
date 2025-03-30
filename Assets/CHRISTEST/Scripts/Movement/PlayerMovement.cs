@@ -5,42 +5,57 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    //Assingables
+    [Header("References")]
     public Transform playerCam;
+    public Camera pCam;
     public Transform orientation;
 
     //Other
     private Rigidbody rb;
 
-    //Rotation and look
-    private float xRotation;
-    private float sensitivity = 50f;
-    private float sensMultiplier = 1f;
+    [Header("Sensitivity")]
+    [SerializeField] private float xRotation;
+    [SerializeField] private float sensitivity = 50f;
+    [SerializeField] private float sensMultiplier = 1f;
 
-    //Movement
+    [Header("Movement")]
     public float moveSpeed = 4500;
     public float maxSpeed = 20;
-    public bool grounded;
+    public bool isGrounded;
     public LayerMask whatIsGround;
 
     public float counterMovement = 0.175f;
     private float threshold = 0.01f;
     public float maxSlopeAngle = 35f;
 
-    //Crouch & Slide
+    [Header("Crouch & Slide")]
     private Vector3 crouchScale = new Vector3(1, 0.5f, 1);
     private Vector3 playerScale;
     public float slideForce = 400;
     public float slideCounterMovement = 0.2f;
 
-    //Jumping
+    [Header("Jumping")]
     private bool readyToJump = true;
     private float jumpCooldown = 0.25f;
     public float jumpForce = 550f;
 
+    [Header("Dashing")]
+    public float dashForce;
+    public float dashUpwardForce;
+    public float maxDashYSpeed;
+    public float dashDuration;
+
+    public float dashCd;
+    private float dashCdTimer;
+
+    [Header("Input")]
+    public KeyCode jumpKey = KeyCode.Space;
+    public KeyCode crouchKey = KeyCode.LeftControl;
+    public KeyCode dashKey = KeyCode.LeftShift;
+
     //Input
     float x, y;
-    bool jumping, sprinting, crouching;
+    bool isJumping, isDashing, isCrouching;
 
     //Sliding
     private Vector3 normalVector = Vector3.up;
@@ -72,14 +87,19 @@ public class PlayerMovement : MonoBehaviour
     {
         x = Input.GetAxisRaw("Horizontal");
         y = Input.GetAxisRaw("Vertical");
-        jumping = Input.GetButton("Jump");
-        crouching = Input.GetKey(KeyCode.LeftControl);
+        isJumping = Input.GetKey(jumpKey);
 
         //Crouching
-        if (Input.GetKeyDown(KeyCode.LeftControl))
+        if (Input.GetKeyDown(crouchKey))
             StartCrouch();
-        if (Input.GetKeyUp(KeyCode.LeftControl))
+        if (Input.GetKeyUp(crouchKey))
             StopCrouch();
+
+        if (Input.GetKeyDown(dashKey))
+            Dash();
+
+        if (dashCdTimer > 0)
+            dashCdTimer -= Time.deltaTime;
     }
 
     private void StartCrouch()
@@ -88,7 +108,7 @@ public class PlayerMovement : MonoBehaviour
         transform.position = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
         if (rb.velocity.magnitude > 0.5f)
         {
-            if (grounded)
+            if (isGrounded)
             {
                 rb.AddForce(orientation.transform.forward * slideForce);
             }
@@ -110,12 +130,12 @@ public class PlayerMovement : MonoBehaviour
 
         CounterMovement(x, y, mag);
 
-        if (readyToJump && jumping) 
+        if (readyToJump && isJumping) 
             Jump();
 
         float maxSpeed = this.maxSpeed;
 
-        if (crouching && grounded && readyToJump)
+        if (isCrouching && isGrounded && readyToJump)
         {
             rb.AddForce(Vector3.down * Time.deltaTime * 3000);
             return;
@@ -133,13 +153,13 @@ public class PlayerMovement : MonoBehaviour
         float multiplier = 1f, multiplierV = 1f;
 
         // Movement in air
-        if (!grounded)
+        if (!isGrounded)
         {
-            multiplier = 0.5f;
-            multiplierV = 0.5f;
+            multiplier = 0.75f;
+            multiplierV = 0.75f;
         }
 
-        if (grounded && crouching) 
+        if (isGrounded && isCrouching) 
             multiplierV = 0f;
 
         rb.AddForce(orientation.transform.forward * y * moveSpeed * Time.deltaTime * multiplier * multiplierV);
@@ -148,7 +168,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
-        if (grounded && readyToJump)
+        if (isGrounded && readyToJump)
         {
             readyToJump = false;
 
@@ -164,6 +184,16 @@ public class PlayerMovement : MonoBehaviour
 
             Invoke(nameof(ResetJump), jumpCooldown);
         }
+    }
+
+    private void Dash()
+    {
+        if (dashCdTimer > 0)
+            return;
+        else 
+            dashCdTimer = dashCd;
+
+        isDashing = true;
     }
 
     private void ResetJump()
@@ -189,10 +219,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void CounterMovement(float x, float y, Vector2 mag)
     {
-        if (!grounded || jumping)
+        if (!isGrounded || isJumping)
             return;
 
-        if (crouching)
+        if (isCrouching)
         {
             rb.AddForce(moveSpeed * Time.deltaTime * -rb.velocity.normalized * slideCounterMovement);
             return;
@@ -248,7 +278,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (IsFloor(normal))
             {
-                grounded = true;
+                isGrounded = true;
                 cancellingGrounded = false;
                 normalVector = normal;
                 CancelInvoke(nameof(StopGrounded));
@@ -265,6 +295,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void StopGrounded()
     {
-        grounded = false;
+        isGrounded = false;
     }
 }

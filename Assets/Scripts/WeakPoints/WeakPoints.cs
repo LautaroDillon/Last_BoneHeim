@@ -32,7 +32,7 @@ public class WeakPoints : MonoBehaviour, Idamagable
         }
         else if (nameorg == FlyweightPointer.organs.Pulmon)
         {
-            damage = FlyweightPointer.organs.pulmon;
+            damage = FlyweightPointer.organs.lung;
             Debug.Log("tomo " + nameorg);
         }
         */

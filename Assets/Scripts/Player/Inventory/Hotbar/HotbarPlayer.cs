@@ -1,11 +1,13 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class HotbarPlayer : MonoBehaviour
 {
     public List<ItemType> hotbarlist;
     public int selecteditem;
+
+    public KeyCode useorgan = KeyCode.Q;
 
     [SerializeField] GameObject heart;
     [SerializeField] GameObject lung;
@@ -22,35 +24,31 @@ public class HotbarPlayer : MonoBehaviour
         hotbar.Add(ItemType.O_Kidney, kidney);
         hotbar.Add(ItemType.O_Liver, liver);
         hotbar.Add(ItemType.O_Stomach, stomach);
-
-        newselected();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1) && hotbarlist.Count > 0)
+        if (Input.GetAxis("Mouse ScrollWheel") < 0)
         {
-            selecteditem = 0;
-            newselected();
+            selecteditem++;
+            Debug.Log("probando rueda");
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2) && hotbarlist.Count > 0)
+        else if(Input.GetAxis("Mouse ScrollWheel") > 0)
+        {
+            selecteditem--;
+            Debug.Log("probando rueda");
+        }
+
+        if (selecteditem < 0)
         {
             selecteditem = 1;
-            newselected();
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3) && hotbarlist.Count > 0)
+        else if (selecteditem > 3)
         {
-            selecteditem = 2;
-            newselected();
+            selecteditem = 1;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha4) && hotbarlist.Count > 0)
+        if (Input.GetKeyDown(useorgan))
         {
-            selecteditem = 3;
-            newselected();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5) && hotbarlist.Count > 0)
-        {
-            selecteditem = 4;
             newselected();
         }
     }
@@ -63,6 +61,7 @@ public class HotbarPlayer : MonoBehaviour
         liver.SetActive(false);
         stomach.SetActive(false);
 
+        Debug.Log(selecteditem);
         GameObject selectedItemgameobject = hotbar[hotbarlist[selecteditem]];
         selectedItemgameobject.SetActive(true);
     }

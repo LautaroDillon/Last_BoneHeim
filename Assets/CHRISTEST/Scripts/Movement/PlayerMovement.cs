@@ -5,299 +5,315 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("References")]
-    public Transform playerCam;
-    public Camera pCam;
-    public Transform orientation;
-
-    //Other
-    private Rigidbody rb;
-
-    [Header("Sensitivity")]
-    [SerializeField] private float xRotation;
-    [SerializeField] private float sensitivity = 50f;
-    [SerializeField] private float sensMultiplier = 1f;
-
     [Header("Movement")]
-    public float moveSpeed = 4500;
-    public float maxSpeed = 20;
-    public bool isGrounded;
-    public LayerMask whatIsGround;
+    private float moveSpeed;
+    public float walkSpeed;
+    public float sprintSpeed;
 
-    public float counterMovement = 0.175f;
-    private float threshold = 0.01f;
-    public float maxSlopeAngle = 35f;
+    public float dashSpeed;
+    public float dashSpeedChangeFactor;
 
-    [Header("Crouch & Slide")]
-    private Vector3 crouchScale = new Vector3(1, 0.5f, 1);
-    private Vector3 playerScale;
-    public float slideForce = 400;
-    public float slideCounterMovement = 0.2f;
+    public float maxYSpeed;
+
+    public float groundDrag;
 
     [Header("Jumping")]
-    private bool readyToJump = true;
-    private float jumpCooldown = 0.25f;
-    public float jumpForce = 550f;
+    public float jumpForce;
+    public float jumpCooldown;
+    public float airMultiplier;
+    bool readyToJump;
+    private int jumpCount;
 
-    [Header("Dashing")]
-    public float dashForce;
-    public float dashUpwardForce;
-    public float maxDashYSpeed;
-    public float dashDuration;
+    [Header("Crouching")]
+    public float crouchSpeed;
+    public float crouchYScale;
+    private float startYScale;
 
-    public float dashCd;
-    private float dashCdTimer;
-
-    [Header("Input")]
+    [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode crouchKey = KeyCode.LeftControl;
-    public KeyCode dashKey = KeyCode.LeftShift;
 
-    //Input
-    float x, y;
-    bool isJumping, isDashing, isCrouching;
+    [Header("Ground Check")]
+    public float playerHeight;
+    public LayerMask whatIsGround;
+    bool grounded;
 
-    //Sliding
-    private Vector3 normalVector = Vector3.up;
-    private Vector3 wallNormalVector;
+    [Header("Slope Handling")]
+    public float maxSlopeAngle;
+    private RaycastHit slopeHit;
+    private bool exitingSlope;
 
-    void Awake()
+    public Transform orientation;
+
+    float horizontalInput;
+    float verticalInput;
+
+    Vector3 moveDirection;
+
+    Rigidbody rb;
+
+    public MovementState state;
+    public enum MovementState
+    {
+        walking,
+        sprinting,
+        crouching,
+        dashing,
+        air
+    }
+
+    public bool dashing;
+
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
-    }
+        rb.freezeRotation = true;
 
-    void Start()
-    {
-        playerScale = transform.localScale;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
+        readyToJump = true;
 
-    private void FixedUpdate()
-    {
-        Movement();
+        startYScale = transform.localScale.y;
+        jumpCount = 0;
     }
 
     private void Update()
     {
+        // ground check
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+        sprintSpeed = walkSpeed;
+        crouchSpeed = walkSpeed + 2;
+
+        if (grounded)
+        {
+            jumpCount = 0;
+        }
+
         MyInput();
-        Look();
+        SpeedControl();
+        StateHandler();
+
+        // handle drag
+        if (state == MovementState.walking || state == MovementState.sprinting || state == MovementState.crouching || state == MovementState.dashing)
+            rb.drag = groundDrag;
+        else
+            rb.drag = 0;
+
     }
+
+    private void FixedUpdate()
+    {
+        MovePlayer();
+    }
+
     private void MyInput()
     {
-        x = Input.GetAxisRaw("Horizontal");
-        y = Input.GetAxisRaw("Vertical");
-        isJumping = Input.GetKey(jumpKey);
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
 
-        //Crouching
-        if (Input.GetKeyDown(crouchKey))
-            StartCrouch();
-        if (Input.GetKeyUp(crouchKey))
-            StopCrouch();
-
-        if (Input.GetKeyDown(dashKey))
-            Dash();
-
-        if (dashCdTimer > 0)
-            dashCdTimer -= Time.deltaTime;
-    }
-
-    private void StartCrouch()
-    {
-        transform.localScale = crouchScale;
-        transform.position = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
-        if (rb.velocity.magnitude > 0.5f)
+        // when to jump
+        if (Input.GetKey(jumpKey) && readyToJump)
         {
-            if (isGrounded)
+            if (grounded || jumpCount < 2)
             {
-                rb.AddForce(orientation.transform.forward * slideForce);
+                readyToJump = false;
+                Jump();
+
+                if (grounded)
+                    jumpCount = 1;
+                else if (jumpCount == 1)
+                    jumpCount = 2;
+
+                Invoke(nameof(ResetJump), jumpCooldown);
             }
         }
-    }
 
-    private void StopCrouch()
-    {
-        transform.localScale = playerScale;
-        transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
-    }
-
-    private void Movement()
-    {
-        rb.AddForce(Vector3.down * Time.deltaTime * 10);
-
-        Vector2 mag = FindVelRelativeToLook();
-        float xMag = mag.x, yMag = mag.y;
-
-        CounterMovement(x, y, mag);
-
-        if (readyToJump && isJumping) 
-            Jump();
-
-        float maxSpeed = this.maxSpeed;
-
-        if (isCrouching && isGrounded && readyToJump)
+        // start crouch
+        if (Input.GetKeyDown(crouchKey))
         {
-            rb.AddForce(Vector3.down * Time.deltaTime * 3000);
-            return;
+            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
         }
 
-        if (x > 0 && xMag > maxSpeed) 
-            x = 0;
-        if (x < 0 && xMag < -maxSpeed) 
-            x = 0;
-        if (y > 0 && yMag > maxSpeed) 
-            y = 0;
-        if (y < 0 && yMag < -maxSpeed) 
-            y = 0;
-
-        float multiplier = 1f, multiplierV = 1f;
-
-        // Movement in air
-        if (!isGrounded)
+        // stop crouch
+        if (Input.GetKeyUp(crouchKey))
         {
-            multiplier = 0.75f;
-            multiplierV = 0.75f;
+            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+        }
+    }
+
+    private float desiredMoveSpeed;
+    private float lastDesiredMoveSpeed;
+    private MovementState lastState;
+    private bool keepMomentum;
+    private void StateHandler()
+    {
+        // Mode - Dashing
+        if (dashing)
+        {
+            state = MovementState.dashing;
+            desiredMoveSpeed = dashSpeed;
+            speedChangeFactor = dashSpeedChangeFactor;
         }
 
-        if (isGrounded && isCrouching) 
-            multiplierV = 0f;
+        // Mode - Crouching
+        else if (Input.GetKey(crouchKey))
+        {
+            state = MovementState.crouching;
+            desiredMoveSpeed = crouchSpeed;
+        }
 
-        rb.AddForce(orientation.transform.forward * y * moveSpeed * Time.deltaTime * multiplier * multiplierV);
-        rb.AddForce(orientation.transform.right * x * moveSpeed * Time.deltaTime * multiplier);
+        // Mode - Walking
+        else if (grounded)
+        {
+            state = MovementState.walking;
+            desiredMoveSpeed = walkSpeed;
+        }
+
+        // Mode - Air
+        else
+        {
+            state = MovementState.air;
+
+            if (desiredMoveSpeed < sprintSpeed)
+                desiredMoveSpeed = walkSpeed;
+            else
+                desiredMoveSpeed = sprintSpeed;
+        }
+
+        bool desiredMoveSpeedHasChanged = desiredMoveSpeed != lastDesiredMoveSpeed;
+        if (lastState == MovementState.dashing)
+            keepMomentum = false;
+
+        if (desiredMoveSpeedHasChanged)
+        {
+            if (keepMomentum)
+            {
+                StopAllCoroutines();
+                StartCoroutine(SmoothlyLerpMoveSpeed());
+            }
+            else
+            {
+                StopAllCoroutines();
+                moveSpeed = desiredMoveSpeed;
+            }
+        }
+
+        lastDesiredMoveSpeed = desiredMoveSpeed;
+        lastState = state;
+    }
+
+    private float speedChangeFactor;
+    private IEnumerator SmoothlyLerpMoveSpeed()
+    {
+        // smoothly lerp movementSpeed to desired value
+        float time = 0;
+        float difference = Mathf.Abs(desiredMoveSpeed - moveSpeed);
+        float startValue = moveSpeed;
+
+        float boostFactor = speedChangeFactor;
+
+        while (time < difference)
+        {
+            moveSpeed = Mathf.Lerp(startValue, desiredMoveSpeed, time / difference);
+
+            time += Time.deltaTime * boostFactor;
+
+            yield return null;
+        }
+
+        moveSpeed = desiredMoveSpeed;
+        speedChangeFactor = 1f;
+        keepMomentum = false;
+    }
+
+    private void MovePlayer()
+    {
+        if (state == MovementState.dashing) return;
+
+        // calculate movement direction
+        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+
+        // on slope
+        if (OnSlope() && !exitingSlope)
+        {
+            rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 20f, ForceMode.Force);
+
+            if (rb.velocity.y > 0)
+                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+        }
+
+        // on ground
+        else if (grounded)
+            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+
+        // in air
+        else if (!grounded)
+            rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+
+        // turn gravity off while on slope
+        rb.useGravity = !OnSlope();
+    }
+
+    private void SpeedControl()
+    {
+        // limiting speed on slope
+        if (OnSlope() && !exitingSlope)
+        {
+            if (rb.velocity.magnitude > moveSpeed)
+                rb.velocity = rb.velocity.normalized * moveSpeed;
+        }
+
+        // limiting speed on ground or in air
+        else
+        {
+            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+            // limit velocity if needed
+            if (flatVel.magnitude > moveSpeed)
+            {
+                Vector3 limitedVel = flatVel.normalized * moveSpeed;
+                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+            }
+        }
+
+        // limit y vel
+        if (maxYSpeed != 0 && rb.velocity.y > maxYSpeed)
+            rb.velocity = new Vector3(rb.velocity.x, maxYSpeed, rb.velocity.z);
     }
 
     private void Jump()
     {
-        if (isGrounded && readyToJump)
-        {
-            readyToJump = false;
+        exitingSlope = true;
 
-            counterMovement = 0.8f;
+        // reset y velocity
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-            rb.AddForce(Vector2.up * jumpForce * 1.5f);
-            rb.AddForce(normalVector * jumpForce * 0.5f);
-
-            //If jumping while falling, reset y velocity.
-            Vector3 vel = rb.velocity;
-            if (rb.velocity.y < 0.5f)
-                rb.velocity = new Vector3(vel.x, 0, vel.z);
-            else if (rb.velocity.y > 0)
-                rb.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
-
-            Invoke(nameof(ResetJump), jumpCooldown);
-        }
+        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
-
-    private void Dash()
-    {
-        if (dashCdTimer > 0)
-            return;
-        else 
-            dashCdTimer = dashCd;
-
-        isDashing = true;
-    }
-
     private void ResetJump()
     {
         readyToJump = true;
+        exitingSlope = false;
     }
 
-    private float desiredX;
-    private void Look()
+    private bool OnSlope()
     {
-        float mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
-        float mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
+        {
+            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+            return angle < maxSlopeAngle && angle != 0;
+        }
 
-        Vector3 rot = playerCam.transform.localRotation.eulerAngles;
-        desiredX = rot.y + mouseX;
-
-        xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-
-        playerCam.transform.localRotation = Quaternion.Euler(xRotation, desiredX, 0);
-        orientation.transform.localRotation = Quaternion.Euler(0, desiredX, 0);
+        return false;
     }
 
-    private void CounterMovement(float x, float y, Vector2 mag)
+    private Vector3 GetSlopeMoveDirection()
     {
-        if (!isGrounded || isJumping)
-            return;
-
-        if (isCrouching)
-        {
-            rb.AddForce(moveSpeed * Time.deltaTime * -rb.velocity.normalized * slideCounterMovement);
-            return;
-        }
-
-        if (Math.Abs(mag.x) > threshold && Math.Abs(x) < 0.05f || (mag.x < -threshold && x > 0) || (mag.x > threshold && x < 0))
-        {
-            rb.AddForce(moveSpeed * orientation.transform.right * Time.deltaTime * -mag.x * counterMovement);
-        }
-        if (Math.Abs(mag.y) > threshold && Math.Abs(y) < 0.05f || (mag.y < -threshold && y > 0) || (mag.y > threshold && y < 0))
-        {
-            rb.AddForce(moveSpeed * orientation.transform.forward * Time.deltaTime * -mag.y * counterMovement);
-        }
-
-        if (Mathf.Sqrt((Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2))) > maxSpeed)
-        {
-            float fallspeed = rb.velocity.y;
-            Vector3 n = rb.velocity.normalized * maxSpeed;
-            rb.velocity = new Vector3(n.x, fallspeed, n.z);
-        }
-    }
-    public Vector2 FindVelRelativeToLook()
-    {
-        float lookAngle = orientation.transform.eulerAngles.y;
-        float moveAngle = Mathf.Atan2(rb.velocity.x, rb.velocity.z) * Mathf.Rad2Deg;
-
-        float u = Mathf.DeltaAngle(lookAngle, moveAngle);
-        float v = 90 - u;
-
-        float magnitue = rb.velocity.magnitude;
-        float yMag = magnitue * Mathf.Cos(u * Mathf.Deg2Rad);
-        float xMag = magnitue * Mathf.Cos(v * Mathf.Deg2Rad);
-
-        return new Vector2(xMag, yMag);
+        return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
     }
 
-    private bool IsFloor(Vector3 v)
+    public static float Round(float value, int digits)
     {
-        float angle = Vector3.Angle(Vector3.up, v);
-        return angle < maxSlopeAngle;
-    }
-
-    private bool cancellingGrounded;
-    private void OnCollisionStay(Collision other)
-    {
-        int layer = other.gameObject.layer;
-        if (whatIsGround != (whatIsGround | (1 << layer)))
-            return;
-
-        for (int i = 0; i < other.contactCount; i++)
-        {
-            Vector3 normal = other.contacts[i].normal;
-
-            if (IsFloor(normal))
-            {
-                isGrounded = true;
-                cancellingGrounded = false;
-                normalVector = normal;
-                counterMovement = 0.4f;
-                CancelInvoke(nameof(StopGrounded));
-            }
-        }
-
-        float delay = 3f;
-        if (!cancellingGrounded)
-        {
-            cancellingGrounded = true;
-            Invoke(nameof(StopGrounded), Time.deltaTime * delay);
-        }
-    }
-
-    private void StopGrounded()
-    {
-        isGrounded = false;
+        float mult = Mathf.Pow(10.0f, (float)digits);
+        return Mathf.Round(value * mult) / mult;
     }
 }

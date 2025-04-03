@@ -39,11 +39,11 @@ public class HotbarPlayer : MonoBehaviour
             Debug.Log("probando rueda");
         }
 
-        if (selecteditem < 0)
+        if (selecteditem <= 0)
         {
             selecteditem = 1;
         }
-        else if (selecteditem > 3)
+        else if (selecteditem >= 4)
         {
             selecteditem = 1;
         }

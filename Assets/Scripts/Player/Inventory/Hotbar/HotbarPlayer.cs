@@ -27,21 +27,44 @@ public class HotbarPlayer : MonoBehaviour
         hotbar.Add(ItemType.O_Liver, liver);
         hotbar.Add(ItemType.O_Stomach, stomach);
     }
-
+    float axisScrollPos;
+    float axisScrollNeg;
+    public float speed;
     void Update()
     {
-        if (Input.GetAxis("Mouse ScrollWheel") < 0)
+        axisScrollPos -= Time.deltaTime;
+        if (axisScrollPos < 0) axisScrollPos = 0;
+        axisScrollNeg -= Time.deltaTime;
+        if (axisScrollNeg < 0) axisScrollNeg = 0;
+
+        var axis = Input.GetAxis("Mouse ScrollWheel");
+        if (axis < 0)
         {
-            selecteditem++;
+            axisScrollPos += speed * Time.deltaTime;
+
+            axisScrollNeg = 0;
+            if (axisScrollPos >= 1)
+            {
+                axisScrollPos = 0;
+                selecteditem++;
+            }
         }
-        else if(Input.GetAxis("Mouse ScrollWheel") > 0)
+        else if(axis > 0)
         {
-            selecteditem--;
+            axisScrollNeg += speed * Time.deltaTime;
+
+            axisScrollPos = 0;
+            if (axisScrollNeg >= 1)
+            {
+                axisScrollNeg = 0;
+                selecteditem--;
+            }
+           
         }
 
         if (selecteditem <= 0)
         {
-            selecteditem = 1;
+            selecteditem = 3;
         }
         else if (selecteditem >= 4)
         {

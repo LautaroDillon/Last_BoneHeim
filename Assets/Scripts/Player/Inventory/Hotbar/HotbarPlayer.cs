@@ -1,13 +1,15 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using Unity.VisualScripting;
 
 public class HotbarPlayer : MonoBehaviour
 {
     public List<ItemType> hotbarlist;
     public int selecteditem;
+    public bool organselect;
 
-    public KeyCode useorgan = KeyCode.Q;
+    public KeyCode selectorgan = KeyCode.Q;
 
     [SerializeField] GameObject heart;
     [SerializeField] GameObject lung;
@@ -31,12 +33,10 @@ public class HotbarPlayer : MonoBehaviour
         if (Input.GetAxis("Mouse ScrollWheel") < 0)
         {
             selecteditem++;
-            Debug.Log("probando rueda");
         }
         else if(Input.GetAxis("Mouse ScrollWheel") > 0)
         {
             selecteditem--;
-            Debug.Log("probando rueda");
         }
 
         if (selecteditem <= 0)
@@ -47,9 +47,13 @@ public class HotbarPlayer : MonoBehaviour
         {
             selecteditem = 1;
         }
-        if (Input.GetKeyDown(useorgan))
+        if (Input.GetKeyDown(selectorgan))
         {
             newselected();
+        }
+        if (Input.GetMouseButtonDown(1) && organselect)
+        {
+            useselected();
         }
     }
 
@@ -66,4 +70,15 @@ public class HotbarPlayer : MonoBehaviour
         selectedItemgameobject.SetActive(true);
     }
 
+
+    void useselected()
+    {
+        heart.SetActive(false);
+        lung.SetActive(false);
+        kidney.SetActive(false);
+        liver.SetActive(false);
+        stomach.SetActive(false);
+
+        //hacer el llamdo para el funcionamiento de los organos
+    }
 }

@@ -112,16 +112,17 @@ public class PlayerMovement : MonoBehaviour
         // when to jump
         if (Input.GetKey(jumpKey) && readyToJump)
         {
-            if (grounded || jumpCount < 2)
+            if (grounded || jumpCount <= 0)
             {
                 readyToJump = false;
+                jumpCount++;
                 Jump();
 
-                if (grounded)
+               /* if (grounded)
                     jumpCount = 1;
                 else if (jumpCount == 1)
                     jumpCount = 2;
-
+               */
                 Invoke(nameof(ResetJump), jumpCooldown);
             }
         }

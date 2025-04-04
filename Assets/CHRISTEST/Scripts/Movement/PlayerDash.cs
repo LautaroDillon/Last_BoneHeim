@@ -57,7 +57,8 @@ public class PlayerDash : MonoBehaviour
 
         pm.dashing = true;
         pm.maxYSpeed = maxDashYSpeed;
-
+        AudioManager.instance.PlaySFXOneShot("Dash Grunt", 1f);
+        AudioManager.instance.PlaySFXOneShot("Dash", 1.5f);
         cam.DoFov(mainCam.fieldOfView + dashFov);
 
         Transform forwardT;

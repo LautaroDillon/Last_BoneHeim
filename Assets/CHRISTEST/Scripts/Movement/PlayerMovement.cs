@@ -9,12 +9,9 @@ public class PlayerMovement : MonoBehaviour
     private float moveSpeed;
     public float walkSpeed;
     public float sprintSpeed;
-
     public float dashSpeed;
     public float dashSpeedChangeFactor;
-
     public float maxYSpeed;
-
     public float groundDrag;
 
     [Header("Jumping")]
@@ -22,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpCooldown;
     public float airMultiplier;
     bool readyToJump;
-    private int jumpCount;
+    [SerializeField] private int jumpCount;
 
     [Header("Crouching")]
     public float crouchSpeed;
@@ -47,6 +44,9 @@ public class PlayerMovement : MonoBehaviour
 
     float horizontalInput;
     float verticalInput;
+    public float stepRate = 0.5f;
+    public float stepCoolDown;
+    bool isWalking;
 
     Vector3 moveDirection;
 
@@ -82,6 +82,13 @@ public class PlayerMovement : MonoBehaviour
         sprintSpeed = walkSpeed;
         crouchSpeed = walkSpeed + 2;
 
+        stepCoolDown -= Time.deltaTime;
+        if ((Input.GetAxis("Horizontal") != 0f || Input.GetAxis("Vertical") != 0f) && stepCoolDown < 0f && grounded)
+        {
+            AudioManager.instance.PlaySFXOneShot("Walk", 1f);
+            stepCoolDown = stepRate;
+        }
+
         if (grounded)
         {
             jumpCount = 0;
@@ -92,7 +99,7 @@ public class PlayerMovement : MonoBehaviour
         StateHandler();
 
         // handle drag
-        if (state == MovementState.walking || state == MovementState.sprinting || state == MovementState.crouching || state == MovementState.dashing)
+        if (state == MovementState.walking || state == MovementState.sprinting || state == MovementState.crouching)
             rb.drag = groundDrag;
         else
             rb.drag = 0;
@@ -118,11 +125,11 @@ public class PlayerMovement : MonoBehaviour
                 jumpCount++;
                 Jump();
 
-               /* if (grounded)
+                if (grounded)
                     jumpCount = 1;
                 else if (jumpCount == 1)
                     jumpCount = 2;
-               */
+               
                 Invoke(nameof(ResetJump), jumpCooldown);
             }
         }
@@ -165,6 +172,9 @@ public class PlayerMovement : MonoBehaviour
         // Mode - Walking
         else if (grounded)
         {
+            if(lastState == MovementState.air)
+                AudioManager.instance.PlaySFX("Landing", 1f, false);
+                
             state = MovementState.walking;
             desiredMoveSpeed = walkSpeed;
         }
@@ -228,7 +238,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer()
     {
-        if (state == MovementState.dashing) return;
+        if (state == MovementState.dashing)
+            return;
 
         // calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
@@ -289,6 +300,8 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+
+        AudioManager.instance.PlaySFX("Jump", 1f, false);
     }
     private void ResetJump()
     {

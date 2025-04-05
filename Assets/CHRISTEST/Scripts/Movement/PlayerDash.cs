@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerDash : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class PlayerDash : MonoBehaviour
     public Transform orientation;
     public Transform playerCam;
     public Camera mainCam;
+
     private Rigidbody rb;
     private PlayerMovement pm;
 
@@ -30,6 +32,9 @@ public class PlayerDash : MonoBehaviour
     [Header("Cooldown")]
     public float dashCd;
     private float dashCdTimer;
+    [SerializeField] private Image _dashCdBar;
+    private float dashCdtarget;
+    private float dashCdReduceSpeed = 100;
 
     [Header("Input")]
     public KeyCode dashKey = KeyCode.LeftShift;
@@ -45,14 +50,21 @@ public class PlayerDash : MonoBehaviour
         if (Input.GetKeyDown(dashKey))
             Dash();
 
+        DashCooldown();
+    }
+
+    public void DashCooldown()
+    {
         if (dashCdTimer > 0)
             dashCdTimer -= Time.deltaTime;
-
+        dashCdtarget = dashCdTimer / dashCd;
+        _dashCdBar.fillAmount = Mathf.MoveTowards(_dashCdBar.fillAmount, dashCdtarget, dashCdReduceSpeed * Time.deltaTime);
     }
 
     private void Dash()
     {
-        if (dashCdTimer > 0) return;
+        if (dashCdTimer > 0)
+            return;
         else dashCdTimer = dashCd;
 
         pm.dashing = true;

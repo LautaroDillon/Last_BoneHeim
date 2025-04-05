@@ -5,6 +5,9 @@ using TMPro;
 public class Guns : MonoBehaviour
 {
     #region Variables
+    [Header("Controls")]
+    public KeyCode shootKey;
+
     [Header("References")]
     public static Guns instance;
     public GunKickback gk;
@@ -17,8 +20,10 @@ public class Guns : MonoBehaviour
 
     public Rigidbody rb;
     public Rigidbody playerRb;
+
     public Camera fpsCam;
     public Transform attackPoint;
+
     public LayerMask whatIsEnemies;
     public TextMeshProUGUI ammunitionDisplay;
     public CamShake camShake;
@@ -79,9 +84,6 @@ public class Guns : MonoBehaviour
     bool readyToShoot;
     bool reloading;
 
-    [Header("Sounds")]
-    [SerializeField] private AudioClip shootClip;
-
     #endregion
 
     #region Awake/Start/Update
@@ -91,8 +93,6 @@ public class Guns : MonoBehaviour
         readyToShoot = true;
         SkeletonHand();
         instance = this;
-        if (magazineSize == 0)
-            isSkeleton = true;
     }
 
     private void Update()
@@ -102,38 +102,30 @@ public class Guns : MonoBehaviour
             ammunitionDisplay.SetText(bulletsLeft + " / " + magazineSize);
         if (bulletsLeft >= magazineSize)
             bulletsLeft = magazineSize;
-        if (magazineSize == 0)
-            isSkeleton = true;
     }
     #endregion
 
     #region GunMethods
     private void ShootInput()
     {
-        if (GameManager.instance.isRunning == true)
+        if (allowButtonHold)
         {
-            if (allowButtonHold)
-                shooting = Input.GetKey(KeyCode.Mouse0);
-            else
-                shooting = Input.GetKeyDown(KeyCode.Mouse0);
-
-            //Reloading 
-            //if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !reloading)
-            //  Reload();
-            //if (readyToShoot && shooting && !reloading && bulletsLeft <= 0)
-            //  Reload();
-
-            //Shooting
-            if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
-            {
-                bulletsShot = 0;
-                SoundManager.instance.PlaySound(shootClip, transform, 0.3f, false);
-                Shoot();
-                gk.ApplyKickback();
-            }
+            shooting = Input.GetKey(shootKey);
+            Debug.Log("Can't click!");
         }
         else
-            Debug.Log("Unpause game!");
+        {
+            shooting = Input.GetKeyDown(shootKey);
+            Debug.Log("Can't hold down click!");
+        }
+
+        //Shooting
+        if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
+        {
+            bulletsShot = 0;
+            Shoot();
+            Debug.Log("Not shooting!");
+        }
     }
     private void Shoot()
     {

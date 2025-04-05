@@ -1,7 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
-using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -80,10 +79,10 @@ public class PlayerMovement : MonoBehaviour
         // ground check
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
         sprintSpeed = walkSpeed;
-        crouchSpeed = walkSpeed + 2;
+        crouchSpeed = walkSpeed + 4;
 
         stepCoolDown -= Time.deltaTime;
-        if ((Input.GetAxis("Horizontal") != 0f || Input.GetAxis("Vertical") != 0f) && stepCoolDown < 0f && grounded)
+        if ((Input.GetAxis("Horizontal") != 0f || Input.GetAxis("Vertical") != 0f) && stepCoolDown < 0f && grounded && state == MovementState.walking)
         {
             AudioManager.instance.PlaySFXOneShot("Walk", 1f);
             stepCoolDown = stepRate;
@@ -105,18 +104,15 @@ public class PlayerMovement : MonoBehaviour
             rb.drag = 0;
 
     }
-
     private void FixedUpdate()
     {
         MovePlayer();
     }
-
     private void MyInput()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        // when to jump
         if (Input.GetKey(jumpKey) && readyToJump)
         {
             if (grounded || jumpCount <= 0)
@@ -124,12 +120,6 @@ public class PlayerMovement : MonoBehaviour
                 readyToJump = false;
                 jumpCount++;
                 Jump();
-
-                if (grounded)
-                    jumpCount = 1;
-                else if (jumpCount == 1)
-                    jumpCount = 2;
-               
                 Invoke(nameof(ResetJump), jumpCooldown);
             }
         }
@@ -139,12 +129,14 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
             rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+            AudioManager.instance.PlaySFXOneShot("Slide", 1f);
         }
 
         // stop crouch
         if (Input.GetKeyUp(crouchKey))
         {
             transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+            AudioManager.instance.StopSFX("Slide");
         }
     }
 

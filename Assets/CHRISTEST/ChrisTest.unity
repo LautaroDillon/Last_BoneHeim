@@ -1338,6 +1338,34 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -7719709785408758572, guid: 23aae928aeec6254bbd91134a74f015a, type: 3}
+--- !u!1 &554372717 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5247402987687501777, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
+  m_PrefabInstance: {fileID: 6131572837673224595}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &554372724 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2551412571509783989, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
+  m_PrefabInstance: {fileID: 6131572837673224595}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &554372725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 554372717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 928374e7cf6be51469d38d37a2c683fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orientation: {fileID: 1560559809}
+  playerObj: {fileID: 554372724}
+  maxSlideTime: 0.75
+  slideForce: 200
+  slideYScale: 0.5
+  slideKey: 306
 --- !u!43 &600001930
 Mesh:
   m_ObjectHideFlags: 0
@@ -2738,6 +2766,11 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -7719709785408758572, guid: 23aae928aeec6254bbd91134a74f015a, type: 3}
+--- !u!4 &1560559809 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5495434876042881451, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
+  m_PrefabInstance: {fileID: 6131572837673224595}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1631643017
 GameObject:
   m_ObjectHideFlags: 0
@@ -4142,13 +4175,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1646706631}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.12302565, y: -0, z: -0, w: 0.99240357}
+  m_LocalRotation: {x: -0.31506857, y: -0, z: -0, w: 0.9490689}
   m_LocalPosition: {x: 5.169998, y: -1.3100001, z: 15.35}
   m_LocalScale: {x: 1, y: 1, z: 5.0666}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1242338362}
-  m_LocalEulerAnglesHint: {x: -14.134, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -36.73, y: 0, z: 0}
 --- !u!1 &1713982733
 GameObject:
   m_ObjectHideFlags: 0
@@ -5595,14 +5628,65 @@ PrefabInstance:
       propertyPath: m_Name
       value: John Boneheim
       objectReference: {fileID: 0}
+    - target: {fileID: 7949670869836013094, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
+      propertyPath: crouchKey
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7949670869836013094, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
+      propertyPath: dashSpeed
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 7949670869836013094, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
+      propertyPath: slideSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7949670869836013094, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
+      propertyPath: dashSpeedChangeFactor
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7949670869836013094, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
+      propertyPath: slopeIncreaseMultiplier
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7949670869836013094, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
+      propertyPath: speedIncreaseMultiplier
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8378892350964853826, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
+      propertyPath: resetVel
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8378892350964853826, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
+      propertyPath: dashForce
+      value: 500
+      objectReference: {fileID: 0}
     - target: {fileID: 8378892350964853826, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
       propertyPath: _dashCdBar
       value: 
       objectReference: {fileID: 2049858900}
+    - target: {fileID: 8378892350964853826, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
+      propertyPath: dashDuration
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8378892350964853826, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
+      propertyPath: maxDashYSpeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8378892350964853826, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
+      propertyPath: disableGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8378892350964853826, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
+      propertyPath: dashUpwardForce
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5247402987687501777, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 554372725}
   m_SourcePrefab: {fileID: 100100000, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
 --- !u!1001 &6207459297647937902
 PrefabInstance:

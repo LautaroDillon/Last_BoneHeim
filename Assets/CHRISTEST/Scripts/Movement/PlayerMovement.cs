@@ -105,12 +105,12 @@ public class PlayerMovement : MonoBehaviour
         StateHandler();
 
         // handle drag
-        if (state == MovementState.walking || state == MovementState.sprinting || state == MovementState.sliding)
+        if (state == MovementState.walking || state == MovementState.sprinting)
             rb.drag = groundDrag;
         else
             rb.drag = 0;
 
-        if (state == MovementState.air || state == MovementState.dashing)
+        if (state == MovementState.air || state == MovementState.dashing || state == MovementState.sliding)
             rb.drag = 0;
         else
             rb.drag = groundDrag;

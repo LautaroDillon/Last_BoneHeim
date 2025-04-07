@@ -383,6 +383,7 @@ GameObject:
   - component: {fileID: 8393594219456582226}
   - component: {fileID: 7949670869836013094}
   - component: {fileID: 8378892350964853826}
+  - component: {fileID: 6979927988560138583}
   m_Layer: 0
   m_Name: John Boneheim
   m_TagString: Player
@@ -523,10 +524,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 12
   sprintSpeed: 0
+  slideSpeed: 30
   dashSpeed: 100
-  dashSpeedChangeFactor: 0
+  dashSpeedChangeFactor: 1000
   maxYSpeed: 0
   groundDrag: 4
+  speedIncreaseMultiplier: 2
+  slopeIncreaseMultiplier: 2.5
   jumpForce: 15
   jumpCooldown: 0.25
   airMultiplier: 0.4
@@ -534,17 +538,18 @@ MonoBehaviour:
   crouchSpeed: 0
   crouchYScale: 0.5
   jumpKey: 32
-  crouchKey: 306
+  crouchKey: 0
   playerHeight: 2
   whatIsGround:
     serializedVersion: 2
     m_Bits: 128
-  maxSlopeAngle: 40
+  maxSlopeAngle: 50
   orientation: {fileID: 5495434876042881451}
   stepRate: 0.5
   stepCoolDown: 0
   state: 0
   dashing: 0
+  sliding: 0
 --- !u!114 &8378892350964853826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -560,8 +565,8 @@ MonoBehaviour:
   orientation: {fileID: 5495434876042881451}
   playerCam: {fileID: 4907814492264641736}
   mainCam: {fileID: 6174852390792161049}
-  dashForce: 100
-  dashUpwardForce: 0
+  dashForce: 500
+  dashUpwardForce: 5
   maxDashYSpeed: 15
   dashDuration: 0.25
   cam: {fileID: 5912975175020226424}
@@ -573,6 +578,24 @@ MonoBehaviour:
   dashCd: 2
   _dashCdBar: {fileID: 0}
   dashKey: 304
+--- !u!114 &6979927988560138583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5247402987687501777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 928374e7cf6be51469d38d37a2c683fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orientation: {fileID: 5495434876042881451}
+  playerObj: {fileID: 2551412571509783989}
+  maxSlideTime: 1
+  slideForce: 500
+  slideYScale: 0
+  slideKey: 306
 --- !u!1 &5456102231126467635
 GameObject:
   m_ObjectHideFlags: 0

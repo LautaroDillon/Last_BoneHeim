@@ -188,7 +188,7 @@ public class PlayerMovement : MonoBehaviour
         else if (grounded)
         {
             if(lastState == MovementState.air)
-                AudioManager.instance.PlaySFX("Landing", 1f, false);
+                AudioManager.instance.PlaySFXOneShot("Landing", 1f);
                 
             state = MovementState.walking;
             desiredMoveSpeed = walkSpeed;

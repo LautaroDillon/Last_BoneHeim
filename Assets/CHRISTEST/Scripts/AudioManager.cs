@@ -23,7 +23,7 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        PlayMusic("BackgroundMusic", 0.4f);
+        PlayMusic("BackgroundMusic", 0.5f);
     }
 
     public void PlayMusic(string name, float volumen)
@@ -35,7 +35,7 @@ public class AudioManager : MonoBehaviour
         else
         {
             musicSource.clip = s.clip;
-            sfxSource.volume = volumen;
+            musicSource.volume = volumen;
             musicSource.Play();
         }
     }

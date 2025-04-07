@@ -19277,11 +19277,6 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
---- !u!54 &553954992 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 8393594219456582226, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
-  m_PrefabInstance: {fileID: 6131572837673224595}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &559332647
 Mesh:
   m_ObjectHideFlags: 0
@@ -27702,7 +27697,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -34727,6 +34722,7 @@ GameObject:
   - component: {fileID: 1027786069}
   - component: {fileID: 1027786068}
   - component: {fileID: 1027786067}
+  - component: {fileID: 1027786071}
   m_Layer: 0
   m_Name: Right Arm
   m_TagString: Player
@@ -34773,8 +34769,8 @@ MonoBehaviour:
   magazineSize: 100
   bulletsPerTap: 1
   allowButtonHold: 1
-  playerRb: {fileID: 553954992}
-  recoilForce: 0
+  kickbackAmount: {x: -0.1, y: 0, z: 0}
+  returnSpeed: 5
   fpsCam: {fileID: 1774941310}
   attackPoint: {fileID: 2123346844}
   muzzleFlash: {fileID: 0}
@@ -34793,7 +34789,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -34851,6 +34847,20 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1027786065}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1027786071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1027786065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b4e6d1c1cac77e42b062ef23f445935, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  kickbackAmount: {x: -1, y: -1, z: 0}
+  returnSpeed: 100
 --- !u!1 &1045237639
 GameObject:
   m_ObjectHideFlags: 0
@@ -73874,7 +73884,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6979927988560138583, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
       propertyPath: slideYScale
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7949670869836013094, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
       propertyPath: dashSpeed

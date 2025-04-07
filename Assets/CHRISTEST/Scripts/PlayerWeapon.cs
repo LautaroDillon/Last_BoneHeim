@@ -18,9 +18,11 @@ public class PlayerWeapon : MonoBehaviour
 
     int bulletsLeft, bulletsShot;
 
-    //Recoil
-    public Rigidbody playerRb;
-    public float recoilForce;
+    public Vector3 kickbackAmount = new Vector3(-0.1f, 0.0f, 0.0f);
+    public float returnSpeed = 5f;
+    private Vector3 originalPosition;
+    private Quaternion originalRotation;
+    private float kickbackTimer;
 
     //bools
     bool shooting, readyToShoot, reloading;
@@ -43,6 +45,12 @@ public class PlayerWeapon : MonoBehaviour
         readyToShoot = true;
     }
 
+    private void Start()
+    {
+        originalPosition = transform.localPosition;
+        originalRotation = transform.localRotation;
+    }
+
     private void Update()
     {
         MyInput();
@@ -52,7 +60,10 @@ public class PlayerWeapon : MonoBehaviour
 
         if (bulletsLeft > magazineSize)
             bulletsLeft = magazineSize;
+
+        KickbackTimer();
     }
+
     private void MyInput()
     {
         //Check if allowed to hold down button and take corresponding input
@@ -123,15 +134,32 @@ public class PlayerWeapon : MonoBehaviour
         {
             Invoke("ResetShot", timeBetweenShooting);
             allowInvoke = false;
-
-            //Add recoil to player (should only be called once)
-            playerRb.AddForce(-directionWithSpread.normalized * recoilForce, ForceMode.Impulse);
         }
 
         //if more than one bulletsPerTap make sure to repeat shoot function
         if (bulletsShot < bulletsPerTap && bulletsLeft > 0)
             Invoke("Shoot", timeBetweenShots);
     }
+
+    public void KickbackTimer()
+    {
+        if (kickbackTimer > 0)
+        {
+            kickbackTimer -= Time.deltaTime;
+            if (kickbackTimer <= 0)
+            {
+                transform.localPosition = Vector3.Lerp(transform.localPosition, originalPosition, returnSpeed * Time.deltaTime);
+                transform.localRotation = Quaternion.Lerp(transform.localRotation, originalRotation, returnSpeed * Time.deltaTime);
+            }
+        }
+    }
+
+    public void ApplyKickback()
+    {
+        transform.localPosition += kickbackAmount;
+        kickbackTimer = 0.1f;
+    }
+
     private void ResetShot()
     {
         //Allow shooting and invoking again

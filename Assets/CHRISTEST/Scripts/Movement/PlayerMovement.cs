@@ -4,6 +4,9 @@ using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public bool canDoubleJump;
+    public bool canDash;
+
     [Header("Movement")]
     private float moveSpeed;
     public float walkSpeed;

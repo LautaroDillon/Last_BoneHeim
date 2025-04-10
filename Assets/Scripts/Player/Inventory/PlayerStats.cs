@@ -463,6 +463,7 @@ public class PlayerStats : MonoBehaviour
                         Debug.Log("LIVER WORKS");
                         FlyweightPointer.Player.Damage += 5;
                         FullscreenShader.instance.normalShaderEnabled = true;
+                        HotbarPlayer.Instance.AddToHotbar(ItemType.O_Liver);
                         SoundManager.instance.PlaySound(liverEquipClip, transform, 1f, false);
                         break;
 
@@ -470,6 +471,7 @@ public class PlayerStats : MonoBehaviour
                         Debug.Log("LUNGS WORKS");
                         PlayerMovementAdvanced.instance.sprintSpeed += 2;
                         FullscreenShader.instance.normalShaderEnabled = true;
+                        HotbarPlayer.Instance.AddToHotbar(ItemType.O_Lungs);
                         SoundManager.instance.PlaySound(lungsEquipClip, transform, 1f, false);
                         break;
 
@@ -478,6 +480,7 @@ public class PlayerStats : MonoBehaviour
                         PlayerMovementAdvanced.instance.jumpForce += 3;
                         FullscreenShader.instance.normalShaderEnabled = true;
                         SoundManager.instance.PlaySound(stomachEquipClip, transform, 1f, false);
+                        HotbarPlayer.Instance.AddToHotbar(ItemType.O_Stomach);
                         SoundManager.instance.PlaySound(stomachSecondaryClip, transform, 1f, false);
                         break;
                     #endregion

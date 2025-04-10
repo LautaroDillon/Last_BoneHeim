@@ -193,7 +193,10 @@ public class InventorySlot
         for (int i = 0; i < AllowedItems.Length; i++)
         {
             if (_itemObject.type == AllowedItems[i])
+            {
+                Debug.Log("equipo item");
                 return true;
+            }
         }
         return false;
     }

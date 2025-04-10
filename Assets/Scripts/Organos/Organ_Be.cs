@@ -4,8 +4,13 @@ using UnityEngine;
 
 public abstract class Organ_Be : MonoBehaviour
 {
+    public static Organ_Be _organ_Be;
+
     public bool canbeused;
     public bool isused;
+    protected ItemType whastisthis;
+    protected GameObject esto;
+
 
     public enum type
     {
@@ -13,6 +18,4 @@ public abstract class Organ_Be : MonoBehaviour
         hands,
         arms
     }
-
-
 }

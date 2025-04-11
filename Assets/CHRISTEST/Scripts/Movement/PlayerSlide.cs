@@ -6,7 +6,8 @@ public class PlayerSlide : MonoBehaviour
 {
     [Header("References")]
     public Transform orientation;
-    public Transform playerObj;
+    public Transform cameraHolder;
+    CapsuleCollider cc;
     private Rigidbody rb;
     private PlayerMovement pm;
 
@@ -18,6 +19,10 @@ public class PlayerSlide : MonoBehaviour
     public float slideYScale;
     private float startYScale;
 
+    [Header("Camera Slide")]
+    public float slideCamYPos = 0.5f;
+    private float startCamYPos;
+
     [Header("Input")]
     public KeyCode slideKey = KeyCode.LeftControl;
     private float horizontalInput;
@@ -27,14 +32,21 @@ public class PlayerSlide : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         pm = GetComponent<PlayerMovement>();
+        cc = GetComponent<CapsuleCollider>();
 
-        startYScale = playerObj.localScale.y;
+        startYScale = cc.height;
+        startCamYPos = cameraHolder.localPosition.y;
     }
 
     private void Update()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
+
+        Vector3 camPos = cameraHolder.localPosition;
+        float targetY = pm.sliding ? slideCamYPos : startCamYPos;
+        camPos.y = Mathf.Lerp(camPos.y, targetY, Time.deltaTime * 10f);
+        cameraHolder.localPosition = camPos;
 
         if (Input.GetKeyDown(slideKey) && (horizontalInput != 0 || verticalInput != 0))
             StartSlide();
@@ -53,10 +65,16 @@ public class PlayerSlide : MonoBehaviour
     {
         pm.sliding = true;
         AudioManager.instance.PlaySFXOneShot("Slide", 1f);
-        playerObj.localScale = new Vector3(playerObj.localScale.x, slideYScale, playerObj.localScale.z);
+        cc.height = slideYScale;
         rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
 
         slideTimer = maxSlideTime;
+    }
+    private void StopSlide()
+    {
+        pm.sliding = false;
+        cc.height = startYScale;
+        AudioManager.instance.StopSFX("Slide");
     }
 
     private void SlidingMovement()
@@ -79,12 +97,5 @@ public class PlayerSlide : MonoBehaviour
 
         if (slideTimer <= 0)
             StopSlide();
-    }
-
-    private void StopSlide()
-    {
-        pm.sliding = false;
-        playerObj.localScale = new Vector3(playerObj.localScale.x, startYScale, playerObj.localScale.z);
-        AudioManager.instance.StopSFX("Slide");
     }
 }

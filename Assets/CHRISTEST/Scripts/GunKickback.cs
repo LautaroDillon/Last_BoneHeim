@@ -5,10 +5,13 @@ using UnityEngine;
 public class GunKickback : MonoBehaviour
 {
     public Vector3 kickbackAmount = new Vector3(-0.1f, 0.0f, 0.0f);
-    public float returnSpeed = 5f;
+    public float returnSpeed = 10f;
+
     private Vector3 originalPosition;
     private Quaternion originalRotation;
-    private float kickbackTimer;
+
+    private Vector3 currentOffset;
+    private bool isKickedBack = false;
 
     void Start()
     {
@@ -18,20 +21,19 @@ public class GunKickback : MonoBehaviour
 
     void Update()
     {
-        if (kickbackTimer > 0)
+        if (isKickedBack)
         {
-            kickbackTimer -= Time.deltaTime;
-            if (kickbackTimer <= 0)
-            {
-                transform.localPosition = Vector3.Lerp(transform.localPosition, originalPosition, returnSpeed * Time.deltaTime);
-                transform.localRotation = Quaternion.Lerp(transform.localRotation, originalRotation, returnSpeed * Time.deltaTime);
-            }
+            transform.localPosition = Vector3.Lerp(transform.localPosition, originalPosition, Time.deltaTime * returnSpeed);
+            transform.localRotation = Quaternion.Lerp(transform.localRotation, originalRotation, Time.deltaTime * returnSpeed);
+
+            if (Vector3.Distance(transform.localPosition, originalPosition) < 0.001f)
+                isKickedBack = false;
         }
     }
 
     public void ApplyKickback()
     {
         transform.localPosition += kickbackAmount;
-        kickbackTimer = 0.1f;
+        isKickedBack = true;
     }
 }

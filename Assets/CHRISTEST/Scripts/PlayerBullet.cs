@@ -30,7 +30,7 @@ public class PlayerBullet : MonoBehaviour
         {
             if (collision.gameObject.tag == "Enemy")
             {
-                AudioManager.instance.PlaySFX("Bullet Enemy Impact", 1f, false);
+                AudioManager.instance.PlaySFX("Bullet Enemy Impact", 0.5f, false);
                 Destroy(gameObject);
             }
             Destroy(gameObject);

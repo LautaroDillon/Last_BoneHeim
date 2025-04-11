@@ -6,9 +6,11 @@ public class PositionFollower : MonoBehaviour
 {
     public Transform targetTransform;
     public Vector3 offset;
+    public float followSpeed = 5f;
 
-    void Update()
+    private void LateUpdate()
     {
-        transform.position = targetTransform.position + offset;
+        Vector3 desiredPosition = targetTransform.position + offset;
+        transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * followSpeed);
     }
 }

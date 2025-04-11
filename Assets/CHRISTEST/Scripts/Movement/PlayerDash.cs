@@ -63,14 +63,17 @@ public class PlayerDash : MonoBehaviour
 
     private void Dash()
     {
+        StartCoroutine(DashCameraKick());
         if (dashCdTimer > 0)
             return;
         else dashCdTimer = dashCd;
 
         pm.dashing = true;
         pm.maxYSpeed = maxDashYSpeed;
+
         AudioManager.instance.PlaySFXOneShot("Dash Grunt", 1f);
         AudioManager.instance.PlaySFXOneShot("Dash", 1.5f);
+
         cam.DoFov(mainCam.fieldOfView + dashFov);
 
         Transform forwardT;
@@ -129,5 +132,29 @@ public class PlayerDash : MonoBehaviour
             direction = forwardT.forward;
 
         return direction.normalized;
+    }
+
+    private IEnumerator DashCameraKick()
+    {
+        Vector3 originalPos = playerCam.localPosition;
+        Vector3 dashOffset = new Vector3(0, -0.1f, -0.2f);
+
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.deltaTime * 10f;
+            playerCam.localPosition = Vector3.Lerp(originalPos, originalPos + dashOffset, t);
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(0.1f);
+
+        t = 0f;
+        while (t < 1f)
+        {
+            t += Time.deltaTime * 10f;
+            playerCam.localPosition = Vector3.Lerp(playerCam.localPosition, originalPos, t);
+            yield return null;
+        }
     }
 }

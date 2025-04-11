@@ -4,15 +4,21 @@ using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Abilites")]
     public bool canDoubleJump;
     public bool canDash;
 
+    [Header("References")]
+    public Transform orientation;
+    public Camera mainCam;
+    public PlayerCamera cam;
+
     [Header("Movement")]
-    private float moveSpeed;
     public float walkSpeed;
     public float sprintSpeed;
     public float slideSpeed;
     public float dashSpeed;
+    private float moveSpeed;
 
     public float dashSpeedChangeFactor;
     public float maxYSpeed;
@@ -25,8 +31,8 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
-    bool readyToJump;
     [SerializeField] private int jumpCount;
+    bool readyToJump;
 
     [Header("Crouching")]
     public float crouchSpeed;
@@ -47,12 +53,14 @@ public class PlayerMovement : MonoBehaviour
     private RaycastHit slopeHit;
     private bool exitingSlope;
 
-    public Transform orientation;
+    [Header("Bools")]
+    public bool dashing;
+    public bool sliding;
 
     float horizontalInput;
     float verticalInput;
-    public float stepRate = 0.5f;
-    public float stepCoolDown;
+    private float stepRate = 0.5f;
+    private float stepCoolDown;
     bool isWalking;
 
     Vector3 moveDirection;
@@ -70,8 +78,7 @@ public class PlayerMovement : MonoBehaviour
         air
     }
 
-    public bool dashing;
-    public bool sliding;
+    
 
     private void Start()
     {
@@ -92,6 +99,7 @@ public class PlayerMovement : MonoBehaviour
         crouchSpeed = walkSpeed + 4;
 
         stepCoolDown -= Time.deltaTime;
+
         if ((Input.GetAxis("Horizontal") != 0f || Input.GetAxis("Vertical") != 0f) && stepCoolDown < 0f && grounded && state == MovementState.walking)
         {
             AudioManager.instance.PlaySFXOneShot("Walk", 1f);
@@ -322,6 +330,7 @@ public class PlayerMovement : MonoBehaviour
 
         AudioManager.instance.PlaySFX("Jump", 1f, false);
     }
+
     private void ResetJump()
     {
         readyToJump = true;

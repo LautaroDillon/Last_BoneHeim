@@ -5,8 +5,10 @@ using UnityEngine;
 public class RotationFollower : MonoBehaviour
 {
     public Transform Target;
-    private void Update()
+    public float rotationSpeed = 5f;
+
+    private void LateUpdate()
     {
-        transform.rotation = Target.rotation;
+        transform.rotation = Quaternion.Slerp(transform.rotation, Target.rotation, Time.deltaTime * rotationSpeed);
     }
 }

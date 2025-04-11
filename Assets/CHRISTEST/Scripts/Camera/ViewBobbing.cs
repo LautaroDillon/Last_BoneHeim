@@ -10,16 +10,26 @@ public class ViewBobbing : MonoBehaviour
     public float EffectSpeed;
 
     private PositionFollower FollowerInstance;
+    public GameObject player;
+    private PlayerMovement pm;
     private Vector3 OriginalOffset;
     private float SinTime;
 
     void Start()
     {
         FollowerInstance = GetComponent<PositionFollower>();
+        pm = player.GetComponent<PlayerMovement>();
         OriginalOffset = FollowerInstance.offset;
     }
 
     void Update()
+    {
+        if(pm.sliding == false)
+            ViewBob();
+
+    }
+
+    private void ViewBob()
     {
         Vector3 inputVector = new Vector3(Input.GetAxis("Vertical"), 0f, Input.GetAxis("Horizontal"));
 

@@ -7,6 +7,7 @@ public class PlayerWeapon : MonoBehaviour
     public KeyCode shootKey;
     //bullet 
     public GameObject bullet;
+    private GunKickback gk;
 
     //bullet force
     public float shootForce, upwardForce;
@@ -49,6 +50,7 @@ public class PlayerWeapon : MonoBehaviour
     {
         originalPosition = transform.localPosition;
         originalRotation = transform.localRotation;
+        gk.GetComponent<GunKickback>();
     }
 
     private void Update()
@@ -60,8 +62,6 @@ public class PlayerWeapon : MonoBehaviour
 
         if (bulletsLeft > magazineSize)
             bulletsLeft = magazineSize;
-
-        KickbackTimer();
     }
 
     private void MyInput()
@@ -139,25 +139,6 @@ public class PlayerWeapon : MonoBehaviour
         //if more than one bulletsPerTap make sure to repeat shoot function
         if (bulletsShot < bulletsPerTap && bulletsLeft > 0)
             Invoke("Shoot", timeBetweenShots);
-    }
-
-    public void KickbackTimer()
-    {
-        if (kickbackTimer > 0)
-        {
-            kickbackTimer -= Time.deltaTime;
-            if (kickbackTimer <= 0)
-            {
-                transform.localPosition = Vector3.Lerp(transform.localPosition, originalPosition, returnSpeed * Time.deltaTime);
-                transform.localRotation = Quaternion.Lerp(transform.localRotation, originalRotation, returnSpeed * Time.deltaTime);
-            }
-        }
-    }
-
-    public void ApplyKickback()
-    {
-        transform.localPosition += kickbackAmount;
-        kickbackTimer = 0.1f;
     }
 
     private void ResetShot()

@@ -68,6 +68,7 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody rb;
 
     public MovementState state;
+
     public enum MovementState
     {
         walking,
@@ -77,8 +78,6 @@ public class PlayerMovement : MonoBehaviour
         dashing,
         air
     }
-
-    
 
     private void Start()
     {
@@ -127,10 +126,12 @@ public class PlayerMovement : MonoBehaviour
             rb.drag = groundDrag;
 
     }
+
     private void FixedUpdate()
     {
         MovePlayer();
     }
+
     private void MyInput()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");

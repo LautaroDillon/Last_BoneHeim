@@ -7,7 +7,6 @@ public class PlayerWeapon : MonoBehaviour
     public KeyCode shootKey;
     //bullet 
     public GameObject bullet;
-    private GunKickback gk;
 
     //bullet force
     public float shootForce, upwardForce;
@@ -50,7 +49,6 @@ public class PlayerWeapon : MonoBehaviour
     {
         originalPosition = transform.localPosition;
         originalRotation = transform.localRotation;
-        gk.GetComponent<GunKickback>();
     }
 
     private void Update()

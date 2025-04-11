@@ -111,12 +111,12 @@ public class Guns : MonoBehaviour
         if (allowButtonHold)
         {
             shooting = Input.GetKey(shootKey);
-            Debug.Log("Can't click!");
+           // Debug.Log("Can't click!");
         }
         else
         {
             shooting = Input.GetKeyDown(shootKey);
-            Debug.Log("Can't hold down click!");
+            //Debug.Log("Can't hold down click!");
         }
 
         //Shooting
@@ -124,7 +124,7 @@ public class Guns : MonoBehaviour
         {
             bulletsShot = 0;
             Shoot();
-            Debug.Log("Not shooting!");
+           // Debug.Log("Not shooting!");
         }
     }
     private void Shoot()

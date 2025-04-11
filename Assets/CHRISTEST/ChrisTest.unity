@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2124,7 +2124,7 @@ GameObject:
   - component: {fileID: 82527926}
   - component: {fileID: 82527925}
   - component: {fileID: 82527924}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Stair (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2138,7 +2138,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 82527923}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 1d424a129a09d354da5182c86e778ff1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -20612,7 +20612,7 @@ GameObject:
   - component: {fileID: 446337159}
   - component: {fileID: 446337158}
   - component: {fileID: 446337157}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20626,7 +20626,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 446337156}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 1d424a129a09d354da5182c86e778ff1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -30851,7 +30851,7 @@ GameObject:
   - component: {fileID: 582547121}
   - component: {fileID: 582547120}
   - component: {fileID: 582547119}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Stair (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30865,7 +30865,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 582547118}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 1d424a129a09d354da5182c86e778ff1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -52556,7 +52556,7 @@ GameObject:
   - component: {fileID: 946026441}
   - component: {fileID: 946026440}
   - component: {fileID: 946026439}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Stair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52570,7 +52570,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 946026438}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 1d424a129a09d354da5182c86e778ff1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -56223,7 +56223,7 @@ GameObject:
   - component: {fileID: 1043153375}
   - component: {fileID: 1043153374}
   - component: {fileID: 1043153373}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Stair (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56237,7 +56237,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1043153372}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 1d424a129a09d354da5182c86e778ff1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -74173,7 +74173,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1381633411}
-  - component: {fileID: 1381633412}
+  - component: {fileID: 1381633413}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -74196,7 +74196,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1631643019}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1381633412
+--- !u!114 &1381633413
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -74205,9 +74205,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1381633410}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65b66f47460fe484a8bca92cd31d1ea5, type: 3}
+  m_Script: {fileID: 11500000, guid: f11313d8d6371ee4b876d3f83ae394f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  thisIsPlayer: {fileID: 0}
+  enemys: []
+  Healers: []
+  firstquestion: {fileID: 0}
+  isRunning: 0
 --- !u!43 &1383789200
 Mesh:
   m_ObjectHideFlags: 0
@@ -82042,7 +82047,7 @@ GameObject:
   - component: {fileID: 1529166393}
   - component: {fileID: 1529166392}
   - component: {fileID: 1529166391}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82056,7 +82061,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1529166390}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 1d424a129a09d354da5182c86e778ff1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -83498,7 +83503,7 @@ GameObject:
   - component: {fileID: 1569775850}
   - component: {fileID: 1569775849}
   - component: {fileID: 1569775848}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Stair (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83512,7 +83517,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1569775847}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 1d424a129a09d354da5182c86e778ff1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -108679,7 +108684,7 @@ GameObject:
   - component: {fileID: 2086366494}
   - component: {fileID: 2086366493}
   - component: {fileID: 2086366492}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Stair (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108693,7 +108698,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2086366491}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 1d424a129a09d354da5182c86e778ff1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

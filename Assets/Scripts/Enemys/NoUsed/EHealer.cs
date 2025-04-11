@@ -177,14 +177,14 @@ public class EHealer : EnemisBehaivor, Idamagable
         if (currentlife <= 0)
         {
             Debug.Log("the skeleton received damage ");
-            GameManager.instance.enemys.Remove(this.gameObject);
+            //GameManager.instance.enemys.Remove(this.gameObject);
             if (gameObject.tag == "Chaman")
                 SoundManager.instance.PlaySound(chamanDeathClip, transform, 1f, false);
             if (PlayerHealth.instance.isInReviveState)
             {
                 PlayerHealth.instance.enemyKilled = true;
             }
-            GameManager.instance.UnregisterHealer(this);
+            //GameManager.instance.UnregisterHealer(this);
             Destroy(this.gameObject);
         }
     }

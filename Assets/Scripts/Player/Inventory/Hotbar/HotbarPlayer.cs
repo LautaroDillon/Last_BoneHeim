@@ -22,11 +22,21 @@ public class HotbarPlayer : MonoBehaviour
     [SerializeField] GameObject liver;
     [SerializeField] GameObject stomach;
 
+    public DataOrgan[] dataOrgans;
+
+    Dictionary<ItemType, GameObject> dataOrgansDict = new Dictionary<ItemType, GameObject>();
+
     private Dictionary<ItemType, GameObject> hotbar = new Dictionary<ItemType, GameObject>();
 
     void Start()
     {
         Instance = this;
+
+        foreach (var item in dataOrgans)
+        {
+            if (!dataOrgansDict.ContainsKey(item.type))
+                dataOrgansDict.Add(item.type, item.go);
+        }
     }
 
 
@@ -54,11 +64,10 @@ public class HotbarPlayer : MonoBehaviour
             }    
         }
 
-        if (selecteditem <= -1)
+        if (selecteditem <= 0)  
         {
             selecteditem = 3;
-        }
-        else if (selecteditem >= hotbar.Count && hotbar.Count + 1 > 0)
+        }else if (selecteditem >= hotbar.Count && hotbar.Count + 1 > 0)
         {
             selecteditem = 0;
         }
@@ -92,12 +101,21 @@ public class HotbarPlayer : MonoBehaviour
         {
             Debug.Log($"Clave: {item.Key} - Valor: {item.Value}");
         }
+
+        lung.SetActive(false);
+        kidney.SetActive(false);
+        liver.SetActive(false);
+        stomach.SetActive(false);
+
         //hacer el llamdo para el funcionamiento de los organos
     }
 
     public void AddToHotbar(ItemType a)
     {
         Debug.Log("Adding to hotbar: " + a);
+        if (!dataOrgansDict.ContainsKey(a)) return;
+
+        //dataOrgansDict[a].SetActive(true);
         switch (a)
         {
             case ItemType.O_Lungs:
@@ -148,4 +166,11 @@ public class HotbarPlayer : MonoBehaviour
         }
 
     }
+}
+
+[System.Serializable]
+public struct DataOrgan
+{
+    public ItemType type;
+    public GameObject go;
 }

@@ -212,8 +212,8 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
             }
         }
-        else
-            Debug.Log("Unpause game!");
+        /*else
+            Debug.Log("Unpause game!");*/
     }
 
     bool keepMomentum;
@@ -325,8 +325,8 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
             if (Mathf.Abs(desiredMoveSpeed - moveSpeed) < 0.1f) keepMomentum = false;
         }
-        else
-            Debug.Log("Unpause game!");
+       /* else
+            Debug.Log("Unpause game!");*/
         
     }
 
@@ -385,8 +385,8 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
             if (!wallrunning) rb.useGravity = !OnSlope();
         }
-        else
-            Debug.Log("Unpause game!");
+       /* else
+            Debug.Log("Unpause game!");*/
     }
 
     private void SpeedControl()
@@ -410,8 +410,8 @@ public class PlayerMovementAdvanced : MonoBehaviour
                 }
             }
         }
-        else
-            Debug.Log("Unpause game!");
+        //else
+            //Debug.Log("Unpause game!");
         
     }
 

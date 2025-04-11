@@ -8,7 +8,12 @@ public class Pulmon : Organ_Be
     void Start()
     {
         canbeused = true;
+        esto = this.gameObject;
+
     }
 
-
+    public  void callGame()
+    {
+        
+    }
 }

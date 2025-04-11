@@ -5,13 +5,18 @@ using Unity.VisualScripting;
 
 public class HotbarPlayer : MonoBehaviour
 {
+    public static HotbarPlayer Instance;
+
+    float ScrollPos;
+    float ScrollNeg;
+    public float speedscroll;
+
     public List<ItemType> hotbarlist;
     public int selecteditem;
     public bool organselect;
 
     public KeyCode selectorgan = KeyCode.Q;
 
-    [SerializeField] GameObject heart;
     [SerializeField] GameObject lung;
     [SerializeField] GameObject kidney;
     [SerializeField] GameObject liver;
@@ -21,60 +26,47 @@ public class HotbarPlayer : MonoBehaviour
 
     void Start()
     {
-        hotbar.Add(ItemType.O_Heart, heart);
-        hotbar.Add(ItemType.O_Lungs, lung);
-        hotbar.Add(ItemType.O_Kidney, kidney);
-        hotbar.Add(ItemType.O_Liver, liver);
-        hotbar.Add(ItemType.O_Stomach, stomach);
+        Instance = this;
     }
-    float axisScrollPos;
-    float axisScrollNeg;
-    public float speed;
+
+
     void Update()
     {
-        axisScrollPos -= Time.deltaTime;
-        if (axisScrollPos < 0) axisScrollPos = 0;
-        axisScrollNeg -= Time.deltaTime;
-        if (axisScrollNeg < 0) axisScrollNeg = 0;
-
         var axis = Input.GetAxis("Mouse ScrollWheel");
         if (axis < 0)
         {
-            axisScrollPos += speed * Time.deltaTime;
+            ScrollPos += speedscroll * Time.deltaTime;
 
-            axisScrollNeg = 0;
-            if (axisScrollPos >= 1)
+            if (ScrollPos >= 1)
             {
-                axisScrollPos = 0;
+                ScrollPos = 0;
                 selecteditem++;
             }
         }
         else if(axis > 0)
         {
-            axisScrollNeg += speed * Time.deltaTime;
+            ScrollNeg += speedscroll * Time.deltaTime;
 
-            axisScrollPos = 0;
-            if (axisScrollNeg >= 1)
+            if (ScrollNeg >= 1)
             {
-                axisScrollNeg = 0;
+                ScrollNeg = 0;
                 selecteditem--;
-            }
-           
+            }    
         }
 
-        if (selecteditem <= 0)
+        if (selecteditem <= -1)
         {
             selecteditem = 3;
         }
-        else if (selecteditem >= 4)
+        else if (selecteditem >= hotbar.Count && hotbar.Count + 1 > 0)
         {
-            selecteditem = 1;
+            selecteditem = 0;
         }
         if (Input.GetKeyDown(selectorgan))
         {
             newselected();
         }
-        if (Input.GetMouseButtonDown(1) && organselect)
+        if (Input.GetMouseButtonDown(1)/* && organselect*/ )
         {
             useselected();
         }
@@ -82,7 +74,6 @@ public class HotbarPlayer : MonoBehaviour
 
     void newselected()
     {
-        heart.SetActive(false);
         lung.SetActive(false);
         kidney.SetActive(false);
         liver.SetActive(false);
@@ -90,18 +81,71 @@ public class HotbarPlayer : MonoBehaviour
 
         Debug.Log(selecteditem);
         GameObject selectedItemgameobject = hotbar[hotbarlist[selecteditem]];
+        organselect = true; 
         selectedItemgameobject.SetActive(true);
     }
 
 
     void useselected()
     {
-        heart.SetActive(false);
-        lung.SetActive(false);
-        kidney.SetActive(false);
-        liver.SetActive(false);
-        stomach.SetActive(false);
-
+        foreach (KeyValuePair<ItemType, GameObject> item in hotbar)
+        {
+            Debug.Log($"Clave: {item.Key} - Valor: {item.Value}");
+        }
         //hacer el llamdo para el funcionamiento de los organos
+    }
+
+    public void AddToHotbar(ItemType a)
+    {
+        Debug.Log("Adding to hotbar: " + a);
+        switch (a)
+        {
+            case ItemType.O_Lungs:
+                hotbarlist.Add(a);
+                hotbar.Add(a, lung);
+                Debug.Log("Added Lungs");
+                break;
+            case ItemType.O_Kidney:
+                hotbarlist.Add(a);
+                hotbar.Add(a, kidney);
+                Debug.Log("Added Kidney");
+                break;
+            case ItemType.O_Liver:
+                hotbarlist.Add(a);
+                hotbar.Add(a, liver);
+                Debug.Log("Added Liver");
+                break;
+            case ItemType.O_Stomach:
+                hotbarlist.Add(a);
+                hotbar.Add(a, stomach);
+                Debug.Log("Added Stomach");
+                break;
+        }
+
+    }
+
+    public void RemoveToHotbar(ItemType a)
+    {
+        Debug.Log("Adding to hotbar: " + a);
+        switch (a)
+        {
+            case ItemType.O_Lungs:
+                hotbar.Remove(a);
+                Debug.Log("Added Lungs");
+                break;
+            case ItemType.O_Kidney:
+                hotbar.Remove(a);
+                Debug.Log("Added Kidney");
+                break;
+            case ItemType.O_Liver:
+                hotbar.Remove(a);
+                Debug.Log("Added Liver");
+                break;
+            case ItemType.O_Stomach:
+                hotbar.Remove(a);
+                Debug.Log("Added Stomach");
+                break;
+        }
+
     }
 }

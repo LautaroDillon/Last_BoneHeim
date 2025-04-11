@@ -1,18 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Kidney : Organ_Be
 {
-    // Start is called before the first frame update
+    
     void Start()
     {
         canbeused = true;
+        _organ_Be = this;
     }
 
-    // Update is called once per frame
-    void Update()
+    public  void callGame()
     {
         
     }
+
 }

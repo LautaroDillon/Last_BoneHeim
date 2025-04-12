@@ -19,10 +19,11 @@ public class PlayerWeapon : MonoBehaviour
     int bulletsLeft, bulletsShot;
 
     public Vector3 kickbackAmount = new Vector3(-0.1f, 0.0f, 0.0f);
-    public float returnSpeed = 5f;
+    public float returnSpeed = 10f;
     private Vector3 originalPosition;
     private Quaternion originalRotation;
-    private float kickbackTimer;
+    private Vector3 currentOffset;
+    private bool isKickedBack = false;
 
     //bools
     bool shooting, readyToShoot, reloading;
@@ -37,6 +38,8 @@ public class PlayerWeapon : MonoBehaviour
 
     //bug fixing :D
     public bool allowInvoke = true;
+
+    public List<GameObject> bulletDisplay = new List<GameObject>();
 
     private void Awake()
     {
@@ -81,11 +84,9 @@ public class PlayerWeapon : MonoBehaviour
         {
             //Set bullets shot to 0
             bulletsShot = 0;
-
             Shoot();
         }
     }
-
     private void Shoot()
     {
         readyToShoot = false;
@@ -125,6 +126,12 @@ public class PlayerWeapon : MonoBehaviour
           //  Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
 
         bulletsLeft--;
+
+        if (bulletsLeft < bulletDisplay.Count)
+        {
+            bulletDisplay[bulletsLeft].SetActive(false);
+        }
+
         bulletsShot++;
 
         //Invoke resetShot function (if not already invoked), with your timeBetweenShooting
@@ -137,6 +144,32 @@ public class PlayerWeapon : MonoBehaviour
         //if more than one bulletsPerTap make sure to repeat shoot function
         if (bulletsShot < bulletsPerTap && bulletsLeft > 0)
             Invoke("Shoot", timeBetweenShots);
+    }
+
+    public void UpdateBulletDisplay()
+    {
+        for (int i = 0; i < bulletDisplay.Count; i++)
+        {
+            bulletDisplay[i].SetActive(i < bulletsLeft);
+        }
+    }
+
+    public void GunKick()
+    {
+        if (isKickedBack)
+        {
+            transform.localPosition = Vector3.Lerp(transform.localPosition, originalPosition, Time.deltaTime * returnSpeed);
+            transform.localRotation = Quaternion.Lerp(transform.localRotation, originalRotation, Time.deltaTime * returnSpeed);
+
+            if (Vector3.Distance(transform.localPosition, originalPosition) < 0.001f)
+                isKickedBack = false;
+        }
+    }
+
+    public void ApplyKickback()
+    {
+        transform.localPosition += kickbackAmount;
+        isKickedBack = true;
     }
 
     private void ResetShot()
@@ -155,6 +188,10 @@ public class PlayerWeapon : MonoBehaviour
     {
         //Fill magazine
         bulletsLeft = magazineSize;
+        foreach (GameObject bulletObj in bulletDisplay)
+        {
+            bulletObj.SetActive(true);
+        }
         reloading = false;
     }
 }

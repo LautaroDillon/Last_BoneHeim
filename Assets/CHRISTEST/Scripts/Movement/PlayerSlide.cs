@@ -48,11 +48,18 @@ public class PlayerSlide : MonoBehaviour
         camPos.y = Mathf.Lerp(camPos.y, targetY, Time.deltaTime * 10f);
         cameraHolder.localPosition = camPos;
 
-        if (Input.GetKeyDown(slideKey) && (horizontalInput != 0 || verticalInput != 0))
-            StartSlide();
+        if(pm.grounded)
+        {
+            if (Input.GetKeyDown(slideKey) && (horizontalInput != 0 || verticalInput != 0))
+                StartSlide();
 
-        if (Input.GetKeyUp(slideKey) && pm.sliding)
+            if (Input.GetKeyUp(slideKey) && pm.sliding)
+                StopSlide();
+        }
+        else
+        {
             StopSlide();
+        }
     }
 
     private void FixedUpdate()

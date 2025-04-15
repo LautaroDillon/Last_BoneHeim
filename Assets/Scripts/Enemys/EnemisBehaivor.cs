@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class EnemisBehaivor : MonoBehaviour, Idamagable
 {
     #region Variables
-    public FSM fsm;
+   // public FSM fsm;
     protected NavMeshAgent agent;
     public EnemyType enemyType;
 
@@ -52,14 +52,14 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
     [Header("Animation")]
     [SerializeField] protected Animator anim;
 
-    [Header("Fsm")]
-    public Node firstNode;
+    //[Header("Fsm")]
+    //public Node firstNode;
 
     #endregion
 
     private void Start()
     {
-        firstNode = GameManager.instance.firstquestion;
+        //firstNode = GameManager.instance.firstquestion;
         player = GameManager.instance.thisIsPlayer;
         gun = GameObject.Find("Gun").GetComponent<Guns>();
         instance = this;
@@ -203,7 +203,7 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
         return false; // No hay un camino claro en el NavMesh
     }
 
-    public EnemisBehaivor FindClosestHealer()
+   /* public EnemisBehaivor FindClosestHealer()
     {
         EnemisBehaivor closestHealer = null;
         float minDistance = Mathf.Infinity;
@@ -219,22 +219,22 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
                 }           
         }
         return closestHealer;
-    }
+    }*/
 
-    public void MoveToHealer()
+   /* public void MoveToHealer()
     {
         EnemisBehaivor healer = FindClosestHealer();
         if (healer != null)
         {
             agent.SetDestination(healer.transform.position);
-            fsm.ChangeState("Escape"); // Cambia a estado de escape hacia el sanador
+           // fsm.ChangeState("Escape"); // Cambia a estado de escape hacia el sanador
         }
         else
         {
             Debug.Log("No hay sanadores disponibles o el camino está bloqueado, huyendo normalmente.");
             FleeFromPlayer();
         }
-    }
+    }*/
 
     public virtual void FleeFromPlayer()
     {

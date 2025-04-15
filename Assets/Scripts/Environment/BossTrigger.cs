@@ -17,7 +17,7 @@ public class BossTrigger : MonoBehaviour
         instance = this;
     }
 
-    private void Update()
+   /* private void Update()
     {
         if(ENecro.instanse.necroLife <= 0)
         {
@@ -25,7 +25,7 @@ public class BossTrigger : MonoBehaviour
             defeatText.gameObject.SetActive(true);
             Debug.Log("Bitch is dead!");
         }
-    }
+    }*/
 
     public IEnumerator DeathEnd(int triggerTime)
     {

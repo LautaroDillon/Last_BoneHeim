@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using Unity.VisualScripting;
+using static UnityEditor.Progress;
 
 public class HotbarPlayer : MonoBehaviour
 {
@@ -17,26 +18,22 @@ public class HotbarPlayer : MonoBehaviour
 
     public KeyCode selectorgan = KeyCode.Q;
 
-    [SerializeField] GameObject lung;
+   /* [SerializeField] GameObject lung;
     [SerializeField] GameObject kidney;
     [SerializeField] GameObject liver;
-    [SerializeField] GameObject stomach;
+    [SerializeField] GameObject stomach;*/
 
     public DataOrgan[] dataOrgans;
 
-    Dictionary<ItemType, GameObject> dataOrgansDict = new Dictionary<ItemType, GameObject>();
+    public Dictionary<ItemType, GameObject> dataOrgansDict = new Dictionary<ItemType, GameObject>();
 
-    private Dictionary<ItemType, GameObject> hotbar = new Dictionary<ItemType, GameObject>();
+   // private Dictionary<ItemType, GameObject> hotbar = new Dictionary<ItemType, GameObject>();
 
     void Start()
     {
         Instance = this;
 
-        foreach (var item in dataOrgans)
-        {
-            if (!dataOrgansDict.ContainsKey(item.type))
-                dataOrgansDict.Add(item.type, item.go);
-        }
+
     }
 
 
@@ -64,10 +61,10 @@ public class HotbarPlayer : MonoBehaviour
             }    
         }
 
-        if (selecteditem <= 0)  
+        if (selecteditem <= 0.5f)  
         {
-            selecteditem = 3;
-        }else if (selecteditem >= hotbar.Count && hotbar.Count + 1 > 0)
+            selecteditem = dataOrgansDict.Count;
+        }else if (selecteditem >= dataOrgansDict.Count && dataOrgansDict.Count + 1 > 0)
         {
             selecteditem = 0;
         }
@@ -75,7 +72,8 @@ public class HotbarPlayer : MonoBehaviour
         {
             newselected();
         }
-        if (Input.GetMouseButtonDown(1)/* && organselect*/ )
+        else return;
+        if (Input.GetMouseButtonDown(1) && organselect )
         {
             useselected();
         }
@@ -83,29 +81,24 @@ public class HotbarPlayer : MonoBehaviour
 
     void newselected()
     {
-        lung.SetActive(false);
-        kidney.SetActive(false);
-        liver.SetActive(false);
-        stomach.SetActive(false);
-
-        Debug.Log(selecteditem);
-        GameObject selectedItemgameobject = hotbar[hotbarlist[selecteditem]];
+        foreach (var item in dataOrgans)
+        {
+            if (dataOrgansDict.ContainsKey(item.type))
+                dataOrgansDict[item.type].SetActive(false);
+        }
+                Debug.Log(selecteditem);
+        dataOrgansDict[hotbarlist[selecteditem]].SetActive(true);
         organselect = true; 
-        selectedItemgameobject.SetActive(true);
     }
 
 
     void useselected()
     {
-        foreach (KeyValuePair<ItemType, GameObject> item in hotbar)
+        foreach (var item in dataOrgans)
         {
-            Debug.Log($"Clave: {item.Key} - Valor: {item.Value}");
+            if (dataOrgansDict.ContainsKey(item.type))
+                dataOrgansDict[item.type].SetActive(false);
         }
-
-        lung.SetActive(false);
-        kidney.SetActive(false);
-        liver.SetActive(false);
-        stomach.SetActive(false);
 
         //hacer el llamdo para el funcionamiento de los organos
     }
@@ -113,10 +106,19 @@ public class HotbarPlayer : MonoBehaviour
     public void AddToHotbar(ItemType a)
     {
         Debug.Log("Adding to hotbar: " + a);
-        if (!dataOrgansDict.ContainsKey(a)) return;
+        hotbarlist.Add(a);
 
-        //dataOrgansDict[a].SetActive(true);
-        switch (a)
+        foreach (var item in dataOrgans)
+        {
+            if (!dataOrgansDict.ContainsKey(item.type))
+                dataOrgansDict.Add(item.type, item.objectType);
+            else
+                Debug.Log("Item already exists in dictionary: " + item.type);
+        }
+        
+
+       // dataOrgansDict[a].SetActive(true);
+        /*switch (a)
         {
             case ItemType.O_Lungs:
                 hotbarlist.Add(a);
@@ -138,13 +140,24 @@ public class HotbarPlayer : MonoBehaviour
                 hotbar.Add(a, stomach);
                 Debug.Log("Added Stomach");
                 break;
-        }
+        }*/
 
     }
 
     public void RemoveToHotbar(ItemType a)
     {
-        Debug.Log("Adding to hotbar: " + a);
+        Debug.Log("Removing to hotbar: " + a);
+        hotbarlist.Remove(a);
+
+        foreach (var item in dataOrgans)
+        {
+            if (dataOrgansDict.ContainsKey(item.type))
+                dataOrgansDict.Remove(item.type);
+            else
+                Debug.Log("Item not exists in dictionary: " + item.type);
+        }
+
+        /*Debug.Log("Adding to hotbar: " + a);
         switch (a)
         {
             case ItemType.O_Lungs:
@@ -164,7 +177,7 @@ public class HotbarPlayer : MonoBehaviour
                 Debug.Log("Added Stomach");
                 break;
         }
-
+        */
     }
 }
 
@@ -172,5 +185,5 @@ public class HotbarPlayer : MonoBehaviour
 public struct DataOrgan
 {
     public ItemType type;
-    public GameObject go;
+    public GameObject objectType;
 }

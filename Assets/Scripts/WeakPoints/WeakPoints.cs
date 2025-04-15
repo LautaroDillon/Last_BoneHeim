@@ -13,7 +13,7 @@ public class WeakPoints : MonoBehaviour, Idamagable
 
     public void TakeDamage(float dmg)
     {
-        NormalSkeleton.instance.TakeDamage(damage);
+        //NormalSkeleton.instance.TakeDamage(damage);
         Debug.Log("ataco punto debil");
     }
 

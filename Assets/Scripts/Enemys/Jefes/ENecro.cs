@@ -5,9 +5,9 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
-public class ENecro : EnemisBehaivor
+public class ENecro : MonoBehaviour
 {
-    #region Variables
+   /* #region Variables
     public float maxHealth;
     public Image healthBar;
 
@@ -102,7 +102,7 @@ public class ENecro : EnemisBehaivor
     }
     #endregion
 
-    public void ResetAnim()
+   /* public void ResetAnim()
     {
         anim.SetBool("Idle", false);
         anim.SetBool("Summon", false);
@@ -183,13 +183,13 @@ public class ENecro : EnemisBehaivor
                 abilityTimer = abilityCooldown;
             }
 
-            ResetAnim();
-            anim.SetBool("Idle", true);
+            //ResetAnim();
+           // anim.SetBool("Idle", true);
         }
         else
         {
-            ResetAnim();
-            anim.SetBool("Idle", true);
+            //ResetAnim();
+            //anim.SetBool("Idle", true);
         }
     }
 
@@ -298,7 +298,7 @@ public class ENecro : EnemisBehaivor
     }
     #endregion
 
-    public override void TakeDamage(float dmg)
+    public void TakeDamage(float dmg)
     {
         necroLife -= dmg;
         healthBar.fillAmount = necroLife / maxHealth;
@@ -313,5 +313,5 @@ public class ENecro : EnemisBehaivor
             BossTrigger.instance.defeatText.gameObject.SetActive(true);
             Destroy(gameObject, 1);
         }
-    }
+    }*/
 }

@@ -15,8 +15,6 @@ public class GameManager : MonoBehaviour
     [Header("Assign Player")]
     public Transform thisIsPlayer;
     public List<GameObject> enemys;
-    public List<EHealer> Healers;
-    public Node firstquestion;
 
     [Header("Time Scale Check")]
     public bool isRunning;

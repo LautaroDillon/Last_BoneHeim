@@ -47,7 +47,7 @@ public class PlayerDash : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(dashKey))
+        if (Input.GetKeyDown(dashKey) && pm.canDash)
             Dash();
 
         DashCooldown();
@@ -63,10 +63,13 @@ public class PlayerDash : MonoBehaviour
 
     private void Dash()
     {
-        StartCoroutine(DashCameraKick());
         if (dashCdTimer > 0)
             return;
-        else dashCdTimer = dashCd;
+        else
+        {
+            dashCdTimer = dashCd;
+            StartCoroutine(DashCameraKick());
+        }
 
         pm.dashing = true;
         pm.maxYSpeed = maxDashYSpeed;

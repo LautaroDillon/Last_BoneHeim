@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform orientation;
     public Camera mainCam;
     public PlayerCamera cam;
+    public PlayerClimb playerClimb;
 
     [Header("Movement")]
     public float walkSpeed;
@@ -19,6 +20,8 @@ public class PlayerMovement : MonoBehaviour
     public float slideSpeed;
     public float dashSpeed;
     private float moveSpeed;
+    public float climbSpeed;
+    public float vaultSpeed;
 
     public float dashSpeedChangeFactor;
     public float maxYSpeed;
@@ -41,7 +44,6 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
-    public KeyCode crouchKey = KeyCode.LeftControl;
 
     [Header("Ground Check")]
     public float playerHeight;
@@ -56,6 +58,11 @@ public class PlayerMovement : MonoBehaviour
     [Header("Bools")]
     public bool dashing;
     public bool sliding;
+    public bool wallrunning;
+    public bool freeze;
+    public bool unlimited;
+    public bool vaulting;
+    public bool climbing;
 
     float horizontalInput;
     float verticalInput;
@@ -71,11 +78,15 @@ public class PlayerMovement : MonoBehaviour
 
     public enum MovementState
     {
+        freeze,
+        unlimited,
         walking,
         sprinting,
-        crouching,
         sliding,
         dashing,
+        wallrunning,
+        climbing,
+        vaulting,
         air
     }
 
@@ -87,6 +98,7 @@ public class PlayerMovement : MonoBehaviour
         readyToJump = true;
 
         startYScale = transform.localScale.y;
+
         jumpCount = 0;
     }
 
@@ -137,29 +149,15 @@ public class PlayerMovement : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKey(jumpKey) && readyToJump)
+        if (Input.GetKeyDown(jumpKey) && readyToJump)
         {
-            if (grounded || jumpCount <= 0)
+            if (grounded || (canDoubleJump && jumpCount < 1))
             {
                 readyToJump = false;
                 jumpCount++;
                 Jump();
                 Invoke(nameof(ResetJump), jumpCooldown);
             }
-        }
-
-        // start crouch
-        if (Input.GetKeyDown(crouchKey))
-        {
-            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
-        }
-
-        // stop crouch
-        if (Input.GetKeyUp(crouchKey))
-        {
-            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
-            
         }
     }
 
@@ -169,7 +167,31 @@ public class PlayerMovement : MonoBehaviour
     private bool keepMomentum;
     private void StateHandler()
     {
-        // Mode - Dashing
+        if (freeze)
+        {
+            state = MovementState.freeze;
+            rb.velocity = Vector3.zero;
+            desiredMoveSpeed = 0f;
+        }
+
+        else if (unlimited)
+        {
+            state = MovementState.unlimited;
+            desiredMoveSpeed = 999f;
+        }
+
+        else if (vaulting)
+        {
+            state = MovementState.vaulting;
+            desiredMoveSpeed = vaultSpeed;
+        }
+
+        else if (climbing)
+        {
+            state = MovementState.climbing;
+            desiredMoveSpeed = climbSpeed;
+        }
+
         if (dashing)
         {
             state = MovementState.dashing;
@@ -177,26 +199,16 @@ public class PlayerMovement : MonoBehaviour
             speedChangeFactor = dashSpeedChangeFactor;
         }
 
-        // Mode - Sliding
-        if (sliding)
+        if (sliding && grounded)
         {
             state = MovementState.sliding;
 
             if (OnSlope() && rb.velocity.y < 0.1f)
                 desiredMoveSpeed = slideSpeed;
-
             else
                 desiredMoveSpeed = sprintSpeed;
         }
 
-        // Mode - Crouching
-        else if (Input.GetKey(crouchKey))
-        {
-            state = MovementState.crouching;
-            desiredMoveSpeed = crouchSpeed;
-        }
-
-        // Mode - Walking
         else if (grounded)
         {
             if(lastState == MovementState.air)
@@ -206,7 +218,6 @@ public class PlayerMovement : MonoBehaviour
             desiredMoveSpeed = walkSpeed;
         }
 
-        // Mode - Air
         else
         {
             state = MovementState.air;
@@ -266,6 +277,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer()
     {
+        if (playerClimb.exitingWall)
+            return;
         if (state == MovementState.dashing)
             return;
 
@@ -290,7 +303,8 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
 
         // turn gravity off while on slope
-        rb.useGravity = !OnSlope();
+        if(wallrunning)
+            rb.useGravity = !OnSlope();
     }
 
     private void SpeedControl()
@@ -330,6 +344,8 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
 
         AudioManager.instance.PlaySFX("Jump", 1f, false);
+
+        FindObjectOfType<CameraNoise>()?.TriggerJumpShake();
     }
 
     private void ResetJump()

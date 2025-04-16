@@ -16,6 +16,9 @@ public class PlayerSlide : MonoBehaviour
     public float slideForce;
     private float slideTimer;
 
+    private bool slideCooldown = false;
+    public float slideCooldownDuration = 0.5f;
+
     public float slideYScale;
     private float startYScale;
 
@@ -51,14 +54,13 @@ public class PlayerSlide : MonoBehaviour
         if(pm.grounded)
         {
             if (Input.GetKeyDown(slideKey) && (horizontalInput != 0 || verticalInput != 0))
+            {
                 StartSlide();
+                StartCoroutine(SlideCooldown());
+            }
 
             if (Input.GetKeyUp(slideKey) && pm.sliding)
                 StopSlide();
-        }
-        else
-        {
-            StopSlide();
         }
     }
 
@@ -68,20 +70,37 @@ public class PlayerSlide : MonoBehaviour
             SlidingMovement();
     }
 
+    private void LateUpdate()
+    {
+        float targetHeight = pm.sliding ? slideYScale : startYScale;
+        cc.height = Mathf.Lerp(cc.height, targetHeight, Time.deltaTime * 10f);
+    }
+
     private void StartSlide()
     {
+        if (!pm.grounded) 
+            return;
+
         pm.sliding = true;
-        AudioManager.instance.PlaySFXOneShot("Slide", 1f);
+        AudioManager.instance.PlaySFX("Slide", 1f, false);
         cc.height = slideYScale;
         rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
 
         slideTimer = maxSlideTime;
     }
+
     private void StopSlide()
     {
-        pm.sliding = false;
         cc.height = startYScale;
         AudioManager.instance.StopSFX("Slide");
+        pm.sliding = false;
+    }
+
+    private IEnumerator SlideCooldown()
+    {
+        slideCooldown = true;
+        yield return new WaitForSeconds(slideCooldownDuration);
+        slideCooldown = false;
     }
 
     private void SlidingMovement()

@@ -6,7 +6,7 @@ public class BuletManager : MonoBehaviour
 {
     public static BuletManager instance;
 
-    [Header("Factory_Objetcpool")]
+    [Header("Factory Object Pool")]
     [SerializeField] public Bullet prefab;
     ObjectPool<Bullet> _objectPool;
     Factory<Bullet> _factory;

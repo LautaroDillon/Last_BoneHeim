@@ -97,7 +97,7 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
         if (currentlife <= 0)
         {
             Debug.Log("the skeleton received damage ");
-            GameManager.instance.enemys.Remove(this.gameObject);
+            //GameManager.instance.enemys.Remove(this.gameObject);
 
             if(gameObject.tag == "Skeleton")
                 SoundManager.instance.PlaySound(skeletonDeathClip, transform, 1f, false);

@@ -13,6 +13,8 @@ public class E_Shooter : MonoBehaviour
 
     public float health;
 
+    public static E_Shooter instance;
+
     //Patroling
     public Vector3 walkPoint;
     bool walkPointSet;
@@ -21,7 +23,10 @@ public class E_Shooter : MonoBehaviour
     //Attacking
     public float timeBetweenAttacks;
     bool alreadyAttacked;
-    public GameObject projectile;
+    //public Bullet projectile;
+    public GameObject firePoint;
+    [SerializeField] private float projectileSpeed;
+
 
     //States
     public float sightRange, attackRange;
@@ -31,6 +36,8 @@ public class E_Shooter : MonoBehaviour
     {
        //    player = GameObject.Find("PlayerObj").transform;
         agent = GetComponent<NavMeshAgent>();
+        if (instance == null)
+            instance = this;
     }
 
     private void Update()
@@ -84,11 +91,18 @@ public class E_Shooter : MonoBehaviour
         if (!alreadyAttacked)
         {
             ///Attack code here
-            /*Rigidbody rb = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
-            rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
-            rb.AddForce(transform.up * 8f, ForceMode.Impulse);*/
-            projectile.transform.position = transform.position;
-            projectile.SetActive(true);
+            Vector3 directionToPlayer = (player.transform.position - firePoint.transform.position).normalized;
+
+            var bullet = BuletManager.instance.GetBullet();
+            bullet.transform.position = firePoint.transform.position;
+            bullet.transform.forward = directionToPlayer;
+
+            Rigidbody rb = bullet.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.velocity = directionToPlayer * projectileSpeed;
+            }
+           // projectile.transform.position = transform.position;
             ///End of attack code
 
             alreadyAttacked = true;
@@ -100,7 +114,7 @@ public class E_Shooter : MonoBehaviour
         alreadyAttacked = false;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         health -= damage;
 

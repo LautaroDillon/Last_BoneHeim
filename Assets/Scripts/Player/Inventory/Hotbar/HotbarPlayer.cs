@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using Unity.VisualScripting;
-using static UnityEditor.Progress;
 
 public class HotbarPlayer : MonoBehaviour
 {

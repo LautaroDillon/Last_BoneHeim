@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Assign Player")]
     public Transform thisIsPlayer;
-    public List<GameObject> enemys;
+    public List<GameObject> enemies;
 
     [Header("Time Scale Check")]
     public bool isRunning;
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
     }
     public void AddToList(GameObject t)
     {
-        enemys.Add(t);
+        enemies.Add(t);
     }
 
 }

@@ -5,36 +5,32 @@ using UnityEngine.AI;
 
 public class E_Shooter : MonoBehaviour
 {
+    [Header("References")]
     public NavMeshAgent agent;
-
     public Transform player;
-
     public LayerMask whatIsGround, whatIsPlayer;
-
-    public float health;
-
     public static E_Shooter instance;
 
-    //Patroling
+    [Header("Health")]
+    public float health;
+
+    [Header("Patrol")]
     public Vector3 walkPoint;
     bool walkPointSet;
     public float walkPointRange;
 
-    //Attacking
+    [Header("Attack")]
     public float timeBetweenAttacks;
     bool alreadyAttacked;
-    //public Bullet projectile;
     public GameObject firePoint;
     [SerializeField] private float projectileSpeed;
 
-
-    //States
+    [Header("States")]
     public float sightRange, attackRange;
     public bool playerInSightRange, playerInAttackRange;
 
     private void Awake()
     {
-       //    player = GameObject.Find("PlayerObj").transform;
         agent = GetComponent<NavMeshAgent>();
         if (instance == null)
             instance = this;
@@ -46,14 +42,18 @@ public class E_Shooter : MonoBehaviour
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
-        if (!playerInSightRange && !playerInAttackRange) Patroling();
-        if (playerInSightRange && !playerInAttackRange) ChasePlayer();
-        if (playerInAttackRange && playerInSightRange) AttackPlayer();
+        if (!playerInSightRange && !playerInAttackRange)
+            Patroling();
+        if (playerInSightRange && !playerInAttackRange)
+            ChasePlayer();
+        if (playerInAttackRange && playerInSightRange)
+            AttackPlayer();
     }
 
     private void Patroling()
     {
-        if (!walkPointSet) SearchWalkPoint();
+        if (!walkPointSet)
+            SearchWalkPoint();
 
         if (walkPointSet)
             agent.SetDestination(walkPoint);
@@ -118,11 +118,22 @@ public class E_Shooter : MonoBehaviour
     {
         health -= damage;
 
-        if (health <= 0) Invoke(nameof(DestroyEnemy), 0.5f);
+        if (health <= 0)
+            Invoke(nameof(DestroyEnemy), 0.5f);
     }
+
     private void DestroyEnemy()
     {
         Destroy(gameObject);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "Bullet")
+        {
+            TakeDamage(50);
+            AudioManager.instance.PlaySFX("Bullet Enemy Impact", 1f, false);
+        }
     }
 
     private void OnDrawGizmosSelected()

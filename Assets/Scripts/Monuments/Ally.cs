@@ -35,14 +35,14 @@ public class Ally : MonoBehaviour, Idamagable
     private void Awake()
     {
         intance = this;
-        _enemies = GameManager.instance.enemys;
+        //_enemies = GameManager.instance.enemys;
         _player = GameManager.instance.thisIsPlayer;
         Destroy(this.gameObject, timeLife);
     }
 
     private void Update()
     {
-        _enemies = GameManager.instance.enemys;
+        //_enemies = GameManager.instance.enemys;
 
         if (_currentLife > 0)
         {

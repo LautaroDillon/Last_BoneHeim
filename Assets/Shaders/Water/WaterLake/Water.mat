@@ -73,12 +73,12 @@ Material:
     - _FoamTiling: 1.85
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _WaveIntencity: 1.26
+    - _WaveIntencity: 0.03
     - _WaveSpeed: 1.15
     m_Colors:
-    - _CausticColor: {r: 119.42823, g: 119.42823, b: 119.42823, a: 1}
-    - _FoamColor: {r: 0.9528302, g: 0.9528302, b: 0.9528302, a: 1}
+    - _CausticColor: {r: 159.4461, g: 88.65287, b: 0, a: 1}
+    - _FoamColor: {r: 0.8773585, g: 0.48648474, b: 0.22761661, a: 1}
     - _FoamSpeed: {r: 0, g: 0.1, b: 0, a: 0}
-    - _ShoreColor: {r: 0.9716981, g: 0.9716981, b: 0.9716981, a: 1}
-    - _WaterColor: {r: 0.2924528, g: 0, b: 0.031046001, a: 1}
+    - _ShoreColor: {r: 0.5849056, g: 0.32883915, b: 0.17933428, a: 1}
+    - _WaterColor: {r: 0.29411766, g: 0.099623315, b: 0, a: 1}
   m_BuildTextureStacks: []

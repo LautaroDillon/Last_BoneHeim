@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    int forgottenBonus = 0;
     int forgottenHeartStat;
     int forgottenLiverStat;
     int forgottenStomachStat;
@@ -72,6 +71,7 @@ public class PlayerStats : MonoBehaviour
                 switch (_slot.ItemObject.type)
                 {
                     #region Normal Organs
+                    /*
                     case ItemType.O_Heart:
                         Debug.Log("HEART DOESNT WORK");
                         PlayerHealth.instance._maxlife -= 20;
@@ -120,19 +120,19 @@ public class PlayerStats : MonoBehaviour
                     #region Cursed Organs
                     case ItemType.O_CursedHeart:
                         Debug.Log("CURSED HEART DOESNT WORK");
-                        PlayerHealth.instance._maxlife += 10;
-                        PlayerHealth.instance.reviveTime -= 3;
+                        //PlayerHealth.instance_maxlife += 10;
+                        //PlayerHealth.instance.reviveTime -= 3;
                         break;
 
                     case ItemType.O_CursedLiver:
                         Debug.Log("CURSED LIVER DOESNT WORK");
-                        PlayerHealth.instance._maxlife += 10;
+                        //PlayerHealth.instance._maxlife += 10;
                         FlyweightPointer.Player.Damage -= 20;
                         break;
 
                     case ItemType.O_CursedLungs:
                         Debug.Log("CURSED LUNGS DOESNT WORK");
-                        PlayerHealth.instance._maxlife += 10;
+                        //PlayerHealth.instance._maxlife += 10;
                         PlayerMovementAdvanced.instance.sprintSpeed -= 1;
                         PlayerMovementAdvanced.instance.slideSpeed -= 1;
                         PlayerMovementAdvanced.instance.climbSpeed -= 2;
@@ -141,7 +141,7 @@ public class PlayerStats : MonoBehaviour
 
                     case ItemType.O_CursedStomach:
                         Debug.Log("CURSED STOMACH DOESNT WORK");
-                        PlayerHealth.instance._maxlife += 10;
+                        //PlayerHealth.instance._maxlife += 10;
                         PlayerMovementAdvanced.instance.jumpForce -= 3;
                         PlayerMovementAdvanced.instance.airMultiplier -= 1;
                         break;
@@ -150,19 +150,19 @@ public class PlayerStats : MonoBehaviour
                     #region Vengeful Organs
                     case ItemType.O_VengefulHeart:
                         Debug.Log("VENGEFUL HEART DOESNT WORK");
-                        PlayerHealth.instance._maxlife -= 15;
-                        PlayerHealth.instance.lifeSteal -= 2;
+                        // PlayerHealth.instance._maxlife -= 15;
+                        // PlayerHealth.instance.lifeSteal -= 2;
                         break;
 
                     case ItemType.O_VengefulLiver:
                         Debug.Log("VENGEFUL LIVER DOESNT WORK");
-                        PlayerHealth.instance.lifeSteal -= 2;
+                        // PlayerHealth.instance.lifeSteal -= 2;
                         FlyweightPointer.Player.Damage -= 5;
                         break;
 
                     case ItemType.O_VengefulLungs:
                         Debug.Log("VENGEFUL LUNGS DOESNT WORK");
-                        PlayerHealth.instance.lifeSteal -= 2;
+                        // PlayerHealth.instance.lifeSteal -= 2;
                         PlayerMovementAdvanced.instance.sprintSpeed -= 1;
                         PlayerMovementAdvanced.instance.slideSpeed -= 1;
                         PlayerMovementAdvanced.instance.climbSpeed -= 1;
@@ -171,7 +171,7 @@ public class PlayerStats : MonoBehaviour
 
                     case ItemType.O_VengefulStomach:
                         Debug.Log("VENGEFUL STOMACH DOESNT WORK");
-                        PlayerHealth.instance.lifeSteal -= 2;
+                        // PlayerHealth.instance.lifeSteal -= 2;
                         PlayerMovementAdvanced.instance.jumpForce -= 1;
                         PlayerMovementAdvanced.instance.airMultiplier -= 1;
                         break;
@@ -180,22 +180,22 @@ public class PlayerStats : MonoBehaviour
                     #region Blessed Organs
                     case ItemType.O_BlessedHeart:
                         Debug.Log("BLESSED HEART DOESNT WORK");
-                        PlayerHealth.instance._maxlife -= 25;
-                       /* PlayerHealth.instance.shieldAmount -= 25;
-                        PlayerHealth.instance.shieldMax -= 25;*/
+                        //PlayerHealth.instance._maxlife -= 25;
+                        /* PlayerHealth.instance.shieldAmount -= 25;
+                         PlayerHealth.instance.shieldMax -= 25;
                         break;
 
                     case ItemType.O_BlessedLiver:
                         Debug.Log("BLESSED LIVER DOESNT WORK");
                        /* PlayerHealth.instance.shieldAmount -= 25;
-                        PlayerHealth.instance.shieldMax -= 25;*/
+                        PlayerHealth.instance.shieldMax -= 25;
                         FlyweightPointer.Player.Damage -= 10;
                         break;
 
                     case ItemType.O_BlessedLungs:
                         Debug.Log("BLESSED LUNGS DOESNT WORK");
                        /* PlayerHealth.instance.shieldAmount -= 25;
-                        PlayerHealth.instance.shieldMax -= 25;*/
+                        PlayerHealth.instance.shieldMax -= 25;
                         PlayerMovementAdvanced.instance.sprintSpeed -= 1;
                         PlayerMovementAdvanced.instance.slideSpeed -= 1;
                         PlayerMovementAdvanced.instance.climbSpeed -= 1;
@@ -205,7 +205,7 @@ public class PlayerStats : MonoBehaviour
                     case ItemType.O_BlessedStomach:
                         Debug.Log("BLESSED STOMACH DOESNT WORK");
                        /* PlayerHealth.instance.shieldAmount -= 25;
-                        PlayerHealth.instance.shieldMax -= 25;*/
+                        PlayerHealth.instance.shieldMax -= 25;
                         PlayerMovementAdvanced.instance.jumpForce -= 1;
                         PlayerMovementAdvanced.instance.airMultiplier -= 2;
                         break;
@@ -215,7 +215,7 @@ public class PlayerStats : MonoBehaviour
 
                     case ItemType.O_ForgottenHeart:
                         Debug.Log("FORGOTTEN HEART WORKS");
-                        PlayerHealth.instance._maxlife -= forgottenHeartStat;
+                        //PlayerHealth.instance._maxlife -= forgottenHeartStat;
                         forgottenBonus -= 5;
                         break;
 
@@ -247,8 +247,8 @@ public class PlayerStats : MonoBehaviour
 
                     case ItemType.O_SpectralHeart:
                         Debug.Log("SPECTRAL HEART WORKS");
-                        PlayerHealth.instance._maxlife -= 15;
-                        PlayerHealth.instance.dodgeChance -= 14;
+                        //PlayerHealth.instance._maxlife -= 15;
+                        // PlayerHealth.instance.dodgeChance -= 14;
                         break;
 
                     case ItemType.O_SpectralLungs:
@@ -257,20 +257,20 @@ public class PlayerStats : MonoBehaviour
                         PlayerMovementAdvanced.instance.slideSpeed -= 2;
                         PlayerMovementAdvanced.instance.climbSpeed -= 2;
                         PlayerMovementAdvanced.instance.wallrunSpeed -= 2;
-                        PlayerHealth.instance.dodgeChance -= 7;
+                        //PlayerHealth.instance.dodgeChance -= 7;
                         break;
 
                     case ItemType.O_SpectralLiver:
                         Debug.Log("SPECTRAL LIVER WORKS");
                         FlyweightPointer.Player.Damage -= 15;
-                        PlayerHealth.instance.dodgeChance -= 7;
+                        //PlayerHealth.instance.dodgeChance -= 7;
                         break;
 
                     case ItemType.O_SpectralStomach:
                         Debug.Log("SPECTRAL STOMACH WORKS");
                         PlayerMovementAdvanced.instance.jumpForce -= 1;
                         PlayerMovementAdvanced.instance.airMultiplier -= 1;
-                        PlayerHealth.instance.dodgeChance -= 7;
+                        //PlayerHealth.instance.dodgeChance -= 7;
                         break;
 
                     #endregion
@@ -279,7 +279,7 @@ public class PlayerStats : MonoBehaviour
 
                     case ItemType.O_LightningHeart:
                         Debug.Log("LIGHTNING HEART WORKS");
-                        PlayerHealth.instance._maxlife -= 35;
+                        //PlayerHealth.instance._maxlife -= 35;
                         Guns.instance.lightningDamage -= 5;
                         Guns.instance.lightningChance -= 7;
                         break;
@@ -315,7 +315,7 @@ public class PlayerStats : MonoBehaviour
 
                     case ItemType.O_InfernalHeart:
                         Debug.Log("INFERNAL HEART WORKS");
-                        PlayerHealth.instance._maxlife -= 10;
+                        //PlayerHealth.instance._maxlife -= 10;
                         Guns.instance.infernalDamage -= 5;
                         Guns.instance.infernalChance -= 7;
                         SoundManager.instance.PlaySound(heartEquipClip, transform, 1f, false);
@@ -359,7 +359,7 @@ public class PlayerStats : MonoBehaviour
 
                     case ItemType.O_RottenHeart:
                         Debug.Log("ROTTEN HEART WORKS");
-                        PlayerHealth.instance._maxlife -= 10;
+                        //PlayerHealth.instance._maxlife -= 10;
                         Guns.instance.rottenDamage -= 5;
                         Guns.instance.rottenChance -= 7;
                         break;
@@ -421,6 +421,7 @@ public class PlayerStats : MonoBehaviour
                         Debug.Log("PARASITE HAND DOESNT WORK");
                         Guns.instance.ResetGun();
                         break;
+                       */
                         #endregion
                 }
                 for (int i = 0; i < _slot.item.buffs.Length; i++)
@@ -452,6 +453,7 @@ public class PlayerStats : MonoBehaviour
                 switch(_slot.ItemObject.type)
                 {
                     #region Normal Organs
+                    /*
                     case ItemType.O_Heart:
                         Debug.Log("HEART WORKS");
                         PlayerHealth.instance._maxlife += 20;
@@ -613,7 +615,7 @@ public class PlayerStats : MonoBehaviour
                         Debug.Log("BLESSED HEART WORK");
                         /*PlayerHealth.instance._maxlife += 25;
                         PlayerHealth.instance.shieldAmount += 25;
-                        PlayerHealth.instance.shieldMax += 25;*/
+                        PlayerHealth.instance.shieldMax += 25;
                         FullscreenShader.instance.blessedShaderEnabled = true;
                         SoundManager.instance.PlaySound(heartEquipClip, transform, 1f, false);
                         SoundManager.instance.PlaySound(blessedOrganClip, transform, 1f, false);
@@ -622,7 +624,7 @@ public class PlayerStats : MonoBehaviour
                     case ItemType.O_BlessedLiver:
                         Debug.Log("BLESSED LIVER WORK");
                        /* PlayerHealth.instance.shieldAmount += 25;
-                        PlayerHealth.instance.shieldMax += 25;*/
+                        PlayerHealth.instance.shieldMax += 25;
                         FlyweightPointer.Player.Damage += 10;
                         FullscreenShader.instance.blessedShaderEnabled = true;
                         SoundManager.instance.PlaySound(liverEquipClip, transform, 1f, false);
@@ -632,7 +634,7 @@ public class PlayerStats : MonoBehaviour
                     case ItemType.O_BlessedLungs:
                         Debug.Log("BLESSED LUNGS WORK");
                        /* PlayerHealth.instance.shieldAmount += 25;
-                        PlayerHealth.instance.shieldMax += 25;*/
+                        PlayerHealth.instance.shieldMax += 25;
                         PlayerMovementAdvanced.instance.sprintSpeed += 1;
                         PlayerMovementAdvanced.instance.slideSpeed += 1;
                         PlayerMovementAdvanced.instance.climbSpeed += 1;
@@ -645,7 +647,7 @@ public class PlayerStats : MonoBehaviour
                     case ItemType.O_BlessedStomach:
                         Debug.Log("BLESSED STOMACH WORK");
                        /* PlayerHealth.instance.shieldAmount += 25;
-                        PlayerHealth.instance.shieldMax += 25;*/
+                        PlayerHealth.instance.shieldMax += 25;
                         PlayerMovementAdvanced.instance.jumpForce += 1;
                         PlayerMovementAdvanced.instance.airMultiplier += 2;
                         FullscreenShader.instance.blessedShaderEnabled = true;
@@ -863,6 +865,7 @@ public class PlayerStats : MonoBehaviour
                         SoundManager.instance.PlaySound(stomachEquipClip, transform, 1f, false);
                         SoundManager.instance.PlaySound(vengefulOrganClip, transform, 1f, false);
                         break;
+                */
 
                     #endregion
 

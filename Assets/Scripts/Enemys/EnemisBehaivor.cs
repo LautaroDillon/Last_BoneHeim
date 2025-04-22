@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemisBehaivor : MonoBehaviour, Idamagable
+public class EnemisBehaivor : MonoBehaviour, IDamagable
 {
     #region Variables
    // public FSM fsm;
@@ -96,30 +96,7 @@ public class EnemisBehaivor : MonoBehaviour, Idamagable
 
         if (currentlife <= 0)
         {
-            Debug.Log("the skeleton received damage ");
-            //GameManager.instance.enemys.Remove(this.gameObject);
 
-            if(gameObject.tag == "Skeleton")
-                SoundManager.instance.PlaySound(skeletonDeathClip, transform, 1f, false);
-            if(gameObject.tag == "Boomer")
-                SoundManager.instance.PlaySound(boomerDeathClip, transform, 1f, false);
-            if(gameObject.tag == "Necromancer")
-                SoundManager.instance.PlaySound(necromancerDeathClip, transform, 1f, false);
-            if(gameObject.tag == "Invoker")
-                SoundManager.instance.PlaySound(invokerDeathClip, transform, 1f, false);
-            if(gameObject.tag == "Chaman")
-                SoundManager.instance.PlaySound(chamanDeathClip, transform, 1f, false);
-
-            if (PlayerHealth.instance.isInReviveState)
-            {
-                PlayerHealth.instance.enemyKilled = true;
-            }
-
-            Destroy(acid);
-            Destroy(this.gameObject, 0.1f);
-            PlayerHealth.instance.life += 10;
-            if(gun != null)
-            Guns.instance.bulletsLeft += Random.Range(1, 3) + gun.killReward;
         }
     }
 

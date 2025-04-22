@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShieldShader : MonoBehaviour, Idamagable
+public class ShieldShader : MonoBehaviour, IDamagable
 {
     [SerializeField]
     Renderer _renderer;

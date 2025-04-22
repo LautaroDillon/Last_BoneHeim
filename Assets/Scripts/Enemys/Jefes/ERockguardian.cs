@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class ERockguardian : MonoBehaviour, Idamagable
+public class ERockguardian : MonoBehaviour, IDamagable
 {
     float currentLife;
     public float maxLife;

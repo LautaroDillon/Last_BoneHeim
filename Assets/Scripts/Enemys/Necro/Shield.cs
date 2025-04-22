@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shield : MonoBehaviour, Idamagable
+public class Shield : MonoBehaviour, IDamagable
 {
     public GameObject esto;
     public float _life;

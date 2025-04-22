@@ -44,17 +44,13 @@ public class ThrowArm : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        Idamagable damagableInterface = other.gameObject.GetComponent<Idamagable>();
+        IDamagable damagableInterface = other.gameObject.GetComponent<IDamagable>();
         if (other.gameObject.layer == 10)
         {
             Debug.Log("pego a enemigo");
             damagableInterface.TakeDamage(75);
             ModifyAmmoBasedOnWeapon();
             ammoCharged = true;
-            if (PlayerHealth.instance.isInReviveState)
-            {
-                PlayerHealth.instance.OnEnemyKilled();
-            }
         }
     }
 

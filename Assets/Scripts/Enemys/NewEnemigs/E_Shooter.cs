@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class E_Shooter : MonoBehaviour
+public class E_Shooter : Entity
 {
     [Header("References")]
     public NavMeshAgent agent;
     public Transform player;
     public LayerMask whatIsGround, whatIsPlayer;
     public static E_Shooter instance;
-
-    [Header("Health")]
-    public float health;
 
     [Header("Patrol")]
     public Vector3 walkPoint;
@@ -23,6 +20,7 @@ public class E_Shooter : MonoBehaviour
     public float timeBetweenAttacks;
     bool alreadyAttacked;
     public GameObject firePoint;
+    public float walkSpeed;
     [SerializeField] private float projectileSpeed;
 
     [Header("States")]
@@ -31,6 +29,8 @@ public class E_Shooter : MonoBehaviour
 
     private void Awake()
     {
+        maxHealth = EnemyFlyweight.Shooter.maxLife;
+        walkSpeed = EnemyFlyweight.Shooter.speed;
         agent = GetComponent<NavMeshAgent>();
         if (instance == null)
             instance = this;
@@ -48,6 +48,7 @@ public class E_Shooter : MonoBehaviour
             ChasePlayer();
         if (playerInAttackRange && playerInSightRange)
             AttackPlayer();
+        Death();
     }
 
     private void Patroling()
@@ -78,7 +79,7 @@ public class E_Shooter : MonoBehaviour
 
     private void ChasePlayer()
     {
-        agent.SetDestination(player.position);
+        agent.SetDestination(player.position * walkSpeed);
     }
 
     private void AttackPlayer()
@@ -114,12 +115,10 @@ public class E_Shooter : MonoBehaviour
         alreadyAttacked = false;
     }
 
-    public void TakeDamage(float damage)
+    private void Death()
     {
-        health -= damage;
-
-        if (health <= 0)
-            Invoke(nameof(DestroyEnemy), 0.5f);
+        if (isDead == true)
+            Invoke("DestroyEnemy", 0.5f);
     }
 
     private void DestroyEnemy()

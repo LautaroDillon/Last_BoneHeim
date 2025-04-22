@@ -443,6 +443,7 @@ GameObject:
   - component: {fileID: 3468319339651991275}
   - component: {fileID: 7787175318602520168}
   - component: {fileID: 5912975175020226424}
+  - component: {fileID: 3855525071880069385}
   m_Layer: 3
   m_Name: Player Camera
   m_TagString: Untagged
@@ -585,6 +586,29 @@ MonoBehaviour:
   sensY: 400
   orientation: {fileID: 5495434876042881451}
   camHolder: {fileID: 4907814492264641736}
+--- !u!114 &3855525071880069385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3897717874469356300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 799737eaa58e47c4cb64349e2f0e3d37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraHolder: {fileID: 4907814492264641736}
+  playerRb: {fileID: 8393594219456582226}
+  pm: {fileID: 7949670869836013094}
+  moveNoiseIntensity: 0.07
+  moveNoiseFrequency: 1.5
+  maxTilt: 3
+  tiltSpeed: 5
+  jumpShakeAmount: 0
+  bumpReturnSpeed: 5
+  landingBumpAmount: -1
+  landingBumpReturnSpeed: 8
 --- !u!1 &5137529503691769728
 GameObject:
   m_ObjectHideFlags: 0
@@ -705,6 +729,7 @@ GameObject:
   - component: {fileID: 8817663980894944531}
   - component: {fileID: 1593223342017836199}
   - component: {fileID: 8393594219456582226}
+  - component: {fileID: 7592187122004267865}
   - component: {fileID: 7949670869836013094}
   - component: {fileID: 8378892350964853826}
   - component: {fileID: 6979927988560138583}
@@ -837,6 +862,21 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &7592187122004267865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5247402987687501777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6efc8cd0521c47b48b60fdd1c401eed8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 0
+  currentHealth: 0
+  isDead: 0
 --- !u!114 &7949670869836013094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -849,8 +889,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4ec8f974cb753c45b2687bcfec389f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canDoubleJump: 0
-  canDash: 0
+  canDoubleJump: 1
+  canDash: 1
   orientation: {fileID: 5495434876042881451}
   mainCam: {fileID: 6174852390792161049}
   cam: {fileID: 5912975175020226424}
@@ -873,13 +913,12 @@ MonoBehaviour:
   crouchSpeed: 0
   crouchYScale: 0.5
   jumpKey: 32
-  crouchKey: 0
   playerHeight: 2
   whatIsGround:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 16512
   grounded: 0
-  maxSlopeAngle: 50
+  maxSlopeAngle: 90
   dashing: 0
   sliding: 0
   wallrunning: 0
@@ -932,6 +971,7 @@ MonoBehaviour:
   cameraHolder: {fileID: 4907814492264641736}
   maxSlideTime: 1
   slideForce: 500
+  slideCooldownDuration: 0.5
   slideYScale: 1
   slideCamYPos: 0.5
   slideKey: 306
@@ -949,7 +989,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   whatIsWall:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 512
   whatIsGround:
     serializedVersion: 2
     m_Bits: 128
@@ -985,7 +1025,7 @@ MonoBehaviour:
   pm: {fileID: 7949670869836013094}
   whatIsWall:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 16384
   climbSpeed: 10
   maxClimbTime: 0.75
   climbJumpUpForce: 14
@@ -1040,6 +1080,7 @@ GameObject:
   - component: {fileID: 1089454899372370689}
   - component: {fileID: 6738236756239467104}
   - component: {fileID: 8641382651066898531}
+  - component: {fileID: 1385696990285263863}
   m_Layer: 3
   m_Name: Weapon Camera
   m_TagString: Untagged
@@ -1157,6 +1198,40 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!114 &1385696990285263863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6345229601094946766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowDebugText: 0
+  m_ShowCameraFrustum: 1
+  m_IgnoreTimeScale: 0
+  m_WorldUpOverride: {fileID: 0}
+  m_UpdateMethod: 2
+  m_BlendUpdateMethod: 1
+  m_DefaultBlend:
+    m_Style: 1
+    m_Time: 2
+    m_CustomCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  m_CustomBlends: {fileID: 0}
+  m_CameraCutEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_CameraActivatedEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7054016997083922796
 GameObject:
   m_ObjectHideFlags: 0

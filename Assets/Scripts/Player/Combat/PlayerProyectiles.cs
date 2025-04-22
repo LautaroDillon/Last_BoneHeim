@@ -55,7 +55,7 @@ public class PlayerProyectiles : MonoBehaviour
         foreach (Collider collider in colliders)
         {
             // Ensure the object has an IDamagable interface and check if it's an enemy
-            Idamagable damagableInterface = collider.gameObject.GetComponent<Idamagable>();
+            IDamagable damagableInterface = collider.gameObject.GetComponent<IDamagable>();
             if (damagableInterface != null)
             {
                 float distanceToEnemy = Vector3.Distance(transform.position, collider.transform.position);
@@ -108,7 +108,7 @@ public class PlayerProyectiles : MonoBehaviour
 
         if (other.gameObject.layer == 10)
         {
-            Idamagable damagableInterface = other.gameObject.GetComponent<Idamagable>();
+            IDamagable damagableInterface = other.gameObject.GetComponent<IDamagable>();
 
             if (damagableInterface != null)
             {
@@ -116,7 +116,6 @@ public class PlayerProyectiles : MonoBehaviour
 
                 damagableInterface.TakeDamage(FlyweightPointer.Player.Damage);
                 SoundManager.instance.PlaySound(bulletHitClip, transform, 0.3f, false);
-                PlayerHealth.instance.life += PlayerHealth.instance.lifeSteal;
                 if (!Guns.instance.isNail)
                 {
                     Destroy(this.gameObject);

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeakPoints : MonoBehaviour, Idamagable
+public class WeakPoints : MonoBehaviour, IDamagable
 {
     public string nameorg;
     public float damage;

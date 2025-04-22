@@ -5,6 +5,7 @@ using UnityEngine;
 public class Organs : MonoBehaviour
 {
     public static Organs instance;
+    /*
     #region Normal Organs
     [Header("Organs")]
     //Heart
@@ -79,6 +80,7 @@ public class Organs : MonoBehaviour
     [Header("Blessed Organs")]
     int random;
 
+
     #region Equip Organ
 
     private void Awake()
@@ -89,17 +91,13 @@ public class Organs : MonoBehaviour
     public void EquipHeart()
     {
         Debug.Log("HEART WORKS");
-        PlayerHealth.instance._maxlife += heartLifeBuff;
     }
 
     public void EquipCursedHeart()
     {
-        PlayerHealth.instance._maxlife -= cursedHeartLifeDebuff;
-        PlayerHealth.instance.reviveTime += cursedHeartReviveBuff;
     }
     public void EquipBlazingHeart()
     {
-        PlayerHealth.instance._maxlife += blazingHeartLifeBuff;
     }
 
     public void EquipLungs()
@@ -112,7 +110,6 @@ public class Organs : MonoBehaviour
 
     public void EquipCursedLungs()
     {
-        PlayerHealth.instance._maxlife -= cursedHeartLifeDebuff;
 
         PlayerMovementAdvanced.instance.sprintSpeed += cursedLungsSprintBuff;
         PlayerMovementAdvanced.instance.climbSpeed += cursedLungsClimbBuff;
@@ -135,7 +132,6 @@ public class Organs : MonoBehaviour
 
     public void EquipCursedStomach()
     {
-        PlayerHealth.instance._maxlife -= cursedHeartLifeDebuff;
 
         PlayerMovementAdvanced.instance.jumpForce += cursedStomachJumpBuff;
         PlayerMovementAdvanced.instance.airMultiplier += cursedStomachAirBuff;
@@ -154,7 +150,6 @@ public class Organs : MonoBehaviour
 
     public void EquipCursedLiver()
     {
-        PlayerHealth.instance._maxlife -= cursedHeartLifeDebuff;
 
         FlyweightPointer.Player.Damage += cursedLiverDamageBuff;
         Guns.instance.killReward += cursedLiverBoneBuff;
@@ -172,17 +167,13 @@ public class Organs : MonoBehaviour
     public void UnequipHeart()
     {
         Debug.Log("HEART DOESNT WORK");
-        PlayerHealth.instance._maxlife -= heartLifeBuff;
     }
 
     public void UnequipCursedHeart()
     {
-        PlayerHealth.instance._maxlife += cursedHeartLifeDebuff;
-        PlayerHealth.instance.reviveTime -= cursedHeartReviveBuff;
     }
     public void UnequipBlazingHeart()
     {
-        PlayerHealth.instance._maxlife -= blazingHeartLifeBuff;
     }
 
     public void UnequipLungs()
@@ -195,7 +186,6 @@ public class Organs : MonoBehaviour
 
     public void UnequipCursedLungs()
     {
-        PlayerHealth.instance._maxlife += cursedHeartLifeDebuff;
 
         PlayerMovementAdvanced.instance.sprintSpeed -= cursedLungsSprintBuff;
         PlayerMovementAdvanced.instance.climbSpeed -= cursedLungsClimbBuff;
@@ -218,7 +208,6 @@ public class Organs : MonoBehaviour
 
     public void UnequipCursedStomach()
     {
-        PlayerHealth.instance._maxlife += cursedHeartLifeDebuff;
 
         PlayerMovementAdvanced.instance.jumpForce -= cursedStomachJumpBuff;
         PlayerMovementAdvanced.instance.airMultiplier -= cursedStomachAirBuff;
@@ -237,7 +226,6 @@ public class Organs : MonoBehaviour
 
     public void UnequipCursedLiver()
     {
-        PlayerHealth.instance._maxlife += cursedHeartLifeDebuff;
 
         FlyweightPointer.Player.Damage -= liverDamageBuff;
         Guns.instance.killReward -= cursedLiverBoneBuff;
@@ -249,4 +237,5 @@ public class Organs : MonoBehaviour
     }
 
     #endregion
+    */
 }

@@ -44,14 +44,13 @@ public class Bullet : MonoBehaviour
     private void OnTriggerEnter(Collider collision)
     {
         PlayerHealth damagableInterface = collision.gameObject.GetComponent<PlayerHealth>();
-        Debug.Log("coliciono con algo");
 
-        if (collision.gameObject.layer == 11 && damagableInterface != null)
+        if (collision.gameObject.tag == "Player" && damagableInterface != null)
         {
-            Debug.Log("player recibe daño"); 
+            Debug.Log("Player takes damage"); 
             TurnOff(this);
             _objectPool.StockAdd(this);
-            damagableInterface.TakeDamage(FlyweightPointer.Eshoot.Damage);
+            damagableInterface.TakeDamage(50);
         }
         else if(collision.gameObject.layer == 6 || collision.gameObject.layer == 7)
         {

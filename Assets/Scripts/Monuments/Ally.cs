@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ally : MonoBehaviour, Idamagable
+public class Ally : MonoBehaviour, IDamagable
 {
     public static Ally intance;
 
@@ -118,7 +118,7 @@ public class Ally : MonoBehaviour, Idamagable
                 resetAnims();
                 anim.SetBool("Punch", true);
                 Debug.Log("Atacando al enemigo " + _targetEnemy.name);
-                _targetEnemy.GetComponent<Idamagable>().TakeDamage(_dmg);
+                _targetEnemy.GetComponent<IDamagable>().TakeDamage(_dmg);
                 lastAttackTime = Time.time;
             }
         }

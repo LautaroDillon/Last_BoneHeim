@@ -56,13 +56,18 @@ public class PlayerWeapon : MonoBehaviour
 
     private void Update()
     {
-        MyInput();
+        if (PauseManager.isPaused)
+            return;
+        else
+        {
+            MyInput();
 
-        if (ammunitionDisplay != null)
-            ammunitionDisplay.SetText(bulletsLeft / bulletsPerTap + " / " + magazineSize / bulletsPerTap);
+            if (ammunitionDisplay != null)
+                ammunitionDisplay.SetText(bulletsLeft / bulletsPerTap + " / " + magazineSize / bulletsPerTap);
 
-        if (bulletsLeft > magazineSize)
-            bulletsLeft = magazineSize;
+            if (bulletsLeft > magazineSize)
+                bulletsLeft = magazineSize;
+        }
     }
 
     private void MyInput()

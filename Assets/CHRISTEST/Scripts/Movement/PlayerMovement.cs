@@ -104,38 +104,43 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        // ground check
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
-        sprintSpeed = walkSpeed;
-        crouchSpeed = walkSpeed + 4;
-
-        stepCoolDown -= Time.deltaTime;
-
-        if ((Input.GetAxis("Horizontal") != 0f || Input.GetAxis("Vertical") != 0f) && stepCoolDown < 0f && grounded && state == MovementState.walking)
-        {
-            AudioManager.instance.PlaySFXOneShot("Walk", 1f);
-            stepCoolDown = stepRate;
-        }
-
-        if (grounded)
-        {
-            jumpCount = 0;
-        }
-
-        MyInput();
-        SpeedControl();
-        StateHandler();
-
-        // handle drag
-        if (state == MovementState.walking || state == MovementState.sprinting)
-            rb.drag = groundDrag;
+        if (PauseManager.isPaused)
+            return;
         else
-            rb.drag = 0;
+        {
+            // ground check
+            grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+            sprintSpeed = walkSpeed;
+            crouchSpeed = walkSpeed + 4;
 
-        if (state == MovementState.air || state == MovementState.dashing || state == MovementState.sliding)
-            rb.drag = 0;
-        else
-            rb.drag = groundDrag;
+            stepCoolDown -= Time.deltaTime;
+
+            if ((Input.GetAxis("Horizontal") != 0f || Input.GetAxis("Vertical") != 0f) && stepCoolDown < 0f && grounded && state == MovementState.walking)
+            {
+                AudioManager.instance.PlaySFXOneShot("Walk", 1f);
+                stepCoolDown = stepRate;
+            }
+
+            if (grounded)
+            {
+                jumpCount = 0;
+            }
+
+            MyInput();
+            SpeedControl();
+            StateHandler();
+
+            // handle drag
+            if (state == MovementState.walking || state == MovementState.sprinting)
+                rb.drag = groundDrag;
+            else
+                rb.drag = 0;
+
+            if (state == MovementState.air || state == MovementState.dashing || state == MovementState.sliding)
+                rb.drag = 0;
+            else
+                rb.drag = groundDrag;
+        }
 
     }
 

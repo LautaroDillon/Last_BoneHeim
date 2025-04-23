@@ -47,10 +47,15 @@ public class PlayerDash : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(dashKey) && pm.canDash)
-            Dash();
+        if (PauseManager.isPaused)
+            return;
+        else
+        {
+            if (Input.GetKeyDown(dashKey) && pm.canDash)
+                Dash();
 
-        DashCooldown();
+            DashCooldown();
+        }
     }
 
     public void DashCooldown()

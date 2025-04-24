@@ -46,6 +46,7 @@ public class Atack : IState
         if (!_shooter.alreadyAttacked)
         {
             Shoot();
+            _shooter.anim.SetTrigger("Attack");
             _shooter.alreadyAttacked = true;
             _cooldownTimer = _shooter.Shootcooldown;
         }

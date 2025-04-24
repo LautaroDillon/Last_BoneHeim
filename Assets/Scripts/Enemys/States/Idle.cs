@@ -23,7 +23,7 @@ public class Idle : IState
     public void OnEnter()
     {
         Debug.Log("Idle OnEnter");
-        //_Shooter.anim.SetBool("Idle", true);
+        _Shooter.anim.SetBool("Idle", true);
         _Shooter.isIdle = true;
         _agent.speed = 0f; // Detener al enemigo
     }
@@ -32,18 +32,18 @@ public class Idle : IState
     {
         _idleTimer += Time.deltaTime;
 
-        if (_idleTimer <= _idleDuration)
+        if (_idleTimer >= _idleDuration)
         {
-        Debug.Log("Idle Tick");
+            Debug.Log("Idle Tick");
             _Shooter.isIdle = false; // Disparador para transición
         }
     }
 
     public void OnExit()
     {
-        _idleTimer = 0f; // Reiniciar el temporizador
         _Shooter.isIdle = false;
-        //_Shooter.anim.SetBool("Idle", false);
+        _Shooter.anim.SetBool("Idle", false);
         Debug.Log("Idle OnExit");
+        _idleTimer = 0f; // Reiniciar el temporizador
     }
 }

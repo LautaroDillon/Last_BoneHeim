@@ -22,6 +22,7 @@ public class Strafe : IState
 
     public void OnEnter()
     {
+        Debug.Log("Strafe OnEnter");
         strafeTimer = 0f;
         moveLeft = Random.Range(0f, 1f) > 0.5f;
     }
@@ -35,6 +36,7 @@ public class Strafe : IState
             // Cambia la dirección después del intervalo
             moveLeft = !moveLeft;
             strafeTimer = 0f;
+            _Shooter.alreadyAttacked = false; // Permitir el ataque después de un strafe
         }
 
         // Movimiento lateral
@@ -46,6 +48,6 @@ public class Strafe : IState
 
     public void OnExit()
     {
-
+        Debug.Log("Strafe OnExit");
     }
 }

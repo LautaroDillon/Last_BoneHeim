@@ -36,14 +36,14 @@ public class E_Shooter : Entity
     [Header("States")]
     public float chaseDistance, attackRange;
     public bool playerInSightRange, playerInAttackRange, canSeePlayer;
-    public bool isIdle;
+    public bool isIdle = true;
 
     [Header("Player Detection")]
     [SerializeField] protected LayerMask obstructionMask;
     [SerializeField] protected float checkRadius;
     [Range(0, 360)]
     [SerializeField] protected float angle;
-    public Transform lastpoint;
+    public Vector3 lastpoint;
     #endregion
 
     private void Awake()
@@ -67,23 +67,25 @@ public class E_Shooter : Entity
         var Search = new Serach_S(agent, this, fsm);
         var strafe = new Strafe(agent, this, fsm);
         var attack = new Atack(agent, this, fsm);
-        //var mele = new MeleAtack(agent, this, fsm);
         var death = new Death(agent, this, fsm);
 
-        fsm.SetState(idle);
 
         // Definir las transiciones
         at(idle, patrol, () => !isIdle);
         at(patrol, idle, () => !ispatrolling);
         at(patrol, chase, () => canSeePlayer && !playerInAttackRange);
         at(chase, attack, () => playerInAttackRange);
-        at(attack, strafe, () => !alreadyAttacked); // Ejemplo
-        at(strafe, chase, () => alreadyAttacked && !playerInAttackRange);
+        at(attack, strafe, () => alreadyAttacked);
+        at(attack, chase, () => !playerInAttackRange);
+        at(attack, Search, () => !playerInAttackRange && !canSeePlayer);
+        at(strafe, chase, () => !playerInAttackRange);
+        at(strafe, attack, () => !alreadyAttacked);
         at(chase, Search, () => !canSeePlayer);
         at(Search, patrol, () => true); // Despues de buscar vuelve a patrullar
-       // at(chase, mele, () => playerInAttackRange);
-        //at(mele, chase, () => !playerInAttackRange);
         any(death, () => currentHealth <= 0); // Transición a Death desde cualquier estado
+
+
+        fsm.SetState(idle);
     }
 
 
@@ -94,19 +96,6 @@ public class E_Shooter : Entity
     private void Update()
     {
         fsm.Tick();
-    }
-
-    public void isinIdle()
-    {
-        float time = Random.Range(0.5f, 3f);
-        time -= Time.deltaTime;
-
-        if (time <= 0)
-        {
-            //anim.SetBool("Idle", true);
-            isIdle = false;
-        }
-
     }
 
     #region Fov
@@ -197,13 +186,12 @@ public class E_Shooter : Entity
             isDead = true;
             anim.SetBool("isDead", true);
             agent.speed = 0f;
-            Death();
         }
     }
-    private void Death()
+    public void Death()
     {
           if (isDead == true)
-              Invoke("DestroyEnemy", 0.5f);
+              Invoke("DestroyEnemy", 2.3f);
     }
 
     private void DestroyEnemy()

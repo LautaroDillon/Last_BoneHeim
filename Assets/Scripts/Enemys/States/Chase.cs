@@ -19,20 +19,28 @@ public class Chase : IState
 
     public void OnEnter()
     {
+        Debug.Log("Chase OnEnter");
+        _Shooter.anim.SetBool("Walk", true);
         _agent.speed = _Shooter.walkSpeed;
     }
 
     public void Tick()
     {
+        float distanceToPlayer = Vector3.Distance(_Shooter.transform.position, _Shooter.player.position);
+       
         if (_Shooter.canSeePlayer)
         {
             _Shooter.agent.SetDestination(_Shooter.player.position);
         }
 
+        if (distanceToPlayer < _Shooter.attackRange)
+        _Shooter.playerInAttackRange = true;
+
     }
 
     public void OnExit()
     {
-
+        Debug.Log("Chase OnExit");
+        _Shooter.anim.SetBool("Walk", false);
     }
 }

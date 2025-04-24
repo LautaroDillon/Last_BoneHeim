@@ -21,6 +21,7 @@ public class Atack : IState
 
     public void OnEnter()
     {
+        Debug.Log("Atack OnEnter");
         _agent.speed = 0f; // Detener al enemigo
     }
 
@@ -35,7 +36,10 @@ public class Atack : IState
         float distanceToPlayer = Vector3.Distance(_shooter.transform.position, _shooter.player.position);
 
         if (distanceToPlayer > _shooter.attackRange)
+        {
+            _shooter.playerInAttackRange = false;
             return;
+        }
 
         _agent.SetDestination(_shooter.transform.position); // Se queda quieto
 
@@ -50,7 +54,7 @@ public class Atack : IState
 
     public void OnExit()
     {
-
+        Debug.Log("Atack OnExit");
     }
 
     private void Shoot()

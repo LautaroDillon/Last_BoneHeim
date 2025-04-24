@@ -22,6 +22,7 @@ public class Patrol : IState
     public void OnEnter()
     {
         Debug.Log("Patrol OnEnter");
+        _Shooter.anim.SetBool("Walk", true);
         _agent.speed = _Shooter.walkSpeed;
         _Shooter.ispatrolling = true;
         _Shooter.isIdle = false;
@@ -51,6 +52,7 @@ public class Patrol : IState
     public void OnExit()
     {
         Debug.Log("Patrol OnExit");
+        _Shooter.anim.SetBool("Walk", false);
         _agent.speed = 0f;
         _Shooter.ispatrolling = false;
     }

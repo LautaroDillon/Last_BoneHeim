@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Assign Player")]
     public Transform thisIsPlayer;
+    public GameObject player;
     public List<GameObject> enemies;
 
     [Header("Time Scale Check")]

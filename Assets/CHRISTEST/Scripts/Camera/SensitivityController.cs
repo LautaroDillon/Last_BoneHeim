@@ -6,13 +6,16 @@ using UnityEngine.UI;
 public class SensitivityController : MonoBehaviour
 {
     [Header("Sensitivity")]
+    public float startingSensitivity = 400f;
     public float sensX;
     public float sensY;
 
+    [Header("Sensitivity Limits")]
+    public float minSensitivity = 100f;
+    public float maxSensitivity = 1000f;
+
     [Header("References")]
     public Slider sensitivitySlider;
-
-    public float startingSensitivity = 400f;
 
     [Header("Options")]
     public bool clearPrefsOnStart = false;
@@ -34,6 +37,8 @@ public class SensitivityController : MonoBehaviour
         }
 
         float savedSensitivity = PlayerPrefs.GetFloat("Sensitivity");
+        savedSensitivity = Mathf.Clamp(savedSensitivity, minSensitivity, maxSensitivity);
+
         sensX = savedSensitivity;
         sensY = savedSensitivity;
 
@@ -45,6 +50,8 @@ public class SensitivityController : MonoBehaviour
 
     public void SetSensitivity(float value)
     {
+        value = Mathf.Clamp(value, minSensitivity, maxSensitivity);
+
         sensX = value;
         sensY = value;
 

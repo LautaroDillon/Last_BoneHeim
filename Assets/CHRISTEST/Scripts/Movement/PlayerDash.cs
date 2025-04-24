@@ -47,7 +47,7 @@ public class PlayerDash : MonoBehaviour
 
     private void Update()
     {
-        if (PauseManager.isPaused)
+        if (PauseManager.isPaused || PlayerHealth.hasDied)
             return;
         else
         {

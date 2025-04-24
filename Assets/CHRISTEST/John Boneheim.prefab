@@ -446,7 +446,7 @@ GameObject:
   - component: {fileID: 3855525071880069385}
   m_Layer: 3
   m_Name: Player Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -549,7 +549,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 1
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -582,10 +582,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c9a9f47a24ad284685aacbd3196a7d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensX: 400
-  sensY: 400
   orientation: {fileID: 5495434876042881451}
   camHolder: {fileID: 4907814492264641736}
+  sensitivityController: {fileID: 0}
 --- !u!114 &3855525071880069385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -874,9 +873,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6efc8cd0521c47b48b60fdd1c401eed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 0
+  maxHealth: 50
   currentHealth: 0
   isDead: 0
+  mainCam: {fileID: 6174852390792161049}
+  deathCamPrefab: {fileID: 3031398129814482924, guid: 43cd7546de6819a46b798fac6ae560d4, type: 3}
 --- !u!114 &7949670869836013094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1177,7 +1178,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0

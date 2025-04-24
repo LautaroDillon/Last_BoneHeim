@@ -23,19 +23,25 @@ public class PauseManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(Pause))
+        if (DeathUI.deathUiActive)
+            return;
+        else
         {
-            if (isPaused)
+            if (Input.GetKeyDown(Pause))
             {
-                UnPauseGame();
-                AudioManager.instance.UnPauseSFX();
-            }
-            else
-            {
-                PauseGame();
-                AudioManager.instance.PauseSFX();
+                if (isPaused)
+                {
+                    UnPauseGame();
+                    AudioManager.instance.UnPauseSFX();
+                }
+                else
+                {
+                    PauseGame();
+                    AudioManager.instance.PauseSFX();
+                }
             }
         }
+        
     }
 
     public void PauseGame()

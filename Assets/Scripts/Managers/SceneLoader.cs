@@ -5,14 +5,22 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
-    public InventoryObject inventory;
-    public InventoryObject equipment;
+    public static SceneLoader instance;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+            Destroy(gameObject);
+    }
+
     public void LoadScene(int level)
     {
-
         SceneManager.LoadScene(level);
-        inventory.Clear();
-        equipment.Clear();
     }
 
     public void Exit()

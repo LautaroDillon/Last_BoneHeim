@@ -5,16 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/MainMenu.unity
     guid: 038e4c53aa031624c9498b84ebcecffb
+  - enabled: 1
+    path: Assets/CHRISTEST/ChrisTest.unity
+    guid: e8272f0a24a1e9546beebba9707c68c8
   - enabled: 0
     path: Assets/Scenes/LVL1 FINAL.unity
     guid: 94139a0be4661794d86f8dedea75e1e6
   - enabled: 0
     path: Assets/Scenes/Death.unity
     guid: c98f616cf71f7c048b4694126251084a
-  - enabled: 1
-    path: Assets/CHRISTEST/ChrisTest.unity
-    guid: e8272f0a24a1e9546beebba9707c68c8
   m_configObjects: {}

@@ -14,6 +14,12 @@ public class PlayerHealth : Entity
     public Camera mainCam;
     public GameObject deathCamPrefab;
 
+    private void Awake()
+    {
+        hasDied = false;
+        isDead = false;
+    }
+
     private void Start()
     {
         mainCam = Camera.main;
@@ -22,8 +28,8 @@ public class PlayerHealth : Entity
     private void Update()
     {
         Death();
-        if (Input.GetKeyDown(KeyCode.R))
-            Respawn();
+        //if (Input.GetKeyDown(KeyCode.R))
+            //Respawn();
     }
 
     private void Death()

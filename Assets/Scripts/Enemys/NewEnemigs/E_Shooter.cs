@@ -22,11 +22,11 @@ public class E_Shooter : Entity
     public Vector3 walkPoint;
     public bool walkPointSet;
     public float walkPointRange;
-    public bool ispatrolling;
+    public bool isPatrolling;
 
 
     [Header("Attack")]
-    public float Shootcooldown;
+    public float shotCooldown;
     public bool alreadyAttacked;
     public GameObject firePoint;
     public float walkSpeed;
@@ -72,7 +72,7 @@ public class E_Shooter : Entity
 
         // Definir las transiciones
         at(idle, patrol, () => !isIdle);
-        at(patrol, idle, () => !ispatrolling);
+        at(patrol, idle, () => !isPatrolling);
         at(patrol, chase, () => canSeePlayer && !playerInAttackRange);
         at(chase, attack, () => playerInAttackRange);
         at(attack, strafe, () => alreadyAttacked);

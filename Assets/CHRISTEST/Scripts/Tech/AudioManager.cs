@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System;
 
 public class AudioManager : MonoBehaviour
@@ -17,14 +18,11 @@ public class AudioManager : MonoBehaviour
     public AudioSource musicSource;
     public AudioSource sfxSource;
 
-
     [Header("Filters")]
     public AudioLowPassFilter lowPassFilter;
 
     private void Awake()
     {
-        lowPassFilter = musicSource.GetComponent<AudioLowPassFilter>();
-
         if (instance == null)
         {
             instance = this;
@@ -32,11 +30,13 @@ public class AudioManager : MonoBehaviour
         }
         else
             Destroy(gameObject);
-    }
 
-    public void Start()
-    {
-        PlayMusic("Background Music", 1f);
+        lowPassFilter = musicSource.GetComponent<AudioLowPassFilter>();
+
+        if (SceneManager.GetActiveScene().name == "ChrisTest")
+        {
+            PlayMusic("Background Music", 1f);
+        }
     }
 
     #region Audio Tech

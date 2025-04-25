@@ -14,7 +14,6 @@ public class LookAtCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         var dir = _cam.transform.position - transform.position;
         transform.forward = dir;
     }

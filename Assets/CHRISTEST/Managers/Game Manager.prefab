@@ -1,0 +1,133 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8575557964957044694
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5810659604827359115}
+  - component: {fileID: 3393008058586065468}
+  - component: {fileID: 4702550064491661653}
+  - component: {fileID: 1308948213122191037}
+  - component: {fileID: 7379105602568375809}
+  - component: {fileID: 6373969852268721697}
+  - component: {fileID: 7761488533239312150}
+  m_Layer: 0
+  m_Name: Game Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5810659604827359115
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8575557964957044694}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3393008058586065468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8575557964957044694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f11313d8d6371ee4b876d3f83ae394f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Pause: 27
+  thisIsPlayer: {fileID: 0}
+  player: {fileID: 0}
+  enemies:
+  - {fileID: 0}
+  isRunning: 0
+--- !u!114 &4702550064491661653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8575557964957044694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4805756c7514454b9d8f853c4134647, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 3593255390567505348, guid: a421ca5fc1999004191e5eaee526bdb6, type: 3}
+--- !u!114 &1308948213122191037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8575557964957044694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6177e61f3b5afb74f88e58973f0d2edc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Pause: 27
+  pauseMenu: {fileID: 0}
+  cdof: {fileID: 0}
+  otherPages: []
+--- !u!114 &7379105602568375809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8575557964957044694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75fd7e6ccb5d35849b8143f0580e9bb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingSensitivity: 400
+  sensX: 400
+  sensY: 400
+  minSensitivity: 100
+  maxSensitivity: 1000
+  sensitivitySlider: {fileID: 0}
+  clearPrefsOnStart: 1
+--- !u!114 &6373969852268721697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8575557964957044694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fd017c585db99c40907e410c0a1cc84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+--- !u!114 &7761488533239312150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8575557964957044694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cb9ea0d0254d144485bd7a437298942, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deathUI: {fileID: 0}
+  fadeCanvasGroup: {fileID: 0}
+  fadeDuration: 1

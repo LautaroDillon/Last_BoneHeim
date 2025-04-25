@@ -50,7 +50,7 @@ public class Bullet : MonoBehaviour
             Debug.Log("Player takes damage"); 
             TurnOff(this);
             _objectPool.StockAdd(this);
-            damagableInterface.TakeDamage(50);
+            damagableInterface.TakeDamage(10);
         }
         else if(collision.gameObject.layer == 6 || collision.gameObject.layer == 7)
         {

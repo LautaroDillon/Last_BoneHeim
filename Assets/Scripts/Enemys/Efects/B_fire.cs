@@ -11,9 +11,11 @@ public class B_fire : MonoBehaviour
 
         if (other.gameObject.layer == 11 && damagableInterface != null)
         {
+            /*
             FullscreenShader.instance.acidShaderEnabled = true;
             Destroy(gameObject);
             damagableInterface.TakeDamage(FlyweightPointer.Eshoot.Damage);
+            */
         }
         else if (other.gameObject.layer == 6 || other.gameObject.layer == 7)
         {

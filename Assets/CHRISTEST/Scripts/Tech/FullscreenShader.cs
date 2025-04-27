@@ -12,6 +12,7 @@ public class FullscreenShader : MonoBehaviour
     {
         instance = this;
         fullscreenSpeedShader.SetActive(false);
+        fullscreenHitShader.SetActive(false);
     }
 
     [Header("Speed Shader")]
@@ -20,6 +21,13 @@ public class FullscreenShader : MonoBehaviour
     private Material speedMaterial;
     public bool speedShaderEnabled = false;
 
+    [Header("Hit Shader")]
+    [SerializeField] private ScriptableRendererFeature fullscreenHitShader;
+    public Shader hitShader;
+    private Material hitMaterial;
+    public bool hitShaderEnabled = false;
+    
+    /*
     [Header("Arm Shader")]
     [SerializeField] private ScriptableRendererFeature fullscreenArmShader;
     public Shader armShader;
@@ -61,19 +69,13 @@ public class FullscreenShader : MonoBehaviour
     public Shader blazingShader;
     private Material blazingMaterial;
     public bool blazingShaderEnabled = false;
-
+    */
 
 
     void Update()
     {
         SpeedShader();
-        NormalOrganShader();
-        CursedOrganShader();
-        VengefulOrganShader();
-        BlazingOrganShader();
-        BlessedOrganShader();
-        ArmRecoveryShader();
-        AcidShader();
+        HitShader();
     }
 
     void SpeedShader()
@@ -91,6 +93,23 @@ public class FullscreenShader : MonoBehaviour
             fullscreenSpeedShader.SetActive(false);
         }
     }
+
+    void HitShader()
+    {
+        if (hitShaderEnabled)
+        {
+            if (hitMaterial != null)
+            {
+                hitMaterial.shader = hitShader;
+            }
+            fullscreenHitShader.SetActive(true);
+        }
+        else
+        {
+            fullscreenHitShader.SetActive(false);
+        }
+    }
+    /*
     void ArmRecoveryShader()
     {
         if (armShaderEnabled)
@@ -211,7 +230,8 @@ public class FullscreenShader : MonoBehaviour
         }
     }
     #endregion
-
+    */
+    /*
     #region IEnumerators
     public IEnumerator BlessedOrganTrigger(float triggerTime)
     {
@@ -258,5 +278,5 @@ public class FullscreenShader : MonoBehaviour
         yield return new WaitForSeconds(triggerTime);
         acidShaderEnabled = false;
     }
-    #endregion
+    #endregion*/
 }

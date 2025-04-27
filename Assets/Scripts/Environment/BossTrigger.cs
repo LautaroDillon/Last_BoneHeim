@@ -29,7 +29,7 @@ public class BossTrigger : MonoBehaviour
 
     public IEnumerator DeathEnd(int triggerTime)
     {
-
+        /*
         FullscreenShader.instance.acidShaderEnabled = false;
         FullscreenShader.instance.armShaderEnabled = false;
         FullscreenShader.instance.blazingShaderEnabled = false;
@@ -38,6 +38,7 @@ public class BossTrigger : MonoBehaviour
         FullscreenShader.instance.speedShaderEnabled = false;
         FullscreenShader.instance.vengefulShaderEnabled = false;
         FullscreenShader.instance.blessedShaderEnabled = false;
+        */
 
         Debug.Log("Started Boss End!");
         yield return new WaitForSeconds(triggerTime);

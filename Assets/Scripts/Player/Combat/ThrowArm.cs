@@ -65,6 +65,7 @@ public class ThrowArm : MonoBehaviour
 
         if (collision.gameObject.tag == "Player")
         {
+            /*
             HandleArmPickup();
             if (ammoCharged == true)
                 ModifyAmmoBasedOnWeapon();
@@ -72,6 +73,7 @@ public class ThrowArm : MonoBehaviour
             print("Retrieved Arm!");
             FullscreenShader.instance.armShaderEnabled = true;
             Destroy(gameObject);
+            */
         }
     }
     private void HandleArmPickup()

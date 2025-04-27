@@ -7,13 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: LavaWorld
-  m_Shader: {fileID: -6465566751694194690, guid: ef63b2f61b9363244a4395e06d223b13, type: 3}
+  m_Name: FireCandle
+  m_Shader: {fileID: -6465566751694194690, guid: e9d1c4a144791c24ea0544bc80328cc3, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -23,12 +23,12 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _Noise:
-        m_Texture: {fileID: 2800000, guid: a8d6481af6dd5ed4da45d3854e74ccd6, type: 3}
+    - _Texture2DAsset_dc0dcb34b5a14ae88aff9e2075b6dcdc_Out_0_Texture2D:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Water:
-        m_Texture: {fileID: 2800000, guid: 932d940a788b3ec46aee0f08735e5aff, type: 3}
+    - _fire:
+        m_Texture: {fileID: 2800000, guid: ed6baac1fa6111444a70a8c688cb660d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -45,34 +45,24 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Brightness_Under_Lava: 32.28
-    - _Cutoff_Top: 0.35
-    - _Distort_Scale: 0.32
-    - _Distortion_Strength: 0.72
-    - _Edge_Blur: 1.9
-    - _Edge_Top_Brightness: 1.84
-    - _Edge_Width: 0
-    - _Main_Texture_Scale: 0.76
-    - _ObjectPosition: 0
+    - Vector1_58f38816a7794c27bfe7fe1086d2dcfd: 4.56
+    - Vector1_6de3bdc559ff4ebdb18fe6ba4f141eef: 6.4
+    - Vector1_701ead0ba7034477af05ac981cd9ab90: 0.864
+    - _FireThreshold: 0.515
+    - _FrankoBongo: 0
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Speed_Distort_X: -0.01
-    - _Speed_Distort_Y: 0.008
-    - _Speed_Main_X: 0
-    - _Speed_Main_Y: 0
-    - _Start_End_Tint_Offset: 7.16
-    - _Top_Blur: 1.07
-    - _Vertex_Color_Distortion_Strength: 0.83
-    - _Wave_Amount: 0
-    - _Wave_Height: 0
-    - _Wave_Move_Speed: 0
+    - _Speed: 0.22
+    - _dissolve: 0.217
+    - _freeze: 0
     m_Colors:
-    - _Edge_Color: {r: 0.5, g: 0.2759434, b: 0.15801886, a: 1}
-    - _Main_Tint_End: {r: 0.16981131, g: 0.0035377357, b: 0, a: 1}
-    - _Main_Tint_Start: {r: 0, g: 0, b: 0, a: 1}
-    - _Top_Layer_Tint: {r: 0.33962262, g: 0.27702552, b: 0, a: 1}
+    - Color_e13d9b4c8a8d430b95f7c66a040c6f07: {r: 0, g: 1, b: 0.972549, a: 1}
+    - _Color: {r: 39.396626, g: 12.470835, b: 0, a: 1}
+    - _FireColor: {r: 0.9960785, g: 0.11764707, b: 0.9960785, a: 1}
+    - _FireColorFrank: {r: 0.8396226, g: 0.33694676, b: 0.09901207, a: 1}
+    - _FrankColorBongo: {r: 0.9494876, g: 0, b: 1, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &2952745430364218955
+--- !u!114 &4714355604886036553
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

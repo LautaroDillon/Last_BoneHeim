@@ -103,6 +103,8 @@ public class FullscreenShader : MonoBehaviour
                 hitMaterial.shader = hitShader;
             }
             fullscreenHitShader.SetActive(true);
+            StartCoroutine("HitShaderTrigger", 1f);
+            
         }
         else
         {
@@ -231,6 +233,12 @@ public class FullscreenShader : MonoBehaviour
     }
     #endregion
     */
+    public IEnumerator HitShaderTrigger(float triggerTime)
+    {
+        hitShaderEnabled = true;
+        yield return new WaitForSeconds(triggerTime);
+        hitShaderEnabled = false;
+    }
     /*
     #region IEnumerators
     public IEnumerator BlessedOrganTrigger(float triggerTime)

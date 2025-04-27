@@ -153,6 +153,20 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    public void PlaySFXClean(string name, float volumen)
+    {
+        Sound s = Array.Find(sfxSounds, x => x.name == name);
+
+        if (s == null)
+            Debug.Log("One Shot Sound Not Found!");
+        else
+        {
+            sfxSource.clip = s.clip;
+            sfxSource.volume = volumen;
+            sfxSource.PlayOneShot(s.clip, 1f);
+        }
+    }
+
     public void PlaySFXOneShot(string name, float volumen)
     {
         Sound s = Array.Find(sfxSounds, x => x.name == name);

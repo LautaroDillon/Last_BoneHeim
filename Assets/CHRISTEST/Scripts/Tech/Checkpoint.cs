@@ -15,7 +15,7 @@ public class Checkpoint : MonoBehaviour
         {
             isActivated = true;
             Debug.Log("Checkpoint set!");
-            AudioManager.instance.PlaySFXOneShot("Checkpoint", 1f);
+            AudioManager.instance.PlaySFXClean("Checkpoint", 1f);
             CheckpointManager.instance.SetCheckpoint(transform.position + Vector3.up * 1f);
         }
     }

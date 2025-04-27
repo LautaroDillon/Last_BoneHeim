@@ -44,6 +44,12 @@ public class PlayerHealth : Entity
         }
     }
 
+    public override void TakeDamage(float dmg)
+    {
+        base.TakeDamage(dmg);
+        FullscreenShader.instance.hitShaderEnabled = true;
+    }
+
     public void Respawn()
     {
         currentHealth = maxHealth;

@@ -9,7 +9,7 @@ public class Entity : MonoBehaviour, IDamagable
     public float currentHealth;
     public bool isDead = false;
 
-    public void TakeDamage(float dmg)
+    public virtual void TakeDamage(float dmg)
     {
         currentHealth -= dmg;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);

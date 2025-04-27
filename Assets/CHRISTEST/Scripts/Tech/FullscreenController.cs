@@ -5,6 +5,8 @@ using UnityEngine.Rendering.Universal;
 
 public class FullscreenController : MonoBehaviour
 {
+    public static FullscreenController instance;
+
     [SerializeField] private float _displayTime = 1.5f;
     [SerializeField] private float fadeoutTime = 0.5f;
 

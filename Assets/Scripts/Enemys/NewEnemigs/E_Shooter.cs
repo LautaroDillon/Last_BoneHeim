@@ -203,7 +203,7 @@ public class E_Shooter : Entity
         if(collision.gameObject.tag == "Bullet")
         {
             TakeDamage(50);
-            AudioManager.instance.PlaySFX("Bullet Enemy Impact", 1f, false);
+            AudioManager.instance.PlaySFXOneShot("Bullet Enemy Impact", 1f);
         }
     }
 

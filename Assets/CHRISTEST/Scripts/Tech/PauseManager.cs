@@ -5,17 +5,21 @@ using UnityEngine.UI;
 
 public class PauseManager : MonoBehaviour
 {
-    public KeyCode Pause = KeyCode.Escape;
-    public GameObject pauseMenu;
-    public static bool isPaused;
+    [Header("References")]
     public ControlDOF cdof;
-    public List<GameObject> otherPages;
+    public KeyCode pauseKey = KeyCode.Escape;
+
+    [Header("Canvas")]
+    public GameObject pauseMenu;
+    public List<GameObject> hideWhenPause;
+
+    private Stack<GameObject> pageStack = new Stack<GameObject>();
+    public static bool isPaused = false;
 
     private void Awake()
     {
         pauseMenu.SetActive(false);
-
-        foreach (GameObject page in otherPages)
+        foreach (GameObject page in hideWhenPause)
         {
             page.SetActive(true);
         }
@@ -25,23 +29,28 @@ public class PauseManager : MonoBehaviour
     {
         if (DeathUI.deathUiActive)
             return;
-        else
+
+        if (Input.GetKeyDown(pauseKey))
         {
-            if (Input.GetKeyDown(Pause))
+            if (isPaused)
             {
-                if (isPaused)
+                if (pageStack.Count > 1)
                 {
-                    UnPauseGame();
-                    AudioManager.instance.UnPauseSFX();
+                    GoBackPage();
                 }
                 else
                 {
-                    PauseGame();
-                    AudioManager.instance.PauseSFX();
+                    UnPauseGame();
                 }
+
+                AudioManager.instance?.UnPauseSFX();
+            }
+            else
+            {
+                PauseGame();
+                AudioManager.instance?.PauseSFX();
             }
         }
-        
     }
 
     public void PauseGame()
@@ -50,15 +59,18 @@ public class PauseManager : MonoBehaviour
         pauseMenu.SetActive(true);
         isPaused = true;
 
+        pageStack.Clear();
+        pageStack.Push(pauseMenu);
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        foreach (GameObject page in otherPages)
+        foreach (GameObject page in hideWhenPause)
         {
             page.SetActive(false);
         }
 
-        AudioManager.instance.PauseMenuMusic();
+        AudioManager.instance?.PauseMenuMusic();
 
         if (cdof != null)
         {
@@ -76,17 +88,62 @@ public class PauseManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        foreach (GameObject page in otherPages)
+        foreach (GameObject page in hideWhenPause)
         {
             page.SetActive(true);
         }
 
-        AudioManager.instance.UnPauseMenuMusic();
+        AudioManager.instance?.UnPauseMenuMusic();
 
-        if(cdof != null)
+        if (cdof != null)
         {
             cdof.DisablePauseDOF();
             cdof.LerpFocalLength(cdof.pauseFocalLength, cdof.normalFocalLength, 0.2f);
+        }
+    }
+
+    void OpenPage(GameObject newPage)
+    {
+        if (pageStack.Count > 0)
+        {
+            GameObject currentPage = pageStack.Peek();
+            FadeUI currentFader = currentPage.GetComponent<FadeUI>();
+            if (currentFader != null)
+                currentFader.FadeOut();
+            else
+                currentPage.SetActive(false);
+        }
+
+        FadeUI newFader = newPage.GetComponent<FadeUI>();
+        if (newFader != null)
+            newFader.FadeIn();
+        else
+            newPage.SetActive(true);
+
+        pageStack.Push(newPage);
+    }
+
+    void GoBackPage()
+    {
+        if (pageStack.Count > 1)
+        {
+            GameObject topPage = pageStack.Pop();
+            FadeUI topFader = topPage.GetComponent<FadeUI>();
+            if (topFader != null)
+                topFader.FadeOut();
+            else
+                topPage.SetActive(false);
+
+            GameObject previousPage = pageStack.Peek();
+            FadeUI prevFader = previousPage.GetComponent<FadeUI>();
+            if (prevFader != null)
+                prevFader.FadeIn();
+            else
+                previousPage.SetActive(true);
+        }
+        else
+        {
+            UnPauseGame();
         }
     }
 }

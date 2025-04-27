@@ -22,14 +22,15 @@ public class PlayerHealth : Entity
 
     private void Start()
     {
+        currentHealth = maxHealth;
         mainCam = Camera.main;
     }
 
     private void Update()
     {
         Death();
-        //if (Input.GetKeyDown(KeyCode.R))
-            //Respawn();
+        if (Input.GetKeyDown(KeyCode.R))
+            Respawn();
     }
 
     private void Death()
@@ -63,5 +64,14 @@ public class PlayerHealth : Entity
         camRb.isKinematic = false;
         camRb.useGravity = true;
         camRb.AddForce(Vector3.back * 5f + Vector3.up * 2f, ForceMode.Impulse);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "EnemyBullet")
+        {
+            TakeDamage(EnemyFlyweight.Shooter.Damage);
+            AudioManager.instance.PlaySFX("Player Bullet Impact", 1f, false);
+        }
     }
 }

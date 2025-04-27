@@ -76,7 +76,6 @@ public class ThrowArm : MonoBehaviour
     }
     private void HandleArmPickup()
     {
-        CameraShake.Shake(0.4f, 0.4f);
 
         AdjustMagazineSizeForWeapon();
 

@@ -876,6 +876,7 @@ MonoBehaviour:
   maxHealth: 50
   currentHealth: 0
   isDead: 0
+  deathUI: {fileID: 0}
   mainCam: {fileID: 6174852390792161049}
   deathCamPrefab: {fileID: 3031398129814482924, guid: 43cd7546de6819a46b798fac6ae560d4, type: 3}
 --- !u!114 &7949670869836013094

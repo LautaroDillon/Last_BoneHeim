@@ -43,19 +43,7 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        PlayerHealth damagableInterface = collision.gameObject.GetComponent<PlayerHealth>();
-
-        if (collision.gameObject.tag == "Player" && damagableInterface != null)
-        {
-            Debug.Log("Player takes damage"); 
-            TurnOff(this);
-            _objectPool.StockAdd(this);
-            damagableInterface.TakeDamage(10);
-        }
-        else if(collision.gameObject.layer == 6 || collision.gameObject.layer == 7)
-        {
-            TurnOff(this);
-            _objectPool.StockAdd(this);
-        }
+        TurnOff(this);
+        _objectPool.StockAdd(this);
     }
 }

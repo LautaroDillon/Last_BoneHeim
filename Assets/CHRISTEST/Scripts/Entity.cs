@@ -9,11 +9,6 @@ public class Entity : MonoBehaviour, IDamagable
     public float currentHealth;
     public bool isDead = false;
 
-    private void Start()
-    {
-        currentHealth = maxHealth;
-    }
-
     public void TakeDamage(float dmg)
     {
         currentHealth -= dmg;

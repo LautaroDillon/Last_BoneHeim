@@ -82,7 +82,7 @@ public class PlayerDash : MonoBehaviour
         AudioManager.instance.PlaySFXOneShot("Dash Grunt", 1f);
         AudioManager.instance.PlaySFXOneShot("Dash", 1.5f);
 
-        cam.DoFov(mainCam.fieldOfView + dashFov);
+        cam.DoFov(mainCam.fieldOfView - dashFov);
 
         Transform forwardT;
 
@@ -118,7 +118,7 @@ public class PlayerDash : MonoBehaviour
         pm.dashing = false;
         pm.maxYSpeed = 0;
 
-        cam.DoFov(mainCam.fieldOfView - dashFov);
+        cam.DoFov(mainCam.fieldOfView + dashFov);
 
         if (disableGravity)
             rb.useGravity = true;

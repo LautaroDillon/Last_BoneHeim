@@ -1,9 +1,18 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
+using EZCameraShake;
+public enum SurfaceType
+{
+    Default,
+    Stone,
+    Metal,
+    Wood
+}
 
 public class PlayerMovement : MonoBehaviour
 {
+    private SurfaceType currentSurface;
+
     [Header("Abilites")]
     public bool canDoubleJump;
     public bool canDash;
@@ -117,12 +126,13 @@ public class PlayerMovement : MonoBehaviour
 
             if ((Input.GetAxis("Horizontal") != 0f || Input.GetAxis("Vertical") != 0f) && stepCoolDown < 0f && grounded && state == MovementState.walking)
             {
-                AudioManager.instance.PlaySFXOneShot("Walk", 1f);
+                PlayStepSound();
                 stepCoolDown = stepRate;
             }
 
             if (grounded)
             {
+                currentSurface = GetSurfaceType();
                 jumpCount = 0;
             }
 
@@ -161,6 +171,8 @@ public class PlayerMovement : MonoBehaviour
                 readyToJump = false;
                 jumpCount++;
                 Jump();
+
+                
                 Invoke(nameof(ResetJump), jumpCooldown);
             }
         }
@@ -170,6 +182,7 @@ public class PlayerMovement : MonoBehaviour
     private float lastDesiredMoveSpeed;
     private MovementState lastState;
     private bool keepMomentum;
+
     private void StateHandler()
     {
         if (freeze)
@@ -216,9 +229,11 @@ public class PlayerMovement : MonoBehaviour
 
         else if (grounded)
         {
-            if(lastState == MovementState.air)
-                AudioManager.instance.PlaySFXOneShot("Landing", 1f);
-                
+            if (lastState == MovementState.air)
+            {
+                PlayLandingSound();
+            }
+
             state = MovementState.walking;
             desiredMoveSpeed = walkSpeed;
         }
@@ -348,9 +363,7 @@ public class PlayerMovement : MonoBehaviour
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
 
-        AudioManager.instance.PlaySFX("Jump", 1f, false);
-
-        FindObjectOfType<CameraNoise>()?.TriggerJumpShake();
+        PlayJumpSound();
     }
 
     private void ResetJump()
@@ -379,5 +392,76 @@ public class PlayerMovement : MonoBehaviour
     {
         float mult = Mathf.Pow(10.0f, (float)digits);
         return Mathf.Round(value * mult) / mult;
+    }
+
+    private void PlayStepSound()
+    {
+        switch (currentSurface)
+        {
+            case SurfaceType.Stone:
+                AudioManager.instance.PlaySFXOneShot("StoneWalk", 1f);
+                break;
+            case SurfaceType.Metal:
+                AudioManager.instance.PlaySFXOneShot("GrassWalk", 1f);
+                break;
+            case SurfaceType.Wood:
+                AudioManager.instance.PlaySFXOneShot("WoodWalk", 1f);
+                break;
+            default:
+                AudioManager.instance.PlaySFXOneShot("Walk", 1f); // Default walk sound
+                break;
+        }
+    }
+
+    private void PlayJumpSound()
+    {
+        switch (currentSurface)
+        {
+            case SurfaceType.Stone:
+                AudioManager.instance.PlaySFX("StoneJump", 1f, false);
+                break;
+            case SurfaceType.Metal:
+                AudioManager.instance.PlaySFX("GrassJump", 1f, false);
+                break;
+            case SurfaceType.Wood:
+                AudioManager.instance.PlaySFX("WoodJump", 1f, false);
+                break;
+            default:
+                AudioManager.instance.PlaySFX("Jump", 1f, false);
+                break;
+        }
+    }
+
+    private void PlayLandingSound()
+    {
+        switch (currentSurface)
+        {
+            case SurfaceType.Stone:
+                AudioManager.instance.PlaySFXOneShot("StoneLand", 1f);
+                break;
+            case SurfaceType.Metal:
+                AudioManager.instance.PlaySFXOneShot("GrassLand", 1f);
+                break;
+            case SurfaceType.Wood:
+                AudioManager.instance.PlaySFXOneShot("WoodLand", 1f);
+                break;
+            default:
+                AudioManager.instance.PlaySFXOneShot("Landing", 1f);
+                break;
+        }
+    }
+
+    private SurfaceType GetSurfaceType()
+    {
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
+        {
+            if (slopeHit.collider.CompareTag("StoneGround"))
+                return SurfaceType.Stone;
+            /*else if (slopeHit.collider.CompareTag("MetalGround"))
+                return SurfaceType.Metal;
+            //else if (slopeHit.collider.CompareTag("WoodGround"))
+                return SurfaceType.Wood;*/
+        }
+        return SurfaceType.Default;
     }
 }

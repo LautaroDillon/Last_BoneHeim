@@ -24,7 +24,6 @@ public class E_Shooter : Entity
     public float walkPointRange;
     public bool isPatrolling;
 
-
     [Header("Attack")]
     public float shotCooldown;
     public bool alreadyAttacked;

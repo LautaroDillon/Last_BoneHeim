@@ -87,14 +87,17 @@ public class PlayerWeapon : MonoBehaviour
         //Shooting
         if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
         {
-            PlayerMovement.instance.animator.SetBool("Atack", true);
+
             //Set bullets shot to 0
+            PlayerMovement.instance.animator.SetBool("Idle", false);
+            PlayerMovement.instance.animator.SetTrigger("Atack");
             bulletsShot = 0;
             Shoot();
         }
     }
     private void Shoot()
     {
+
         readyToShoot = false;
 
         //Find the exact hit position using a raycast
@@ -151,7 +154,7 @@ public class PlayerWeapon : MonoBehaviour
         if (bulletsShot < bulletsPerTap && bulletsLeft > 0)
             Invoke("Shoot", timeBetweenShots);
 
-        PlayerMovement.instance.animator.SetBool("Atack", false);
+        PlayerMovement.instance.animator.SetBool("Idle", true);
     }
 
     public void UpdateBulletDisplay()

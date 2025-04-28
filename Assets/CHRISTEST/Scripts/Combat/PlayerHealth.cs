@@ -77,5 +77,6 @@ public class PlayerHealth : Entity
             TakeDamage(EnemyFlyweight.Shooter.Damage);
             AudioManager.instance.PlaySFX("Player Bullet Impact", 1f, false);
         }
+
     }
 }

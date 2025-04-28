@@ -14,9 +14,8 @@ public class PlayerMovement : MonoBehaviour
     private SurfaceType currentSurface;
 
     [Header("Abilites")]
-    public bool canDoubleJump = false;
-    public bool canDash = false;
-    public bool normalSpeed = false;
+    public bool canDoubleJump;
+    public bool canDash;
 
     [Header("References")]
     public Transform orientation;
@@ -110,17 +109,6 @@ public class PlayerMovement : MonoBehaviour
         startYScale = transform.localScale.y;
 
         jumpCount = 0;
-
-        if(normalSpeed == true)
-        {
-            jumpForce = 15;
-            walkSpeed = 12;
-        }
-        else
-        {
-            jumpForce = 0;
-            walkSpeed = 3;
-        }
     }
 
     private void Update()
@@ -475,31 +463,5 @@ public class PlayerMovement : MonoBehaviour
                 return SurfaceType.Wood;*/
         }
         return SurfaceType.Default;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject.tag == "Heart")
-        {
-            walkSpeed = 12;
-            jumpForce = 15;
-            normalSpeed = true;
-            AudioManager.instance.PlaySFXOneShot("Heartbeat", 1f);
-            AudioManager.instance.PlayMusic("Background Music", 1f);
-            Destroy(other.gameObject);
-        }
-
-        if (other.gameObject.tag == "Stomach")
-        {
-            canDoubleJump = true;
-            AudioManager.instance.PlaySFXOneShot("Stomach", 1f);
-            Destroy(other.gameObject);
-        }
-        if (other.gameObject.tag == "Lungs")
-        {
-            canDash = true;
-            AudioManager.instance.PlaySFXOneShot("Lungs", 1f);
-            Destroy(other.gameObject);
-        }
     }
 }

@@ -106,8 +106,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 2.7179613
-  m_Center: {x: 0.03694105, y: 0, z: 0}
+  m_Radius: 1.2121468
+  m_Center: {x: -0.029445648, y: 0, z: 0}
 --- !u!54 &-7617738585451488803
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -150,7 +150,7 @@ MonoBehaviour:
   rb: {fileID: -7617738585451488803}
   speed: 20
   counter: 5
-  lifetime: 10
+  lifetime: 5
 --- !u!1001 &900730880709944960
 PrefabInstance:
   m_ObjectHideFlags: 0

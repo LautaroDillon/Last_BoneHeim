@@ -32,6 +32,11 @@ public class AudioManager : MonoBehaviour
             Destroy(gameObject);
 
         lowPassFilter = musicSource.GetComponent<AudioLowPassFilter>();
+
+        if (SceneManager.GetActiveScene().name == "ChrisTest")
+        {
+            PlayMusic("Background Music", 1f);
+        }
     }
 
     #region Audio Tech

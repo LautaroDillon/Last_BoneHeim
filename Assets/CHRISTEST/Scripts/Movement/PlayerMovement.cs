@@ -13,9 +13,6 @@ public class PlayerMovement : MonoBehaviour
 {
     private SurfaceType currentSurface;
 
-    public Animator animator;
-    public static PlayerMovement instance;
-
     [Header("Abilites")]
     public bool canDoubleJump;
     public bool canDash;

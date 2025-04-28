@@ -88,6 +88,8 @@ public class PlayerWeapon : MonoBehaviour
         if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
         {
             //Set bullets shot to 0
+            PlayerMovement.instance.animator.SetTrigger("Atack");
+            PlayerMovement.instance.animator.SetBool("Idle", false);
             bulletsShot = 0;
             Shoot();
         }
@@ -149,6 +151,9 @@ public class PlayerWeapon : MonoBehaviour
         //if more than one bulletsPerTap make sure to repeat shoot function
         if (bulletsShot < bulletsPerTap && bulletsLeft > 0)
             Invoke("Shoot", timeBetweenShots);
+
+        PlayerMovement.instance.animator.SetBool("Idle", true);
+
     }
 
     public void UpdateBulletDisplay()

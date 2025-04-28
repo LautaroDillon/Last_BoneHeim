@@ -13,6 +13,9 @@ public class PlayerMovement : MonoBehaviour
 {
     private SurfaceType currentSurface;
 
+    public Animator animator;
+    public static PlayerMovement instance;
+
     [Header("Abilites")]
     public bool canDoubleJump = false;
     public bool canDash = false;
@@ -102,6 +105,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        PlayerMovement.instance = this;
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
@@ -481,25 +485,38 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.gameObject.tag == "Heart")
         {
+            animator.SetTrigger("Organ");
+            animator.SetBool("Idle", false);
             walkSpeed = 12;
             jumpForce = 15;
             normalSpeed = true;
             AudioManager.instance.PlaySFXOneShot("Heartbeat", 1f);
             AudioManager.instance.PlayMusic("Background Music", 1f);
+            animator.SetBool("Idle", true);
             Destroy(other.gameObject);
+
         }
 
         if (other.gameObject.tag == "Stomach")
         {
+            animator.SetTrigger("Organ");
+            animator.SetBool("Idle", false);
             canDoubleJump = true;
             AudioManager.instance.PlaySFXOneShot("Stomach", 1f);
+            animator.SetBool("Idle", true);
             Destroy(other.gameObject);
+
         }
         if (other.gameObject.tag == "Lungs")
         {
+            animator.SetTrigger("Organ");
+            animator.SetBool("Idle", false);
             canDash = true;
             AudioManager.instance.PlaySFXOneShot("Lungs", 1f);
+            animator.SetBool("Idle", true);
             Destroy(other.gameObject);
+
         }
     }
+
 }

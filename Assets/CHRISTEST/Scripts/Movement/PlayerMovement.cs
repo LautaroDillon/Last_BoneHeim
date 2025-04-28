@@ -13,9 +13,6 @@ public class PlayerMovement : MonoBehaviour
 {
     private SurfaceType currentSurface;
 
-    public Animator animator;
-    public static PlayerMovement instance;
-
     [Header("Abilites")]
     public bool canDoubleJump = false;
     public bool canDash = false;
@@ -105,7 +102,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        PlayerMovement.instance = this;
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 

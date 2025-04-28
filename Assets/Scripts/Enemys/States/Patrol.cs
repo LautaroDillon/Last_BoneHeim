@@ -21,7 +21,7 @@ public class Patrol : IState
 
     public void OnEnter()
     {
-        //Debug.Log("Patrol OnEnter");
+        Debug.Log("Patrol OnEnter");
         _Shooter.anim.SetBool("Walk", true);
         _agent.speed = _Shooter.walkSpeed;
         _Shooter.isPatrolling = true;
@@ -43,7 +43,7 @@ public class Patrol : IState
 
         if (stuckTimer > stuckThreshold)
         {
-            //Debug.Log("Parece atascado, buscando nuevo punto");
+            Debug.Log("Parece atascado, buscando nuevo punto");
             _Shooter.SearchWalkPoint();
             stuckTimer = 0f;
         }
@@ -51,7 +51,7 @@ public class Patrol : IState
 
     public void OnExit()
     {
-       // Debug.Log("Patrol OnExit");
+        Debug.Log("Patrol OnExit");
         _Shooter.anim.SetBool("Walk", false);
         _agent.speed = 0f;
         _Shooter.isPatrolling = false;

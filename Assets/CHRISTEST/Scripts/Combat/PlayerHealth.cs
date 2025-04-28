@@ -29,8 +29,6 @@ public class PlayerHealth : Entity
     private void Update()
     {
         Death();
-        if (Input.GetKeyDown(KeyCode.R))
-            Respawn();
     }
 
     private void Death()

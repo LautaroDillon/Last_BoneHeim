@@ -36,6 +36,7 @@ public class E_Shooter : Entity
     public float chaseDistance, attackRange;
     public bool playerInSightRange, playerInAttackRange, canSeePlayer;
     public bool isIdle = true;
+    public bool WasHit;
 
     [Header("Player Detection")]
     [SerializeField] protected LayerMask obstructionMask;
@@ -68,6 +69,7 @@ public class E_Shooter : Entity
         var strafe = new Strafe(agent, this, fsm);
         var attack = new Atack(agent, this, fsm);
         var death = new Death(agent, this, fsm);
+        var Onhit = new OnHit(agent, this, fsm);
 
 
         // Definir las transiciones
@@ -83,7 +85,13 @@ public class E_Shooter : Entity
         at(chase, Search, () => !canSeePlayer);
         at(Search, patrol, () => true); // Despues de buscar vuelve a patrullar
         any(death, () => currentHealth <= 0); // Transición a Death desde cualquier estado
-
+        any(Onhit, () => WasHit); // Transición a hit desde cualquier estado
+        at(Onhit, idle, () => !WasHit); // Transición a idle desde hit
+        at(Onhit, patrol, () => !WasHit);
+        at(Onhit, chase, () => !WasHit);
+        at(Onhit, Search, () => !WasHit);
+        at(Onhit, strafe, () => !WasHit);
+        at(Onhit, attack, () => !WasHit); 
 
         fsm.SetState(idle);
     }
@@ -181,6 +189,10 @@ public class E_Shooter : Entity
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        if (currentHealth > 0)
+        {
+            WasHit = true;
+        }
         if (currentHealth <= 0 && !isincombatArena)
         {
             isDead = true;
@@ -218,5 +230,12 @@ public class E_Shooter : Entity
         Gizmos.DrawWireSphere(transform.position, checkRadius);
         Gizmos.color = Color.white;
         Gizmos.DrawWireSphere(transform.position, walkPointRange);
+    }
+
+
+    public IEnumerator waitforsecond(float time)
+    {
+        yield return new WaitForSeconds(time);
+        WasHit = false;
     }
 }

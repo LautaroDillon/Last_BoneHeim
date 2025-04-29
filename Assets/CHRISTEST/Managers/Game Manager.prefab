@@ -80,10 +80,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6177e61f3b5afb74f88e58973f0d2edc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Pause: 27
-  pauseMenu: {fileID: 0}
   cdof: {fileID: 0}
-  otherPages: []
+  pauseKey: 27
+  pauseMenu: {fileID: 0}
+  hideWhenPause:
+  - {fileID: 0}
 --- !u!114 &7379105602568375809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,4 +131,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deathUI: {fileID: 0}
   fadeCanvasGroup: {fileID: 0}
-  fadeDuration: 1
+  fadeDuration: 2

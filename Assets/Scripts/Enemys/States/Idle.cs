@@ -30,6 +30,9 @@ public class Idle : IState
 
     public void Tick()
     {
+        _Shooter.anim.SetFloat("Horizontal", 0, .25f, Time.deltaTime);
+        _Shooter.anim.SetFloat("Vertical", 0, .25f, Time.deltaTime);
+
         _idleTimer += Time.deltaTime;
 
         if (_idleTimer >= _idleDuration)

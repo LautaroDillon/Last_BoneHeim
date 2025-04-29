@@ -26,6 +26,16 @@ public class Chase : IState
 
     public void Tick()
     {
+
+
+        var dir = (_agent.steeringTarget - _Shooter.transform.position).normalized;
+        var animdir = _Shooter.transform.InverseTransformDirection(dir);
+        var isfacingmovedirection = Vector3.Dot(dir, _Shooter.transform.forward) > 0.5f;
+
+        _Shooter.anim.SetFloat("Horizontal", isfacingmovedirection ? animdir.x : 0, .5f, Time.deltaTime);
+        _Shooter.anim.SetFloat("Vertical", isfacingmovedirection ? animdir.z : 0, .5f, Time.deltaTime);
+
+
         float distanceToPlayer = Vector3.Distance(_Shooter.transform.position, _Shooter.player.position);
        
         if (_Shooter.canSeePlayer)

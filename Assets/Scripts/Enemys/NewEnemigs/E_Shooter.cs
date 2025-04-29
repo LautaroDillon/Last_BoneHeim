@@ -44,6 +44,7 @@ public class E_Shooter : Entity
     [SerializeField] protected float angle;
     public Vector3 lastpoint;
     #endregion
+    public bool isincombatArena;
 
     private void Awake()
       {
@@ -180,7 +181,7 @@ public class E_Shooter : Entity
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        if (currentHealth <= 0)
+        if (currentHealth <= 0 && !isincombatArena)
         {
             isDead = true;
             anim.SetBool("isDead", true);

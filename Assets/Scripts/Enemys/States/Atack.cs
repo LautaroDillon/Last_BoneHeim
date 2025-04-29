@@ -27,7 +27,10 @@ public class Atack : IState
 
     public void Tick()
     {
-        if(_shooter.player == null)  return;
+        _shooter.anim.SetFloat("Horizontal", 0, .25f, Time.deltaTime);
+        _shooter.anim.SetFloat("Vertical", 0, .25f, Time.deltaTime);
+
+        if (_shooter.player == null)  return;
 
         Vector3 dir = (_shooter.player.position - _shooter.transform.position).normalized;
         dir.y = 0;

@@ -35,6 +35,15 @@ public class Patrol : IState
     public void Tick()
     {
         _Shooter.Patroling();
+        if (!_agent.hasPath)
+            _Shooter.Patroling();
+
+        var dir = (_agent.steeringTarget - _Shooter.transform.position).normalized;
+        var animdir = _Shooter.transform.InverseTransformDirection(dir);
+        var isfacingmovedirection = Vector3.Dot(dir, _Shooter.transform.forward) > 0.5f;
+
+        _Shooter.anim.SetFloat("Horizontal", isfacingmovedirection ? animdir.x : 0, .5f, Time.deltaTime);
+        _Shooter.anim.SetFloat("Vertical", isfacingmovedirection ? animdir.z : 0, .5f, Time.deltaTime);
 
         if (_agent.velocity.magnitude < 0.1f)
             stuckTimer += Time.deltaTime;

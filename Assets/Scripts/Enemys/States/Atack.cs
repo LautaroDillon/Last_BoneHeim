@@ -10,6 +10,9 @@ public class Atack : IState
     E_Shooter _shooter;
     StateMachine _FSM;
 
+    private float _attackDuration = 1.5f; // tiempo quieto mientras ataca
+    private float _attackTimer;
+
     private float _cooldownTimer;
 
     public Atack(NavMeshAgent agent, E_Shooter shooter, StateMachine fSM)
@@ -21,12 +24,22 @@ public class Atack : IState
 
     public void OnEnter()
     {
-        Debug.Log("Atack OnEnter");
-        _agent.speed = 0f; // Detener al enemigo
+        _agent.isStopped = true; // se queda quieto
+        _agent.velocity = Vector3.zero;
+        _attackTimer = 0f;
+        _shooter.alreadyAttacked = false;
     }
 
     public void Tick()
     {
+        _attackTimer += Time.deltaTime;
+
+        if (_attackTimer >= _attackDuration && !_shooter.alreadyAttacked)
+        {
+            Shoot(); // Método que dispara al jugador
+            _shooter.alreadyAttacked = true;
+        }
+
         _shooter.anim.SetFloat("Horizontal", 0, .25f, Time.deltaTime);
         _shooter.anim.SetFloat("Vertical", 0, .25f, Time.deltaTime);
 
@@ -58,7 +71,7 @@ public class Atack : IState
 
     public void OnExit()
     {
-        Debug.Log("Atack OnExit");
+        _agent.isStopped = false;
     }
 
     private void Shoot()

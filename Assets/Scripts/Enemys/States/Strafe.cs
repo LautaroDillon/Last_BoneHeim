@@ -24,6 +24,7 @@ public class Strafe : IState
     {
         Debug.Log("Strafe OnEnter");
         strafeTimer = 0f;
+        _agent.speed = 1.5f;
         moveLeft = Random.Range(0f, 1f) > 0.5f;
     }
 

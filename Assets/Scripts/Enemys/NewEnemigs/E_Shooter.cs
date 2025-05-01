@@ -37,6 +37,7 @@ public class E_Shooter : Entity
     public bool playerInSightRange, playerInAttackRange, canSeePlayer;
     public bool isIdle = true;
     public bool WasHit;
+    public float muchit;
 
     [Header("Player Detection")]
     [SerializeField] protected LayerMask obstructionMask;
@@ -133,19 +134,15 @@ public class E_Shooter : Entity
 
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
                 {
-                    // Debug.Log("veo player");
                     return true;
                 }
                 else
                 {
-                    // Debug.Log(" no veo player");
-
                     return false;
                 }
             }
             else
             {
-                //Debug.Log(" no veo player");
                 return false;
             }
         }
@@ -185,11 +182,11 @@ public class E_Shooter : Entity
     }
     #endregion
 
-
+    #region takedamage
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        if (currentHealth > 0)
+        if (currentHealth > 0 && currentHealth <= (maxHealth/3))
         {
             WasHit = true;
         }
@@ -210,6 +207,7 @@ public class E_Shooter : Entity
     {
           Destroy(gameObject);
     }
+    #endregion
 
     private void OnCollisionEnter(Collision collision)
     {

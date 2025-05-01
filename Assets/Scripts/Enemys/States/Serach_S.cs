@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class Serach_S : IState
 {
     NavMeshAgent _agent;
-    E_Shooter _Shooter;
+    E_Shooter _shooter;
     StateMachine _fsm;
     private float _searchDuration = 3f;
     private float _searchTimer;
@@ -20,29 +20,29 @@ public class Serach_S : IState
     public Serach_S(NavMeshAgent agent, E_Shooter shooter, StateMachine fsm)
     {
         _agent = agent;
-        _Shooter = shooter;
+        _shooter = shooter;
         _fsm = fsm;
     }
 
     public void OnEnter()
     {
+        Debug.Log("Search OnEnter");
         _searchTimer = 0f;
         _waitTimer = 0f;
         _movingToNewPoint = false;
+        _agent.speed = _shooter.walkSpeed * 0.5f; // Reducción de velocidad para hacerlo más deliberado
     }
 
     public void Tick()
     {
-
-
-        var dir = (_agent.steeringTarget - _Shooter.transform.position).normalized;
-        var animdir = _Shooter.transform.InverseTransformDirection(dir);
-        var isfacingmovedirection = Vector3.Dot(dir, _Shooter.transform.forward) > 0.5f;
-
-        _Shooter.anim.SetFloat("Horizontal", isfacingmovedirection ? animdir.x : 0, .5f, Time.deltaTime);
-        _Shooter.anim.SetFloat("Vertical", isfacingmovedirection ? animdir.z : 0, .5f, Time.deltaTime);
-
         _searchTimer += Time.deltaTime;
+
+        // Si está atacando, se queda quieto
+        if (_shooter.playerInAttackRange)
+        {
+            _agent.SetDestination(_shooter.transform.position);
+            return;
+        }
 
         if (!_movingToNewPoint || _agent.remainingDistance < 0.5f)
         {
@@ -60,6 +60,7 @@ public class Serach_S : IState
 
     public void OnExit()
     {
+        Debug.Log("Search OnExit");
         _agent.ResetPath();
     }
 
@@ -67,12 +68,15 @@ public class Serach_S : IState
     {
         float radius = 5f;
         Vector3 randomDirection = Random.insideUnitSphere * radius;
-        randomDirection += _Shooter.transform.position;
+        randomDirection.y = 0;
+        Vector3 candidate = _shooter.player.position + randomDirection;
 
-        if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, radius, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(candidate, out NavMeshHit hit, radius, NavMesh.AllAreas))
         {
-            return hit.position;
+            float distToPlayer = Vector3.Distance(hit.position, _shooter.player.position);
+            if (distToPlayer <= _shooter.attackRange)
+                return hit.position;
         }
-        return _Shooter.transform.position;
+        return _shooter.transform.position;
     }
 }

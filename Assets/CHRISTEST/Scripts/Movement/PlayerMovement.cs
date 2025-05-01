@@ -50,6 +50,15 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private int jumpCount;
     bool readyToJump;
 
+    [Header("Airtime")]
+    public Transform arms;
+
+    public float maxAirTime = 1.0f;
+    public float maxOffset = 0.2f;
+
+    private float airTime = 0f;
+    private Vector3 armsInitialPos;
+
     [Header("Crouching")]
     public float crouchSpeed;
     public float crouchYScale;
@@ -125,6 +134,8 @@ public class PlayerMovement : MonoBehaviour
             jumpForce = 0;
             walkSpeed = 3;
         }
+
+        armsInitialPos = arms.localPosition;
     }
 
     private void Update()
@@ -155,6 +166,7 @@ public class PlayerMovement : MonoBehaviour
             MyInput();
             SpeedControl();
             StateHandler();
+            Airtime();
 
             // handle drag
             if (state == MovementState.walking || state == MovementState.sprinting)
@@ -167,7 +179,7 @@ public class PlayerMovement : MonoBehaviour
             else
                 rb.drag = groundDrag;
         }
-
+        
     }
 
     private void FixedUpdate()
@@ -341,6 +353,26 @@ public class PlayerMovement : MonoBehaviour
         // turn gravity off while on slope
         if(wallrunning)
             rb.useGravity = !OnSlope();
+    }
+
+    private void Airtime()
+    {
+        if (!grounded)
+        {
+            airTime += Time.deltaTime;
+            airTime = Mathf.Min(airTime, maxAirTime);
+        }
+        else
+        {
+            airTime = 0f;
+        }
+
+        float normalizedTime = airTime / maxAirTime;
+        float offsetY = normalizedTime * maxOffset;
+
+        // Apply offset to arms
+        Vector3 targetPos = armsInitialPos + new Vector3(0f, offsetY, 0f);
+        arms.localPosition = Vector3.Lerp(arms.localPosition, targetPos, Time.deltaTime * 30f);
     }
 
     private void SpeedControl()

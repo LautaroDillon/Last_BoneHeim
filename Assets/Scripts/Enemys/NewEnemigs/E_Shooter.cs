@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
@@ -78,7 +79,7 @@ public class E_Shooter : Entity
         at(patrol, idle, () => !isPatrolling);
         at(patrol, chase, () => canSeePlayer && !playerInAttackRange);
         at(chase, attack, () => playerInAttackRange);
-        at(attack, strafe, () => alreadyAttacked);
+        at(attack, strafe, () => alreadyAttacked && playerInAttackRange);
         at(attack, chase, () => !playerInAttackRange);
         at(attack, Search, () => !playerInAttackRange && !canSeePlayer);
         at(strafe, chase, () => !playerInAttackRange);

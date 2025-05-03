@@ -3875,6 +3875,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 926287277}
+    - target: {fileID: 3288562228548541264, guid: b5996fa40d1792d4ca8bfef4ae96a840, type: 3}
+      propertyPath: shotCooldown
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 4719166512671149468, guid: b5996fa40d1792d4ca8bfef4ae96a840, type: 3}
       propertyPath: m_UseGravity
       value: 0

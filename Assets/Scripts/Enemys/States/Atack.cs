@@ -24,62 +24,66 @@ public class Atack : IState
 
     public void OnEnter()
     {
-        _agent.isStopped = true; // se queda quieto
+        _agent.isStopped = true;
         _agent.velocity = Vector3.zero;
         _attackTimer = 0f;
+        _cooldownTimer = 0f;
         _shooter.alreadyAttacked = false;
+        _shooter.anim.SetBool("Walk", false);
     }
 
     public void Tick()
     {
         _attackTimer += Time.deltaTime;
 
-        if (_attackTimer >= _attackDuration && !_shooter.alreadyAttacked)
-        {
-            Shoot(); // Método que dispara al jugador
-            _shooter.alreadyAttacked = true;
-        }
+        FaceTarget();
 
-        _shooter.anim.SetFloat("Horizontal", 0, .25f, Time.deltaTime);
-        _shooter.anim.SetFloat("Vertical", 0, .25f, Time.deltaTime);
-
-        if (_shooter.player == null)  return;
-
-        Vector3 dir = (_shooter.player.position - _shooter.transform.position).normalized;
-        dir.y = 0;
-        _shooter.transform.rotation = Quaternion.Slerp(_shooter.transform.rotation, Quaternion.LookRotation(dir), 5 * Time.deltaTime);
-
-        float distanceToPlayer = Vector3.Distance(_shooter.transform.position, _shooter.player.position);
-
-        if (distanceToPlayer > _shooter.attackRange)
+        float distance = Vector3.Distance(_shooter.transform.position, _shooter.player.position);
+        if (distance > _shooter.attackRange)
         {
             _shooter.playerInAttackRange = false;
             return;
         }
 
-        _agent.SetDestination(_shooter.transform.position); // Se queda quieto
+        _agent.SetDestination(_shooter.transform.position);
 
-        if (!_shooter.alreadyAttacked)
+        if (_attackTimer >= _attackDuration && !_shooter.alreadyAttacked)
         {
-            Shoot();
             _shooter.anim.SetTrigger("Attack");
+            Shoot();
             _shooter.alreadyAttacked = true;
             _cooldownTimer = _shooter.shotCooldown;
         }
 
+        // Reducir cooldown
+        if (_shooter.alreadyAttacked && _cooldownTimer > 0f)
+            _cooldownTimer -= Time.deltaTime;
     }
 
     public void OnExit()
     {
         _agent.isStopped = false;
+        //_shooter.alreadyAttacked = false;
+    }
+
+    private void FaceTarget()
+    {
+        var dir = (_shooter.player.position - _shooter.transform.position).normalized;
+        dir.y = 0;
+        _shooter.transform.rotation = Quaternion.Slerp(
+            _shooter.transform.rotation,
+            Quaternion.LookRotation(dir),
+            10 * Time.deltaTime
+        );
     }
 
     private void Shoot()
     {
-        Vector3 directionToPlayer = (_shooter.player.position - _shooter.firePoint.transform.position).normalized;
+        _shooter.anim.SetTrigger("Attack");
 
         var bullet = BuletManager.instance.GetBullet();
         bullet.transform.position = _shooter.firePoint.transform.position;
-        bullet.transform.forward = directionToPlayer;
+        bullet.transform.forward = (_shooter.player.position - _shooter.firePoint.transform.position).normalized;
+        //bullet.GetComponent<Rigidbody>()?.velocity = bullet.transform.forward * _shooter.projectileSpeed;
     }
 }

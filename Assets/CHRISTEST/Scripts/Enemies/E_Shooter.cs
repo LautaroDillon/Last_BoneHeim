@@ -77,25 +77,25 @@ public class E_Shooter : Entity
 
 
         // Definir las transiciones
-        at(idle, patrol, () => !isIdle);
-        at(patrol, idle, () => !isPatrolling);
-        at(patrol, chase, () => canSeePlayer && !playerInAttackRange);
-        at(chase, attack, () => playerInAttackRange);
-        at(attack, strafe, () => alreadyAttacked && playerInAttackRange);
-        at(attack, chase, () => !playerInAttackRange);
-        at(attack, Search, () => !playerInAttackRange && !canSeePlayer);
-        at(strafe, chase, () => !playerInAttackRange);
-        at(strafe, attack, () => !alreadyAttacked);
-        at(chase, Search, () => !canSeePlayer);
-        at(Search, patrol, () => true); // Despues de buscar vuelve a patrullar
-        any(death, () => currentHealth <= 0); // Transición a Death desde cualquier estado
-        any(Onhit, () => WasHit); // Transición a hit desde cualquier estado
-        at(Onhit, idle, () => !WasHit); // Transición a idle desde hit
-        at(Onhit, patrol, () => !WasHit);
-        at(Onhit, chase, () => !WasHit);
-        at(Onhit, Search, () => !WasHit);
-        at(Onhit, strafe, () => !WasHit);
-        at(Onhit, attack, () => !WasHit); 
+        at(idle, patrol, () => !isIdle && !isDead);
+        at(patrol, idle, () => !isPatrolling && !isDead);
+        at(patrol, chase, () => canSeePlayer && !playerInAttackRange && !isDead);
+        at(chase, attack, () => playerInAttackRange && !isDead);
+        at(attack, strafe, () => alreadyAttacked && playerInAttackRange && !isDead);
+        at(attack, chase, () => !playerInAttackRange && !isDead);
+        at(attack, Search, () => !playerInAttackRange && !canSeePlayer && !isDead);
+        at(strafe, chase, () => !playerInAttackRange && !isDead);
+        at(strafe, attack, () => !alreadyAttacked && !isDead);
+        at(chase, Search, () => !canSeePlayer && !isDead);
+        at(Search, patrol, () => true && !isDead); // Despues de buscar vuelve a patrullar
+        any(death, () => currentHealth <= 0 && isDead); // Transición a Death desde cualquier estado
+        any(Onhit, () => WasHit && !isDead); // Transición a hit desde cualquier estado
+        at(Onhit, idle, () => !WasHit && !isDead); // Transición a idle desde hit
+        at(Onhit, patrol, () => !WasHit && !isDead);
+        at(Onhit, chase, () => !WasHit && !isDead);
+        at(Onhit, Search, () => !WasHit && !isDead);
+        at(Onhit, strafe, () => !WasHit && !isDead);
+        at(Onhit, attack, () => !WasHit && !isDead); 
 
         fsm.SetState(idle);
     }
@@ -196,7 +196,7 @@ public class E_Shooter : Entity
         if (currentHealth <= 0 && !isincombatArena)
         {
             isDead = true;
-            anim.SetBool("isDead", true);
+
             agent.speed = 0f;
         }
     }
@@ -245,5 +245,12 @@ public class E_Shooter : Entity
     {
         yield return new WaitForSeconds(time);
         WasHit = false;
+    } 
+    
+    public IEnumerator waittoendAnim(float time)
+    {
+        yield return new WaitForSeconds(time);
+        alreadyAttacked = true;
+
     }
 }

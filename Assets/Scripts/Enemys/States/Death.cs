@@ -19,7 +19,7 @@ public class Death : IState
 
     public void OnEnter()
     {
-        _Shooter.anim.SetBool("Death", true);
+        _Shooter.anim.SetTrigger("IsDead");
         _Shooter.agent.isStopped = true; // Detener al enemigo
         _Shooter.Death();
     }

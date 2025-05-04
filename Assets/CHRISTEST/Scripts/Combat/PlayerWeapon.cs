@@ -36,6 +36,12 @@ public class PlayerWeapon : MonoBehaviour
     public GameObject muzzleFlash;
     public TextMeshProUGUI ammunitionDisplay;
 
+    [Header("Casing Ejection")]
+    public GameObject casingPrefab;
+    public Transform casingEjectPoint;
+    public float casingEjectForce = 2f;
+    public float casingEjectTorque = 5f;
+
     //bug fixing :D
     public bool allowInvoke = true;
 
@@ -117,12 +123,11 @@ public class PlayerWeapon : MonoBehaviour
         float y = Random.Range(-spread, spread);
 
         //Calculate new direction with spread
-        Vector3 directionWithSpread = directionWithoutSpread + new Vector3(x, y, 0); //Just add spread to last direction
+        Vector3 directionWithSpread = Quaternion.Euler(Random.Range(-spread, spread), Random.Range(-spread, spread), 0) * directionWithoutSpread;
 
         //Instantiate bullet/projectile
         GameObject currentBullet = Instantiate(bullet, attackPoint.position, Quaternion.identity); //store instantiated bullet in currentBullet
-        //Rotate bullet to shoot direction
-        currentBullet.transform.forward = directionWithSpread.normalized;
+        currentBullet.transform.rotation = Quaternion.LookRotation(directionWithSpread.normalized) * Quaternion.Euler(90, 0, 0);
 
         //Add forces to bullet
         currentBullet.GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
@@ -153,7 +158,6 @@ public class PlayerWeapon : MonoBehaviour
             Invoke("Shoot", timeBetweenShots);
 
         PlayerMovement.instance.animator.SetBool("Idle", true);
-
     }
 
     public void UpdateBulletDisplay()

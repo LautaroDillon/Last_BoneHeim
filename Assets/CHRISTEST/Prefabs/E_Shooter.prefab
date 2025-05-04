@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 2856933726968949420}
   - component: {fileID: 3288562228548541264}
   - component: {fileID: 4308110794063990159}
-  - component: {fileID: 4719166512671149468}
+  - component: {fileID: 9011733329996984528}
   m_Layer: 10
   m_Name: E_Shooter
   m_TagString: Enemy
@@ -155,7 +155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73fc8cd6757a2ef4db63d9204a067f5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100000
+  maxHealth: 100
   currentHealth: 0
   isDead: 0
   agent: {fileID: 4308110794063990159}
@@ -167,6 +167,8 @@ MonoBehaviour:
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 8
+  bulletDrop: {fileID: 3963558588678754370, guid: e5db85985806d5e4796aebf3d1712301, type: 3}
+  numberOfBulletsOnDeath: 3
   walkPoint: {x: 0, y: 0, z: 0}
   walkPointSet: 0
   walkPointRange: 13
@@ -184,6 +186,7 @@ MonoBehaviour:
   canSeePlayer: 0
   isIdle: 1
   WasHit: 0
+  muchit: 0
   obstructionMask:
     serializedVersion: 2
     m_Bits: 64
@@ -213,7 +216,7 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!54 &4719166512671149468
+--- !u!54 &9011733329996984528
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -237,9 +240,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 80
-  m_CollisionDetection: 0
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 1
 --- !u!1001 &5630542704800156661
 PrefabInstance:
   m_ObjectHideFlags: 0

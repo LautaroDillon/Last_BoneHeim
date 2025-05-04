@@ -4,12 +4,20 @@ using UnityEngine;
 
 public class PlayerBullet : MonoBehaviour
 {
+    [Header("Stats")]
+    public float damage;
+
     [Header("References")]
     public Rigidbody rb;
 
     [Header("Variables")]
     private float counter;
     public float lifetime;
+
+    [Header("Particle")]
+    public GameObject wallHitEffect;
+    public GameObject enemyHitEffect;
+
     void Update()
     {
         Lifetime();
@@ -24,17 +32,21 @@ public class PlayerBullet : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.tag != "Player")
-        {
-            if (collision.gameObject.tag == "Enemy")
-            {
-                Destroy(gameObject);
-            }
-            Destroy(gameObject);
-        }
+        if (other.CompareTag("Player"))
+            return;
 
-        
+        if (other.CompareTag("Enemy"))
+        {
+            other.GetComponent<E_Shooter>().TakeDamage(damage);
+            Instantiate(enemyHitEffect, transform.position, Quaternion.identity);
+            AudioManager.instance.PlaySFXOneShot("Bullet Enemy Impact", 1f);
+        }
+        else
+        {
+            Instantiate(wallHitEffect, transform.position, Quaternion.identity);
+        }
+        Destroy(gameObject);
     }
 }

@@ -8,7 +8,7 @@ public class EnemyFlyweight
     {
         speed = 2,
         Damage = 20,
-        maxLife = 10000
+        maxLife = 100
     };
 
     public static readonly EnemysFlight Boomer = new EnemysFlight()

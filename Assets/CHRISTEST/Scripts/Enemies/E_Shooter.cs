@@ -18,6 +18,8 @@ public class E_Shooter : Entity
     public Animator anim;
     public LayerMask whatIsGround, whatIsPlayer;
     public static E_Shooter instance;
+    public GameObject bulletDrop;
+    public int numberOfBulletsOnDeath = 3;
 
     [Header("Patrol")]
     public Vector3 walkPoint;
@@ -200,22 +202,29 @@ public class E_Shooter : Entity
     }
     public void Death()
     {
-          if (isDead == true)
-              Invoke("DestroyEnemy", 2.3f);
+        if (isDead == true)
+        {
+            SpawnFloatingObjects();
+            Invoke("DestroyEnemy", 2.3f);
+        }
     }
 
     private void DestroyEnemy()
     {
-          Destroy(gameObject);
+        Destroy(gameObject);
     }
     #endregion
 
-    private void OnCollisionEnter(Collision collision)
+    private void SpawnFloatingObjects()
     {
-        if(collision.gameObject.tag == "Bullet")
+        for (int i = 0; i < numberOfBulletsOnDeath; i++)
         {
-            TakeDamage(50);
-            AudioManager.instance.PlaySFXOneShot("Bullet Enemy Impact", 1f);
+            Vector3 spawnPosition = transform.position + new Vector3(
+                Random.Range(-1f, 1f),
+                Random.Range(0.5f, 1.5f),
+                Random.Range(-1f, 1f)
+            );
+            Instantiate(bulletDrop, spawnPosition, Quaternion.identity);
         }
     }
 

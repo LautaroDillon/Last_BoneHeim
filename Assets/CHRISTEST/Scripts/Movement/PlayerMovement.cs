@@ -356,7 +356,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (OnSlope() && grounded && moveDirection == Vector3.zero)
         {
-            rb.velocity = Vector3.zero; // stops sliding when idle on a slope
+            rb.velocity = Vector3.zero;
         }
     }
 
@@ -510,10 +510,6 @@ public class PlayerMovement : MonoBehaviour
         {
             if (slopeHit.collider.CompareTag("StoneGround"))
                 return SurfaceType.Stone;
-            /*else if (slopeHit.collider.CompareTag("MetalGround"))
-                return SurfaceType.Metal;
-            //else if (slopeHit.collider.CompareTag("WoodGround"))
-                return SurfaceType.Wood;*/
         }
         return SurfaceType.Default;
     }

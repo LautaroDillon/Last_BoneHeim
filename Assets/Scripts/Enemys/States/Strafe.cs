@@ -37,6 +37,14 @@ public class Strafe : IState
 
     public void Tick()
     {
+        var dir = (_agent.steeringTarget - _shooter.transform.position).normalized;
+        var animdir = _shooter.transform.InverseTransformDirection(dir);
+        var isfacingmovedirection = Vector3.Dot(dir, _shooter.transform.forward) > 0.5f;
+
+        _shooter.anim.SetFloat("Horizontal", isfacingmovedirection ? animdir.x : 0, .5f, Time.deltaTime);
+        _shooter.anim.SetFloat("Vertical", isfacingmovedirection ? animdir.z : 0, .5f, Time.deltaTime);
+
+
         _actionTimer += Time.deltaTime;
 
         if (!_hasChosenMode)

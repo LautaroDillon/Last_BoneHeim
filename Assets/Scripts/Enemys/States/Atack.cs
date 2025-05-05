@@ -27,6 +27,8 @@ public class Atack : IState
         _agent.isStopped = true;
         _agent.velocity = Vector3.zero;
         _attackTimer = 0f;
+        _shooter.anim.SetFloat("Horizontal",0);
+        _shooter.anim.SetFloat("Vertical",0);
         _cooldownTimer = 0f;
         _shooter.alreadyAttacked = false;
         _shooter.anim.SetBool("Walk", false);
@@ -49,9 +51,9 @@ public class Atack : IState
 
         if (_attackTimer >= _attackDuration && !_shooter.alreadyAttacked)
         {
-            _shooter.anim.SetTrigger("Attack");
-            Shoot();
+            _shooter.anim.SetTrigger("atack");
             _shooter.alreadyAttacked = true;
+            Shoot();
             _cooldownTimer = _shooter.shotCooldown;
         }
 
@@ -79,7 +81,7 @@ public class Atack : IState
 
     private void Shoot()
     {
-        _shooter.anim.SetTrigger("Attack");
+        //_shooter.anim.SetTrigger("atack");
 
         var bullet = BuletManager.instance.GetBullet();
         bullet.transform.position = _shooter.firePoint.transform.position;

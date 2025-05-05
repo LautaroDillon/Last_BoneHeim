@@ -353,6 +353,11 @@ public class PlayerMovement : MonoBehaviour
         // turn gravity off while on slope
         if(wallrunning)
             rb.useGravity = !OnSlope();
+
+        if (OnSlope() && grounded && moveDirection == Vector3.zero)
+        {
+            rb.velocity = Vector3.zero; // stops sliding when idle on a slope
+        }
     }
 
     private void Airtime()

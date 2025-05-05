@@ -167,7 +167,7 @@ MonoBehaviour:
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 8
-  bulletDrop: {fileID: 3963558588678754370, guid: e5db85985806d5e4796aebf3d1712301, type: 3}
+  bulletDrop: {fileID: 3963558588678754370, guid: a64ccfd54ba88864a95a2dadff6093c3, type: 3}
   numberOfBulletsOnDeath: 3
   walkPoint: {x: 0, y: 0, z: 0}
   walkPointSet: 0
@@ -242,7 +242,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 3
 --- !u!1001 &5630542704800156661
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -303,6 +303,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -4586408438681121999, guid: baec98b1518be3c43a8c1123d94ae7e6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ec6996f7772318f4593b08f9725f481e, type: 2}
     - target: {fileID: 919132149155446097, guid: baec98b1518be3c43a8c1123d94ae7e6, type: 3}
       propertyPath: m_Name
       value: EsqueletoEnemigo

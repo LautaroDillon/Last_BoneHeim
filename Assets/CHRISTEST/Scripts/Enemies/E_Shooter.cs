@@ -20,6 +20,8 @@ public class E_Shooter : Entity
     public static E_Shooter instance;
     public GameObject bulletDrop;
     public int numberOfBulletsOnDeath = 3;
+    public PlayerWeapon playerWeapon;
+    public int bulletsToGive = 5;
 
     [Header("Patrol")]
     public Vector3 walkPoint;
@@ -64,6 +66,8 @@ public class E_Shooter : Entity
 
     private void Start()
     {
+        playerWeapon = FindObjectOfType<PlayerWeapon>();
+
         StartCoroutine(FOVRoutime());
 
         var idle = new Idle(agent, this, fsm);
@@ -204,7 +208,7 @@ public class E_Shooter : Entity
     {
         if (isDead == true)
         {
-            SpawnFloatingObjects();
+            playerWeapon.AddAmmo(bulletsToGive);
             Invoke("DestroyEnemy", 2.3f);
         }
     }

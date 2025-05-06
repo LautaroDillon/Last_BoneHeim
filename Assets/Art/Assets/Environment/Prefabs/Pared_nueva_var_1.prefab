@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 747226278617543158}
   - component: {fileID: 3704122089560989442}
   - component: {fileID: 5151266353918548780}
-  - component: {fileID: 5950477474787307998}
-  m_Layer: 6
+  - component: {fileID: 7719772336119408383}
+  m_Layer: 0
   m_Name: Pared_nueva_var_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,13 +27,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6950071262880428494}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
+  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.0000029504295}
   m_LocalPosition: {x: 37.377586, y: 7.139999, z: -4.760915}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3704122089560989442
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -41,7 +41,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6950071262880428494}
-  m_Mesh: {fileID: -1575867879384240376, guid: 108823a71eaa0c145b68b58738ec99ae, type: 3}
+  m_Mesh: {fileID: -4777969045601013103, guid: db2ad20415cf30e44a4391da14d140f5, type: 3}
 --- !u!23 &5151266353918548780
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 21e0d122cdb8c4140a15b612aaa6b98e, type: 2}
+  - {fileID: 2100000, guid: b4f9e6623c5c3174da5864326740ab81, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5950477474787307998
-BoxCollider:
+--- !u!64 &7719772336119408383
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,6 +102,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 799.99994, y: 600.00006, z: 36.06006}
-  m_Center: {x: -399.99997, y: 300.00027, z: -18.029785}
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -4777969045601013103, guid: db2ad20415cf30e44a4391da14d140f5, type: 3}

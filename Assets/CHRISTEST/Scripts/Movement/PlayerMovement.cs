@@ -353,6 +353,11 @@ public class PlayerMovement : MonoBehaviour
         // turn gravity off while on slope
         if(wallrunning)
             rb.useGravity = !OnSlope();
+
+        if (OnSlope() && grounded && moveDirection == Vector3.zero)
+        {
+            rb.velocity = Vector3.zero;
+        }
     }
 
     private void Airtime()
@@ -505,10 +510,6 @@ public class PlayerMovement : MonoBehaviour
         {
             if (slopeHit.collider.CompareTag("StoneGround"))
                 return SurfaceType.Stone;
-            /*else if (slopeHit.collider.CompareTag("MetalGround"))
-                return SurfaceType.Metal;
-            //else if (slopeHit.collider.CompareTag("WoodGround"))
-                return SurfaceType.Wood;*/
         }
         return SurfaceType.Default;
     }

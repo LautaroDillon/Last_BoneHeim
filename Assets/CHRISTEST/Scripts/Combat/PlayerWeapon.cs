@@ -196,7 +196,7 @@ public class PlayerWeapon : MonoBehaviour
     private void Reload()
     {
         reloading = true;
-        Invoke("ReloadFinished", reloadTime); //Invoke ReloadFinished function with your reloadTime as delay
+        Invoke("ReloadFinished", reloadTime);
     }
     private void ReloadFinished()
     {
@@ -207,5 +207,11 @@ public class PlayerWeapon : MonoBehaviour
             bulletObj.SetActive(true);
         }
         reloading = false;
+    }
+
+    public void AddAmmo(int amount)
+    {
+        bulletsLeft = Mathf.Min(bulletsLeft + amount, magazineSize);
+        UpdateBulletDisplay();
     }
 }

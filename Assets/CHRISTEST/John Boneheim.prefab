@@ -1097,40 +1097,26 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2274620222270433167}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9e57e9b09a91daf46ad1522954f477e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootKey: 316
-  bullet: {fileID: 3963558588678754370, guid: e5db85985806d5e4796aebf3d1712301, type: 3}
-  shootForce: 250
-  upwardForce: 0
-  timeBetweenShooting: 1
-  spread: 0
-  reloadTime: 1.5
-  timeBetweenShots: 0.8
+  fireMode: 0
+  shootButton: 316
+  reloadButton: 114
+  fireRate: 0.2
+  burstCount: 3
+  damage: 10
   magazineSize: 10
-  bulletsPerTap: 1
-  allowButtonHold: 1
-  kickbackAmount: {x: -0.1, y: 0, z: 0}
-  returnSpeed: 5
-  fpsCam: {fileID: 6174852390792161049}
-  attackPoint: {fileID: 7795666134765801136}
-  muzzleFlash: {fileID: 0}
-  ammunitionDisplay: {fileID: 0}
-  allowInvoke: 1
-  bulletDisplay:
-  - {fileID: 5255098921769386177}
-  - {fileID: 7918896775389971109}
-  - {fileID: 2468313596999972283}
-  - {fileID: 5262140398229922765}
-  - {fileID: 5296051244669370653}
-  - {fileID: 1352524362652993491}
-  - {fileID: 5389645676294156080}
-  - {fileID: 5943737166861071035}
-  - {fileID: 4367248009236024501}
-  - {fileID: 1008969365107385744}
+  reloadTime: 1.5
+  recoilTransform: {fileID: 0}
+  recoilRotation: {x: -5, y: 0, z: 0}
+  recoilReturnSpeed: 5
+  recoilSnappiness: 10
+  firePoint: {fileID: 0}
+  bulletPrefab: {fileID: 0}
+  bulletSpeed: 20
 --- !u!114 &4043179668563702199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2077,6 +2063,7 @@ GameObject:
   - component: {fileID: 6411974394588855077}
   - component: {fileID: 7396602347337389293}
   - component: {fileID: 7414093129574444737}
+  - component: {fileID: 5552574659142779766}
   m_Layer: 11
   m_Name: Left Arm
   m_TagString: Player
@@ -2171,6 +2158,33 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5552574659142779766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5137529503691769728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e57e9b09a91daf46ad1522954f477e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireMode: 0
+  shootButton: 316
+  reloadButton: 114
+  fireRate: 0.2
+  burstCount: 3
+  damage: 10
+  magazineSize: 10
+  reloadTime: 1.5
+  recoilTransform: {fileID: 1089454899372370689}
+  recoilRotation: {x: -5, y: 0, z: 0}
+  recoilReturnSpeed: 5
+  recoilSnappiness: 10
+  firePoint: {fileID: 7777794667085834323}
+  bulletPrefab: {fileID: 3963558588678754370, guid: e5db85985806d5e4796aebf3d1712301, type: 3}
+  bulletSpeed: 20
 --- !u!1 &5208182492721743928
 GameObject:
   m_ObjectHideFlags: 0

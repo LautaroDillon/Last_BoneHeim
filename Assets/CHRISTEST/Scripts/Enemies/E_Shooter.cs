@@ -53,19 +53,24 @@ public class E_Shooter : Entity
     #endregion
     public bool isincombatArena;
 
+    private Vector3 originalPosition;
+    public float shakeAmount = 0.05f;  // How much to shake
+    public float shakeDuration = 0.1f;
+
     private void Awake()
-      {
+    {
         maxHealth = EnemyFlyweight.Shooter.maxLife;
         currentHealth = maxHealth;
         walkSpeed = EnemyFlyweight.Shooter.speed;
         fsm = new StateMachine();
         agent = GetComponent<NavMeshAgent>();
-          if (instance == null)
-              instance = this;
-      }
+        if (instance == null)
+            instance = this;
+    }
 
     private void Start()
     {
+        originalPosition = transform.position;
         playerWeapon = FindObjectOfType<PlayerWeapon>();
 
         StartCoroutine(FOVRoutime());
@@ -193,6 +198,7 @@ public class E_Shooter : Entity
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        StartCoroutine(ShakeEffect());
         if (currentHealth > 0 && currentHealth <= (maxHealth/3))
         {
             WasHit = true;
@@ -208,7 +214,6 @@ public class E_Shooter : Entity
     {
         if (isDead == true)
         {
-            playerWeapon.AddAmmo(bulletsToGive);
             Invoke("DestroyEnemy", 2.3f);
         }
     }
@@ -219,17 +224,29 @@ public class E_Shooter : Entity
     }
     #endregion
 
-    private void SpawnFloatingObjects()
+    private IEnumerator ShakeEffect()
     {
-        for (int i = 0; i < numberOfBulletsOnDeath; i++)
+        float timeElapsed = 0f;
+
+        while (timeElapsed < shakeDuration)
         {
-            Vector3 spawnPosition = transform.position + new Vector3(
-                Random.Range(-1f, 1f),
-                Random.Range(0.5f, 1.5f),
-                Random.Range(-1f, 1f)
+            // Create a small random shake direction
+            Vector3 shakeOffset = new Vector3(
+                Random.Range(-shakeAmount, shakeAmount),
+                Random.Range(-shakeAmount, shakeAmount),
+                Random.Range(-shakeAmount, shakeAmount)
             );
-            Instantiate(bulletDrop, spawnPosition, Quaternion.identity);
+
+            transform.position = originalPosition + shakeOffset;
+
+            timeElapsed += Time.deltaTime;
+
+            // Wait until the next frame before continuing
+            yield return null;
         }
+
+        // Return the enemy to its original position
+        transform.position = originalPosition;
     }
 
     private void OnDrawGizmosSelected()

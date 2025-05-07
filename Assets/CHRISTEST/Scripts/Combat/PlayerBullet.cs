@@ -22,6 +22,7 @@ public class PlayerBullet : MonoBehaviour
     {
         Lifetime();
     }
+
     public void Lifetime()
     {
         counter += Time.deltaTime;
@@ -30,6 +31,11 @@ public class PlayerBullet : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public void SetDamage(float dmg)
+    {
+        damage = dmg;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -43,10 +49,8 @@ public class PlayerBullet : MonoBehaviour
             Instantiate(enemyHitEffect, transform.position, Quaternion.identity);
             AudioManager.instance.PlaySFXOneShot("Bullet Enemy Impact", 1f);
         }
-        else
-        {
+        if (other.CompareTag("Wall"))
             Instantiate(wallHitEffect, transform.position, Quaternion.identity);
-        }
         Destroy(gameObject);
     }
 }

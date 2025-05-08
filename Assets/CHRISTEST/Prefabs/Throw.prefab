@@ -1011,6 +1011,7 @@ GameObject:
   - component: {fileID: 802180715485323095}
   - component: {fileID: 5608865901135598199}
   - component: {fileID: 8467289120626257952}
+  - component: {fileID: -7981166408447703708}
   m_Layer: 0
   m_Name: Throw
   m_TagString: Arm
@@ -1248,6 +1249,23 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!114 &-7981166408447703708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4466020935756555090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cc6afca34f821a43b931eadad9bbbd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 20
+  damageableLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  enemyHitEffect: {fileID: 9160994265675421395, guid: d8e6d7a18bb01e148904bb0c060666d8, type: 3}
 --- !u!1 &4591254130231205589
 GameObject:
   m_ObjectHideFlags: 0

@@ -2159,18 +2159,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e57e9b09a91daf46ad1522954f477e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireMode: 0
+  fireMode: 3
   shootButton: 316
   reloadButton: 114
+  switchFireModeKey: 118
   fireRate: 0.2
   burstCount: 3
   damage: 10
-  magazineSize: 10
+  magazineSize: 100
   reloadTime: 1.5
+  shotgunDamage: 60
+  pelletsPerShot: 6
+  spreadAngle: 10
+  falloffStartDistance: 10
+  minDamageMultiplier: 0.3
   firePoint: {fileID: 7777794667085834323}
   bulletPrefab: {fileID: 3963558588678754370, guid: e5db85985806d5e4796aebf3d1712301, type: 3}
   bulletSpeed: 75
   ammoText: {fileID: 0}
+  fireModeText: {fileID: 0}
+  fireModeDisplayTime: 2
   bulletDisplay:
   - {fileID: 7918896775389971109}
   - {fileID: 5255098921769386177}
@@ -2234,6 +2242,7 @@ GameObject:
   - component: {fileID: 4684314571490862348}
   - component: {fileID: 4615370192834907068}
   - component: {fileID: 8012495331682462058}
+  - component: {fileID: 3889202759188512740}
   m_Layer: 3
   m_Name: John Boneheim
   m_TagString: Player
@@ -2560,6 +2569,37 @@ MonoBehaviour:
   pm: {fileID: 7949670869836013094}
   heart: {fileID: 0}
   lungs: {fileID: 0}
+--- !u!114 &3889202759188512740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5247402987687501777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77cc974e21d846e4c9e89529c95fe82d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meleeKey: 102
+  meleeRange: 2
+  meleeRadius: 2
+  meleeDamage: 20
+  meleeHitMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  canMelee: 1
+  knockbackForce: 5
+  throwKey: 113
+  throwableObjectPrefab: {fileID: 4466020935756555090, guid: 1a44b35d2ee8bf041ace00ce2209257d, type: 3}
+  throwOrigin: {fileID: 7777794667085834323}
+  throwForce: 50
+  recallSpeed: 50
+  hitMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  throwCooldown: 5
+  enemyHitEffect: {fileID: 9160994265675421395, guid: d8e6d7a18bb01e148904bb0c060666d8, type: 3}
 --- !u!1 &5255098921769386177
 GameObject:
   m_ObjectHideFlags: 0

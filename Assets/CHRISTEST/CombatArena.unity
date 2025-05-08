@@ -704,11 +704,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 891564673617898122, guid: 5861198ece183ea4589e2b8fa31c1538, type: 3}
   m_PrefabInstance: {fileID: 332598988}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &275629918 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7777794667085834323, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
-  m_PrefabInstance: {fileID: 1380201260}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &294334909 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2831434643348055416, guid: 3c54debe86cd66f40ad539de05ff8202, type: 3}
@@ -1467,37 +1462,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2551412571509783989, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
   m_PrefabInstance: {fileID: 1380201260}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &926287289
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 926287276}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77cc974e21d846e4c9e89529c95fe82d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  meleeKey: 102
-  meleeRange: 2
-  meleeRadius: 1
-  meleeDamage: 20
-  meleeHitMask:
-    serializedVersion: 2
-    m_Bits: 1024
-  canMelee: 1
-  knockbackForce: 5
-  throwKey: 113
-  throwableObjectPrefab: {fileID: 4466020935756555090, guid: 1a44b35d2ee8bf041ace00ce2209257d, type: 3}
-  throwOrigin: {fileID: 275629918}
-  throwForce: 50
-  recallSpeed: 50
-  hitMask:
-    serializedVersion: 2
-    m_Bits: 1024
-  throwCooldown: 1.5
-  enemyHitEffect: {fileID: 9160994265675421395, guid: d8e6d7a18bb01e148904bb0c060666d8, type: 3}
 --- !u!1001 &946571740
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2029,6 +1993,10 @@ PrefabInstance:
       propertyPath: shotCooldown
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 3288562228548541264, guid: b5996fa40d1792d4ca8bfef4ae96a840, type: 3}
+      propertyPath: enemyHitEffect
+      value: 
+      objectReference: {fileID: 9160994265675421395, guid: d8e6d7a18bb01e148904bb0c060666d8, type: 3}
     - target: {fileID: 4719166512671149468, guid: b5996fa40d1792d4ca8bfef4ae96a840, type: 3}
       propertyPath: m_UseGravity
       value: 0
@@ -2270,17 +2238,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1395731376}
     - target: {fileID: 5552574659142779766, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
-      propertyPath: fireMode
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5552574659142779766, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
       propertyPath: fireModeText
       value: 
       objectReference: {fileID: 2042933763}
-    - target: {fileID: 5552574659142779766, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
-      propertyPath: magazineSize
-      value: 100
-      objectReference: {fileID: 0}
     - target: {fileID: 5912975175020226424, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
       propertyPath: sensitivityController
       value: 
@@ -2300,10 +2260,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5247402987687501777, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 926287289}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
 --- !u!114 &1395731376 stripped
 MonoBehaviour:

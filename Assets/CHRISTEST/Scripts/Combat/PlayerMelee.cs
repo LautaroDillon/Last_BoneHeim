@@ -142,7 +142,7 @@ public class PlayerMelee : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, 100f, hitMask))
             targetPoint = hit.point;
         else
-            targetPoint = ray.GetPoint(50f); // Default distance
+            targetPoint = ray.GetPoint(50f);
 
         Vector3 dir = (targetPoint - throwOrigin.position).normalized;
 
@@ -158,6 +158,14 @@ public class PlayerMelee : MonoBehaviour
         Rigidbody rb = currentThrowable.GetComponent<Rigidbody>();
         rb.velocity = dir * throwForce;
 
+        ThrowableObject throwableScript = currentThrowable.GetComponent<ThrowableObject>();
+        if (throwableScript != null)
+        {
+            throwableScript.damage = meleeDamage;
+            throwableScript.damageableLayer = meleeHitMask;
+        }
+
+        CameraShake.Instance.ShakeOnce(2f, 2f, 0.1f, 0.3f);
         isThrowableAway = true;
         canMelee = false;
     }
@@ -172,6 +180,7 @@ public class PlayerMelee : MonoBehaviour
         float distance = Vector3.Distance(currentThrowable.transform.position, throwOrigin.position);
         if (distance < 1f)
         {
+            CameraShake.Instance.ShakeOnce(4f, 8f, 0.1f, 0.3f);
             Destroy(currentThrowable);
             isThrowableAway = false;
             isRecalling = false;

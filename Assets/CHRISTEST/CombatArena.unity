@@ -704,6 +704,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 891564673617898122, guid: 5861198ece183ea4589e2b8fa31c1538, type: 3}
   m_PrefabInstance: {fileID: 332598988}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &275629918 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7777794667085834323, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
+  m_PrefabInstance: {fileID: 1380201260}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &294334909 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2831434643348055416, guid: 3c54debe86cd66f40ad539de05ff8202, type: 3}
@@ -1481,7 +1486,17 @@ MonoBehaviour:
   meleeHitMask:
     serializedVersion: 2
     m_Bits: 1024
+  canMelee: 1
   knockbackForce: 5
+  throwKey: 113
+  throwableObjectPrefab: {fileID: 4466020935756555090, guid: 1a44b35d2ee8bf041ace00ce2209257d, type: 3}
+  throwOrigin: {fileID: 275629918}
+  throwForce: 50
+  recallSpeed: 50
+  hitMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  throwCooldown: 1.5
   enemyHitEffect: {fileID: 9160994265675421395, guid: d8e6d7a18bb01e148904bb0c060666d8, type: 3}
 --- !u!1001 &946571740
 PrefabInstance:

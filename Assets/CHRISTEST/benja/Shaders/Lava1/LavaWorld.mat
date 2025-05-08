@@ -46,13 +46,13 @@ Material:
     m_Ints: []
     m_Floats:
     - _Brightness_Under_Lava: 32.28
-    - _Cutoff_Top: 0.35
-    - _Distort_Scale: 0.32
+    - _Cutoff_Top: -0.12
+    - _Distort_Scale: 0.12
     - _Distortion_Strength: 0.72
     - _Edge_Blur: 1.9
     - _Edge_Top_Brightness: 1.84
     - _Edge_Width: 0
-    - _Main_Texture_Scale: 0.76
+    - _Main_Texture_Scale: 0.22
     - _ObjectPosition: 0
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -60,12 +60,12 @@ Material:
     - _Speed_Distort_Y: 0.008
     - _Speed_Main_X: 0
     - _Speed_Main_Y: 0
-    - _Start_End_Tint_Offset: 7.16
-    - _Top_Blur: 1.07
+    - _Start_End_Tint_Offset: 3.26
+    - _Top_Blur: 1
     - _Vertex_Color_Distortion_Strength: 0.83
-    - _Wave_Amount: 0
-    - _Wave_Height: 0
-    - _Wave_Move_Speed: 0
+    - _Wave_Amount: 11
+    - _Wave_Height: 0.05
+    - _Wave_Move_Speed: 1
     m_Colors:
     - _Edge_Color: {r: 0.5, g: 0.2759434, b: 0.15801886, a: 1}
     - _Main_Tint_End: {r: 0.16981131, g: 0.0035377357, b: 0, a: 1}

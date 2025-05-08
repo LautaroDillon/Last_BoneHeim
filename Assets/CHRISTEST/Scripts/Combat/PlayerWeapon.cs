@@ -18,6 +18,7 @@ public class PlayerWeapon : MonoBehaviour
     public int burstCount = 3;
     public int damage = 10;
     public int magazineSize = 30;
+    public int currentAmmo;
     public float reloadTime = 2f;
 
     [Header("Shotgun Settings")]
@@ -40,7 +41,6 @@ public class PlayerWeapon : MonoBehaviour
     [Header("Bullet Display")]
     public List<GameObject> bulletDisplay = new List<GameObject>();
 
-    private int currentAmmo;
     private bool isReloading = false;
     private float nextTimeToFire = 0f;
     private bool isFiringHeld = false;
@@ -61,6 +61,8 @@ public class PlayerWeapon : MonoBehaviour
             UpdateAmmoUI();
             HandleFireModeSwitching();
         }
+        if (currentAmmo > magazineSize)
+            currentAmmo = magazineSize;
     }
 
     void Reloading()
@@ -138,15 +140,21 @@ public class PlayerWeapon : MonoBehaviour
             targetPoint = ray.GetPoint(1000);
         }
 
-        Vector3 direction = (targetPoint - firePoint.position).normalized;
+        Vector3 aimDirection = (targetPoint - firePoint.position).normalized;
 
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(direction));
+        float maxAngle = 60f; // clamp angle from firePoint.forward
+        if (Vector3.Angle(firePoint.forward, aimDirection) > maxAngle)
+        {
+            aimDirection = firePoint.forward;
+        }
+
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(aimDirection));
 
         if (bullet.TryGetComponent(out PlayerBullet bulletScript))
             bulletScript.SetDamage(damage);
 
         if (bullet.TryGetComponent(out Rigidbody rb))
-            rb.velocity = direction * bulletSpeed;
+            rb.velocity = aimDirection * bulletSpeed;
 
         currentAmmo--;
         UpdateBulletDisplay();

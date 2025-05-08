@@ -19,9 +19,8 @@ public class E_Shooter : Entity
     public LayerMask whatIsGround, whatIsPlayer;
     public static E_Shooter instance;
     public GameObject bulletDrop;
-    public int numberOfBulletsOnDeath = 3;
+    public int numberOfBulletsOnDeath;
     public PlayerWeapon playerWeapon;
-    public int bulletsToGive = 5;
 
     [Header("Patrol")]
     public Vector3 walkPoint;
@@ -36,6 +35,7 @@ public class E_Shooter : Entity
     public float walkSpeed;
     [SerializeField] private float projectileSpeed;
     public float strafeSpeed = 5f;
+    public bool wasKilledByThrowable = false;
 
     [Header("States")]
     public float chaseDistance, attackRange;
@@ -53,15 +53,12 @@ public class E_Shooter : Entity
     #endregion
     public bool isincombatArena;
 
-    private Vector3 originalPosition;
-    public float shakeAmount = 0.05f;  // How much to shake
-    public float shakeDuration = 0.1f;
-
     private void Awake()
     {
         maxHealth = EnemyFlyweight.Shooter.maxLife;
         currentHealth = maxHealth;
         walkSpeed = EnemyFlyweight.Shooter.speed;
+        numberOfBulletsOnDeath = Random.Range(1, 4);
         fsm = new StateMachine();
         agent = GetComponent<NavMeshAgent>();
         if (instance == null)
@@ -70,7 +67,6 @@ public class E_Shooter : Entity
 
     private void Start()
     {
-        originalPosition = transform.position;
         playerWeapon = FindObjectOfType<PlayerWeapon>();
 
         StartCoroutine(FOVRoutime());
@@ -198,7 +194,6 @@ public class E_Shooter : Entity
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        StartCoroutine(ShakeEffect());
         if (currentHealth > 0 && currentHealth <= (maxHealth/3))
         {
             WasHit = true;
@@ -216,6 +211,7 @@ public class E_Shooter : Entity
         if (isDead == true)
         {
             AudioManager.instance.PlaySFXOneShot("ShooterDeath", 1f);
+            DropBullets();
             Invoke("DestroyEnemy", 2.3f);
         }
     }
@@ -226,29 +222,37 @@ public class E_Shooter : Entity
     }
     #endregion
 
-    private IEnumerator ShakeEffect()
+    void DropBullets()
     {
-        float timeElapsed = 0f;
-
-        while (timeElapsed < shakeDuration)
+        for (int i = 0; i < numberOfBulletsOnDeath; i++)
         {
-            // Create a small random shake direction
-            Vector3 shakeOffset = new Vector3(
-                Random.Range(-shakeAmount, shakeAmount),
-                Random.Range(-shakeAmount, shakeAmount),
-                Random.Range(-shakeAmount, shakeAmount)
+            Vector3 dropOffset = new Vector3(
+                Random.Range(-0.3f, 0.3f),
+                0.5f,
+                Random.Range(-0.3f, 0.3f)
             );
 
-            transform.position = originalPosition + shakeOffset;
+            Vector3 dropPosition = transform.position + dropOffset;
 
-            timeElapsed += Time.deltaTime;
+            GameObject bullet = Instantiate(bulletDrop, dropPosition, Quaternion.identity);
 
-            // Wait until the next frame before continuing
-            yield return null;
+            bullet.transform.position += Vector3.up * 0.3f;
+
+            // Add physics force in random arc
+            Rigidbody rb = bullet.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                Vector3 randomDirection = new Vector3(
+                    Random.Range(-1f, 1f),
+                    1f,
+                    Random.Range(-1f, 1f)
+                ).normalized;
+
+                float dropForce = Random.Range(3f, 6f);
+                rb.AddForce(randomDirection * dropForce, ForceMode.Impulse);
+                rb.AddTorque(Random.insideUnitSphere * 5f, ForceMode.Impulse);
+            }
         }
-
-        // Return the enemy to its original position
-        transform.position = originalPosition;
     }
 
     private void OnDrawGizmosSelected()

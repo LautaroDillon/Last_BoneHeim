@@ -16,7 +16,7 @@ public class PlayerMelee : MonoBehaviour
     public int meleeDamage = 20;
     public LayerMask meleeHitMask;
     public bool canMelee = true;
-    private float meleeCooldown = 0.5f;
+    public float meleeCooldown = 3f;
     private float nextMeleeTime = 0f;
     private float recallDelay = 0.2f;
     private float timeThrown = 0f;

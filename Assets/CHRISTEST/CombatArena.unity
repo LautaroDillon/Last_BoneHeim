@@ -1611,6 +1611,63 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 891564673617898122, guid: 5861198ece183ea4589e2b8fa31c1538, type: 3}
   m_PrefabInstance: {fileID: 1990541192}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &993007256
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3963558588678754370, guid: a64ccfd54ba88864a95a2dadff6093c3, type: 3}
+      propertyPath: m_Name
+      value: Bullet Drop
+      objectReference: {fileID: 0}
+    - target: {fileID: 4344481765370694392, guid: a64ccfd54ba88864a95a2dadff6093c3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 12.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4344481765370694392, guid: a64ccfd54ba88864a95a2dadff6093c3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 20.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 4344481765370694392, guid: a64ccfd54ba88864a95a2dadff6093c3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5.239285
+      objectReference: {fileID: 0}
+    - target: {fileID: 4344481765370694392, guid: a64ccfd54ba88864a95a2dadff6093c3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4344481765370694392, guid: a64ccfd54ba88864a95a2dadff6093c3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4344481765370694392, guid: a64ccfd54ba88864a95a2dadff6093c3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4344481765370694392, guid: a64ccfd54ba88864a95a2dadff6093c3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4344481765370694392, guid: a64ccfd54ba88864a95a2dadff6093c3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4344481765370694392, guid: a64ccfd54ba88864a95a2dadff6093c3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4344481765370694392, guid: a64ccfd54ba88864a95a2dadff6093c3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a64ccfd54ba88864a95a2dadff6093c3, type: 3}
 --- !u!1 &1016672053 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 891564673617898122, guid: 5861198ece183ea4589e2b8fa31c1538, type: 3}
@@ -1992,6 +2049,10 @@ PrefabInstance:
     - target: {fileID: 3288562228548541264, guid: b5996fa40d1792d4ca8bfef4ae96a840, type: 3}
       propertyPath: shotCooldown
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3288562228548541264, guid: b5996fa40d1792d4ca8bfef4ae96a840, type: 3}
+      propertyPath: bulletsToGive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3288562228548541264, guid: b5996fa40d1792d4ca8bfef4ae96a840, type: 3}
       propertyPath: enemyHitEffect
@@ -3188,3 +3249,4 @@ SceneRoots:
   - {fileID: 416716831}
   - {fileID: 1380201260}
   - {fileID: 1192761235}
+  - {fileID: 993007256}

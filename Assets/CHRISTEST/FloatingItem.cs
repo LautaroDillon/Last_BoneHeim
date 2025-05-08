@@ -4,27 +4,20 @@ using UnityEngine;
 
 public class FloatingItem : MonoBehaviour
 {
-    public float floatSpeed = 1f;
-    public float floatAmount = 0.5f;
-    public bool floating = true;
-
-    private Vector3 localOffset;
-    private float offset;
+    public float floatSpeed = 2f;
+    public float floatHeight = 0.2f;
+    public float rotateSpeed = 90f;
+    private Vector3 startPos;
 
     void Start()
     {
-        localOffset = transform.localPosition;
-        offset = Random.Range(0f, 1f * Mathf.PI);
+        startPos = transform.position;
     }
 
     void Update()
     {
-        if (!floating) return;
-
-        Vector3 basePos = transform.parent ? transform.parent.position : transform.position;
-
-        float newY = basePos.y + Mathf.Sin(Time.time * floatSpeed + offset) * floatAmount;
-
-        transform.position = new Vector3(basePos.x, newY, basePos.z);
+        float newY = Mathf.Sin(Time.time * floatSpeed) * floatHeight;
+        transform.position = startPos + new Vector3(0, newY, 0);
+        transform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime);
     }
 }

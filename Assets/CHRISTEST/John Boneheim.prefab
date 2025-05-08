@@ -1011,7 +1011,7 @@ Transform:
   m_GameObject: {fileID: 2274620222270433167}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.043619405, z: 0, w: 0.9990483}
-  m_LocalPosition: {x: 0.402, y: -0.628, z: 0.559}
+  m_LocalPosition: {x: 0.402, y: -0.19600028, z: 0.559}
   m_LocalScale: {x: 0.25, y: 0.25, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1160,7 +1160,7 @@ Transform:
   m_GameObject: {fileID: 2384508327437597571}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.16, y: 0, z: 0.451}
+  m_LocalPosition: {x: -0.14, y: 0, z: 0.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2069,7 +2069,7 @@ Transform:
   m_GameObject: {fileID: 5137529503691769728}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.043619405, z: 0, w: 0.9990483}
-  m_LocalPosition: {x: -0.333, y: -0.662, z: 0.552}
+  m_LocalPosition: {x: -0.333, y: -0.23, z: 0.552}
   m_LocalScale: {x: 0.25, y: 0.25, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2143,7 +2143,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -2167,10 +2167,11 @@ MonoBehaviour:
   burstCount: 3
   damage: 10
   magazineSize: 100
+  currentAmmo: 0
   reloadTime: 1.5
   shotgunDamage: 60
   pelletsPerShot: 6
-  spreadAngle: 10
+  spreadAngle: 15
   falloffStartDistance: 10
   minDamageMultiplier: 0.3
   firePoint: {fileID: 7777794667085834323}
@@ -2589,6 +2590,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   canMelee: 1
+  meleeCooldown: 3
   knockbackForce: 5
   throwKey: 113
   throwableObjectPrefab: {fileID: 4466020935756555090, guid: 1a44b35d2ee8bf041ace00ce2209257d, type: 3}

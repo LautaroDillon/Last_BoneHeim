@@ -202,6 +202,7 @@ public class E_Shooter : Entity
         if (currentHealth > 0 && currentHealth <= (maxHealth/3))
         {
             WasHit = true;
+            AudioManager.instance.PlaySFX("ShooterDamage", 1f, false);
         }
         if (currentHealth <= 0 && !isincombatArena)
         {
@@ -214,6 +215,7 @@ public class E_Shooter : Entity
     {
         if (isDead == true)
         {
+            AudioManager.instance.PlaySFXOneShot("ShooterDeath", 1f);
             Invoke("DestroyEnemy", 2.3f);
         }
     }

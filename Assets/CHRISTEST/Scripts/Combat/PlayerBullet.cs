@@ -43,6 +43,9 @@ public class PlayerBullet : MonoBehaviour
         if (other.CompareTag("Player"))
             return;
 
+        if (other.CompareTag("Bullet"))
+            return;
+
         if (other.CompareTag("Enemy"))
         {
             other.GetComponent<E_Shooter>().TakeDamage(damage);

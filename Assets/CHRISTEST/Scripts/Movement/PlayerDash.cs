@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using EZCameraShake;
 
 public class PlayerDash : MonoBehaviour
 {
@@ -68,6 +69,7 @@ public class PlayerDash : MonoBehaviour
 
     private void Dash()
     {
+        CameraShake.Instance.ShakeOnce(2f, 2f, 0.1f, 1f);
         if (dashCdTimer > 0)
             return;
         else

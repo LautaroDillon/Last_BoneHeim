@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.Universal;
+using EZCameraShake;
 
 public class PlayerHealth : Entity
 {
@@ -45,6 +46,7 @@ public class PlayerHealth : Entity
     public override void TakeDamage(float dmg)
     {
         base.TakeDamage(dmg);
+        CameraShake.Instance.ShakeOnce(4f, 4f, 0.1f, 1f);
         FullscreenShader.instance.hitShaderEnabled = true;
     }
 

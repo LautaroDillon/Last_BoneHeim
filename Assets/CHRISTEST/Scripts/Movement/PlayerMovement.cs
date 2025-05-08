@@ -260,6 +260,7 @@ public class PlayerMovement : MonoBehaviour
             if (lastState == MovementState.air)
             {
                 PlayLandingSound();
+                CameraShake.Instance.ShakeOnce(2f, 2f, 0.1f, 1f);
             }
 
             state = MovementState.walking;

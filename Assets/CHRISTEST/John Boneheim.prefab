@@ -994,7 +994,6 @@ GameObject:
   - component: {fileID: 116858499393802380}
   - component: {fileID: 9082736920714613950}
   - component: {fileID: 1996084968083585401}
-  - component: {fileID: 8423426633067519778}
   - component: {fileID: 4043179668563702199}
   m_Layer: 11
   m_Name: Right Arm
@@ -1090,33 +1089,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8423426633067519778
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2274620222270433167}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e57e9b09a91daf46ad1522954f477e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fireMode: 0
-  shootButton: 316
-  reloadButton: 114
-  fireRate: 0.2
-  burstCount: 3
-  damage: 10
-  magazineSize: 10
-  reloadTime: 1.5
-  recoilTransform: {fileID: 0}
-  recoilRotation: {x: -5, y: 0, z: 0}
-  recoilReturnSpeed: 5
-  recoilSnappiness: 10
-  firePoint: {fileID: 0}
-  bulletPrefab: {fileID: 0}
-  bulletSpeed: 20
 --- !u!114 &4043179668563702199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1188,7 +1160,7 @@ Transform:
   m_GameObject: {fileID: 2384508327437597571}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.28, y: 0, z: 1.182}
+  m_LocalPosition: {x: -0.16, y: 0, z: 0.451}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1498,6 +1470,7 @@ GameObject:
   - component: {fileID: 7787175318602520168}
   - component: {fileID: 5912975175020226424}
   - component: {fileID: 3855525071880069385}
+  - component: {fileID: 1296089383415864466}
   m_Layer: 3
   m_Name: Player Camera
   m_TagString: MainCamera
@@ -1662,6 +1635,22 @@ MonoBehaviour:
   bumpReturnSpeed: 0
   landingBumpAmount: 0
   landingBumpReturnSpeed: 0
+--- !u!114 &1296089383415864466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3897717874469356300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3858ab0d59c12c4a99560f8db1b2561, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DefaultPosInfluence: {x: 0.15, y: 0.15, z: 0.15}
+  DefaultRotInfluence: {x: 1, y: 1, z: 1}
+  RestPositionOffset: {x: 0, y: 0, z: 0}
+  RestRotationOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &3907293354244236723
 GameObject:
   m_ObjectHideFlags: 0
@@ -2178,13 +2167,21 @@ MonoBehaviour:
   damage: 10
   magazineSize: 10
   reloadTime: 1.5
-  recoilTransform: {fileID: 1089454899372370689}
-  recoilRotation: {x: -5, y: 0, z: 0}
-  recoilReturnSpeed: 5
-  recoilSnappiness: 10
   firePoint: {fileID: 7777794667085834323}
   bulletPrefab: {fileID: 3963558588678754370, guid: e5db85985806d5e4796aebf3d1712301, type: 3}
-  bulletSpeed: 20
+  bulletSpeed: 75
+  ammoText: {fileID: 0}
+  bulletDisplay:
+  - {fileID: 7918896775389971109}
+  - {fileID: 5255098921769386177}
+  - {fileID: 2468313596999972283}
+  - {fileID: 5262140398229922765}
+  - {fileID: 5296051244669370653}
+  - {fileID: 1352524362652993491}
+  - {fileID: 5389645676294156080}
+  - {fileID: 5943737166861071035}
+  - {fileID: 4367248009236024501}
+  - {fileID: 1008969365107385744}
 --- !u!1 &5208182492721743928
 GameObject:
   m_ObjectHideFlags: 0

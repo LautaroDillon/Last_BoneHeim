@@ -45,7 +45,7 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 0.58642024, b: 0, a: 1}
-  m_Intensity: 5000
+  m_Intensity: 1000
   m_Range: 26.015545
   m_SpotAngle: 103.73393
   m_InnerSpotAngle: 65.44226
@@ -129,8 +129,8 @@ GameObject:
   - component: {fileID: 3473284136289077646}
   - component: {fileID: 1707389256165089678}
   - component: {fileID: 2777691452128380674}
-  - component: {fileID: 8111406611403985279}
   - component: {fileID: 3570212280800801938}
+  - component: {fileID: 5351770624887592326}
   m_Layer: 7
   m_Name: piso con fosa
   m_TagString: StoneGround
@@ -204,28 +204,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8111406611403985279
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6585705169931502571}
-  m_Material: {fileID: 13400000, guid: 1d424a129a09d354da5182c86e778ff1, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -6568539763519735516, guid: b04c4305206445b4681f15a48a43d945, type: 3}
 --- !u!82 &3570212280800801938
 AudioSource:
   m_ObjectHideFlags: 0
@@ -247,7 +225,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 30
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -322,3 +300,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!65 &5351770624887592326
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6585705169931502571}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 800.0013, y: 300.06302, z: 800.00146}
+  m_Center: {x: -400.00064, y: 150.03151, z: -400.00073}

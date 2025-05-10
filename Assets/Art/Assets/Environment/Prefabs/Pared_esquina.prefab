@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6908595201417779163}
   - component: {fileID: 6304904608447020633}
   - component: {fileID: 2691224901661406552}
-  - component: {fileID: 7963571761500856972}
+  - component: {fileID: 7934987513641982856}
   m_Layer: 6
   m_Name: Pared_esquina
   m_TagString: Untagged
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &7963571761500856972
+--- !u!64 &7934987513641982856
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,4 +105,4 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: -3194826189641995282, guid: ce6f153299ea59e4eb63f0acb9a0ba25, type: 3}
+  m_Mesh: {fileID: 8181512213219530056, guid: 1fd6cae4fd3492f418087cc2faf3389c, type: 3}

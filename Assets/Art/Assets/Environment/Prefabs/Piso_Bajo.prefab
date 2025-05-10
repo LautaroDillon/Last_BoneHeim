@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6750401979091673210}
   - component: {fileID: 8317835435853913272}
   - component: {fileID: 6360752135627005299}
+  - component: {fileID: 901240973555036037}
   m_Layer: 0
   m_Name: Piso_Bajo
   m_TagString: Untagged
@@ -83,3 +84,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &901240973555036037
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730361876334700405}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 800.0012, y: 150.00009, z: 800.00134}
+  m_Center: {x: -400.0006, y: 75.000046, z: -400.00067}

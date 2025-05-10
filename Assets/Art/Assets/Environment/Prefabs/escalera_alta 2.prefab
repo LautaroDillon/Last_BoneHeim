@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6103152802046970845}
   - component: {fileID: 359296828574261384}
   - component: {fileID: 7642381002725569500}
-  - component: {fileID: 2581761071163840586}
   m_Layer: 7
   m_Name: escalera_alta 2
   m_TagString: StoneGround
@@ -85,28 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2581761071163840586
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1210436543300057510}
-  m_Material: {fileID: 13400000, guid: 1d424a129a09d354da5182c86e778ff1, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -5184093807663944, guid: fd1655e3c65c84141916e24d5310c944, type: 3}
 --- !u!1 &5727244285939645166
 GameObject:
   m_ObjectHideFlags: 0
@@ -134,13 +111,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5727244285939645166}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.00000044703478, y: -0.15842062, z: 0.0000011473893, w: 0.9873718}
-  m_LocalPosition: {x: 136.3, y: 133.2, z: 49.4}
-  m_LocalScale: {x: 331.1484, y: 269.94, z: 1}
+  m_LocalRotation: {x: -0.00000068545336, y: -0.18450613, z: 0.000001966953, w: 0.98283136}
+  m_LocalPosition: {x: 87.9, y: 133.2, z: 37.4}
+  m_LocalScale: {x: 323.23166, y: 269.94, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6103152802046970845}
-  m_LocalEulerAnglesHint: {x: 0, y: -18.23, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -21.265, z: 0}
 --- !u!33 &797597708169190692
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -198,7 +175,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5727244285939645166}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 1d424a129a09d354da5182c86e778ff1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

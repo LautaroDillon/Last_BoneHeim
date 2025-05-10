@@ -1619,7 +1619,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3897717874469356300}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 799737eaa58e47c4cb64349e2f0e3d37, type: 3}
   m_Name: 
@@ -2585,7 +2585,7 @@ MonoBehaviour:
   meleeKey: 102
   meleeRange: 2
   meleeRadius: 2
-  meleeDamage: 20
+  meleeDamage: 100
   meleeHitMask:
     serializedVersion: 2
     m_Bits: 1024

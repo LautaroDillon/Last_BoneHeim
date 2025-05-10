@@ -2165,7 +2165,7 @@ MonoBehaviour:
   switchFireModeKey: 118
   fireRate: 0.2
   burstCount: 3
-  damage: 10
+  damage: 25
   magazineSize: 100
   currentAmmo: 0
   reloadTime: 1.5
@@ -2585,7 +2585,7 @@ MonoBehaviour:
   meleeKey: 102
   meleeRange: 2
   meleeRadius: 2
-  meleeDamage: 100
+  meleeDamage: 50
   meleeHitMask:
     serializedVersion: 2
     m_Bits: 1024
@@ -2601,6 +2601,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   throwCooldown: 5
+  meleeCooldownUI: {fileID: 0}
+  throwCooldownUI: {fileID: 0}
   enemyHitEffect: {fileID: 9160994265675421395, guid: d8e6d7a18bb01e148904bb0c060666d8, type: 3}
 --- !u!1 &5255098921769386177
 GameObject:

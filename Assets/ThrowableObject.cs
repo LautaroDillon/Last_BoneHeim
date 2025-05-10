@@ -23,6 +23,7 @@ public class ThrowableObject : MonoBehaviour
             if (collision.gameObject.TryGetComponent(out IDamagable damageable))
             {
                 damageable.TakeDamage(damage);
+                AudioManager.instance.PlaySFXOneShot("ArmHit", 1f);
                 Instantiate(enemyHitEffect, transform.position, Quaternion.identity);
                 Debug.Log("Throwable hit: " + collision.gameObject.name);
             }

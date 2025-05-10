@@ -369,6 +369,16 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 51f69276a0f227244b0011d1de80da6d, type: 3}
   - name: ShooterDeath
     clip: {fileID: 8300000, guid: b7aeefd653f078045868e115a8f2108c, type: 3}
+  - name: Melee
+    clip: {fileID: 8300000, guid: 890fd10f05366ab44b08221feb333d63, type: 3}
+  - name: MeleeImpact
+    clip: {fileID: 8300000, guid: 7c7d72252c9d4df4fbcbf0cb51d12842, type: 3}
+  - name: ArmRecovery
+    clip: {fileID: 8300000, guid: 8033e27b78c2afa47bef2008062ec417, type: 3}
+  - name: ArmCall
+    clip: {fileID: 8300000, guid: 5e45d5d8fa0ac1f47b7280ae0dc334b1, type: 3}
+  - name: ArmHit
+    clip: {fileID: 8300000, guid: 5ed27179301fa2c42b9db57232c4fac4, type: 3}
   musicSource: {fileID: 5346159640810696971}
   sfxSource: {fileID: 5383471359783110402}
   lowPassFilter: {fileID: 1620276307403910139}

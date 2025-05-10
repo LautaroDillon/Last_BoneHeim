@@ -6,14 +6,25 @@ public class BulletPickup : MonoBehaviour
 {
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        Debug.Log("Trigger Enter: " + other.name);
+        
+        if (!other.CompareTag("Player"))
+            return;
+
+        PlayerWeapon weapon = other.GetComponentInParent<PlayerWeapon>();
+        if (weapon != null)
         {
-            PlayerWeapon weapon = other.GetComponent<PlayerWeapon>();
-            if (weapon != null)
-            {
-                weapon.currentAmmo += 1;
-            }
+            AudioManager.instance?.PlaySFXClean("BulletRecovery", 1f);
+            weapon.currentAmmo += 1;
+        }
+        
+        if (transform.parent != null)
+        {
             Destroy(transform.parent.gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 }

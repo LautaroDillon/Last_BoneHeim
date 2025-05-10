@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using EZCameraShake;
 
 public class PlayerMelee : MonoBehaviour
@@ -36,10 +37,15 @@ public class PlayerMelee : MonoBehaviour
     public float throwCooldown = 1.5f;
     private float nextThrowTime = 0f;
 
+    [Header("Cooldown UI")]
+    public Image meleeCooldownUI;
+    public Image throwCooldownUI;
+
     private GameObject currentThrowable;
     private bool isHoldingToThrow = false;
     private bool isThrowableAway = false;
     private bool isRecalling = false;
+    private bool hasPlayedRecallSound = false;
 
     [Header("Particle")]
     public GameObject enemyHitEffect;
@@ -87,6 +93,18 @@ public class PlayerMelee : MonoBehaviour
         if (isRecalling && currentThrowable != null)
         {
             RecallObject();
+        }
+
+        if (meleeCooldownUI != null)
+        {
+            float meleeTimeLeft = Mathf.Clamp(nextMeleeTime - Time.time, 0, meleeCooldown);
+            meleeCooldownUI.fillAmount = 1 - (meleeTimeLeft / meleeCooldown);
+        }
+
+        if (throwCooldownUI != null)
+        {
+            float throwTimeLeft = Mathf.Clamp(nextThrowTime - Time.time, 0, throwCooldown);
+            throwCooldownUI.fillAmount = 1 - (throwTimeLeft / throwCooldown);
         }
     }
 
@@ -172,19 +190,32 @@ public class PlayerMelee : MonoBehaviour
 
     void RecallObject()
     {
+        if (currentThrowable == null) return;
+
         Vector3 direction = (throwOrigin.position - currentThrowable.transform.position).normalized;
+        float distance = Vector3.Distance(currentThrowable.transform.position, throwOrigin.position);
+
+        if (!hasPlayedRecallSound && AudioManager.instance != null)
+        {
+            AudioManager.instance.PlaySFXOneShot("ArmCall", 1f);
+            hasPlayedRecallSound = true;
+        }
+
         Rigidbody rb = currentThrowable.GetComponent<Rigidbody>();
         rb.velocity = direction * recallSpeed;
+
         currentThrowable.transform.Rotate(Vector3.up * 720 * Time.deltaTime);
 
-        float distance = Vector3.Distance(currentThrowable.transform.position, throwOrigin.position);
         if (distance < 1f)
         {
             CameraShake.Instance.ShakeOnce(4f, 8f, 0.1f, 0.3f);
+            AudioManager.instance.PlaySFXOneShot("ArmRecovery", 1f);
+
             Destroy(currentThrowable);
             isThrowableAway = false;
             isRecalling = false;
             canMelee = true;
+            hasPlayedRecallSound = false;
         }
     }
 

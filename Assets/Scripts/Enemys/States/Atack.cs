@@ -53,6 +53,7 @@ public class Atack : IState
         {
             _shooter.anim.SetTrigger("atack");
             _shooter.alreadyAttacked = true;
+            AudioManager.instance.PlaySFXOneShot("ShooterAttack", 1f);
             Shoot();
             _cooldownTimer = _shooter.shotCooldown;
         }

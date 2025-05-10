@@ -197,7 +197,6 @@ public class E_Shooter : Entity
         if (currentHealth > 0 && currentHealth <= (maxHealth/3))
         {
             WasHit = true;
-            AudioManager.instance.PlaySFX("ShooterDamage", 1f, false);
         }
         if (currentHealth <= 0 && !isincombatArena)
         {
@@ -270,6 +269,7 @@ public class E_Shooter : Entity
 
     public IEnumerator waitforsecond(float time)
     {
+        AudioManager.instance.PlaySFXOneShot("ShooterDamage", 1f);
         yield return new WaitForSeconds(time);
         WasHit = false;
     } 

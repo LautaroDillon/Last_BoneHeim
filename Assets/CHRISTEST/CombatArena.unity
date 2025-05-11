@@ -2628,18 +2628,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3474132673437316730, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.385525
-      objectReference: {fileID: 0}
-    - target: {fileID: 3474132673437316730, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.498625
-      objectReference: {fileID: 0}
-    - target: {fileID: 3855525071880069385, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3889202759188512740, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
       propertyPath: meleeCooldownUI
       value: 
@@ -2664,10 +2652,6 @@ PrefabInstance:
       propertyPath: sensitivityController
       value: 
       objectReference: {fileID: 880049978}
-    - target: {fileID: 7414093129574444737, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8012495331682462058, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
       propertyPath: heart
       value: 

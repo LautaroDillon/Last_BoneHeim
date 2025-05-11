@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 7598229764220869214}
   - component: {fileID: 4985303079265293236}
   - component: {fileID: 4206627927120781687}
+  - component: {fileID: 8201463961978729941}
   m_Layer: 7
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: StoneGround
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,8 +29,8 @@ Transform:
   m_GameObject: {fileID: 2409689380298163282}
   serializedVersion: 2
   m_LocalRotation: {x: 0.0000002533197, y: -0, z: 0.37749153, w: 0.9260131}
-  m_LocalPosition: {x: -104, y: 94, z: -414}
-  m_LocalScale: {x: 15.82682, y: 1, z: 81.66117}
+  m_LocalPosition: {x: -124, y: 75, z: -414}
+  m_LocalScale: {x: 21.47492, y: 1, z: 81.66117}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8671915014597429620}
@@ -101,11 +102,32 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &8201463961978729941
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2409689380298163282}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 10.000001, y: 0.0000047661106, z: 10}
+  m_Center: {x: -0.000034332275, y: 0, z: 0.0000076293945}
 --- !u!1 &4087522018806400954
 GameObject:
   m_ObjectHideFlags: 0
@@ -117,9 +139,9 @@ GameObject:
   - component: {fileID: 8671915014597429620}
   - component: {fileID: 3978889780476190250}
   - component: {fileID: 686772108728827961}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Escalera_Baja
-  m_TagString: Untagged
+  m_TagString: StoneGround
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -132,9 +154,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4087522018806400954}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.70710576, z: -0, w: 0.7071079}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -51.387207, y: 0.50000083, z: -40.772915}
-  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_LocalScale: {x: 0.009999998, y: 0.01, z: 0.009999998}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 972024716155516611}

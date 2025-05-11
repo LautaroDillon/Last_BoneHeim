@@ -47,12 +47,17 @@ public class E_Shooter : Entity
     public NodePathfinding initialNode;
     public NodePathfinding goalNode;
     public List<NodePathfinding> path;
+    public int pathIndex;
+    public float nodeReachDistance = 0.3f;
 
-    public float WalkSpeed => EnemyFlyweight.Shooter.speed;
+    public float moveSpeed;
     public float maxSpeed;
     public float arriveRadius;
     public float maxForce;
     [HideInInspector] public Vector3 velocity;
+
+    [Header("Zona")]
+    public int zoneId;
 
     #endregion
     public bool isincombatArena;
@@ -165,128 +170,170 @@ public class E_Shooter : Entity
     }
     #endregion
 
-    #region Movement
-    public Vector3 Seek(Vector3 targetSeek)
+    /*  #region Movement
+      public Vector3 Seek(Vector3 targetSeek)
+      {
+          var desired = targetSeek - transform.position;
+          desired.Normalize();
+          desired *= maxSpeed;
+          return CalculateSteering(desired);
+      }
+      public Vector3 CalculateSteering(Vector3 desired)
+      {
+          var steering = desired - velocity;
+          steering = Vector3.ClampMagnitude(steering, maxForce);
+          return steering;
+      }
+
+      public void AddForce(Vector3 dir)
+      {
+          velocity += dir;
+          //velocity.y = transform.position.y; //Mantengo mi altura
+          velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
+      }
+
+      public Vector3 ObstacleAvoidance()
+      {
+          Vector3 pos = transform.position;
+          Vector3 dir = transform.forward;
+          float dist = velocity.magnitude; //Que tan rapido estoy yendo
+
+          Debug.DrawLine(pos, pos + (dir * dist));
+
+          if (Physics.SphereCast(pos, 1, dir, out RaycastHit hit, dist, obstructionMask))
+          {
+              var obstacle = hit.transform; //Obtengo el transform del obstaculo q acaba de tocar
+              Vector3 dirToObject = obstacle.position - transform.position; //La direccion del obstaculo
+
+              float anguloEntre = Vector3.SignedAngle(transform.forward, dirToObject, Vector3.up); //(Dir. hacia donde voy, Dir. objeto, Dir. mis costados)
+
+              Vector3 desired = anguloEntre >= 0 ? -transform.right : transform.right; //Me meuvo para derecha o izquierda dependiendo donde esta el obstaculo
+              desired.Normalize();
+              desired *= maxSpeed;
+
+              return CalculateSteering(desired);
+          }
+
+          return Vector3.zero;
+      }
+
+      public List<NodePathfinding> CalculateAStar(NodePathfinding startingNode, NodePathfinding goalNode)
+      {
+          Debug.Log("Calculando A* desde " + startingNode.name + " a " + goalNode.name);
+          Prioryti<NodePathfinding> frontier = new Prioryti<NodePathfinding>();
+          frontier.Enqueue(startingNode, 0);
+
+          Dictionary<NodePathfinding, NodePathfinding> cameFrom = new Dictionary<NodePathfinding, NodePathfinding>();
+          cameFrom.Add(startingNode, null);
+
+          Dictionary<NodePathfinding, int> costSoFar = new Dictionary<NodePathfinding, int>();
+          costSoFar.Add(startingNode, 0);
+
+          while (frontier.Count > 0)
+          {
+              NodePathfinding current = frontier.Dequeue();
+
+              if (current == goalNode)
+              {
+                  List<NodePathfinding> path = new List<NodePathfinding>();
+
+                  while (current != startingNode)
+                  {
+                      path.Add(current);
+                      current = cameFrom[current];
+                  }
+
+                  path.Reverse();
+                  return path;
+              }
+
+              foreach (var item in current.neighbors)
+              {
+
+                  int newCost = costSoFar[current] + item.cost; //Calculo el costo como en Dijkstra
+                  float priority = newCost + Vector3.Distance(item.transform.position, goalNode.transform.position); //Calculo la distancia del nodo actual hasta la meta
+
+                  if (!costSoFar.ContainsKey(item))
+                  {
+                      if (!frontier.ContainsKey(item))
+                          frontier.Enqueue(item, priority);
+                      cameFrom.Add(item, current);
+                      costSoFar.Add(item, newCost);
+                  }
+                  else if (costSoFar[item] > newCost)
+                  {
+                      if (!frontier.ContainsKey(item))
+                          frontier.Enqueue(item, priority);
+                      cameFrom[item] = current;
+                      costSoFar[item] = newCost;
+                  }
+              }
+          }
+          return new List<NodePathfinding>();
+      }
+
+      public List<NodePathfinding> CalculateThetaStar(NodePathfinding startingNode, NodePathfinding goalNode) //Me borra los nodos q estan de más en el recorrido
+      {
+          Debug.Log("Calculando Theta* desde " + startingNode.name + " a " + goalNode.name);
+          var listNode = CalculateAStar(startingNode, goalNode); //Llamo a AStar
+
+          int current = 0;
+
+          while (current + 2 < listNode.Count)
+          {
+              if (GameManager.instance.InLineOfSight(listNode[current].transform.position, listNode[current + 2].transform.position)) //Si puedo llegar a un nodo siguiente
+              {
+                  listNode.RemoveAt(current + 1); //Borro el anterior nodo
+              }
+              else
+                  current++; //Sino me lo sumo
+          }
+
+          return listNode;
+      }
+      #endregion*/
+
+
+    public void MoveAlongPath()
     {
-        var desired = targetSeek - transform.position;
-        desired.Normalize();
-        desired *= maxSpeed;
-        return CalculateSteering(desired);
+        if (path == null || pathIndex >= path.Count) return;
+
+        NodePathfinding targetNode = path[pathIndex];
+        Vector3 direction = (targetNode.transform.position - transform.position).normalized;
+        Vector3 move = direction * moveSpeed * Time.deltaTime;
+
+        transform.position += move;
+
+        // Rotación suave hacia el siguiente nodo
+        if (direction != Vector3.zero)
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 5f * Time.deltaTime);
+
+        // Animaciones
+        anim.SetFloat("Horizontal", direction.x, 0.2f, Time.deltaTime);
+        anim.SetFloat("Vertical", direction.z, 0.2f, Time.deltaTime);
+
+        if (Vector3.Distance(transform.position, targetNode.transform.position) < nodeReachDistance)
+            pathIndex++;
     }
-    public Vector3 CalculateSteering(Vector3 desired)
+
+    public void CalculatePathToRandomNode()
     {
-        var steering = desired - velocity;
-        steering = Vector3.ClampMagnitude(steering, maxForce);
-        return steering;
-    }
+        var start = ManagerNode.Instance.GetClosestNode(transform.position);
+        var allNodes = ManagerNode.Instance.nodes;
 
-    public void AddForce(Vector3 dir)
-    {
-        velocity += dir;
-        //velocity.y = transform.position.y; //Mantengo mi altura
-        velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
-    }
+        NodePathfinding randomTarget = null;
+        int attempts = 0;
 
-    public Vector3 ObstacleAvoidance()
-    {
-        Vector3 pos = transform.position;
-        Vector3 dir = transform.forward;
-        float dist = velocity.magnitude; //Que tan rapido estoy yendo
-
-        Debug.DrawLine(pos, pos + (dir * dist));
-
-        if (Physics.SphereCast(pos, 1, dir, out RaycastHit hit, dist, obstructionMask))
+        while ((randomTarget == null || randomTarget == start) && attempts < 10)
         {
-            var obstacle = hit.transform; //Obtengo el transform del obstaculo q acaba de tocar
-            Vector3 dirToObject = obstacle.position - transform.position; //La direccion del obstaculo
-
-            float anguloEntre = Vector3.SignedAngle(transform.forward, dirToObject, Vector3.up); //(Dir. hacia donde voy, Dir. objeto, Dir. mis costados)
-
-            Vector3 desired = anguloEntre >= 0 ? -transform.right : transform.right; //Me meuvo para derecha o izquierda dependiendo donde esta el obstaculo
-            desired.Normalize();
-            desired *= maxSpeed;
-
-            return CalculateSteering(desired);
+            randomTarget = allNodes[Random.Range(0, allNodes.Count)];
+            attempts++;
         }
 
-        return Vector3.zero;
+        path = ManagerNode.Instance.FindPath(start, randomTarget);
+        pathIndex = 0;
     }
 
-    public List<NodePathfinding> CalculateAStar(NodePathfinding startingNode, NodePathfinding goalNode)
-    {
-        Debug.Log("Calculando A* desde " + startingNode.name + " a " + goalNode.name);
-        Prioryti<NodePathfinding> frontier = new Prioryti<NodePathfinding>();
-        frontier.Enqueue(startingNode, 0);
-
-        Dictionary<NodePathfinding, NodePathfinding> cameFrom = new Dictionary<NodePathfinding, NodePathfinding>();
-        cameFrom.Add(startingNode, null);
-
-        Dictionary<NodePathfinding, int> costSoFar = new Dictionary<NodePathfinding, int>();
-        costSoFar.Add(startingNode, 0);
-
-        while (frontier.Count > 0)
-        {
-            NodePathfinding current = frontier.Dequeue();
-
-            if (current == goalNode)
-            {
-                List<NodePathfinding> path = new List<NodePathfinding>();
-
-                while (current != startingNode)
-                {
-                    path.Add(current);
-                    current = cameFrom[current];
-                }
-
-                path.Reverse();
-                return path;
-            }
-
-            foreach (var item in current.neighbors)
-            {
-
-                int newCost = costSoFar[current] + item.cost; //Calculo el costo como en Dijkstra
-                float priority = newCost + Vector3.Distance(item.transform.position, goalNode.transform.position); //Calculo la distancia del nodo actual hasta la meta
-
-                if (!costSoFar.ContainsKey(item))
-                {
-                    if (!frontier.ContainsKey(item))
-                        frontier.Enqueue(item, priority);
-                    cameFrom.Add(item, current);
-                    costSoFar.Add(item, newCost);
-                }
-                else if (costSoFar[item] > newCost)
-                {
-                    if (!frontier.ContainsKey(item))
-                        frontier.Enqueue(item, priority);
-                    cameFrom[item] = current;
-                    costSoFar[item] = newCost;
-                }
-            }
-        }
-        return new List<NodePathfinding>();
-    }
-
-    public List<NodePathfinding> CalculateThetaStar(NodePathfinding startingNode, NodePathfinding goalNode) //Me borra los nodos q estan de más en el recorrido
-    {
-        Debug.Log("Calculando Theta* desde " + startingNode.name + " a " + goalNode.name);
-        var listNode = CalculateAStar(startingNode, goalNode); //Llamo a AStar
-
-        int current = 0;
-
-        while (current + 2 < listNode.Count)
-        {
-            if (GameManager.instance.InLineOfSight(listNode[current].transform.position, listNode[current + 2].transform.position)) //Si puedo llegar a un nodo siguiente
-            {
-                listNode.RemoveAt(current + 1); //Borro el anterior nodo
-            }
-            else
-                current++; //Sino me lo sumo
-        }
-
-        return listNode;
-    }
-    #endregion
 
     #region takedamage
     public void TakeDamage(int damage)

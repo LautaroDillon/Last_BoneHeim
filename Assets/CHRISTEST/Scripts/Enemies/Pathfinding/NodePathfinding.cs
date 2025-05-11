@@ -5,26 +5,19 @@ using UnityEngine;
 public class NodePathfinding : MonoBehaviour
 {
     public List<NodePathfinding> neighbors = new List<NodePathfinding>();
-
     public int cost;
 
-    private void Awake()
+    [Header("Zona")]
+    public int zoneId;// <— identifica a qué zona pertenece este nodo
+
+
+
+    private void OnDrawGizmos()
     {
-        if (ManagerNode.Instance.nodes.Contains(this))
-            Debug.LogWarning("Node already exists in the list");
-        else
-            ManagerNode.Instance.nodes.Add(this);
+        Gizmos.color = (zoneId == 0 ? Color.white : Color.Lerp(Color.red, Color.green, zoneId / 5f));
+        Gizmos.DrawSphere(transform.position, 0.2f);
+        foreach (var n in neighbors)
+            Gizmos.DrawLine(transform.position, n.transform.position);
     }
-
-/*#if neighbors == null
-
-    private void Update()
-    {
-        ManagerNode.Instance.errorNodes();
-    }
-
-
-
-
-#endif*/
 }
+

@@ -1,0 +1,410 @@
+fileFormatVersion: 2
+guid: 4574b2a24af5e8843a8e08778667626b
+ModelImporter:
+  serializedVersion: 22200
+  internalIDToNameTable: []
+  externalObjects: {}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human:
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_Hips
+      humanName: Hips
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_LeftUpLeg
+      humanName: LeftUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_RightUpLeg
+      humanName: RightUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_LeftLeg
+      humanName: LeftLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_RightLeg
+      humanName: RightLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_LeftFoot
+      humanName: LeftFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_RightFoot
+      humanName: RightFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_Spine
+      humanName: Spine
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_Spine1
+      humanName: Chest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_Neck
+      humanName: Neck
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_Head
+      humanName: Head
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_LeftShoulder
+      humanName: LeftShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_RightShoulder
+      humanName: RightShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_LeftArm
+      humanName: LeftUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_RightArm
+      humanName: RightUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_LeftForeArm
+      humanName: LeftLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_RightForeArm
+      humanName: RightLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_LeftHand
+      humanName: LeftHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_RightHand
+      humanName: RightHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_LeftToeBase
+      humanName: LeftToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_RightToeBase
+      humanName: RightToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: EsqueletoEnemigoAnimations:EqueletoRig1_Spine2
+      humanName: UpperChest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    skeleton:
+    - name: EsqueletoEnemigo(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: EsqueletoEnemigoAnimations:polySurface130
+      parentName: EsqueletoEnemigo(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_Reference
+      parentName: EsqueletoEnemigo(Clone)
+      position: {x: -0.00000834465, y: -0.14492269, z: -0.00073620863}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_Hips
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_Reference
+      position: {x: 0.0011192587, y: 0.30292013, z: -0.0072452715}
+      rotation: {x: 0.52774805, y: -0.47061872, z: -0.5277481, w: 0.47061872}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1.0000001}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_LeftUpLeg
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_Hips
+      position: {x: 0.0051148324, y: 0.008116911, z: 0.02059395}
+      rotation: {x: 0.0027914047, y: -0.00044582784, z: 0.99662733, w: -0.08201218}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_LeftLeg
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_LeftUpLeg
+      position: {x: -0.06239202, y: -0.0000014290458, z: -0.0000013466326}
+      rotation: {x: 0.017977254, y: -0.0005228211, z: 0.029280175, w: -0.99940944}
+      scale: {x: 1.0000004, y: 1.0000002, z: 1.0000006}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_LeftFoot
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_LeftLeg
+      position: {x: -0.073080905, y: 0.0000002641331, z: 4.2450304e-10}
+      rotation: {x: -0.0026254018, y: 0.016566627, z: 0.600088, w: 0.79975814}
+      scale: {x: 0.99999994, y: 1, z: 0.99999994}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_LeftToeBase
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_LeftFoot
+      position: {x: -0.025722818, y: 0.000000006259489, z: 0.00000002682982}
+      rotation: {x: 0.000000003026798, y: 0.00000009499489, z: -0.000000017127602, w: 1}
+      scale: {x: 1, y: 1.0000001, z: 1.0000002}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_RightUpLeg
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_Hips
+      position: {x: 0.0051148296, y: 0.008116911, z: -0.020593949}
+      rotation: {x: -0.000443846, y: -0.0027912557, z: 0.08199385, w: 0.9966289}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1.0000002}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_RightLeg
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_RightUpLeg
+      position: {x: 0.06239193, y: 0.00000010199236, z: -0.00000026211845}
+      rotation: {x: -0.017955402, y: 0.0005218447, z: -0.029277677, w: 0.99941}
+      scale: {x: 1.0000001, y: 1.0000002, z: 1}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_RightFoot
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_RightLeg
+      position: {x: 0.07308095, y: -0.00000018855165, z: 0.00000016826357}
+      rotation: {x: -0.0026453587, y: 0.016580645, z: 0.6000995, w: 0.7997492}
+      scale: {x: 1.0000001, y: 1, z: 1.0000001}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_RightToeBase
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_RightFoot
+      position: {x: 0.025722815, y: -0.0000000047545368, z: -0.000000001985172}
+      rotation: {x: 0.000025473297, y: -0.000000032596283, z: -0.00000008610002, w: 1}
+      scale: {x: 0.99999994, y: 1.0000002, z: 1.0000002}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_Spine
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_Hips
+      position: {x: -0.011843967, y: -0.0000000048328204, z: -6.7663586e-10}
+      rotation: {x: 0.000000059604645, y: -0, z: 0.23191991, w: 0.97273487}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_Spine1
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_Spine
+      position: {x: -0.021828363, y: 0.0000000015001217, z: 0.0000000012592077}
+      rotation: {x: 0.0000000071191484, y: 0.000000029832396, z: 0.014558584, w: 0.999894}
+      scale: {x: 1, y: 0.9999999, z: 1}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_Spine2
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_Spine1
+      position: {x: -0.022805821, y: 4.5237622e-10, z: -0.0000000021941706}
+      rotation: {x: 0.00000006102152, y: 0.000000026781853, z: 0.19723885, w: -0.9803555}
+      scale: {x: 1.0000002, y: 1.0000005, z: 1.0000004}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_LeftShoulder
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_Spine2
+      position: {x: -0.017201805, y: -0.0030243653, z: 0.012304728}
+      rotation: {x: 0.58241844, y: -0.57104534, z: -0.40973088, w: -0.40843183}
+      scale: {x: 1, y: 1.0000001, z: 1.0000001}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_LeftArm
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_LeftShoulder
+      position: {x: -0.029370526, y: 0.000000006723227, z: 0.000000008265354}
+      rotation: {x: 0.69386846, y: -0.13136289, z: 0.13741624, w: 0.6945554}
+      scale: {x: 1.0000001, y: 1.0000004, z: 1.0000004}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_LeftForeArm
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_LeftArm
+      position: {x: -0.050451152, y: -0.0000007469212, z: -0.000002944362}
+      rotation: {x: -0.00014466046, y: 0.00019478795, z: -0.030310739, w: 0.9995405}
+      scale: {x: 1.0000006, y: 1.0000001, z: 1.0000005}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_LeftHand
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_LeftForeArm
+      position: {x: -0.039924443, y: -0.0000002697489, z: -0.00000005267742}
+      rotation: {x: 0.00000053139223, y: -0.00000003329478, z: 0.000032387903, w: 1}
+      scale: {x: 1.0000002, y: 1.0000004, z: 1.0000002}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_RightShoulder
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_Spine2
+      position: {x: -0.01720181, y: -0.0030243655, z: -0.012304728}
+      rotation: {x: -0.5710454, y: -0.58241844, z: 0.40843183, w: -0.40973085}
+      scale: {x: 1, y: 1, z: 1.0000001}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_RightArm
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_RightShoulder
+      position: {x: 0.029370537, y: -0.0000000087869445, z: 0.000000005474554}
+      rotation: {x: -0.6938706, y: 0.1313554, z: -0.13740602, w: -0.6945567}
+      scale: {x: 1.0000001, y: 1, z: 0.99999994}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_RightForeArm
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_RightArm
+      position: {x: 0.05045111, y: 0.0000007996559, z: 0.0000030192302}
+      rotation: {x: -0.00014457105, y: 0.00019843128, z: -0.030281443, w: 0.9995414}
+      scale: {x: 0.99999994, y: 0.9999998, z: 1}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_RightHand
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_RightForeArm
+      position: {x: 0.03992445, y: 0.0000003126775, z: 0.000000071462445}
+      rotation: {x: 0.00000008303323, y: -0.0000000021536835, z: 0.000032572825, w: 1}
+      scale: {x: 1.0000004, y: 1.0000002, z: 1.0000001}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_Neck
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_Spine2
+      position: {x: -0.030165808, y: 0.0000000026831712, z: 9.725842e-10}
+      rotation: {x: 0.00000006251308, y: 0.000000056546828, z: -0.2163433, w: 0.9763174}
+      scale: {x: 1.0000001, y: 1, z: 1.0000002}
+    - name: EsqueletoEnemigoAnimations:EqueletoRig1_Head
+      parentName: EsqueletoEnemigoAnimations:EqueletoRig1_Neck
+      position: {x: -0.032973394, y: 0.000000018249274, z: 0.0000000055223652}
+      rotation: {x: -0, y: -0, z: -3.534916e-15, w: 1}
+      scale: {x: 0.99999994, y: 0.99999994, z: 1}
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: baec98b1518be3c43a8c1123d94ae7e6, type: 3}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 3
+  humanoidOversampling: 1
+  avatarSetup: 2
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

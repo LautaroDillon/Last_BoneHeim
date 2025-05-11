@@ -22,31 +22,39 @@ public class ManagerNode : MonoBehaviour
 
     private void Start()
     {
-        for (int i = 0; i < nodes.Count; i++)
+        foreach (var a in nodes)
         {
-            var a = nodes[i];
-            for (int j = 0; j < nodes.Count; j++)
+            int connected = 0;
+            foreach (var b in nodes)
             {
-                var b = nodes[j];
-                if (a == b || a.neighbors.Contains(b)) continue;
+                if (a == b) continue;
 
-                float planarDist = Vector3.Distance(
-                    new Vector3(a.transform.position.x, 0, a.transform.position.z),
-                    new Vector3(b.transform.position.x, 0, b.transform.position.z)
-                );
+                // Distancia planar
+                float dx = a.transform.position.x - b.transform.position.x;
+                float dz = a.transform.position.z - b.transform.position.z;
+                float planarDist = Mathf.Sqrt(dx * dx + dz * dz);
+
+                // Diferencia de altura
                 float heightDiff = Mathf.Abs(a.transform.position.y - b.transform.position.y);
 
-                // Línea de vista + distancia en planta + altura tolerable
+                // Comprobación de línea de vista usando GameManager
+                bool canSee = GameManager.instance.InLineOfSight(
+                    a.transform.position + Vector3.up * 0.5f,
+                    b.transform.position + Vector3.up * 0.5f
+                );
+
                 if (planarDist <= maxNeighborDistance
                  && heightDiff <= maxStepHeight
-                 && GameManager.instance.InLineOfSight(a.transform.position, b.transform.position))
+                 && canSee)
                 {
                     a.neighbors.Add(b);
+                    connected++;
                 }
             }
-            Debug.Log($"Nodo {a.name} vecinos: {a.neighbors.Count}");
+            Debug.Log($"[ManagerNode] Nodo {a.name} tiene {connected} vecinos.");
         }
     }
+
 
 
     /// <summary>Devuelve solo los nodos de la zona dada</summary>

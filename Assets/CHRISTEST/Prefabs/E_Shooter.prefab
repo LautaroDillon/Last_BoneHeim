@@ -44,7 +44,6 @@ GameObject:
   - component: {fileID: 8092065465287883561}
   - component: {fileID: 2856933726968949420}
   - component: {fileID: 3288562228548541264}
-  - component: {fileID: 4308110794063990159}
   - component: {fileID: 9011733329996984528}
   m_Layer: 10
   m_Name: E_Shooter
@@ -139,10 +138,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.7
-  m_Height: 3
+  m_Radius: 0.51
+  m_Height: 2.12
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.06, z: 0}
 --- !u!114 &3288562228548541264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,7 +157,6 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 0
   isDead: 0
-  agent: {fileID: 4308110794063990159}
   player: {fileID: 0}
   anim: {fileID: 2254369835939493476}
   whatIsGround:
@@ -169,16 +167,13 @@ MonoBehaviour:
     m_Bits: 8
   bulletDrop: {fileID: 3963558588678754370, guid: a64ccfd54ba88864a95a2dadff6093c3, type: 3}
   numberOfBulletsOnDeath: 3
-  walkPoint: {x: 0, y: 0, z: 0}
-  walkPointSet: 0
-  walkPointRange: 13
-  isPatrolling: 0
+  playerWeapon: {fileID: 0}
   shotCooldown: 0
   alreadyAttacked: 0
   firePoint: {fileID: 4124477927847827353}
-  walkSpeed: 2
   projectileSpeed: 5
   strafeSpeed: 5
+  wasKilledByThrowable: 0
   chaseDistance: 16
   attackRange: 14
   playerInSightRange: 0
@@ -186,6 +181,7 @@ MonoBehaviour:
   canSeePlayer: 0
   isIdle: 1
   WasHit: 0
+  isPatrolling: 0
   muchit: 0
   obstructionMask:
     serializedVersion: 2
@@ -193,29 +189,14 @@ MonoBehaviour:
   checkRadius: 16
   angle: 360
   lastpoint: {x: 0, y: 0, z: 0}
-  isincombatArena: 1
---- !u!195 &4308110794063990159
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8323795386488884064}
-  m_Enabled: 1
-  m_AgentTypeID: -1372625422
-  m_Radius: 0.5
-  m_Speed: 6.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 1
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 1
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  initialNode: {fileID: 0}
+  goalNode: {fileID: 0}
+  path: []
+  maxSpeed: 6
+  arriveRadius: 3
+  maxForce: 3
+  velocity: {x: 0, y: 0, z: 0}
+  isincombatArena: 0
 --- !u!54 &9011733329996984528
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -241,7 +222,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 3
 --- !u!1001 &5630542704800156661
 PrefabInstance:

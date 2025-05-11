@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class Atack : IState
 {
 
-    NavMeshAgent _agent;
+    
     E_Shooter _shooter;
     StateMachine _FSM;
 
@@ -15,17 +15,15 @@ public class Atack : IState
 
     private float _cooldownTimer;
 
-    public Atack(NavMeshAgent agent, E_Shooter shooter, StateMachine fSM)
+    public Atack( E_Shooter shooter, StateMachine fSM)
     {
-        _agent = agent;
+
         _shooter = shooter;
         _FSM = fSM;
     }
 
     public void OnEnter()
     {
-        _agent.isStopped = true;
-        _agent.velocity = Vector3.zero;
         _attackTimer = 0f;
         _shooter.anim.SetFloat("Horizontal",0);
         _shooter.anim.SetFloat("Vertical",0);
@@ -47,7 +45,6 @@ public class Atack : IState
             return;
         }
 
-        _agent.SetDestination(_shooter.transform.position);
 
         if (_attackTimer >= _attackDuration && !_shooter.alreadyAttacked)
         {
@@ -65,7 +62,7 @@ public class Atack : IState
 
     public void OnExit()
     {
-        _agent.isStopped = false;
+        
         //_shooter.alreadyAttacked = false;
     }
 

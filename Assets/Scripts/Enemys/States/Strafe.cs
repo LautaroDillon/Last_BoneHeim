@@ -5,7 +5,6 @@ using UnityEngine.AI;
 
 public class Strafe : IState
 {
-    private NavMeshAgent _agent;
     private E_Shooter _shooter;
     private StateMachine _fsm;
 
@@ -20,9 +19,8 @@ public class Strafe : IState
     private float _strafeRadius = 15f;
     private float _minSeparation = 4f;
 
-    public Strafe(NavMeshAgent agent, E_Shooter shooter, StateMachine fsm)
+    public Strafe( E_Shooter shooter, StateMachine fsm)
     {
-        _agent = agent;
         _shooter = shooter;
         _fsm = fsm;
     }
@@ -31,13 +29,11 @@ public class Strafe : IState
     {
         _actionTimer = 0f;
         _hasChosenMode = false;
-        _agent.isStopped = false;
-        _agent.speed = _shooter.walkSpeed * _speedFactor;
     }
 
     public void Tick()
     {
-        var dir = (_agent.steeringTarget - _shooter.transform.position).normalized;
+        var dir = (/*steeringTarget*/ - _shooter.transform.position).normalized;
         var animdir = _shooter.transform.InverseTransformDirection(dir);
         var isfacingmovedirection = Vector3.Dot(dir, _shooter.transform.forward) > 0.5f;
 
@@ -57,18 +53,15 @@ public class Strafe : IState
             else
                 LateralTarget();
 
-            _agent.SetDestination(_targetPosition);
         }
 
         // Marcamos que hemos terminado para que la transición Strafe→Attack funcione
-        if (_agent.remainingDistance < 0.5f || _actionTimer >= _actionDuration)
+        if (/*remainingDistance < 0.5f ||*/ _actionTimer >= _actionDuration)
             _shooter.alreadyAttacked = false;
     }
 
     public void OnExit()
     {
-        _agent.speed = _shooter.walkSpeed;
-        _agent.isStopped = false;
         _hasChosenMode = false;
     }
 

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Data.SqlTypes;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 public class E_Shooter : Entity
@@ -13,7 +12,6 @@ public class E_Shooter : Entity
     public StateMachine fsm;
 
     [Header("References")]
-    public NavMeshAgent agent;
     public Transform player;
     public Animator anim;
     public LayerMask whatIsGround, whatIsPlayer;
@@ -22,17 +20,10 @@ public class E_Shooter : Entity
     public int numberOfBulletsOnDeath;
     public PlayerWeapon playerWeapon;
 
-    [Header("Patrol")]
-    public Vector3 walkPoint;
-    public bool walkPointSet;
-    public float walkPointRange;
-    public bool isPatrolling;
-
     [Header("Attack")]
     public float shotCooldown;
     public bool alreadyAttacked;
     public GameObject firePoint;
-    public float walkSpeed;
     [SerializeField] private float projectileSpeed;
     public float strafeSpeed = 5f;
     public bool wasKilledByThrowable = false;
@@ -42,14 +33,26 @@ public class E_Shooter : Entity
     public bool playerInSightRange, playerInAttackRange, canSeePlayer;
     public bool isIdle = true;
     public bool WasHit;
+    public bool isPatrolling;
     public float muchit;
 
     [Header("Player Detection")]
-    [SerializeField] protected LayerMask obstructionMask;
+    [SerializeField] public LayerMask obstructionMask;
     [SerializeField] protected float checkRadius;
     [Range(0, 360)]
     [SerializeField] protected float angle;
     public Vector3 lastpoint;
+
+    [Header("Nodes")]
+    public NodePathfinding initialNode;
+    public NodePathfinding goalNode;
+    public List<NodePathfinding> path;
+
+    public float maxSpeed;
+    public float arriveRadius;
+    public float maxForce;
+    [HideInInspector] public Vector3 velocity;
+
     #endregion
     public bool isincombatArena;
 
@@ -57,28 +60,27 @@ public class E_Shooter : Entity
     {
         maxHealth = EnemyFlyweight.Shooter.maxLife;
         currentHealth = maxHealth;
-        walkSpeed = EnemyFlyweight.Shooter.speed;
         numberOfBulletsOnDeath = Random.Range(1, 4);
         fsm = new StateMachine();
-        agent = GetComponent<NavMeshAgent>();
         if (instance == null)
             instance = this;
     }
 
+    #region start
     private void Start()
     {
         playerWeapon = FindObjectOfType<PlayerWeapon>();
 
         StartCoroutine(FOVRoutime());
 
-        var idle = new Idle(agent, this, fsm);
-        var patrol = new Patrol(agent, this, fsm);
-        var chase = new Chase(agent, this, fsm);
-        var Search = new Serach_S(agent, this, fsm);
-        var strafe = new Strafe(agent, this, fsm);
-        var attack = new Atack(agent, this, fsm);
-        var death = new Death(agent, this, fsm);
-        var Onhit = new OnHit(agent, this, fsm);
+        var idle = new Idle( this, fsm);
+        var patrol = new Patrol( this, fsm);
+        var chase = new Chase( this, fsm);
+        var Search = new Serach_S( this, fsm);
+        var strafe = new Strafe( this, fsm);
+        var attack = new Atack( this, fsm);
+        var death = new Death( this, fsm);
+        var Onhit = new OnHit( this, fsm);
 
 
         // Definir las transiciones
@@ -108,7 +110,7 @@ public class E_Shooter : Entity
 
     void at(IState from, IState to, Func<bool> condition) => fsm.AddTransition(from, to, condition);
     void any(IState to, Func<bool> condition) => fsm.AddAnyTransition(to, condition);
-
+    #endregion
 
     private void Update()
     {
@@ -162,31 +164,126 @@ public class E_Shooter : Entity
     }
     #endregion
 
-    #region patrol
-    public void Patroling()
+    #region Movement
+    public Vector3 Seek(Vector3 targetSeek)
     {
-        if (!walkPointSet)
-            SearchWalkPoint();
-
-        if (walkPointSet)
-            agent.SetDestination(walkPoint);
-
-        Vector3 distanceToWalkPoint = transform.position - walkPoint;
-
-          //Walkpoint reached
-        if (distanceToWalkPoint.magnitude < 1f)
-            walkPointSet = false;
+        var desired = targetSeek - transform.position;
+        desired.Normalize();
+        desired *= maxSpeed;
+        return CalculateSteering(desired);
     }
-    public void SearchWalkPoint()
+    public Vector3 CalculateSteering(Vector3 desired)
     {
-          //Calculate random point in range
-        float randomZ = Random.Range(-walkPointRange, walkPointRange);
-        float randomX = Random.Range(-walkPointRange, walkPointRange);
+        var steering = desired - velocity;
+        steering = Vector3.ClampMagnitude(steering, maxForce);
+        return steering;
+    }
 
-        walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
+    public void AddForce(Vector3 dir)
+    {
+        velocity += dir;
+        //velocity.y = transform.position.y; //Mantengo mi altura
+        velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
+    }
 
-        if (Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround))
-            walkPointSet = true;
+    public Vector3 ObstacleAvoidance()
+    {
+        Vector3 pos = transform.position;
+        Vector3 dir = transform.forward;
+        float dist = velocity.magnitude; //Que tan rapido estoy yendo
+
+        Debug.DrawLine(pos, pos + (dir * dist));
+
+        if (Physics.SphereCast(pos, 1, dir, out RaycastHit hit, dist, obstructionMask))
+        {
+            var obstacle = hit.transform; //Obtengo el transform del obstaculo q acaba de tocar
+            Vector3 dirToObject = obstacle.position - transform.position; //La direccion del obstaculo
+
+            float anguloEntre = Vector3.SignedAngle(transform.forward, dirToObject, Vector3.up); //(Dir. hacia donde voy, Dir. objeto, Dir. mis costados)
+
+            Vector3 desired = anguloEntre >= 0 ? -transform.right : transform.right; //Me meuvo para derecha o izquierda dependiendo donde esta el obstaculo
+            desired.Normalize();
+            desired *= maxSpeed;
+
+            return CalculateSteering(desired);
+        }
+
+        return Vector3.zero;
+    }
+
+    public List<NodePathfinding> CalculateAStar(NodePathfinding startingNode, NodePathfinding goalNode)
+    {
+        Debug.Log("Calculando A* desde " + startingNode.name + " a " + goalNode.name);
+        Prioryti<NodePathfinding> frontier = new Prioryti<NodePathfinding>();
+        frontier.Enqueue(startingNode, 0);
+
+        Dictionary<NodePathfinding, NodePathfinding> cameFrom = new Dictionary<NodePathfinding, NodePathfinding>();
+        cameFrom.Add(startingNode, null);
+
+        Dictionary<NodePathfinding, int> costSoFar = new Dictionary<NodePathfinding, int>();
+        costSoFar.Add(startingNode, 0);
+
+        while (frontier.Count > 0)
+        {
+            NodePathfinding current = frontier.Dequeue();
+
+            if (current == goalNode)
+            {
+                List<NodePathfinding> path = new List<NodePathfinding>();
+
+                while (current != startingNode)
+                {
+                    path.Add(current);
+                    current = cameFrom[current];
+                }
+
+                path.Reverse();
+                return path;
+            }
+
+            foreach (var item in current.neighbors)
+            {
+
+                int newCost = costSoFar[current] + item.cost; //Calculo el costo como en Dijkstra
+                float priority = newCost + Vector3.Distance(item.transform.position, goalNode.transform.position); //Calculo la distancia del nodo actual hasta la meta
+
+                if (!costSoFar.ContainsKey(item))
+                {
+                    if (!frontier.ContainsKey(item))
+                        frontier.Enqueue(item, priority);
+                    cameFrom.Add(item, current);
+                    costSoFar.Add(item, newCost);
+                }
+                else if (costSoFar[item] > newCost)
+                {
+                    if (!frontier.ContainsKey(item))
+                        frontier.Enqueue(item, priority);
+                    cameFrom[item] = current;
+                    costSoFar[item] = newCost;
+                }
+            }
+        }
+        return new List<NodePathfinding>();
+    }
+
+    public List<NodePathfinding> CalculateThetaStar(NodePathfinding startingNode, NodePathfinding goalNode) //Me borra los nodos q estan de más en el recorrido
+    {
+        Debug.Log("Calculando Theta* desde " + startingNode.name + " a " + goalNode.name);
+        var listNode = CalculateAStar(startingNode, goalNode); //Llamo a AStar
+
+        int current = 0;
+
+        while (current + 2 < listNode.Count)
+        {
+            if (GameManager.instance.InLineOfSight(listNode[current].transform.position, listNode[current + 2].transform.position)) //Si puedo llegar a un nodo siguiente
+            {
+                listNode.RemoveAt(current + 1); //Borro el anterior nodo
+            }
+            else
+                current++; //Sino me lo sumo
+        }
+
+        return listNode;
     }
     #endregion
 
@@ -202,7 +299,6 @@ public class E_Shooter : Entity
         {
             isDead = true;
 
-            agent.speed = 0f;
         }
     }
     public void Death()
@@ -262,8 +358,6 @@ public class E_Shooter : Entity
         Gizmos.DrawWireSphere(transform.position, chaseDistance); 
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, checkRadius);
-        Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere(transform.position, walkPointRange);
     }
 
 

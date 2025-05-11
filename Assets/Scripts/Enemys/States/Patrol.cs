@@ -6,63 +6,121 @@ using UnityEngine.AI;
 public class Patrol : IState
 {
 
-    NavMeshAgent _agent;
-    E_Shooter _Shooter;
+    E_Shooter _shooter;
     StateMachine _FSM;
-    private float stuckTimer = 0f;
-    private float stuckThreshold = 4f;
+    private List<NodePathfinding> _path;
+    private int _pathIndex;
 
-    public Patrol(NavMeshAgent agent, E_Shooter shooter, StateMachine fSM)
+    // Opcionales: definir un cooldown antes de cambiar de nodo
+    private float _waitTimer;
+    private float _waitDuration = 1f;
+
+    public Patrol( E_Shooter shooter, StateMachine fSM)
     {
-        _agent = agent;
-        _Shooter = shooter;
+        _shooter = shooter;
         _FSM = fSM;
     }
 
     public void OnEnter()
     {
-        Debug.Log("Patrol OnEnter");
-        _Shooter.anim.SetBool("Walk", true);
-        _agent.speed = _Shooter.walkSpeed;
-        _Shooter.isPatrolling = true;
-        _Shooter.isIdle = false;
-        _Shooter.SearchWalkPoint();
-        _Shooter.Patroling();
-
-
+        Debug.Log("Patrol: OnEnter");
+        _waitTimer = 0f;
+        _path = null;
+        _pathIndex = 0;
+        _shooter.anim.SetFloat("Horizontal", 0f);
+        _shooter.anim.SetFloat("Vertical", 0f);
+        _shooter.isPatrolling = true;
+        ChooseRandomVisibleNodePath();
     }
 
     public void Tick()
     {
-        _Shooter.Patroling();
-        if (!_agent.hasPath)
-            _Shooter.Patroling();
-
-        var dir = (_agent.steeringTarget - _Shooter.transform.position).normalized;
-        var animdir = _Shooter.transform.InverseTransformDirection(dir);
-        var isfacingmovedirection = Vector3.Dot(dir, _Shooter.transform.forward) > 0.5f;
-
-        _Shooter.anim.SetFloat("Horizontal", isfacingmovedirection ? animdir.x : 0, .5f, Time.deltaTime);
-        _Shooter.anim.SetFloat("Vertical", isfacingmovedirection ? animdir.z : 0, .5f, Time.deltaTime);
-
-        if (_agent.velocity.magnitude < 0.1f)
-            stuckTimer += Time.deltaTime;
-        else
-            stuckTimer = 0f;
-
-        if (stuckTimer > stuckThreshold)
+        if (_path != null && _pathIndex < _path.Count)
         {
-            Debug.Log("Parece atascado, buscando nuevo punto");
-            _Shooter.SearchWalkPoint();
-            stuckTimer = 0f;
+            Vector3 targetPos = _path[_pathIndex].transform.position;
+            Vector3 steer = _shooter.Seek(targetPos) + _shooter.ObstacleAvoidance();
+            _shooter.AddForce(steer);
+
+            Vector3 movement = _shooter.velocity * Time.deltaTime;
+            _shooter.transform.position += movement;
+
+            // Rotar hacia la dirección del movimiento
+            if (movement.sqrMagnitude > 0.001f)
+            {
+                Quaternion lookRot = Quaternion.LookRotation(movement.normalized);
+                _shooter.transform.rotation = Quaternion.Slerp(_shooter.transform.rotation, lookRot, Time.deltaTime * 5f);
+            }
+
+            // Animación con Horizontal/Vertical relativos al enemigo
+            Vector3 localVel = _shooter.transform.InverseTransformDirection(_shooter.velocity.normalized);
+            _shooter.anim.SetFloat("Horizontal", localVel.x, 0.1f, Time.deltaTime);
+            _shooter.anim.SetFloat("Vertical", localVel.z, 0.1f, Time.deltaTime);
+
+            if (Vector3.Distance(_shooter.transform.position, targetPos) < _shooter.arriveRadius)
+            {
+                _pathIndex++;
+            }
+        }
+        else
+        {
+            // Detener animación
+            _shooter.anim.SetFloat("Horizontal", 0f, 0.1f, Time.deltaTime);
+            _shooter.anim.SetFloat("Vertical", 0f, 0.1f, Time.deltaTime);
+
+            _waitTimer += Time.deltaTime;
+            if (_waitTimer >= _waitDuration)
+            {
+                _waitTimer = 0f;
+                _path = null;
+                _pathIndex = 0;
+                ChooseRandomVisibleNodePath();
+            }
         }
     }
 
     public void OnExit()
     {
-        Debug.Log("Patrol OnExit");
-        _Shooter.anim.SetBool("Walk", false);
-        _agent.speed = 0f;
-        _Shooter.isPatrolling = false;
+        Debug.Log("Patrol: OnExit");
+        // Limpiar fuerza/velocidad
+        _shooter.isPatrolling = false;
+        _shooter.anim.SetFloat("Horizontal", 0f);
+        _shooter.anim.SetFloat("Vertical", 0f);
+        _shooter.velocity = Vector3.zero;
+        _path = null;
+    }
+
+    private void ChooseRandomVisibleNodePath()
+    {
+        _waitTimer = 0f;
+
+        // 1) Conseguir todos los nodos
+        var allNodes = ManagerNode.Instance.nodes; // asume array público
+        var visible = new List<NodePathfinding>();
+
+        // 2) Filtrar solo los visibles: sin obstáculos entre shooter y nodo
+        foreach (var node in allNodes)
+        {
+            Vector3 dir = (node.transform.position - _shooter.transform.position).normalized;
+            float dist = Vector3.Distance(_shooter.transform.position, node.transform.position);
+
+            // raycast contra capa de obstáculos
+            if (!Physics.Raycast(_shooter.transform.position, dir, dist, _shooter.obstructionMask))
+                visible.Add(node);
+        }
+
+        if (visible.Count == 0)
+        {
+            // fallback: volver a intento más tarde
+            return;
+        }
+
+        // 3) Elegir uno al azar
+        var destNode = visible[Random.Range(0, visible.Count)];
+
+        // 4) Calcular ruta con tu A* Theta*
+        var startNode = ManagerNode.Instance.NodeProx(_shooter.transform.position);
+        _path = _shooter.CalculateThetaStar(startNode, destNode);
+
+        _pathIndex = 0;
     }
 }

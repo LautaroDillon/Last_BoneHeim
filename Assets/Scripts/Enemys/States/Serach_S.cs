@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class Serach_S : IState
 {
-    NavMeshAgent _agent;
+    
     E_Shooter _shooter;
     StateMachine _fsm;
     private float _searchDuration = 3f;
@@ -17,9 +17,8 @@ public class Serach_S : IState
     private bool _movingToNewPoint = false;
     private Vector3 _targetSearchPoint;
 
-    public Serach_S(NavMeshAgent agent, E_Shooter shooter, StateMachine fsm)
+    public Serach_S( E_Shooter shooter, StateMachine fsm)
     {
-        _agent = agent;
         _shooter = shooter;
         _fsm = fsm;
     }
@@ -30,36 +29,32 @@ public class Serach_S : IState
         _searchTimer = 0f;
         _waitTimer = 0f;
         _movingToNewPoint = false;
-        _agent.speed = _shooter.walkSpeed * 0.5f; // Reducción de velocidad para hacerlo más deliberado
     }
 
     public void Tick()
     {
 
-        var dir = (_agent.steeringTarget - _shooter.transform.position).normalized;
-        var animdir = _shooter.transform.InverseTransformDirection(dir);
-        var isfacingmovedirection = Vector3.Dot(dir, _shooter.transform.forward) > 0.5f;
+       /* var animdir = _shooter.transform.InverseTransformDirection(dir);
+        var isfacingmovedirection = Vector3.Dot(dir, _shooter.transform.forward) > 0.5f;*/
 
-        _shooter.anim.SetFloat("Horizontal", isfacingmovedirection ? animdir.x : 0, .5f, Time.deltaTime);
-        _shooter.anim.SetFloat("Vertical", isfacingmovedirection ? animdir.z : 0, .5f, Time.deltaTime);
+       /* _shooter.anim.SetFloat("Horizontal", isfacingmovedirection ? animdir.x : 0, .5f, Time.deltaTime);
+        _shooter.anim.SetFloat("Vertical", isfacingmovedirection ? animdir.z : 0, .5f, Time.deltaTime);*/
 
         _searchTimer += Time.deltaTime;
 
         // Si está atacando, se queda quieto
         if (_shooter.playerInAttackRange)
         {
-            _agent.SetDestination(_shooter.transform.position);
             return;
         }
 
-        if (!_movingToNewPoint || _agent.remainingDistance < 0.5f)
+        if (!_movingToNewPoint)
         {
             _waitTimer += Time.deltaTime;
 
             if (_waitTimer >= _waitDuration)
             {
                 _targetSearchPoint = GetRandomSearchPoint();
-                _agent.SetDestination(_targetSearchPoint);
                 _movingToNewPoint = true;
                 _waitTimer = 0f;
             }
@@ -69,7 +64,6 @@ public class Serach_S : IState
     public void OnExit()
     {
         Debug.Log("Search OnExit");
-        _agent.ResetPath();
     }
 
     private Vector3 GetRandomSearchPoint()

@@ -5,16 +5,14 @@ using UnityEngine.AI;
 
 public class OnHit : IState
 {
-    NavMeshAgent _agent;
     E_Shooter _Shooter;
     StateMachine _fsm;
     private float _idleTimer;
     private float _idleDuration = 3f;
 
 
-    public OnHit(NavMeshAgent agent, E_Shooter shooter, StateMachine fsm)
-    {
-        _agent = agent;
+    public OnHit( E_Shooter shooter, StateMachine fsm)
+    { 
         _Shooter = shooter;
         _fsm = fsm;
     }

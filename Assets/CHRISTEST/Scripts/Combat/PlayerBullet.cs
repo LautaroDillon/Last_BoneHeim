@@ -21,6 +21,8 @@ public class PlayerBullet : MonoBehaviour
     void Update()
     {
         Lifetime();
+        if (rb.velocity != Vector3.zero)
+            transform.rotation = Quaternion.LookRotation(rb.velocity);
     }
 
     public void Lifetime()

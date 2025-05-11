@@ -505,8 +505,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
-
     private SurfaceType GetSurfaceType()
     {
         if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))

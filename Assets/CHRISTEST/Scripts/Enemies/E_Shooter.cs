@@ -48,6 +48,7 @@ public class E_Shooter : Entity
     public NodePathfinding goalNode;
     public List<NodePathfinding> path;
 
+    public float WalkSpeed => EnemyFlyweight.Shooter.speed;
     public float maxSpeed;
     public float arriveRadius;
     public float maxForce;

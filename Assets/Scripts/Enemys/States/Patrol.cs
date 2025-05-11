@@ -38,23 +38,22 @@ public class Patrol : IState
         if (_path != null && _pathIndex < _path.Count)
         {
             Vector3 targetPos = _path[_pathIndex].transform.position;
-            Vector3 steer = _shooter.Seek(targetPos) + _shooter.ObstacleAvoidance();
-            _shooter.AddForce(steer);
+            Vector3 dir = (targetPos - _shooter.transform.position).normalized;
 
-            Vector3 movement = _shooter.velocity * Time.deltaTime;
-            _shooter.transform.position += movement;
+            // Movimiento directo hacia el nodo
+            _shooter.transform.position += dir * _shooter.WalkSpeed * Time.deltaTime;
 
-            // Rotar hacia la dirección del movimiento
-            if (movement.sqrMagnitude > 0.001f)
+            // Rotación suave
+            if (dir.magnitude > 0.01f)
             {
-                Quaternion lookRot = Quaternion.LookRotation(movement.normalized);
+                Quaternion lookRot = Quaternion.LookRotation(dir);
                 _shooter.transform.rotation = Quaternion.Slerp(_shooter.transform.rotation, lookRot, Time.deltaTime * 5f);
             }
 
-            // Animación con Horizontal/Vertical relativos al enemigo
-            Vector3 localVel = _shooter.transform.InverseTransformDirection(_shooter.velocity.normalized);
-            _shooter.anim.SetFloat("Horizontal", localVel.x, 0.1f, Time.deltaTime);
-            _shooter.anim.SetFloat("Vertical", localVel.z, 0.1f, Time.deltaTime);
+            // Animación si usás Horizontal / Vertical
+            Vector3 localDir = _shooter.transform.InverseTransformDirection(dir);
+            _shooter.anim.SetFloat("Horizontal", localDir.x, 0.1f, Time.deltaTime);
+            _shooter.anim.SetFloat("Vertical", localDir.z, 0.1f, Time.deltaTime);
 
             if (Vector3.Distance(_shooter.transform.position, targetPos) < _shooter.arriveRadius)
             {
@@ -63,7 +62,6 @@ public class Patrol : IState
         }
         else
         {
-            // Detener animación
             _shooter.anim.SetFloat("Horizontal", 0f, 0.1f, Time.deltaTime);
             _shooter.anim.SetFloat("Vertical", 0f, 0.1f, Time.deltaTime);
 
@@ -75,6 +73,7 @@ public class Patrol : IState
                 _pathIndex = 0;
                 ChooseRandomVisibleNodePath();
             }
+
         }
     }
 

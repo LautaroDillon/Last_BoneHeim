@@ -10,7 +10,9 @@ public class NodePathfinding : MonoBehaviour
 
     private void Awake()
     {
-        if (!ManagerNode.Instance.nodes.Contains(this))
+        if (ManagerNode.Instance.nodes.Contains(this))
+            Debug.LogWarning("Node already exists in the list");
+        else
             ManagerNode.Instance.nodes.Add(this);
     }
 

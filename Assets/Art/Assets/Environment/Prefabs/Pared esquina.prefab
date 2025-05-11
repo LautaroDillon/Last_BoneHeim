@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 7272733780783218269}
   - component: {fileID: 1285783098163523844}
   - component: {fileID: 8528551404635706071}
-  - component: {fileID: 7544810320617700818}
+  - component: {fileID: 4695306299017399257}
+  - component: {fileID: 5684229774698134409}
   m_Layer: 6
   m_Name: Pared esquina
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: -55.387207, y: 2, z: -48.772934}
-  m_LocalScale: {x: 0.009999999, y: 0.01, z: 0.009999999}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -84,8 +85,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &7544810320617700818
-MeshCollider:
+--- !u!65 &4695306299017399257
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +103,27 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -3194826189641995282, guid: ce6f153299ea59e4eb63f0acb9a0ba25, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 28.258959, y: 600, z: 828.27234}
+  m_Center: {x: 14.141212, y: 300, z: 385.86508}
+--- !u!65 &5684229774698134409
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8880920617723891805}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 828.27246, y: 600, z: 31.581348}
+  m_Center: {x: -385.8655, y: 300, z: -12.480374}

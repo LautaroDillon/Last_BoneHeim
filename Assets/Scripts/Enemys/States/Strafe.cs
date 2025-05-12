@@ -8,16 +8,10 @@ public class Strafe : IState
     private E_Shooter _shooter;
     private StateMachine _fsm;
 
-    private float _speedFactor = 1.5f;
-    private float _actionDuration = 3f;
-    private float _actionTimer;
-
-    private bool _hasChosenMode;
-    private bool _moveAwayMode;
-    private Vector3 _targetPosition;
-
-    private float _strafeRadius = 15f;
-    private float _minSeparation = 4f;
+    private float _timer;
+    private readonly float _duration = 1.2f;      // tiempo que dura el strafe
+    private Vector3 _targetPos;
+    private bool _toRight;
 
     public Strafe( E_Shooter shooter, StateMachine fsm)
     {
@@ -27,93 +21,74 @@ public class Strafe : IState
 
     public void OnEnter()
     {
-        _actionTimer = 0f;
-        _hasChosenMode = false;
+        _timer = 0f;
+        // Elegir aleatoriamente si strafea a la derecha o izquierda
+        _toRight = Random.value < 0.5f;
+
+        // Calculamos una posición objetivo relativa al jugador:
+        Vector3 toPlayer = (_shooter.player.position - _shooter.transform.position).normalized;
+        // Vector lateral:
+        Vector3 strafeDir = _toRight
+            ? Vector3.Cross(Vector3.up, toPlayer)  // derecha
+            : Vector3.Cross(toPlayer, Vector3.up); // izquierda
+
+        // Distancia lateral entre 2 y 4 metros
+        float latDist = Random.Range(2f, 4f);
+        // Queremos mantenernos dentro del rango de ataque:
+        float forwardDist = Mathf.Clamp(
+            Vector3.Distance(_shooter.transform.position, _shooter.player.position),
+            _shooter.attackRange * 0.8f,
+            _shooter.attackRange * 1.1f
+        );
+
+        // Construir targetPos alrededor del jugador:
+        _targetPos = _shooter.player.position
+                   - toPlayer * forwardDist
+                   + strafeDir * latDist;
+
+        // Trigger de anim si lo necesitás
+       //_shooter.anim.SetTrigger("Strafe");
     }
 
     public void Tick()
     {
-        var dir = (/*steeringTarget*/ - _shooter.transform.position).normalized;
-        var animdir = _shooter.transform.InverseTransformDirection(dir);
-        var isfacingmovedirection = Vector3.Dot(dir, _shooter.transform.forward) > 0.5f;
+        _timer += Time.deltaTime;
 
-        _shooter.anim.SetFloat("Horizontal", isfacingmovedirection ? animdir.x : 0, .5f, Time.deltaTime);
-        _shooter.anim.SetFloat("Vertical", isfacingmovedirection ? animdir.z : 0, .5f, Time.deltaTime);
+        // Movernos hacia _targetPos con steering u orientación directa:
+        Vector3 dir = (_targetPos - _shooter.transform.position).normalized;
+        Vector3 movement = dir * _shooter.strafeSpeed * Time.deltaTime;
+        _shooter.transform.position += movement;
 
-
-        _actionTimer += Time.deltaTime;
-
-        if (!_hasChosenMode)
+        // Rotar para mirar en la dirección de movimiento
+        if (movement.sqrMagnitude > 0.001f)
         {
-            _hasChosenMode = true;
-            _moveAwayMode = Random.value < 0.5f;
-
-            if (_moveAwayMode)
-                AwayTarget();
-            else
-                LateralTarget();
-
+            Quaternion lookRot = Quaternion.LookRotation(movement.normalized);
+            _shooter.transform.rotation = Quaternion.Slerp(
+                _shooter.transform.rotation,
+                lookRot,
+                Time.deltaTime * 8f
+            );
         }
 
-        // Marcamos que hemos terminado para que la transición Strafe→Attack funcione
-        if (/*remainingDistance < 0.5f ||*/ _actionTimer >= _actionDuration)
-            _shooter.alreadyAttacked = false;
+        // Animación: Horizontal/Vertical según movimiento local
+        Vector3 local = _shooter.transform.InverseTransformDirection(dir);
+        _shooter.anim.SetFloat("Horizontal", local.x, 0.1f, Time.deltaTime);
+        _shooter.anim.SetFloat("Vertical", local.z, 0.1f, Time.deltaTime);
+
+        // Si se acaba el tiempo o llega al target:
+        if (_timer >= _duration
+         || Vector3.Distance(_shooter.transform.position, _targetPos) < 0.5f)
+        {
+            // marcamos que ya no está atacando, listo para volver al estado anterior
+            _shooter.alreadyAttacked = false;           
+        }
     }
 
     public void OnExit()
     {
-        _hasChosenMode = false;
+        _shooter.anim.SetFloat("Horizontal", 0f);
+        _shooter.anim.SetFloat("Vertical", 0f);
     }
 
-    private void AwayTarget()
-    {
-        Vector3 raw;
-        int attempts = 0;
-        do
-        {
-           
-            Vector3 dir = (_shooter.transform.position - _shooter.player.position).normalized;
-            float dist = Random.Range(_shooter.attackRange * 0.5f, _strafeRadius);
-            raw = _shooter.player.position + dir * dist;
-            attempts++;
-        }
-        while (Vector3.Distance(raw, _shooter.transform.position) < _minSeparation && attempts < 10);
-
-        
-        if (NavMesh.SamplePosition(raw, out var hit, 1.5f, NavMesh.AllAreas))
-            _targetPosition = hit.position;
-        else
-            _targetPosition = _shooter.transform.position + (raw - _shooter.transform.position).normalized * _minSeparation;
-    }
-
-    private void LateralTarget()
-    {
-        Vector3 ortho = Vector3.Cross(Vector3.up,
-            (_shooter.player.position - _shooter.transform.position).normalized
-        );
-        float dist;
-        Vector3 raw;
-        int attempts = 0;
-        do
-        {
-            // Distancia aleatoria lateral
-            dist = Random.Range(3f, _strafeRadius);
-            float sign = Random.value < 0.5f ? 1f : -1f;
-            raw = _shooter.player.position + ortho * dist * sign;
-            attempts++;
-        }
-        while (Vector3.Distance(raw, _shooter.transform.position) < _minSeparation && attempts < 10);
-
-        // Clamp al attackRange
-        float actualDist = Vector3.Distance(raw, _shooter.player.position);
-        if (actualDist > _shooter.attackRange)
-            raw = _shooter.player.position +
-                  (raw - _shooter.player.position).normalized * (_shooter.attackRange * 0.9f);
-
-        if (NavMesh.SamplePosition(raw, out var hit, 1.5f, NavMesh.AllAreas))
-            _targetPosition = hit.position;
-        else
-            _targetPosition = _shooter.transform.position +
-                              (raw - _shooter.transform.position).normalized * _minSeparation;
-    }
+   
 }

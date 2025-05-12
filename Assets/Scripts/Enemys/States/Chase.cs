@@ -7,49 +7,68 @@ public class Chase : IState
 {
 
 
-    E_Shooter _Shooter;
+    E_Shooter _shooter;
     StateMachine _FSM;
 
     public Chase( E_Shooter shooter, StateMachine fSM)
     {
 
-        _Shooter = shooter;
+        _shooter = shooter;
         _FSM = fSM;
     }
 
     public void OnEnter()
     {
-        Debug.Log("Chase OnEnter");
-        _Shooter.anim.SetBool("Walk", true);
+        Debug.Log($"[{_shooter.name}] Enter Chase");
+        // Limpiamos cualquier velocidad residual
+        _shooter.velocity = Vector3.zero;
+        // Aseguramos que no esté marcado como atacado
+        _shooter.alreadyAttacked = false;
     }
 
     public void Tick()
     {
 
+        // 1) Calculamos el steering hacia el jugador
+        var steer = _shooter.Seek(_shooter.player.position)
+                  + _shooter.ObstacleAvoidance();
 
-       /* var dir = (_agent.steeringTarget - _Shooter.transform.position).normalized;
-        var animdir = _Shooter.transform.InverseTransformDirection(dir);
-        var isfacingmovedirection = Vector3.Dot(dir, _Shooter.transform.forward) > 0.5f;
+        _shooter.AddForce(steer);
 
-        _Shooter.anim.SetFloat("Horizontal", isfacingmovedirection ? animdir.x : 0, .5f, Time.deltaTime);
-        _Shooter.anim.SetFloat("Vertical", isfacingmovedirection ? animdir.z : 0, .5f, Time.deltaTime);*/
+        // 2) Movemos según la velocity resultante
+        Vector3 movement = _shooter.velocity * Time.deltaTime;
+        _shooter.transform.position += movement;
 
-
-        float distanceToPlayer = Vector3.Distance(_Shooter.transform.position, _Shooter.player.position);
-       
-        if (_Shooter.canSeePlayer)
+        // 3) Rotación suave hacia la dirección de movimiento real
+        if (movement.sqrMagnitude > 0.001f)
         {
-
+            Vector3 flat = new Vector3(movement.x, 0, movement.z).normalized;
+            var look = Quaternion.LookRotation(flat);
+            _shooter.transform.rotation = Quaternion.Slerp(
+                _shooter.transform.rotation, look, Time.deltaTime * 8f);
         }
 
-        if (distanceToPlayer < _Shooter.attackRange)
-        _Shooter.playerInAttackRange = true;
+        // 4) Animaciones 2D blend-tree
+        Vector3 localDir = _shooter.transform.InverseTransformDirection(
+            _shooter.velocity.normalized);
+        _shooter.anim.SetFloat("Horizontal", localDir.x, 0.1f, Time.deltaTime);
+        _shooter.anim.SetFloat("Vertical", localDir.z, 0.1f, Time.deltaTime);
 
+        // 5) Si entro en rango de ataque, cambio a AttackState
+        float dist = Vector3.Distance(
+            _shooter.transform.position,
+            _shooter.player.position);
+        if (dist <= _shooter.attackRange)
+        {
+           _shooter.playerInAttackRange = true;
+        }
     }
 
     public void OnExit()
     {
-        Debug.Log("Chase OnExit");
-        _Shooter.anim.SetBool("Walk", false);
+        Debug.Log($"[{_shooter.name}] Exit Chase");
+        // Frenar animación de correr
+        _shooter.anim.SetFloat("Horizontal", 0f);
+        _shooter.anim.SetFloat("Vertical", 0f);
     }
 }

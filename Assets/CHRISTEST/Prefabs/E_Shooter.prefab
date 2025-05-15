@@ -174,8 +174,8 @@ MonoBehaviour:
   projectileSpeed: 5
   strafeSpeed: 5
   wasKilledByThrowable: 0
-  chaseDistance: 16
-  attackRange: 14
+  chaseDistance: 44.3
+  attackRange: 19.7
   playerInSightRange: 0
   playerInAttackRange: 0
   canSeePlayer: 0
@@ -186,7 +186,7 @@ MonoBehaviour:
   obstructionMask:
     serializedVersion: 2
     m_Bits: 64
-  checkRadius: 16
+  checkRadius: 44.3
   angle: 360
   lastpoint: {x: 0, y: 0, z: 0}
   initialNode: {fileID: 0}
@@ -201,6 +201,7 @@ MonoBehaviour:
   velocity: {x: 0, y: 0, z: 0}
   zoneId: 0
   isincombatArena: 0
+  alert_Enemis: 0
 --- !u!54 &9011733329996984528
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -62,6 +62,7 @@ public class E_Shooter : Entity
     #endregion
     public bool isincombatArena;
 
+
     private void Awake()
     {
         maxHealth = EnemyFlyweight.Shooter.maxLife;
@@ -87,7 +88,6 @@ public class E_Shooter : Entity
         var attack = new Atack( this, fsm);
         var death = new Death( this, fsm);
         var Onhit = new OnHit( this, fsm);
-
 
         // Definir las transiciones
         at(idle, patrol, () => !isIdle && !isDead);
@@ -128,7 +128,6 @@ public class E_Shooter : Entity
     public virtual IEnumerator FOVRoutime()
     {
         WaitForSeconds wait = new WaitForSeconds(0.2f);
-        // Debug.Log("busco player");
 
         while (true)
         {
@@ -151,6 +150,7 @@ public class E_Shooter : Entity
 
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
                 {
+
                     return true;
                 }
                 else
@@ -171,8 +171,8 @@ public class E_Shooter : Entity
     }
     #endregion
 
-     #region Movement
-      public Vector3 Seek(Vector3 targetSeek)
+    #region Movement
+    public Vector3 Seek(Vector3 targetSeek)
       {
           var desired = targetSeek - transform.position;
           desired.Normalize();
@@ -217,7 +217,7 @@ public class E_Shooter : Entity
 
           return Vector3.zero;
       }
-      #endregion
+      
 
 
     public void MoveAlongPath()
@@ -259,7 +259,7 @@ public class E_Shooter : Entity
         path = ManagerNode.Instance.FindPath(start, randomTarget);
         pathIndex = 0;
     }
-
+    #endregion
 
     #region takedamage
     public void TakeDamage(int damage)
@@ -333,7 +333,6 @@ public class E_Shooter : Entity
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, checkRadius);
     }
-
 
     public IEnumerator waitforsecond(float time)
     {

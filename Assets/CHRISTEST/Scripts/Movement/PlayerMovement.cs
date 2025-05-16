@@ -144,6 +144,9 @@ public class PlayerMovement : MonoBehaviour
             return;
         else
         {
+            Vector3 viewDirection = mainCam.transform.forward;
+            viewDirection.y = 0f; // Ignore vertical camera tilt
+            orientation.forward = viewDirection.normalized;
             // ground check
             grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
             sprintSpeed = walkSpeed;
@@ -168,15 +171,9 @@ public class PlayerMovement : MonoBehaviour
             StateHandler();
             Airtime();
 
-            // handle drag
-            if (state == MovementState.walking || state == MovementState.sprinting)
-                rb.drag = groundDrag;
-            else
-                rb.drag = 0;
-
             if (state == MovementState.air || state == MovementState.dashing || state == MovementState.sliding)
                 rb.drag = 0;
-            else
+            else if (state == MovementState.walking || state == MovementState.sprinting)
                 rb.drag = groundDrag;
         }
         
@@ -520,13 +517,13 @@ public class PlayerMovement : MonoBehaviour
         if (other.gameObject.tag == "Heart")
         {
             animator.SetTrigger("Organ");
-            animator.SetBool("Idle", false);
+            //animator.SetBool("Idle", false);
             walkSpeed = 12;
             jumpForce = 15;
             normalSpeed = true;
             AudioManager.instance.PlaySFXOneShot("Heartbeat", 1f);
             AudioManager.instance.PlayMusic("Background Music", 1f);
-            animator.SetBool("Idle", true);
+            //animator.SetBool("Idle", true);
             Destroy(other.gameObject);
 
         }

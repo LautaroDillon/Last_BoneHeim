@@ -170,7 +170,6 @@ public class PlayerMelee : MonoBehaviour
         }
 
         timeThrown = Time.time;
-        nextThrowTime = Time.time + throwCooldown;
 
         currentThrowable = Instantiate(throwableObjectPrefab, throwOrigin.position, Quaternion.identity);
         Rigidbody rb = currentThrowable.GetComponent<Rigidbody>();
@@ -186,6 +185,7 @@ public class PlayerMelee : MonoBehaviour
         CameraShake.Instance.ShakeOnce(2f, 2f, 0.1f, 0.3f);
         isThrowableAway = true;
         canMelee = false;
+        
     }
 
     void RecallObject()
@@ -216,6 +216,7 @@ public class PlayerMelee : MonoBehaviour
             isRecalling = false;
             canMelee = true;
             hasPlayedRecallSound = false;
+            nextThrowTime = Time.time + throwCooldown;
         }
     }
 

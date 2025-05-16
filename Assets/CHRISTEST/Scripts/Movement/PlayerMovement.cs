@@ -517,13 +517,13 @@ public class PlayerMovement : MonoBehaviour
         if (other.gameObject.tag == "Heart")
         {
             animator.SetTrigger("Organ");
-            animator.SetBool("Idle", false);
+            //animator.SetBool("Idle", false);
             walkSpeed = 12;
             jumpForce = 15;
             normalSpeed = true;
             AudioManager.instance.PlaySFXOneShot("Heartbeat", 1f);
             AudioManager.instance.PlayMusic("Background Music", 1f);
-            animator.SetBool("Idle", true);
+            //animator.SetBool("Idle", true);
             Destroy(other.gameObject);
 
         }

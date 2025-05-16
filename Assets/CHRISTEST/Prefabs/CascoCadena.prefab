@@ -31,7 +31,7 @@ Transform:
   m_Children:
   - {fileID: 4375211003394009289}
   - {fileID: 6329970432692734280}
-  - {fileID: 5976073031474446347}
+  - {fileID: 7565029288327463272}
   - {fileID: 7696807747334009042}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -185,7 +185,7 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 1, g: 0.8173368, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.57580614, b: 0, a: 1}
   m_Intensity: 10
   m_Range: 30
   m_SpotAngle: 30
@@ -328,7 +328,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b62d63fac72b0bc4b8d1c04535411ecf, type: 3}
---- !u!4 &5976073031474446347 stripped
+--- !u!4 &7565029288327463272 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7625192874774155049, guid: b62d63fac72b0bc4b8d1c04535411ecf, type: 3}
   m_PrefabInstance: {fileID: 85078609662807617}

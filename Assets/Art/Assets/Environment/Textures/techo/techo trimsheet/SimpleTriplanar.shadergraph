@@ -17,6 +17,9 @@
         },
         {
             "m_Id": "0a8862df014f466581e88bc0af707ff8"
+        },
+        {
+            "m_Id": "ac04c8bbba0444418155b77249256fb3"
         }
     ],
     "m_Keywords": [],
@@ -246,8 +249,8 @@
     },
     "m_FragmentContext": {
         "m_Position": {
-            "x": 0.0,
-            "y": 200.0
+            "x": 58.00000762939453,
+            "y": 217.99998474121095
         },
         "m_Blocks": [
             {
@@ -901,6 +904,9 @@
         },
         {
             "m_Id": "0a8862df014f466581e88bc0af707ff8"
+        },
+        {
+            "m_Id": "ac04c8bbba0444418155b77249256fb3"
         }
     ]
 }
@@ -1205,6 +1211,36 @@
     },
     "m_Labels": [],
     "m_Space": 3
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Texture2DShaderProperty",
+    "m_ObjectId": "ac04c8bbba0444418155b77249256fb3",
+    "m_Guid": {
+        "m_GuidSerialized": "81bb2ef0-2371-4e07-9e5d-8e7369586a6e"
+    },
+    "m_Name": "TextureEmisive",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "TextureEmisive",
+    "m_DefaultReferenceName": "_TextureEmisive",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": {
+        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_Guid": ""
+    },
+    "isMainTexture": false,
+    "useTilingAndOffset": false,
+    "m_Modifiable": true,
+    "m_DefaultType": 0
 }
 
 {

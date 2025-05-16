@@ -35,7 +35,7 @@ public class PlayerDash : MonoBehaviour
     private float dashCdTimer;
     [SerializeField] private Image _dashCdBar;
     private float dashCdtarget;
-    private float dashCdReduceSpeed = 100;
+    private float dashCdReduceSpeed = 100f;
 
     [Header("Input")]
     public KeyCode dashKey = KeyCode.LeftShift;
@@ -50,33 +50,29 @@ public class PlayerDash : MonoBehaviour
     {
         if (PauseManager.isPaused || PlayerHealth.hasDied)
             return;
-        else
-        {
-            if (Input.GetKeyDown(dashKey) && pm.canDash)
-                Dash();
 
-            DashCooldown();
-        }
+        if (Input.GetKeyDown(dashKey) && pm.canDash)
+            Dash();
+
+        DashCooldown();
     }
 
-    public void DashCooldown()
+    private void DashCooldown()
     {
-        if (dashCdTimer > 0)
+        if (dashCdTimer > 0f)
             dashCdTimer -= Time.deltaTime;
+
         dashCdtarget = dashCdTimer / dashCd;
         _dashCdBar.fillAmount = Mathf.MoveTowards(_dashCdBar.fillAmount, dashCdtarget, dashCdReduceSpeed * Time.deltaTime);
     }
 
     private void Dash()
     {
-        CameraShake.Instance.ShakeOnce(2f, 2f, 0.1f, 1f);
-        if (dashCdTimer > 0)
+        if (dashCdTimer > 0f)
             return;
-        else
-        {
-            dashCdTimer = dashCd;
-            StartCoroutine(DashCameraKick());
-        }
+
+        dashCdTimer = dashCd;
+        StartCoroutine(DashCameraKick());
 
         pm.dashing = true;
         pm.maxYSpeed = maxDashYSpeed;
@@ -86,15 +82,7 @@ public class PlayerDash : MonoBehaviour
 
         cam.DoFov(mainCam.fieldOfView - dashFov);
 
-        Transform forwardT;
-
-        if (useCameraForward)
-            forwardT = playerCam; /// where you're looking
-        else
-            forwardT = orientation; /// where you're facing (no up or down)
-
-        Vector3 direction = GetDirection(forwardT);
-
+        Vector3 direction = GetDirection(useCameraForward ? playerCam : orientation);
         Vector3 forceToApply = direction * dashForce + orientation.up * dashUpwardForce;
 
         if (disableGravity)
@@ -102,11 +90,11 @@ public class PlayerDash : MonoBehaviour
 
         delayedForceToApply = forceToApply;
         Invoke(nameof(DelayedDashForce), 0.025f);
-
         Invoke(nameof(ResetDash), dashDuration);
     }
 
     private Vector3 delayedForceToApply;
+
     private void DelayedDashForce()
     {
         if (resetVel)
@@ -119,7 +107,6 @@ public class PlayerDash : MonoBehaviour
     {
         pm.dashing = false;
         pm.maxYSpeed = 0;
-
         cam.DoFov(mainCam.fieldOfView + dashFov);
 
         if (disableGravity)
@@ -128,20 +115,16 @@ public class PlayerDash : MonoBehaviour
 
     private Vector3 GetDirection(Transform forwardT)
     {
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
-        float verticalInput = Input.GetAxisRaw("Vertical");
-
-        Vector3 direction = new Vector3();
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
 
         if (allowAllDirections)
-            direction = forwardT.forward * verticalInput + forwardT.right * horizontalInput;
-        else
-            direction = forwardT.forward;
+        {
+            Vector3 dir = forwardT.forward * v + forwardT.right * h;
+            return dir == Vector3.zero ? forwardT.forward : dir.normalized;
+        }
 
-        if (verticalInput == 0 && horizontalInput == 0)
-            direction = forwardT.forward;
-
-        return direction.normalized;
+        return forwardT.forward;
     }
 
     private IEnumerator DashCameraKick()

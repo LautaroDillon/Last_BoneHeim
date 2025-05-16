@@ -15,6 +15,9 @@ public class PlayerCamera : MonoBehaviour
     private float xRotation;
     private float yRotation;
 
+    private Tween fovTween;
+    private Tween tiltTween;
+
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -37,11 +40,13 @@ public class PlayerCamera : MonoBehaviour
 
     public void DoFov(float endValue)
     {
-        GetComponent<Camera>().DOFieldOfView(endValue, 0.25f);
+        if (fovTween != null && fovTween.IsActive()) fovTween.Kill();
+        fovTween = GetComponent<Camera>().DOFieldOfView(endValue, 0.25f);
     }
 
     public void DoTilt(float zTilt)
     {
-        transform.DOLocalRotate(new Vector3(0, 0, zTilt), 0.25f);
+        if (tiltTween != null && tiltTween.IsActive()) tiltTween.Kill();
+        tiltTween = transform.DOLocalRotate(new Vector3(0, 0, zTilt), 0.25f);
     }
 }

@@ -13,6 +13,12 @@ public class PlayerWallrun : MonoBehaviour
     public float wallClimbSpeed;
     public float maxWallRunTime;
     private float wallRunTimer;
+    private float currentTilt = 0f;
+    private bool hasWallJumped;
+
+    [Header("Camera")]
+    public float wallRunFov = 100f;
+    public float normalFov = 90f;
 
     [Header("Input")]
     public KeyCode jumpKey = KeyCode.Space;
@@ -32,9 +38,9 @@ public class PlayerWallrun : MonoBehaviour
     private bool wallRight;
 
     [Header("Exiting")]
-    private bool exitingWall;
     public float exitWallTime;
     private float exitWallTimer;
+    private bool exitingWall;
 
     [Header("Gravity")]
     public bool useGravity;
@@ -127,16 +133,21 @@ public class PlayerWallrun : MonoBehaviour
 
     private void StartWallRun()
     {
+        if (!pm.wallrunning)
+        {
+            cam.DoFov(wallRunFov);
+
+            float targetTilt = wallLeft ? -5f : wallRight ? 5f : 0f;
+            if (currentTilt != targetTilt)
+            {
+                cam.DoTilt(targetTilt);
+                currentTilt = targetTilt;
+            }
+        }
+
         pm.wallrunning = true;
-
         wallRunTimer = maxWallRunTime;
-
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-        // apply camera effects
-        cam.DoFov(90f);
-        if (wallLeft) cam.DoTilt(-5f);
-        if (wallRight) cam.DoTilt(5f);
     }
 
     private void WallRunningMovement()
@@ -170,25 +181,31 @@ public class PlayerWallrun : MonoBehaviour
 
     private void StopWallRun()
     {
-        pm.wallrunning = false;
-
-        // reset camera effects
-        cam.DoFov(90f);
-        cam.DoTilt(0f);
+        if (pm.wallrunning)
+        {
+            pm.wallrunning = false;
+            cam.DoFov(normalFov);
+            cam.DoTilt(0f);
+        }
     }
 
     private void WallJump()
     {
-        // enter exiting wall state
         exitingWall = true;
         exitWallTimer = exitWallTime;
+        hasWallJumped = true;
 
         Vector3 wallNormal = wallRight ? rightWallhit.normal : leftWallhit.normal;
-
         Vector3 forceToApply = transform.up * wallJumpUpForce + wallNormal * wallJumpSideForce;
 
-        // reset y velocity and add force
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(forceToApply, ForceMode.Impulse);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawRay(transform.position, orientation.right * wallCheckDistance);
+        Gizmos.DrawRay(transform.position, -orientation.right * wallCheckDistance);
     }
 }

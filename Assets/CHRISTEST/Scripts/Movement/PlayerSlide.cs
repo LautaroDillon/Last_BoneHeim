@@ -78,14 +78,13 @@ public class PlayerSlide : MonoBehaviour
 
     private void StartSlide()
     {
-        if (!pm.grounded) 
+        if (!pm.grounded || pm.sliding)
             return;
 
         pm.sliding = true;
         AudioManager.instance.PlaySFX("Slide", 1f, false);
         cc.height = slideYScale;
         rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
-
         slideTimer = maxSlideTime;
     }
 

@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Piso
-  m_Shader: {fileID: -6465566751694194690, guid: 69460aefdf866f34991200aa60123a7b, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 9ad93c5a324625c489d44a0498473743, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -38,6 +38,10 @@ Material:
     m_TexEnvs:
     - _BaseMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Base_map:
+        m_Texture: {fileID: 2800000, guid: c9acfe6842c606f45a1b781190958c41, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -60,6 +64,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Emissive_map:
+        m_Texture: {fileID: 2800000, guid: 5d6237ba59847eb41a26a78b9b6a6c51, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -69,6 +77,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalTextureInput:
+        m_Texture: {fileID: 2800000, guid: e6e36689b4c9ceb4e94e3752bf478593, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal_map:
         m_Texture: {fileID: 2800000, guid: e6e36689b4c9ceb4e94e3752bf478593, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -86,6 +98,18 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_ea5beaeaffe14748903b9688fd144312_Out_0_Texture2D:
+        m_Texture: {fileID: 2800000, guid: b5cdf93f33685b94f8bc95ce2d4f760c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_f1789e58b37948adbfd48c28ac4fdc5d_Out_0_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_f69e98847c3d47b6992259570f2b5766_Out_0_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 78aa079386491a24a9b45c86a563975a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureEmisive:
@@ -129,6 +153,7 @@ Material:
     - _GlossyReflections: 0
     - _Metallic: 0
     - _NormaLStrength: 1
+    - _Normal_strength: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueControl: 0

@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 8317835435853913272}
   - component: {fileID: 6360752135627005299}
   - component: {fileID: 901240973555036037}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Piso_Bajo
-  m_TagString: StoneGround
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1730361876334700405}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -51.387207, y: -1, z: -32.772903}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 83c561550fc33c34e997ce4fc4b4965d, type: 2}
+  - {fileID: 2100000, guid: a22b330d6f502d643be2451d37e2455a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -91,7 +91,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1730361876334700405}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 1d424a129a09d354da5182c86e778ff1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

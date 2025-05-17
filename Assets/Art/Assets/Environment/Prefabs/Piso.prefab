@@ -11,10 +11,15 @@ GameObject:
   - component: {fileID: 5880011083371045115}
   - component: {fileID: 2152625399126095987}
   - component: {fileID: 764657658080213363}
-  - component: {fileID: 5842861554154964727}
+<<<<<<< HEAD
+  - component: {fileID: 5591298847781069247}
   m_Layer: 7
+=======
+  - component: {fileID: 5842861554154964727}
+  m_Layer: 0
+>>>>>>> parent of fd0b911 (cambios de particulas)
   m_Name: Piso
-  m_TagString: StoneGround
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,7 +32,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 190034175276088597}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -51.387207, y: -1, z: -40.77292}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
@@ -85,14 +90,14 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5842861554154964727
+--- !u!65 &5591298847781069247
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 190034175276088597}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 1d424a129a09d354da5182c86e778ff1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -104,5 +109,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 800.00134, y: 599.406, z: 800.00146}
-  m_Center: {x: 0, y: 0.00033569336, z: 0}
+  m_Size: {x: 800.00134, y: 300.00018, z: 800.00134}
+  m_Center: {x: -400.00067, y: 150.00009, z: -400.00067}

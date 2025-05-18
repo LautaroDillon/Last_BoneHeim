@@ -31,19 +31,13 @@ public class PlayerBullet : MonoBehaviour
 
         if (counter >= lifetime)
         {
-            BulletPool.Instance.ReturnBullet(gameObject);
+            Destroy(gameObject);
         }
     }
 
     public void SetDamage(float dmg)
     {
         damage = dmg;
-    }
-
-    public void ResetBullet()
-    {
-        counter = 0f;
-        rb.velocity = Vector3.zero;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -62,6 +56,6 @@ public class PlayerBullet : MonoBehaviour
         }
         if (other.CompareTag("Wall"))
             Instantiate(wallHitEffect, transform.position, Quaternion.identity);
-        BulletPool.Instance.ReturnBullet(gameObject);
+        Destroy(gameObject);
     }
 }

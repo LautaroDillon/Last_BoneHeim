@@ -61,21 +61,32 @@ public class E_Shooter : Entity
 
     #endregion
     public bool isincombatArena;
+    public int groupIndex;
+    [HideInInspector]
+    public bool isLeader;
 
+    public Rigidbody rb;
 
     private void Awake()
     {
         maxHealth = EnemyFlyweight.Shooter.maxLife;
         currentHealth = maxHealth;
         numberOfBulletsOnDeath = Random.Range(1, 4);
+        rb = GetComponent<Rigidbody>();
         fsm = new StateMachine();
         if (instance == null)
             instance = this;
+
+
+
     }
 
     #region start
     private void Start()
     {
+        GameManager.instance.RegisterShooter(this);
+        isLeader = (groupIndex == 0);
+
         playerWeapon = FindObjectOfType<PlayerWeapon>();
 
         StartCoroutine(FOVRoutime());

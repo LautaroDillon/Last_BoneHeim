@@ -33,6 +33,7 @@ public class Patrol : IState
 
             // Movimiento real
             Vector3 movement = dir * _shooter.moveSpeed * Time.deltaTime;
+            _shooter.rb.MovePosition(_shooter.rb.position + movement);
 
             // Rotación hacia la dirección de movimiento
             if (movement.sqrMagnitude > 0.001f)
@@ -77,11 +78,12 @@ public class Patrol : IState
     {
         Debug.Log($"[{_shooter.name}] Patrol OnExit");
         // Frenar anim y movimiento
+        _shooter.rb.velocity = Vector3.zero;
         _shooter.isPatrolling = false;
         _shooter.anim.SetFloat("Horizontal", 0f);
         _shooter.anim.SetFloat("Vertical", 0f);
-        _shooter.velocity = Vector3.zero;
     }
+
     private void ChooseRandomNodeInZone()
     {
         // 1) Obtener lista de nodos de la zona

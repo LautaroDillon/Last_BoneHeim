@@ -46,40 +46,34 @@ public class Strafe : IState
         _timer += Time.deltaTime;
         if (_timer >= _duration)
         {
-            // terminamos el strafe
             _shooter.alreadyAttacked = false;
             return;
         }
 
-        // Dirección a jugador
+        // 1) construís tu moveDir orgánico (como antes)…
         Vector3 toPlayer = (_shooter.player.position - _shooter.transform.position).normalized;
-
-        // Lateral puro
         Vector3 lateral = Vector3.Cross(Vector3.up, toPlayer) * _direction;
-
-        // Un poco de forward/back bias
         Vector3 forwardBack = toPlayer * Random.Range(-ForwardBias, ForwardBias);
-
-        // Jitter suave con Perlin
         float noise = (Mathf.PerlinNoise(Time.time * 1.5f, _noiseOffset) - 0.5f) * 2f;
         Vector3 jitter = lateral * (noise * JitterAmp);
-
-        // Vector final de movimiento
         Vector3 moveDir = (lateral + forwardBack + jitter).normalized;
 
-        //  Aplicar movimiento
-        Vector3 delta = moveDir * _speed * Time.deltaTime;
-        _shooter.transform.position += delta;
+        // 2) Calculás el desplazamiento
+        Vector3 displacement = moveDir * _speed * Time.deltaTime;
 
-        // Rotación suave hacia la propia dirección de movimiento
-        if (delta.sqrMagnitude > 0.001f)
+        // 3) Mueves con el Rigidbody
+        _shooter.rb.MovePosition(_shooter.rb.position + displacement);
+
+        // 4) Rotación suave si necesitas:
+        if (displacement.sqrMagnitude > 0.001f)
         {
-            Vector3 flat = new Vector3(delta.x, 0, delta.z).normalized;
-            Quaternion look = Quaternion.LookRotation(flat);
+            Vector3 flat = new Vector3(displacement.x, 0, displacement.z).normalized;
+            var look = Quaternion.LookRotation(flat);
             _shooter.transform.rotation = Quaternion.Slerp(
                 _shooter.transform.rotation, look, Time.deltaTime * 8f);
         }
 
+        // 5) Animaciones igual que antes…
         Vector3 local = _shooter.transform.InverseTransformDirection(moveDir);
         _shooter.anim.SetFloat("Horizontal", local.x, 0.1f, Time.deltaTime);
         _shooter.anim.SetFloat("Vertical", local.z, 0.1f, Time.deltaTime);

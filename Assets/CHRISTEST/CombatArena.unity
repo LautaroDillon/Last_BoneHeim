@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.5444161, g: 0.5070113, b: 0.5242729, a: 1}
+  m_IndirectSpecularColor: {r: 0.5444019, g: 0.50700164, b: 0.5242697, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1305,25 +1305,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AgentTypeID: -1372625422
-  m_CollectObjects: 0
-  m_Size: {x: 10, y: 10, z: 10}
-  m_Center: {x: 0, y: 2, z: 0}
-  m_LayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_UseGeometry: 0
-  m_DefaultArea: 0
-  m_GenerateLinks: 0
-  m_IgnoreNavMeshAgent: 1
-  m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
-  m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 7e3de6fe7c231e14592a9b5c8a6965c9, type: 2}
-  m_BuildHeightMesh: 0
 --- !u!4 &562962360 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9154213400065990961, guid: 5861198ece183ea4589e2b8fa31c1538, type: 3}
@@ -2306,12 +2287,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 926287277}
     - target: {fileID: 3288562228548541264, guid: b5996fa40d1792d4ca8bfef4ae96a840, type: 3}
+      propertyPath: isincombatArena
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3288562228548541264, guid: b5996fa40d1792d4ca8bfef4ae96a840, type: 3}
       propertyPath: numberOfBulletsOnDeath
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8323795386488884064, guid: b5996fa40d1792d4ca8bfef4ae96a840, type: 3}
       propertyPath: m_Name
       value: E_Shooter
+      objectReference: {fileID: 0}
+    - target: {fileID: 9011733329996984528, guid: b5996fa40d1792d4ca8bfef4ae96a840, type: 3}
+      propertyPath: m_Constraints
+      value: 112
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2652,6 +2641,10 @@ PrefabInstance:
       propertyPath: sensitivityController
       value: 
       objectReference: {fileID: 880049978}
+    - target: {fileID: 7592187122004267865, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
+      propertyPath: maxHealth
+      value: 3.402823e+38
+      objectReference: {fileID: 0}
     - target: {fileID: 8012495331682462058, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
       propertyPath: heart
       value: 

@@ -14,6 +14,7 @@ public class Atack : IState
     private float _attackTimer;
 
     private float _cooldownTimer;
+    float attackDelay ;
 
     public Atack( E_Shooter shooter, StateMachine fSM)
     {
@@ -30,6 +31,7 @@ public class Atack : IState
         _cooldownTimer = 0f;
         _shooter.alreadyAttacked = false;
         _shooter.anim.SetBool("Walk", false);
+        attackDelay = Random.Range(0.1f, 0.4f);
     }
 
     public void Tick()
@@ -46,7 +48,7 @@ public class Atack : IState
         }
 
 
-        if (_attackTimer >= _attackDuration && !_shooter.alreadyAttacked)
+        if (_attackTimer >= _attackDuration + attackDelay && !_shooter.alreadyAttacked)
         {
             _shooter.anim.SetTrigger("atack");
             _shooter.alreadyAttacked = true;
@@ -63,7 +65,6 @@ public class Atack : IState
     public void OnExit()
     {
         
-        //_shooter.alreadyAttacked = false;
     }
 
     private void FaceTarget()

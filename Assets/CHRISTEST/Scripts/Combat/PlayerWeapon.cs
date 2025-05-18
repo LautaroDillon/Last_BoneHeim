@@ -30,7 +30,7 @@ public class PlayerWeapon : MonoBehaviour
 
     [Header("References")]
     public Transform firePoint;
-    //public GameObject bulletPrefab;
+    public GameObject bulletPrefab;
     public float bulletSpeed = 20f;
     public TextMeshProUGUI ammoText;
 
@@ -148,27 +148,17 @@ public class PlayerWeapon : MonoBehaviour
             aimDirection = firePoint.forward;
         }
 
-        GameObject visualBone = GetBulletDisplayObject();
-        if (visualBone == null) return;
-
-        Vector3 shootPosition = visualBone.transform.position;
-        Vector3 shootDirection = (targetPoint - shootPosition).normalized;
-
-        GameObject bullet = BulletPool.Instance.GetBullet();
-        bullet.transform.position = shootPosition;
-        bullet.transform.rotation = Quaternion.LookRotation(shootDirection);
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(aimDirection));
 
         if (bullet.TryGetComponent(out PlayerBullet bulletScript))
-        {
             bulletScript.SetDamage(damage);
-            bulletScript.ResetBullet();
-        }
 
         if (bullet.TryGetComponent(out Rigidbody rb))
-            rb.velocity = shootDirection * bulletSpeed;
+            rb.velocity = aimDirection * bulletSpeed;
 
         currentAmmo--;
         UpdateBulletDisplay();
+        Debug.Log("Shot fired! Ammo left: " + currentAmmo);
     }
 
     void ShootShotgun()
@@ -203,18 +193,7 @@ public class PlayerWeapon : MonoBehaviour
                 0
             ) * direction;
 
-            if (currentAmmo <= 0 || currentAmmo > bulletDisplay.Count)
-                return;
-
-            GameObject visualBullet = GetBulletDisplayObject();
-            if (visualBullet == null) return;
-
-            Vector3 spawnPos = visualBullet.transform.position;
-            Quaternion spawnRot = firePoint.rotation;
-
-            GameObject bullet = BulletPool.Instance.GetBullet();
-            bullet.transform.position = spawnPos;
-            bullet.transform.rotation = spawnRot;
+            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(direction));
 
             float falloffMultiplier = 1f;
             if (baseDistance > falloffStartDistance)
@@ -226,10 +205,7 @@ public class PlayerWeapon : MonoBehaviour
             float pelletDamage = (shotgunDamage / pelletsPerShot) * falloffMultiplier;
 
             if (bullet.TryGetComponent(out PlayerBullet bulletScript))
-            {
-                bulletScript.ResetBullet();
                 bulletScript.SetDamage(Mathf.RoundToInt(pelletDamage));
-            }
 
             if (bullet.TryGetComponent(out Rigidbody rb))
                 rb.velocity = direction * bulletSpeed;
@@ -251,16 +227,6 @@ public class PlayerWeapon : MonoBehaviour
         {
             bulletDisplay[i].SetActive(i < currentAmmo);
         }
-    }
-
-    GameObject GetBulletDisplayObject()
-    {
-        if (currentAmmo <= 0 || currentAmmo > bulletDisplay.Count)
-            return null;
-
-        GameObject bone = bulletDisplay[currentAmmo - 1];
-        bone.SetActive(false); // Deactivate bone as visual feedback
-        return bone;
     }
 
     void HandleFireModeSwitching()

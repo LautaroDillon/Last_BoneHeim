@@ -194,13 +194,17 @@ MonoBehaviour:
   path: []
   pathIndex: 0
   nodeReachDistance: 0.3
-  moveSpeed: 6
-  maxSpeed: 6
+  moveSpeed: 3
+  maxSpeed: 3
   arriveRadius: 3
   maxForce: 3
   velocity: {x: 0, y: 0, z: 0}
   zoneId: 0
+  timeBeforeFlank: 5
+  flankTimer: 0
+  lastAttackPosition: {x: 0, y: 0, z: 0}
   isincombatArena: 0
+  canFlank: 0
   groupIndex: 0
   isLeader: 0
   rb: {fileID: 0}

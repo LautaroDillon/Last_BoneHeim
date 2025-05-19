@@ -40,7 +40,8 @@ public class PlayerWeapon : MonoBehaviour
 
     [Header("Bullet Display")]
     public List<GameObject> bulletDisplay = new List<GameObject>();
-    public List<Transform> firePoints = new List<Transform>(); // Each corresponds to a bulletDisplay
+    [SerializeField] private List<Transform> firePoints;
+    [SerializeField] private List<string> fireAnimations;
 
     private bool isReloading = false;
     private float nextTimeToFire = 0f;
@@ -121,33 +122,44 @@ public class PlayerWeapon : MonoBehaviour
             return;
 
         CameraShake.Instance.ShakeOnce(1f, 1f, 0.1f, 1f);
-        PlayerMovement.instance.animator.SetTrigger("Atack");
         PlayerMovement.instance.animator.SetBool("Idle", false);
         StartCoroutine(ResetIdle());
 
-        Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 0f);
-        Ray ray = Camera.main.ScreenPointToRay(screenCenter);
-        Vector3 targetPoint = Physics.Raycast(ray, out RaycastHit hit) ? hit.point : ray.GetPoint(1000);
-        Vector3 aimDirection = (targetPoint - firePoint.position).normalized;
-
-        // Clamp angle
-        float maxAngle = 60f;
-        if (Vector3.Angle(firePoint.forward, aimDirection) > maxAngle)
-            aimDirection = firePoint.forward;
-
-        // Choose fire point based on ammo index
         int bulletIndex = currentAmmo - 1;
         Transform selectedFirePoint = (bulletIndex >= 0 && bulletIndex < firePoints.Count)
             ? firePoints[bulletIndex]
             : firePoint;
 
-        GameObject bullet = Instantiate(bulletPrefab, selectedFirePoint.position, Quaternion.LookRotation(aimDirection));
+        if (bulletIndex >= 0 && bulletIndex < fireAnimations.Count)
+        {
+            string animTrigger = fireAnimations[bulletIndex];
+            PlayerMovement.instance.animator.SetTrigger(animTrigger);
+        }
+
+        // --- FIX: Use firePoint.forward as base shooting direction ---
+        Vector3 shootDirection = selectedFirePoint.forward;
+
+        // Optional: Aim assist with max angle limit
+        Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 0f);
+        Ray ray = Camera.main.ScreenPointToRay(screenCenter);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            Vector3 aimDir = (hit.point - selectedFirePoint.position).normalized;
+            float maxAngle = 60f;
+            if (Vector3.Angle(selectedFirePoint.forward, aimDir) <= maxAngle)
+                shootDirection = aimDir;
+        }
+
+        Debug.DrawRay(selectedFirePoint.position, shootDirection * 5f, Color.red, 2f);
+        Debug.DrawRay(selectedFirePoint.position, selectedFirePoint.forward * 5f, Color.blue, 2f);
+
+        GameObject bullet = Instantiate(bulletPrefab, selectedFirePoint.position, Quaternion.LookRotation(shootDirection));
 
         if (bullet.TryGetComponent(out PlayerBullet bulletScript))
             bulletScript.SetDamage(damage);
 
         if (bullet.TryGetComponent(out Rigidbody rb))
-            rb.velocity = aimDirection * bulletSpeed;
+            rb.velocity = shootDirection * bulletSpeed;
 
         currentAmmo--;
         UpdateBulletDisplay();
@@ -159,20 +171,33 @@ public class PlayerWeapon : MonoBehaviour
         if (currentAmmo <= 0 || isReloading)
             return;
 
-        PlayerMovement.instance.animator.SetTrigger("Atack");
+        int bulletIndex = currentAmmo - 1;
+
+        if (bulletIndex < 0 || bulletIndex >= firePoints.Count)
+        {
+            Debug.LogWarning("Invalid fire point index for shotgun: " + bulletIndex);
+            return;
+        }
+
+        Transform selectedFirePoint = firePoints[bulletIndex];
+
+        if (bulletIndex >= 0 && bulletIndex < fireAnimations.Count)
+        {
+            string animTrigger = fireAnimations[bulletIndex];
+            if (!string.IsNullOrEmpty(animTrigger))
+                PlayerMovement.instance.animator.SetTrigger(animTrigger);
+        }
+
         PlayerMovement.instance.animator.SetBool("Idle", false);
         StartCoroutine(ResetIdle());
+
         CameraShake.Instance.ShakeOnce(1.5f, 1.5f, 0.1f, 1f);
 
         Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 0f);
         Ray ray = Camera.main.ScreenPointToRay(screenCenter);
         Vector3 targetPoint = Physics.Raycast(ray, out RaycastHit hit) ? hit.point : ray.GetPoint(1000);
 
-        float baseDistance = Vector3.Distance(firePoint.position, targetPoint);
-        int bulletIndex = currentAmmo - 1;
-        Transform selectedFirePoint = (bulletIndex >= 0 && bulletIndex < firePoints.Count)
-            ? firePoints[bulletIndex]
-            : firePoint;
+        float baseDistance = Vector3.Distance(selectedFirePoint.position, targetPoint);
 
         for (int i = 0; i < pelletsPerShot; i++)
         {
@@ -180,15 +205,16 @@ public class PlayerWeapon : MonoBehaviour
             direction = Quaternion.Euler(
                 Random.Range(-spreadAngle, spreadAngle),
                 Random.Range(-spreadAngle, spreadAngle),
-                0) * direction;
+                0
+            ) * direction;
 
             GameObject bullet = Instantiate(bulletPrefab, selectedFirePoint.position, Quaternion.LookRotation(direction));
 
             float falloffMultiplier = 1f;
             if (baseDistance > falloffStartDistance)
             {
-                float excess = baseDistance - falloffStartDistance;
-                falloffMultiplier = Mathf.Lerp(1f, minDamageMultiplier, excess / 20f);
+                float excessDistance = baseDistance - falloffStartDistance;
+                falloffMultiplier = Mathf.Lerp(1f, minDamageMultiplier, excessDistance / 20f);
             }
 
             float pelletDamage = (shotgunDamage / pelletsPerShot) * falloffMultiplier;
@@ -202,7 +228,7 @@ public class PlayerWeapon : MonoBehaviour
 
         currentAmmo--;
         UpdateBulletDisplay();
-        Debug.Log("Shotgun fired! Ammo left: " + currentAmmo);
+        Debug.Log("Shotgun fired from finger " + bulletIndex + "! Ammo left: " + currentAmmo);
     }
 
     void UpdateAmmoUI()

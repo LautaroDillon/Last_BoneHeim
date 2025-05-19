@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Scripting;
 using TMPro;
 using EZCameraShake;
+
 public class PlayerWeapon : MonoBehaviour
 {
+    public static PlayerWeapon Instance;
+
     public enum FireMode { SemiAuto, Burst, FullAuto, Shotgun }
     public FireMode fireMode = FireMode.SemiAuto;
 
@@ -48,6 +52,18 @@ public class PlayerWeapon : MonoBehaviour
     private float nextTimeToFire = 0f;
 
     int bulletIndex;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+        currentAmmo = magazineSize;
+    }
 
     void Start()
     {
@@ -219,6 +235,7 @@ public class PlayerWeapon : MonoBehaviour
         Debug.Log("Shotgun fired from finger " + bulletIndex + "! Ammo left: " + currentAmmo);
     }
 
+    [Preserve]
     public void FireBulletFromAnimation()
     {
         if (queuedFirePoint == null)

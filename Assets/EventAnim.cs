@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 public class EventAnim : MonoBehaviour
 {
@@ -11,9 +12,9 @@ public class EventAnim : MonoBehaviour
     public GameObject heartPosition;
     private bool isFollowing = false;
 
-    public PlayerWeapon playerWeapon;
+    private PlayerWeapon playerWeapon;
 
-    private void Start()
+    private void Awake()
     {
         instance = this;
         organs.SetActive(false);
@@ -35,10 +36,10 @@ public class EventAnim : MonoBehaviour
         heartPosition.SetActive(true);
     }
 
+    [Preserve]
     public void ShootingEvent()
     {
         Debug.LogWarning("Shooting Event");
         playerWeapon.FireBulletFromAnimation();
     }
-
 }

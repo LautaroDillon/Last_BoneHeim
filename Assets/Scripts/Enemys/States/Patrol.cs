@@ -19,7 +19,7 @@ public class Patrol : IState
     public void OnEnter()
     {
         _shooter.isPatrolling = true;
-        Debug.Log($"[{_shooter.name}] Patrol OnEnter (zona {_shooter.zoneId})");
+       // Debug.Log($"[{_shooter.name}] Patrol OnEnter (zona {_shooter.zoneId})");
         _waitTimer = 0f;
         ChooseRandomNodeInZone();
     }
@@ -76,7 +76,7 @@ public class Patrol : IState
 
     public void OnExit()
     {
-        Debug.Log($"[{_shooter.name}] Patrol OnExit");
+        //Debug.Log($"[{_shooter.name}] Patrol OnExit");
         // Frenar anim y movimiento
         _shooter.rb.velocity = Vector3.zero;
         _shooter.isPatrolling = false;
@@ -90,7 +90,7 @@ public class Patrol : IState
         var zoneNodes = ManagerNode.Instance.GetNodesInZone(_shooter.zoneId);
         if (zoneNodes == null || zoneNodes.Count == 0)
         {
-            Debug.LogError($"[PatrolState] Zona {_shooter.zoneId} sin nodos registrados.");
+            //Debug.LogError($"[PatrolState] Zona {_shooter.zoneId} sin nodos registrados.");
             return;
         }
 
@@ -98,7 +98,7 @@ public class Patrol : IState
         var start = ManagerNode.Instance.GetClosestNode(_shooter.transform.position, _shooter.zoneId);
         if (start == null)
         {
-            Debug.LogError($"[PatrolState] No encontré nodo de inicio en zona {_shooter.zoneId}.");
+           // Debug.LogError($"[PatrolState] No encontré nodo de inicio en zona {_shooter.zoneId}.");
             return;
         }
 
@@ -111,7 +111,7 @@ public class Patrol : IState
             tries++;
         }
 
-        Debug.Log($"[{_shooter.name}] Patrullando nodo {start.name} → {dest.name}");
+       // Debug.Log($"[{_shooter.name}] Patrullando nodo {start.name} → {dest.name}");
 
         // 4) Calcular A y asignar ruta
         _shooter.path = ManagerNode.Instance.FindPath(start, dest);

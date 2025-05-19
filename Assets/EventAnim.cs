@@ -11,11 +11,14 @@ public class EventAnim : MonoBehaviour
     public GameObject heartPosition;
     private bool isFollowing = false;
 
+    public PlayerWeapon playerWeapon;
+
     private void Start()
     {
         instance = this;
         organs.SetActive(false);
         heartPosition.SetActive(false);
+        playerWeapon = FindObjectOfType<PlayerWeapon>();
     }
 
     public void HeartEventActive()
@@ -31,4 +34,11 @@ public class EventAnim : MonoBehaviour
         organs.SetActive(false);
         heartPosition.SetActive(true);
     }
+
+    public void ShootingEvent()
+    {
+        Debug.LogWarning("Shooting Event");
+        playerWeapon.Shoot();
+    }
+
 }

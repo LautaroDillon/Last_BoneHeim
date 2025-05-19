@@ -46,6 +46,8 @@ public class PlayerWeapon : MonoBehaviour
     private bool isReloading = false;
     private float nextTimeToFire = 0f;
 
+    int bulletIndex;
+
     void Start()
     {
         currentAmmo = magazineSize;
@@ -86,7 +88,20 @@ public class PlayerWeapon : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Mouse0) && Time.time >= nextTimeToFire)
                 {
                     nextTimeToFire = Time.time + fireRate;
-                    Shoot();
+
+                    //Debug.LogError("Shooting with index: " + bulletIndex);
+
+                    CameraShake.Instance.ShakeOnce(1f, 1f, 0.1f, 1f);
+                    PlayerMovement.instance.animator.SetBool("Idle", false);
+                    StartCoroutine(ResetIdle());
+
+                    if (bulletIndex >= 0 && bulletIndex < fireAnimations.Count)
+                    {
+                        Debug.LogWarning("Shooting with index: " + bulletIndex);
+                        string animTrigger = fireAnimations[bulletIndex];
+                        PlayerMovement.instance.animator.SetTrigger(animTrigger);
+                    }
+                    //Shoot();
                 }
                 break;
 
@@ -102,7 +117,7 @@ public class PlayerWeapon : MonoBehaviour
                 if (Input.GetKey(KeyCode.Mouse0) && Time.time >= nextTimeToFire)
                 {
                     nextTimeToFire = Time.time + fireRate;
-                    Shoot();
+                    //Shoot();
                 }
                 break;
 
@@ -116,25 +131,19 @@ public class PlayerWeapon : MonoBehaviour
         }
     }
 
-    void Shoot()
+    public void Shoot()
     {
         if (isReloading || currentAmmo <= 0)
             return;
 
-        CameraShake.Instance.ShakeOnce(1f, 1f, 0.1f, 1f);
-        PlayerMovement.instance.animator.SetBool("Idle", false);
-        StartCoroutine(ResetIdle());
 
-        int bulletIndex = currentAmmo - 1;
+
+         bulletIndex = currentAmmo - 1;
         Transform selectedFirePoint = (bulletIndex >= 0 && bulletIndex < firePoints.Count)
             ? firePoints[bulletIndex]
             : firePoint;
 
-        if (bulletIndex >= 0 && bulletIndex < fireAnimations.Count)
-        {
-            string animTrigger = fireAnimations[bulletIndex];
-            PlayerMovement.instance.animator.SetTrigger(animTrigger);
-        }
+
 
         // --- FIX: Use firePoint.forward as base shooting direction ---
         Vector3 shootDirection = selectedFirePoint.forward;
@@ -286,7 +295,7 @@ public class PlayerWeapon : MonoBehaviour
             if (currentAmmo <= 0)
                 break;
 
-            Shoot();
+            //Shoot();
             yield return new WaitForSeconds(fireRate);
         }
     }

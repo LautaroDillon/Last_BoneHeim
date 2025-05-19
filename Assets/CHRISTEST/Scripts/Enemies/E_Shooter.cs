@@ -67,7 +67,8 @@ public class E_Shooter : Entity
     #endregion
     public bool isincombatArena;
     public bool canFlank;
-
+    public bool finishedMicroFlank;
+    public float lastAttackTime;
 
     public int groupIndex;
     [HideInInspector]
@@ -108,6 +109,7 @@ public class E_Shooter : Entity
         var death = new Death( this, fsm);
         var Onhit = new OnHit( this, fsm);
         var flank = new Flank( this, fsm);
+        var microFlank = new MicroFlank( this, fsm);
 
         // Definir las transiciones
         at(idle, patrol, () => !isIdle && !isDead);
@@ -130,7 +132,11 @@ public class E_Shooter : Entity
         at(Onhit, Search, () => !WasHit && !isDead);
        // at(Onhit, strafe, () => !WasHit && !isDead);
         at(Onhit, attack, () => !WasHit && !isDead); 
-        at(attack, flank, () => canFlank && !playerInAttackRange && !isDead); 
+        at(attack, flank, () => canFlank && !playerInAttackRange && !isDead);
+        at(attack, microFlank, () => playerInAttackRange &&
+                                     !alreadyAttacked &&
+                                     Time.time - lastAttackTime > 2f);
+        at(microFlank, chase, () => path == null || pathIndex >= path.Count);
 
         fsm.SetState(idle);
     }

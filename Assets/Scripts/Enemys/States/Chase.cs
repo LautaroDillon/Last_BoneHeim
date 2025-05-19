@@ -26,7 +26,7 @@ public class Chase : IState
 
     public void OnEnter()
     {
-        Debug.Log($"[{_shooter.name}] Enter Chase");
+       // Debug.Log($"[{_shooter.name}] Enter Chase");
         // Limpiamos cualquier velocidad residual
         _shooter.velocity = Vector3.zero;
         // Aseguramos que no esté marcado como atacado
@@ -95,7 +95,7 @@ public class Chase : IState
 
     public void OnExit()
     {
-        Debug.Log($"[{_shooter.name}] Exit Chase");
+        //Debug.Log($"[{_shooter.name}] Exit Chase");
         // Frenar animación de correr
         _shooter.anim.SetFloat("Horizontal", 0f);
         _shooter.anim.SetFloat("Vertical", 0f);

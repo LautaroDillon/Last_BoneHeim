@@ -100,16 +100,15 @@ public class E_Shooter : Entity
 
         StartCoroutine(FOVRoutime());
 
-        var idle = new Idle( this, fsm);
-        var patrol = new Patrol( this, fsm);
-        var chase = new Chase( this, fsm);
-        var Search = new Serach_S( this, fsm);
-        //var strafe = new Strafe( this, fsm);
-        var attack = new Atack( this, fsm);
-        var death = new Death( this, fsm);
-        var Onhit = new OnHit( this, fsm);
-        var flank = new Flank( this, fsm);
-        var microFlank = new MicroFlank( this, fsm);
+        var idle = new Idle(this, fsm);
+        var patrol = new Patrol(this, fsm);
+        var chase = new Chase(this, fsm);
+        var Search = new Serach_S(this, fsm);
+        var strafe = new Strafe(this, fsm);
+        var attack = new Atack(this, fsm);
+        var death = new Death(this, fsm);
+        var Onhit = new OnHit(this, fsm);
+
 
         // Definir las transiciones
         at(idle, patrol, () => !isIdle && !isDead);
@@ -117,12 +116,13 @@ public class E_Shooter : Entity
         at(patrol, chase, () => canSeePlayer && !playerInAttackRange && !isDead);
         at(patrol, attack, () => canSeePlayer && playerInAttackRange && !isDead);
         at(chase, attack, () => playerInAttackRange && !isDead);
-        //at(attack, strafe, () => alreadyAttacked && playerInAttackRange && !isDead);
         at(attack, chase, () => !playerInAttackRange && !isDead);
         at(attack, Search, () => !playerInAttackRange && !canSeePlayer && !isDead);
-       // at(strafe, chase, () => !playerInAttackRange && !isDead);
-       // at(strafe, attack, () => !alreadyAttacked && !isDead);
         at(chase, Search, () => !canSeePlayer && !isDead);
+        at(Onhit, strafe, () => !WasHit && !isDead);
+        at(strafe, chase, () => !playerInAttackRange && !isDead);
+        at(attack, strafe, () => alreadyAttacked && playerInAttackRange && !isDead);
+        at(strafe, attack, () => !alreadyAttacked && !isDead);
         at(Search, patrol, () => true && !isDead); // Despues de buscar vuelve a patrullar
         any(death, () => currentHealth <= 0 && isDead); // Transición a Death desde cualquier estado
         any(Onhit, () => WasHit && !isDead); // Transición a hit desde cualquier estado
@@ -130,14 +130,7 @@ public class E_Shooter : Entity
         at(Onhit, patrol, () => !WasHit && !isDead);
         at(Onhit, chase, () => !WasHit && !isDead);
         at(Onhit, Search, () => !WasHit && !isDead);
-       // at(Onhit, strafe, () => !WasHit && !isDead);
-        at(Onhit, attack, () => !WasHit && !isDead); 
-        at(attack, flank, () => canFlank && !playerInAttackRange && !isDead);
-        at(attack, microFlank, () => playerInAttackRange &&
-                                     !alreadyAttacked &&
-                                     Time.time - lastAttackTime > 2f);
-        at(microFlank, chase, () => path == null || pathIndex >= path.Count);
-
+        at(Onhit, attack, () => !WasHit && !isDead);
         fsm.SetState(idle);
     }
 
@@ -200,99 +193,57 @@ public class E_Shooter : Entity
 
     #region Movement
     public Vector3 Seek(Vector3 targetSeek)
-      {
-          var desired = targetSeek - transform.position;
-          desired.Normalize();
-          desired *= maxSpeed;
-          return CalculateSteering(desired);
-      }
-      public Vector3 CalculateSteering(Vector3 desired)
-      {
-          var steering = desired - velocity;
-          steering = Vector3.ClampMagnitude(steering, maxForce);
-          return steering;
-      }
-
-      public void AddForce(Vector3 dir)
-      {
-          velocity += dir;
-          //velocity.y = transform.position.y; //Mantengo mi altura
-          velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
-      }
-
-      public Vector3 ObstacleAvoidance()
-      {
-          Vector3 pos = transform.position;
-          Vector3 dir = transform.forward;
-          float dist = velocity.magnitude; //Que tan rapido estoy yendo
-
-          Debug.DrawLine(pos, pos + (dir * dist));
-
-          if (Physics.SphereCast(pos, 1, dir, out RaycastHit hit, dist, obstructionMask))
-          {
-              var obstacle = hit.transform; //Obtengo el transform del obstaculo q acaba de tocar
-              Vector3 dirToObject = obstacle.position - transform.position; //La direccion del obstaculo
-
-              float anguloEntre = Vector3.SignedAngle(transform.forward, dirToObject, Vector3.up); //(Dir. hacia donde voy, Dir. objeto, Dir. mis costados)
-
-              Vector3 desired = anguloEntre >= 0 ? -transform.right : transform.right; //Me meuvo para derecha o izquierda dependiendo donde esta el obstaculo
-              desired.Normalize();
-              desired *= maxSpeed;
-
-              return CalculateSteering(desired);
-          }
-
-          return Vector3.zero;
-      }
-      
-
-
-    public void MoveAlongPath()
     {
-        if (path == null || pathIndex >= path.Count) return;
-
-        NodePathfinding targetNode = path[pathIndex];
-        Vector3 direction = (targetNode.transform.position - transform.position).normalized;
-        Vector3 move = direction * moveSpeed * Time.deltaTime;
-
-        transform.position += move;
-
-        // Rotación suave hacia el siguiente nodo
-        if (direction != Vector3.zero)
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 5f * Time.deltaTime);
-
-        // Animaciones
-        anim.SetFloat("Horizontal", direction.x, 0.2f, Time.deltaTime);
-        anim.SetFloat("Vertical", direction.z, 0.2f, Time.deltaTime);
-
-        if (Vector3.Distance(transform.position, targetNode.transform.position) < nodeReachDistance)
-            pathIndex++;
+        var desired = targetSeek - transform.position;
+        desired.Normalize();
+        desired *= maxSpeed;
+        return CalculateSteering(desired);
+    }
+    public Vector3 CalculateSteering(Vector3 desired)
+    {
+        var steering = desired - velocity;
+        steering = Vector3.ClampMagnitude(steering, maxForce);
+        return steering;
     }
 
-    public void CalculatePathToRandomNode()
+    public void AddForce(Vector3 dir)
     {
-        var start = ManagerNode.Instance.GetClosestNode(transform.position);
-        var allNodes = ManagerNode.Instance.nodes;
+        velocity += dir;
+        velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
+    }
 
-        NodePathfinding randomTarget = null;
-        int attempts = 0;
+    public Vector3 ObstacleAvoidance()
+    {
+        Vector3 pos = transform.position;
+        Vector3 dir = transform.forward;
+        float dist = velocity.magnitude; //Que tan rapido estoy yendo
 
-        while ((randomTarget == null || randomTarget == start) && attempts < 10)
+        Debug.DrawLine(pos, pos + (dir * dist));
+
+        if (Physics.SphereCast(pos, 1, dir, out RaycastHit hit, dist, obstructionMask))
         {
-            randomTarget = allNodes[Random.Range(0, allNodes.Count)];
-            attempts++;
+            var obstacle = hit.transform; //Obtengo el transform del obstaculo q acaba de tocar
+            Vector3 dirToObject = obstacle.position - transform.position; //La direccion del obstaculo
+
+            float anguloEntre = Vector3.SignedAngle(transform.forward, dirToObject, Vector3.up); //(Dir. hacia donde voy, Dir. objeto, Dir. mis costados)
+
+            Vector3 desired = anguloEntre >= 0 ? -transform.right : transform.right; //Me meuvo para derecha o izquierda dependiendo donde esta el obstaculo
+            desired.Normalize();
+            desired *= maxSpeed;
+
+            return CalculateSteering(desired);
         }
 
-        path = ManagerNode.Instance.FindPath(start, randomTarget);
-        pathIndex = 0;
+        return Vector3.zero;
     }
+
     #endregion
 
     #region takedamage
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        if (currentHealth > 0 && currentHealth <= (maxHealth/3))
+        if (currentHealth > 0 && currentHealth <= (maxHealth / 3))
         {
             WasHit = true;
         }
@@ -356,7 +307,7 @@ public class E_Shooter : Entity
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, chaseDistance); 
+        Gizmos.DrawWireSphere(transform.position, chaseDistance);
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, checkRadius);
     }
@@ -366,8 +317,8 @@ public class E_Shooter : Entity
         AudioManager.instance.PlaySFXOneShot("ShooterDamage", 1f);
         yield return new WaitForSeconds(time);
         WasHit = false;
-    } 
-    
+    }
+
     public IEnumerator waittoendAnim(float time)
     {
         yield return new WaitForSeconds(time);

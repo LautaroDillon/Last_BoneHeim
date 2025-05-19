@@ -6,7 +6,9 @@ using EZCameraShake;
 
 public class PlayerMelee : MonoBehaviour
 {
-    PlayerMovement pm;
+    public PlayerMovement pm;
+    public PlayerWeapon pw;
+    public ThrowableObject throwable;
     private float initialSpeed;
     private float initialJump;
 
@@ -52,7 +54,6 @@ public class PlayerMelee : MonoBehaviour
 
     private void Start()
     {
-        pm = GetComponent<PlayerMovement>();
         initialJump = pm.jumpForce;
         initialSpeed = pm.walkSpeed;
     }
@@ -144,6 +145,7 @@ public class PlayerMelee : MonoBehaviour
                 AudioManager.instance.PlaySFXOneShot("MeleeImpact", 1f);
                 CameraShake.Instance.ShakeOnce(4f, 4f, 0.1f, 0.5f);
                 Debug.Log("Melee hit: " + hit.name);
+                pw.currentAmmo += 5;
                 break;
             }
         }
@@ -212,6 +214,7 @@ public class PlayerMelee : MonoBehaviour
             AudioManager.instance.PlaySFXOneShot("ArmRecovery", 1f);
 
             Destroy(currentThrowable);
+            pw.currentAmmo += 10;
             isThrowableAway = false;
             isRecalling = false;
             canMelee = true;

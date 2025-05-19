@@ -6,6 +6,7 @@ public class ThrowableObject : MonoBehaviour
 {
     public int damage = 20;
     public LayerMask damageableLayer;
+    public bool bulletReward = false;
     private bool hasHit = false;
 
     [Header("Particle")]
@@ -19,7 +20,7 @@ public class ThrowableObject : MonoBehaviour
         if (((1 << collision.gameObject.layer) & damageableLayer) != 0)
         {
             hasHit = true;
-
+            bulletReward = true;
             if (collision.gameObject.TryGetComponent(out IDamagable damageable))
             {
                 damageable.TakeDamage(damage);

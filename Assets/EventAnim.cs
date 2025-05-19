@@ -8,12 +8,14 @@ public class EventAnim : MonoBehaviour
 
     public GameObject organPoint;
     public GameObject organs;
+    public GameObject heartPosition;
     private bool isFollowing = false;
 
     private void Start()
     {
         instance = this;
         organs.SetActive(false);
+        heartPosition.SetActive(false);
     }
 
     public void HeartEventActive()
@@ -27,5 +29,6 @@ public class EventAnim : MonoBehaviour
         isFollowing = false;
         organs.transform.SetParent(null);
         organs.SetActive(false);
+        heartPosition.SetActive(true);
     }
 }

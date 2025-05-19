@@ -40,27 +40,28 @@ public class PlayerWeapon : MonoBehaviour
 
     [Header("Bullet Display")]
     public List<GameObject> bulletDisplay = new List<GameObject>();
+    public List<Transform> firePoints = new List<Transform>(); // Each corresponds to a bulletDisplay
 
     private bool isReloading = false;
     private float nextTimeToFire = 0f;
-    private bool isFiringHeld = false;
 
     void Start()
     {
         currentAmmo = magazineSize;
+        UpdateBulletDisplay();
+        UpdateAmmoUI();
     }
 
     public void Update()
     {
         if (PauseManager.isPaused)
             return;
-        else
-        {
-            Reloading();
-            Shooting();
-            UpdateAmmoUI();
-            HandleFireModeSwitching();
-        }
+
+        Reloading();
+        Shooting();
+        UpdateAmmoUI();
+        HandleFireModeSwitching();
+
         if (currentAmmo > magazineSize)
             currentAmmo = magazineSize;
     }
@@ -73,9 +74,7 @@ public class PlayerWeapon : MonoBehaviour
         if (currentAmmo <= 0 || Input.GetKeyDown(reloadButton))
         {
             StartCoroutine(Reload());
-            return;
         }
-
     }
 
     void Shooting()
@@ -105,6 +104,7 @@ public class PlayerWeapon : MonoBehaviour
                     Shoot();
                 }
                 break;
+
             case FireMode.Shotgun:
                 if (Input.GetKeyDown(KeyCode.Mouse0) && Time.time >= nextTimeToFire)
                 {
@@ -112,7 +112,6 @@ public class PlayerWeapon : MonoBehaviour
                     ShootShotgun();
                 }
                 break;
-                
         }
     }
 
@@ -127,28 +126,22 @@ public class PlayerWeapon : MonoBehaviour
         StartCoroutine(ResetIdle());
 
         Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 0f);
-
         Ray ray = Camera.main.ScreenPointToRay(screenCenter);
-        Vector3 targetPoint;
-
-        if (Physics.Raycast(ray, out RaycastHit hit))
-        {
-            targetPoint = hit.point;
-        }
-        else
-        {
-            targetPoint = ray.GetPoint(1000);
-        }
-
+        Vector3 targetPoint = Physics.Raycast(ray, out RaycastHit hit) ? hit.point : ray.GetPoint(1000);
         Vector3 aimDirection = (targetPoint - firePoint.position).normalized;
 
-        float maxAngle = 60f; // clamp angle from firePoint.forward
+        // Clamp angle
+        float maxAngle = 60f;
         if (Vector3.Angle(firePoint.forward, aimDirection) > maxAngle)
-        {
             aimDirection = firePoint.forward;
-        }
 
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(aimDirection));
+        // Choose fire point based on ammo index
+        int bulletIndex = currentAmmo - 1;
+        Transform selectedFirePoint = (bulletIndex >= 0 && bulletIndex < firePoints.Count)
+            ? firePoints[bulletIndex]
+            : firePoint;
+
+        GameObject bullet = Instantiate(bulletPrefab, selectedFirePoint.position, Quaternion.LookRotation(aimDirection));
 
         if (bullet.TryGetComponent(out PlayerBullet bulletScript))
             bulletScript.SetDamage(damage);
@@ -169,37 +162,33 @@ public class PlayerWeapon : MonoBehaviour
         PlayerMovement.instance.animator.SetTrigger("Atack");
         PlayerMovement.instance.animator.SetBool("Idle", false);
         StartCoroutine(ResetIdle());
-
         CameraShake.Instance.ShakeOnce(1.5f, 1.5f, 0.1f, 1f);
 
         Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 0f);
         Ray ray = Camera.main.ScreenPointToRay(screenCenter);
-        Vector3 targetPoint;
-
-        if (Physics.Raycast(ray, out RaycastHit hit))
-            targetPoint = hit.point;
-        else
-            targetPoint = ray.GetPoint(1000);
+        Vector3 targetPoint = Physics.Raycast(ray, out RaycastHit hit) ? hit.point : ray.GetPoint(1000);
 
         float baseDistance = Vector3.Distance(firePoint.position, targetPoint);
+        int bulletIndex = currentAmmo - 1;
+        Transform selectedFirePoint = (bulletIndex >= 0 && bulletIndex < firePoints.Count)
+            ? firePoints[bulletIndex]
+            : firePoint;
 
         for (int i = 0; i < pelletsPerShot; i++)
         {
-            // Calculate spread per pellet
-            Vector3 direction = (targetPoint - firePoint.position).normalized;
+            Vector3 direction = (targetPoint - selectedFirePoint.position).normalized;
             direction = Quaternion.Euler(
                 Random.Range(-spreadAngle, spreadAngle),
                 Random.Range(-spreadAngle, spreadAngle),
-                0
-            ) * direction;
+                0) * direction;
 
-            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(direction));
+            GameObject bullet = Instantiate(bulletPrefab, selectedFirePoint.position, Quaternion.LookRotation(direction));
 
             float falloffMultiplier = 1f;
             if (baseDistance > falloffStartDistance)
             {
-                float excessDistance = baseDistance - falloffStartDistance;
-                falloffMultiplier = Mathf.Lerp(1f, minDamageMultiplier, excessDistance / 20f); // 20f = falloff range
+                float excess = baseDistance - falloffStartDistance;
+                falloffMultiplier = Mathf.Lerp(1f, minDamageMultiplier, excess / 20f);
             }
 
             float pelletDamage = (shotgunDamage / pelletsPerShot) * falloffMultiplier;
@@ -241,7 +230,7 @@ public class PlayerWeapon : MonoBehaviour
 
     void ShowFireModeText(string message)
     {
-        StopAllCoroutines(); // Optional: avoids overlapping texts
+        StopAllCoroutines();
         StartCoroutine(DisplayFireModeText(message));
     }
 

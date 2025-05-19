@@ -26,6 +26,8 @@ public class PlayerMovement : MonoBehaviour
     public Camera mainCam;
     public PlayerCamera cam;
     public PlayerClimb playerClimb;
+    public GameObject lungsPosition;
+    public GameObject stomachPosition;
 
     [Header("Movement")]
     public float walkSpeed;
@@ -47,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
+    public float extraAirGravity = 10f;
     [SerializeField] private int jumpCount;
     bool readyToJump;
 
@@ -114,6 +117,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        stomachPosition.SetActive(false);
+        lungsPosition.SetActive(false);
         PlayerMovement.instance = this;
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
@@ -144,9 +149,11 @@ public class PlayerMovement : MonoBehaviour
             return;
         else
         {
-            Vector3 viewDirection = mainCam.transform.forward;
-            viewDirection.y = 0f; // Ignore vertical camera tilt
-            orientation.forward = viewDirection.normalized;
+            Vector3 camForward = mainCam.transform.forward;
+            camForward.y = 0f;
+
+            if (camForward.sqrMagnitude > 0.01f)
+                orientation.forward = camForward.normalized;
             // ground check
             grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
             sprintSpeed = walkSpeed;
@@ -346,10 +353,15 @@ public class PlayerMovement : MonoBehaviour
 
         // in air
         else if (!grounded)
+        {
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
 
+            // Add artificial gravity to simulate weight
+            rb.AddForce(Vector3.down * extraAirGravity, ForceMode.Force);
+        }
+
         // turn gravity off while on slope
-        if(wallrunning)
+        if (wallrunning)
             rb.useGravity = !OnSlope();
 
         if (OnSlope() && grounded && moveDirection == Vector3.zero)
@@ -519,13 +531,11 @@ public class PlayerMovement : MonoBehaviour
             animator.SetTrigger("Organ");
             //animator.SetBool("Idle", false);
             walkSpeed = 12;
-            jumpForce = 15;
+            jumpForce = 20;
             normalSpeed = true;
             AudioManager.instance.PlaySFXOneShot("Heartbeat", 1f);
             AudioManager.instance.PlayMusic("Background Music", 1f);
-            //animator.SetBool("Idle", true);
             Destroy(other.gameObject);
-
         }
 
         if (other.gameObject.tag == "Stomach")
@@ -535,6 +545,7 @@ public class PlayerMovement : MonoBehaviour
             canDoubleJump = true;
             AudioManager.instance.PlaySFXOneShot("Stomach", 1f);
             animator.SetBool("Idle", true);
+            lungsPosition.SetActive(true);
             Destroy(other.gameObject);
 
         }
@@ -545,6 +556,7 @@ public class PlayerMovement : MonoBehaviour
             canDash = true;
             AudioManager.instance.PlaySFXOneShot("Lungs", 1f);
             animator.SetBool("Idle", true);
+            stomachPosition.SetActive(true);
             Destroy(other.gameObject);
 
         }

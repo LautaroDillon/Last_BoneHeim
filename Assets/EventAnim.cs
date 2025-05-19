@@ -38,7 +38,7 @@ public class EventAnim : MonoBehaviour
     public void ShootingEvent()
     {
         Debug.LogWarning("Shooting Event");
-        playerWeapon.Shoot();
+        playerWeapon.FireBulletFromAnimation();
     }
 
 }

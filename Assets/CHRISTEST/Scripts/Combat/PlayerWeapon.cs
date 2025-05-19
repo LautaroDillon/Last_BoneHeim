@@ -33,6 +33,7 @@ public class PlayerWeapon : MonoBehaviour
     public GameObject bulletPrefab;
     public float bulletSpeed = 20f;
     public TextMeshProUGUI ammoText;
+    private Transform queuedFirePoint;
 
     [Header("UI References")]
     public TextMeshProUGUI fireModeText;
@@ -88,20 +89,7 @@ public class PlayerWeapon : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Mouse0) && Time.time >= nextTimeToFire)
                 {
                     nextTimeToFire = Time.time + fireRate;
-
-                    //Debug.LogError("Shooting with index: " + bulletIndex);
-
-                    CameraShake.Instance.ShakeOnce(1f, 1f, 0.1f, 1f);
-                    PlayerMovement.instance.animator.SetBool("Idle", false);
-                    StartCoroutine(ResetIdle());
-
-                    if (bulletIndex >= 0 && bulletIndex < fireAnimations.Count)
-                    {
-                        Debug.LogWarning("Shooting with index: " + bulletIndex);
-                        string animTrigger = fireAnimations[bulletIndex];
-                        PlayerMovement.instance.animator.SetTrigger(animTrigger);
-                    }
-                    //Shoot();
+                    Shoot();
                 }
                 break;
 
@@ -117,7 +105,7 @@ public class PlayerWeapon : MonoBehaviour
                 if (Input.GetKey(KeyCode.Mouse0) && Time.time >= nextTimeToFire)
                 {
                     nextTimeToFire = Time.time + fireRate;
-                    //Shoot();
+                    Shoot();
                 }
                 break;
 
@@ -136,43 +124,29 @@ public class PlayerWeapon : MonoBehaviour
         if (isReloading || currentAmmo <= 0)
             return;
 
+        CameraShake.Instance.ShakeOnce(1f, 1f, 0.1f, 1f);
+        PlayerMovement.instance.animator.SetBool("Idle", false);
+        StartCoroutine(ResetIdle());
 
+        int bulletIndex = currentAmmo - 1;
 
-         bulletIndex = currentAmmo - 1;
-        Transform selectedFirePoint = (bulletIndex >= 0 && bulletIndex < firePoints.Count)
+        // Set queued fire point to be used in the animation event
+        queuedFirePoint = (bulletIndex >= 0 && bulletIndex < firePoints.Count)
             ? firePoints[bulletIndex]
             : firePoint;
 
-
-
-        // --- FIX: Use firePoint.forward as base shooting direction ---
-        Vector3 shootDirection = selectedFirePoint.forward;
-
-        // Optional: Aim assist with max angle limit
-        Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 0f);
-        Ray ray = Camera.main.ScreenPointToRay(screenCenter);
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        // Trigger correct animation
+        if (bulletIndex >= 0 && bulletIndex < fireAnimations.Count)
         {
-            Vector3 aimDir = (hit.point - selectedFirePoint.position).normalized;
-            float maxAngle = 60f;
-            if (Vector3.Angle(selectedFirePoint.forward, aimDir) <= maxAngle)
-                shootDirection = aimDir;
+            string animTrigger = fireAnimations[bulletIndex];
+            PlayerMovement.instance.animator.SetTrigger(animTrigger);
         }
-
-        Debug.DrawRay(selectedFirePoint.position, shootDirection * 5f, Color.red, 2f);
-        Debug.DrawRay(selectedFirePoint.position, selectedFirePoint.forward * 5f, Color.blue, 2f);
-
-        GameObject bullet = Instantiate(bulletPrefab, selectedFirePoint.position, Quaternion.LookRotation(shootDirection));
-
-        if (bullet.TryGetComponent(out PlayerBullet bulletScript))
-            bulletScript.SetDamage(damage);
-
-        if (bullet.TryGetComponent(out Rigidbody rb))
-            rb.velocity = shootDirection * bulletSpeed;
 
         currentAmmo--;
         UpdateBulletDisplay();
-        Debug.Log("Shot fired! Ammo left: " + currentAmmo);
+        UpdateAmmoUI();
+
+        Debug.Log("Animation triggered. Waiting for animation event to fire bullet...");
     }
 
     void ShootShotgun()
@@ -204,20 +178,25 @@ public class PlayerWeapon : MonoBehaviour
 
         Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 0f);
         Ray ray = Camera.main.ScreenPointToRay(screenCenter);
-        Vector3 targetPoint = Physics.Raycast(ray, out RaycastHit hit) ? hit.point : ray.GetPoint(1000);
+        Vector3 targetPoint = ray.GetPoint(1000f);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            targetPoint = hit.point;
+        }
 
         float baseDistance = Vector3.Distance(selectedFirePoint.position, targetPoint);
 
         for (int i = 0; i < pelletsPerShot; i++)
         {
-            Vector3 direction = (targetPoint - selectedFirePoint.position).normalized;
-            direction = Quaternion.Euler(
+            Vector3 directionToCenter = (targetPoint - selectedFirePoint.position).normalized;
+
+            Vector3 spreadDirection = Quaternion.Euler(
                 Random.Range(-spreadAngle, spreadAngle),
                 Random.Range(-spreadAngle, spreadAngle),
                 0
-            ) * direction;
+            ) * directionToCenter;
 
-            GameObject bullet = Instantiate(bulletPrefab, selectedFirePoint.position, Quaternion.LookRotation(direction));
+            GameObject bullet = Instantiate(bulletPrefab, selectedFirePoint.position, Quaternion.LookRotation(spreadDirection));
 
             float falloffMultiplier = 1f;
             if (baseDistance > falloffStartDistance)
@@ -232,12 +211,49 @@ public class PlayerWeapon : MonoBehaviour
                 bulletScript.SetDamage(Mathf.RoundToInt(pelletDamage));
 
             if (bullet.TryGetComponent(out Rigidbody rb))
-                rb.velocity = direction * bulletSpeed;
+                rb.velocity = spreadDirection * bulletSpeed;
         }
 
         currentAmmo--;
         UpdateBulletDisplay();
         Debug.Log("Shotgun fired from finger " + bulletIndex + "! Ammo left: " + currentAmmo);
+    }
+
+    public void FireBulletFromAnimation()
+    {
+        if (queuedFirePoint == null)
+        {
+            Debug.LogWarning("No fire point queued when animation event triggered.");
+            return;
+        }
+
+        Transform selectedFirePoint = queuedFirePoint;
+        queuedFirePoint = null; // Clear after use
+
+        // Get world position of center screen point
+        Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 0f);
+        Ray ray = Camera.main.ScreenPointToRay(screenCenter);
+
+        Vector3 targetPoint = ray.GetPoint(1000f);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            targetPoint = hit.point;
+        }
+
+        // Calculate direction from fire point to screen center target point
+        Vector3 directionToCenter = (targetPoint - selectedFirePoint.position).normalized;
+
+        Debug.DrawRay(selectedFirePoint.position, directionToCenter * 5f, Color.red, 2f);
+
+        GameObject bullet = Instantiate(bulletPrefab, selectedFirePoint.position, Quaternion.LookRotation(directionToCenter));
+
+        if (bullet.TryGetComponent(out PlayerBullet bulletScript))
+            bulletScript.SetDamage(damage);
+
+        if (bullet.TryGetComponent(out Rigidbody rb))
+            rb.velocity = directionToCenter * bulletSpeed;
+
+        Debug.Log("Bullet fired from animation event!");
     }
 
     void UpdateAmmoUI()
@@ -295,7 +311,7 @@ public class PlayerWeapon : MonoBehaviour
             if (currentAmmo <= 0)
                 break;
 
-            //Shoot();
+            Shoot();
             yield return new WaitForSeconds(fireRate);
         }
     }

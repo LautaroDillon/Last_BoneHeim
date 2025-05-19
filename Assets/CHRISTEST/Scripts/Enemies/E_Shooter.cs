@@ -59,23 +59,42 @@ public class E_Shooter : Entity
     [Header("Zona")]
     public int zoneId;
 
+    [Header("Flank Logic")]
+    public float timeBeforeFlank = 5f;
+    public float flankTimer = 0f;
+    public Vector3 lastAttackPosition;
+
     #endregion
     public bool isincombatArena;
+    public bool canFlank;
 
+
+    public int groupIndex;
+    [HideInInspector]
+    public bool isLeader;
+
+    public Rigidbody rb;
 
     private void Awake()
     {
         maxHealth = EnemyFlyweight.Shooter.maxLife;
         currentHealth = maxHealth;
         numberOfBulletsOnDeath = Random.Range(1, 4);
+        rb = GetComponent<Rigidbody>();
         fsm = new StateMachine();
         if (instance == null)
             instance = this;
+
+
+
     }
 
     #region start
     private void Start()
     {
+        GameManager.instance.RegisterShooter(this);
+        isLeader = (groupIndex == 0);
+
         playerWeapon = FindObjectOfType<PlayerWeapon>();
 
         StartCoroutine(FOVRoutime());
@@ -84,10 +103,11 @@ public class E_Shooter : Entity
         var patrol = new Patrol( this, fsm);
         var chase = new Chase( this, fsm);
         var Search = new Serach_S( this, fsm);
-        var strafe = new Strafe( this, fsm);
+        //var strafe = new Strafe( this, fsm);
         var attack = new Atack( this, fsm);
         var death = new Death( this, fsm);
         var Onhit = new OnHit( this, fsm);
+        var flank = new Flank( this, fsm);
 
         // Definir las transiciones
         at(idle, patrol, () => !isIdle && !isDead);
@@ -95,11 +115,11 @@ public class E_Shooter : Entity
         at(patrol, chase, () => canSeePlayer && !playerInAttackRange && !isDead);
         at(patrol, attack, () => canSeePlayer && playerInAttackRange && !isDead);
         at(chase, attack, () => playerInAttackRange && !isDead);
-        at(attack, strafe, () => alreadyAttacked && playerInAttackRange && !isDead);
+        //at(attack, strafe, () => alreadyAttacked && playerInAttackRange && !isDead);
         at(attack, chase, () => !playerInAttackRange && !isDead);
         at(attack, Search, () => !playerInAttackRange && !canSeePlayer && !isDead);
-        at(strafe, chase, () => !playerInAttackRange && !isDead);
-        at(strafe, attack, () => !alreadyAttacked && !isDead);
+       // at(strafe, chase, () => !playerInAttackRange && !isDead);
+       // at(strafe, attack, () => !alreadyAttacked && !isDead);
         at(chase, Search, () => !canSeePlayer && !isDead);
         at(Search, patrol, () => true && !isDead); // Despues de buscar vuelve a patrullar
         any(death, () => currentHealth <= 0 && isDead); // Transición a Death desde cualquier estado
@@ -108,8 +128,9 @@ public class E_Shooter : Entity
         at(Onhit, patrol, () => !WasHit && !isDead);
         at(Onhit, chase, () => !WasHit && !isDead);
         at(Onhit, Search, () => !WasHit && !isDead);
-        at(Onhit, strafe, () => !WasHit && !isDead);
+       // at(Onhit, strafe, () => !WasHit && !isDead);
         at(Onhit, attack, () => !WasHit && !isDead); 
+        at(attack, flank, () => canFlank && !playerInAttackRange && !isDead); 
 
         fsm.SetState(idle);
     }

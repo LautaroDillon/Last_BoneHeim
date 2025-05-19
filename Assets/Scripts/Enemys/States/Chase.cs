@@ -5,10 +5,17 @@ using UnityEngine.AI;
 
 public class Chase : IState
 {
-
-
     E_Shooter _shooter;
     StateMachine _FSM;
+
+    private static readonly Vector3[] FormationOffsets = {
+        Vector3.zero,
+        new Vector3( 2f, 0,  1f),
+        new Vector3(-2f, 0,  1f),
+        new Vector3( 0f, 0, -2f),
+        new Vector3( 3f, 0,  1f),
+        new Vector3(-3f, 0,  1f)
+    };
 
     public Chase( E_Shooter shooter, StateMachine fSM)
     {
@@ -29,30 +36,52 @@ public class Chase : IState
     public void Tick()
     {
 
-        // 1) Calculamos el steering hacia el jugador
-        var steer = _shooter.Seek(_shooter.player.position)
-                  + _shooter.ObstacleAvoidance();
+        Vector3 targetPos;
 
-        _shooter.AddForce(steer);
-
-        // 2) Movemos según la velocity resultante
-        Vector3 movement = _shooter.velocity * Time.deltaTime;
-        _shooter.transform.position += movement;
-
-        // 3) Rotación suave hacia la dirección de movimiento real
-        if (movement.sqrMagnitude > 0.001f)
+        if (_shooter.isLeader)
         {
-            Vector3 flat = new Vector3(movement.x, 0, movement.z).normalized;
-            var look = Quaternion.LookRotation(flat);
-            _shooter.transform.rotation = Quaternion.Slerp(
-                _shooter.transform.rotation, look, Time.deltaTime * 8f);
+            // líder va directo al jugador
+            targetPos = _shooter.player.position;
+        }
+        else
+        {
+            // subordinado: sigue la posición del líder + su offset
+            var leader = GameManager.instance.GetGroupLeader(_shooter.zoneId);
+            if (leader == null)
+            {
+                targetPos = _shooter.player.position; // fallback
+            }
+            else
+            {
+                // Elegimos offset según su groupIndex
+                int idx = _shooter.groupIndex % FormationOffsets.Length;
+                Vector3 worldOffset = leader.transform.TransformDirection(FormationOffsets[idx]);
+                targetPos = leader.transform.position + worldOffset;
+            }
         }
 
-        // 4) Animaciones 2D blend-tree
-        Vector3 localDir = _shooter.transform.InverseTransformDirection(
-            _shooter.velocity.normalized);
-        _shooter.anim.SetFloat("Horizontal", localDir.x, 0.1f, Time.deltaTime);
-        _shooter.anim.SetFloat("Vertical", localDir.z, 0.1f, Time.deltaTime);
+        // Steering hacia targetPos
+        var steer = _shooter.Seek(targetPos)
+                  + _shooter.ObstacleAvoidance();
+        _shooter.AddForce(steer);
+
+        // Mover con física
+        Vector3 delta = _shooter.velocity * Time.deltaTime;
+        _shooter.rb.MovePosition(_shooter.rb.position + delta);
+
+        // Rotar hacia movimiento real
+        if (delta.sqrMagnitude > 0.001f)
+        {
+            Vector3 flat = new Vector3(delta.x, 0, delta.z).normalized;
+            Quaternion rot = Quaternion.LookRotation(flat);
+            _shooter.transform.rotation = Quaternion.Slerp(
+                _shooter.transform.rotation, rot, Time.deltaTime * 8f);
+        }
+
+        // Animaciones blend-tree
+        Vector3 local = _shooter.transform.InverseTransformDirection(delta.normalized);
+        _shooter.anim.SetFloat("Horizontal", local.x, 0.1f, Time.deltaTime);
+        _shooter.anim.SetFloat("Vertical", local.z, 0.1f, Time.deltaTime);
 
         // 5) Si entro en rango de ataque, cambio a AttackState
         float dist = Vector3.Distance(

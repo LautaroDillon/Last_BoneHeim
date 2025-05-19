@@ -182,23 +182,10 @@ public class PlayerMovement : MonoBehaviour
         Airtime();
 
         bool isIdle = Mathf.Approximately(horizontalInput, 0f) && Mathf.Approximately(verticalInput, 0f);
-        bool onStairs = false;
 
-        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, playerHeight * 0.5f + 0.3f))
+        if (grounded && isIdle)
         {
-            if (hit.collider.CompareTag("Stairs"))
-            {
-                onStairs = true;
-            }
-        }
-
-        if (grounded && isIdle && onStairs)
-        {
-            rb.drag = groundDrag * 100f;
-        }
-        else if (grounded && isIdle)
-        {
-            rb.drag = groundDrag;
+            rb.drag = groundDrag * 5f;
         }
         else if (state == MovementState.walking || state == MovementState.sprinting)
         {

@@ -53,12 +53,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private int jumpCount;
     bool readyToJump;
 
+    [Header("Coyote Time")]
+    public float coyoteTime = 0.2f;
+    private float coyoteTimeCounter;
+
     [Header("Airtime")]
     public Transform arms;
-
     public float maxAirTime = 1.0f;
     public float maxOffset = 0.2f;
-
     private float airTime = 0f;
     private Vector3 armsInitialPos;
 
@@ -147,43 +149,52 @@ public class PlayerMovement : MonoBehaviour
     {
         if (PauseManager.isPaused || PlayerHealth.hasDied)
             return;
+
+        Vector3 camForward = mainCam.transform.forward;
+        camForward.y = 0f;
+
+        if (camForward.sqrMagnitude > 0.01f)
+            orientation.forward = camForward.normalized;
+
+        // ground check
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+
+        sprintSpeed = walkSpeed;
+        crouchSpeed = walkSpeed + 4;
+
+        stepCoolDown -= Time.deltaTime;
+
+        if ((Input.GetAxis("Horizontal") != 0f || Input.GetAxis("Vertical") != 0f) && stepCoolDown < 0f && grounded && state == MovementState.walking)
+        {
+            PlayStepSound();
+            stepCoolDown = stepRate;
+        }
+
+        if (grounded)
+        {
+            currentSurface = GetSurfaceType();
+            jumpCount = 0;
+        }
+
+        MyInput();
+        SpeedControl();
+        StateHandler();
+        Airtime();
+
+        bool isIdle = Mathf.Approximately(horizontalInput, 0f) && Mathf.Approximately(verticalInput, 0f);
+
+        if (grounded && isIdle)
+        {
+            rb.drag = groundDrag * 5f;
+        }
+        else if (state == MovementState.walking || state == MovementState.sprinting)
+        {
+            rb.drag = groundDrag;
+        }
         else
         {
-            Vector3 camForward = mainCam.transform.forward;
-            camForward.y = 0f;
-
-            if (camForward.sqrMagnitude > 0.01f)
-                orientation.forward = camForward.normalized;
-            // ground check
-            grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
-            sprintSpeed = walkSpeed;
-            crouchSpeed = walkSpeed + 4;
-
-            stepCoolDown -= Time.deltaTime;
-
-            if ((Input.GetAxis("Horizontal") != 0f || Input.GetAxis("Vertical") != 0f) && stepCoolDown < 0f && grounded && state == MovementState.walking)
-            {
-                PlayStepSound();
-                stepCoolDown = stepRate;
-            }
-
-            if (grounded)
-            {
-                currentSurface = GetSurfaceType();
-                jumpCount = 0;
-            }
-
-            MyInput();
-            SpeedControl();
-            StateHandler();
-            Airtime();
-
-            if (state == MovementState.air || state == MovementState.dashing || state == MovementState.sliding)
-                rb.drag = 0;
-            else if (state == MovementState.walking || state == MovementState.sprinting)
-                rb.drag = groundDrag;
+            rb.drag = 0f;
         }
-        
     }
 
     private void FixedUpdate()
@@ -198,13 +209,11 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyDown(jumpKey) && readyToJump)
         {
-            if (grounded || (canDoubleJump && jumpCount < 1))
+            if (coyoteTimeCounter > 0f || (canDoubleJump && jumpCount < 1))
             {
                 readyToJump = false;
                 jumpCount++;
                 Jump();
-
-                
                 Invoke(nameof(ResetJump), jumpCooldown);
             }
         }
@@ -223,19 +232,16 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = Vector3.zero;
             desiredMoveSpeed = 0f;
         }
-
         else if (unlimited)
         {
             state = MovementState.unlimited;
             desiredMoveSpeed = 999f;
         }
-
         else if (vaulting)
         {
             state = MovementState.vaulting;
             desiredMoveSpeed = vaultSpeed;
         }
-
         else if (climbing)
         {
             state = MovementState.climbing;
@@ -251,14 +257,25 @@ public class PlayerMovement : MonoBehaviour
 
         if (sliding && grounded)
         {
-            state = MovementState.sliding;
-
+            // Prevent sliding on stairs by checking the tag
             if (OnSlope() && rb.velocity.y < 0.1f)
-                desiredMoveSpeed = slideSpeed;
+            {
+                if (slopeHit.collider.CompareTag("Stairs"))
+                {
+                    state = MovementState.walking;
+                    desiredMoveSpeed = walkSpeed;
+                }
+                else
+                {
+                    state = MovementState.sliding;
+                    desiredMoveSpeed = slideSpeed;
+                }
+            }
             else
+            {
                 desiredMoveSpeed = sprintSpeed;
+            }
         }
-
         else if (grounded)
         {
             if (lastState == MovementState.air)
@@ -270,7 +287,6 @@ public class PlayerMovement : MonoBehaviour
             state = MovementState.walking;
             desiredMoveSpeed = walkSpeed;
         }
-
         else
         {
             state = MovementState.air;
@@ -296,7 +312,6 @@ public class PlayerMovement : MonoBehaviour
         }
 
         lastDesiredMoveSpeed = desiredMoveSpeed;
-
         lastState = state;
     }
 
@@ -338,29 +353,36 @@ public class PlayerMovement : MonoBehaviour
         // calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
-        // on slope
         if (OnSlope() && !exitingSlope)
         {
             rb.AddForce(GetSlopeMoveDirection(moveDirection) * moveSpeed * 20f, ForceMode.Force);
 
             if (rb.velocity.y > 0)
                 rb.AddForce(Vector3.down * 80f, ForceMode.Force);
-        }
 
-        // on ground
+            // Prevent sliding when no input
+            if (moveDirection.magnitude < 0.1f)
+            {
+                rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+            }
+        }
         else if (grounded)
+        {
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
 
-        // in air
+            // Prevent sliding when no input on flat ground
+            if (moveDirection.magnitude < 0.1f)
+            {
+                rb.velocity = new Vector3(0, rb.velocity.y, 0);
+            }
+        }
         else if (!grounded)
         {
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
-
-            // Add artificial gravity to simulate weight
             rb.AddForce(Vector3.down * extraAirGravity, ForceMode.Force);
         }
 
-        // turn gravity off while on slope
+        // turn gravity off while on slope and wallrunning
         if (wallrunning)
             rb.useGravity = !OnSlope();
 
@@ -423,7 +445,7 @@ public class PlayerMovement : MonoBehaviour
 
         // reset y velocity
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
+        coyoteTimeCounter = 0f;
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
 
         PlayJumpSound();
@@ -439,10 +461,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
         {
+            if (slopeHit.collider.CompareTag("Stairs"))
+                return false;
+
             float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
             return angle < maxSlopeAngle && angle != 0;
         }
-
         return false;
     }
 

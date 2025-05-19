@@ -104,11 +104,12 @@ public class E_Shooter : Entity
         var patrol = new Patrol( this, fsm);
         var chase = new Chase( this, fsm);
         var Search = new Serach_S( this, fsm);
-        var strafe = new Strafe( this, fsm);
+        //var strafe = new Strafe( this, fsm);
         var attack = new Atack( this, fsm);
         var death = new Death( this, fsm);
         var Onhit = new OnHit( this, fsm);
-
+        var flank = new Flank( this, fsm);
+        var microFlank = new MicroFlank( this, fsm);
 
         // Definir las transiciones
         at(idle, patrol, () => !isIdle && !isDead);
@@ -116,13 +117,12 @@ public class E_Shooter : Entity
         at(patrol, chase, () => canSeePlayer && !playerInAttackRange && !isDead);
         at(patrol, attack, () => canSeePlayer && playerInAttackRange && !isDead);
         at(chase, attack, () => playerInAttackRange && !isDead);
+        //at(attack, strafe, () => alreadyAttacked && playerInAttackRange && !isDead);
         at(attack, chase, () => !playerInAttackRange && !isDead);
         at(attack, Search, () => !playerInAttackRange && !canSeePlayer && !isDead);
+       // at(strafe, chase, () => !playerInAttackRange && !isDead);
+       // at(strafe, attack, () => !alreadyAttacked && !isDead);
         at(chase, Search, () => !canSeePlayer && !isDead);
-        at(Onhit, strafe, () => !WasHit && !isDead);
-        at(strafe, chase, () => !playerInAttackRange && !isDead);
-        at(attack, strafe, () => alreadyAttacked && playerInAttackRange && !isDead);
-        at(strafe, attack, () => !alreadyAttacked && !isDead);
         at(Search, patrol, () => true && !isDead); // Despues de buscar vuelve a patrullar
         any(death, () => currentHealth <= 0 && isDead); // Transición a Death desde cualquier estado
         any(Onhit, () => WasHit && !isDead); // Transición a hit desde cualquier estado
@@ -130,7 +130,14 @@ public class E_Shooter : Entity
         at(Onhit, patrol, () => !WasHit && !isDead);
         at(Onhit, chase, () => !WasHit && !isDead);
         at(Onhit, Search, () => !WasHit && !isDead);
-        at(Onhit, attack, () => !WasHit && !isDead);
+       // at(Onhit, strafe, () => !WasHit && !isDead);
+        at(Onhit, attack, () => !WasHit && !isDead); 
+        at(attack, flank, () => canFlank && !playerInAttackRange && !isDead);
+        at(attack, microFlank, () => playerInAttackRange &&
+                                     !alreadyAttacked &&
+                                     Time.time - lastAttackTime > 2f);
+        at(microFlank, chase, () => path == null || pathIndex >= path.Count);
+
         fsm.SetState(idle);
     }
 
@@ -193,12 +200,12 @@ public class E_Shooter : Entity
 
     #region Movement
     public Vector3 Seek(Vector3 targetSeek)
-    {
-         var desired = targetSeek - transform.position;
-         desired.Normalize();
-         desired *= maxSpeed;
-         return CalculateSteering(desired);
-    }
+      {
+          var desired = targetSeek - transform.position;
+          desired.Normalize();
+          desired *= maxSpeed;
+          return CalculateSteering(desired);
+      }
       public Vector3 CalculateSteering(Vector3 desired)
       {
           var steering = desired - velocity;
@@ -209,6 +216,7 @@ public class E_Shooter : Entity
       public void AddForce(Vector3 dir)
       {
           velocity += dir;
+          //velocity.y = transform.position.y; //Mantengo mi altura
           velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
       }
 
@@ -237,6 +245,47 @@ public class E_Shooter : Entity
           return Vector3.zero;
       }
       
+
+
+    public void MoveAlongPath()
+    {
+        if (path == null || pathIndex >= path.Count) return;
+
+        NodePathfinding targetNode = path[pathIndex];
+        Vector3 direction = (targetNode.transform.position - transform.position).normalized;
+        Vector3 move = direction * moveSpeed * Time.deltaTime;
+
+        transform.position += move;
+
+        // Rotación suave hacia el siguiente nodo
+        if (direction != Vector3.zero)
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 5f * Time.deltaTime);
+
+        // Animaciones
+        anim.SetFloat("Horizontal", direction.x, 0.2f, Time.deltaTime);
+        anim.SetFloat("Vertical", direction.z, 0.2f, Time.deltaTime);
+
+        if (Vector3.Distance(transform.position, targetNode.transform.position) < nodeReachDistance)
+            pathIndex++;
+    }
+
+    public void CalculatePathToRandomNode()
+    {
+        var start = ManagerNode.Instance.GetClosestNode(transform.position);
+        var allNodes = ManagerNode.Instance.nodes;
+
+        NodePathfinding randomTarget = null;
+        int attempts = 0;
+
+        while ((randomTarget == null || randomTarget == start) && attempts < 10)
+        {
+            randomTarget = allNodes[Random.Range(0, allNodes.Count)];
+            attempts++;
+        }
+
+        path = ManagerNode.Instance.FindPath(start, randomTarget);
+        pathIndex = 0;
+    }
     #endregion
 
     #region takedamage

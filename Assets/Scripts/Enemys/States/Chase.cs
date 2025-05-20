@@ -26,50 +26,25 @@ public class Chase : IState
 
     public void OnEnter()
     {
-       // Debug.Log($"[{_shooter.name}] Enter Chase");
-        // Limpiamos cualquier velocidad residual
         _shooter.velocity = Vector3.zero;
-        // Aseguramos que no esté marcado como atacado
         _shooter.alreadyAttacked = false;
     }
 
     public void Tick()
     {
 
-        Vector3 targetPos;
+        // 1) Siempre sigue al jugador directamente
+        Vector3 targetPos = _shooter.player.position;
 
-        if (_shooter.isLeader)
-        {
-            // líder va directo al jugador
-            targetPos = _shooter.player.position;
-        }
-        else
-        {
-            // subordinado: sigue la posición del líder + su offset
-            var leader = GameManager.instance.GetGroupLeader(_shooter.zoneId);
-            if (leader == null)
-            {
-                targetPos = _shooter.player.position; // fallback
-            }
-            else
-            {
-                // Elegimos offset según su groupIndex
-                int idx = _shooter.groupIndex % FormationOffsets.Length;
-                Vector3 worldOffset = leader.transform.TransformDirection(FormationOffsets[idx]);
-                targetPos = leader.transform.position + worldOffset;
-            }
-        }
-
-        // Steering hacia targetPos
-        var steer = _shooter.Seek(targetPos)
-                  + _shooter.ObstacleAvoidance();
+        // 2) Calcular dirección usando Seek y evitar obstáculos
+        Vector3 steer = _shooter.Seek(targetPos) + _shooter.ObstacleAvoidance();
         _shooter.AddForce(steer);
 
-        // Mover con física
+        // 3) Movimiento físico
         Vector3 delta = _shooter.velocity * Time.deltaTime;
         _shooter.rb.MovePosition(_shooter.rb.position + delta);
 
-        // Rotar hacia movimiento real
+        // 4) Rotación y animación
         if (delta.sqrMagnitude > 0.001f)
         {
             Vector3 flat = new Vector3(delta.x, 0, delta.z).normalized;
@@ -78,25 +53,21 @@ public class Chase : IState
                 _shooter.transform.rotation, rot, Time.deltaTime * 8f);
         }
 
-        // Animaciones blend-tree
         Vector3 local = _shooter.transform.InverseTransformDirection(delta.normalized);
         _shooter.anim.SetFloat("Horizontal", local.x, 0.1f, Time.deltaTime);
         _shooter.anim.SetFloat("Vertical", local.z, 0.1f, Time.deltaTime);
 
-        // 5) Si entro en rango de ataque, cambio a AttackState
-        float dist = Vector3.Distance(
-            _shooter.transform.position,
-            _shooter.player.position);
+        // 5) Si está en rango de ataque, marcarlo
+        float dist = Vector3.Distance(_shooter.transform.position, _shooter.player.position);
         if (dist <= _shooter.attackRange)
         {
-           _shooter.playerInAttackRange = true;
+            _shooter.playerInAttackRange = true;
         }
     }
 
     public void OnExit()
     {
-        //Debug.Log($"[{_shooter.name}] Exit Chase");
-        // Frenar animación de correr
+        _shooter.lastposition = GameManager.instance.thisIsPlayer.position;
         _shooter.anim.SetFloat("Horizontal", 0f);
         _shooter.anim.SetFloat("Vertical", 0f);
     }

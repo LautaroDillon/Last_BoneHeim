@@ -29,56 +29,43 @@ public class Serach_S : IState
         _searchTimer = 0f;
         _waitTimer = 0f;
         _movingToNewPoint = false;
+        _targetSearchPoint = _shooter.lastposition;
     }
 
     public void Tick()
     {
 
-       /* var animdir = _shooter.transform.InverseTransformDirection(dir);
-        var isfacingmovedirection = Vector3.Dot(dir, _shooter.transform.forward) > 0.5f;*/
-
-       /* _shooter.anim.SetFloat("Horizontal", isfacingmovedirection ? animdir.x : 0, .5f, Time.deltaTime);
-        _shooter.anim.SetFloat("Vertical", isfacingmovedirection ? animdir.z : 0, .5f, Time.deltaTime);*/
-
-        _searchTimer += Time.deltaTime;
-
-        // Si está atacando, se queda quieto
-        if (_shooter.playerInAttackRange)
+        if (_movingToNewPoint)
         {
-            return;
-        }
+            Vector3 dir = (_targetSearchPoint - _shooter.transform.position).normalized;
+            Vector3 move = dir * _shooter.moveSpeed * Time.deltaTime;
 
-        if (!_movingToNewPoint)
-        {
-            _waitTimer += Time.deltaTime;
+            _shooter.rb.MovePosition(_shooter.rb.position + move);
 
-            if (_waitTimer >= _waitDuration)
+            // Animación y rotación
+            if (move.sqrMagnitude > 0.001f)
             {
-                _targetSearchPoint = GetRandomSearchPoint();
-                _movingToNewPoint = true;
-                _waitTimer = 0f;
+                Quaternion rot = Quaternion.LookRotation(dir);
+                _shooter.transform.rotation = Quaternion.Slerp(
+                    _shooter.transform.rotation, rot, Time.deltaTime * 5f
+                );
+            }
+
+            Vector3 localDir = _shooter.transform.InverseTransformDirection(dir);
+            _shooter.anim.SetFloat("Horizontal", localDir.x, 0.1f, Time.deltaTime);
+            _shooter.anim.SetFloat("Vertical", localDir.z, 0.1f, Time.deltaTime);
+
+            if (Vector3.Distance(_shooter.transform.position, _targetSearchPoint) < _shooter.nodeReachDistance)
+            {
+                _movingToNewPoint = false;
+                _shooter.lastposition = Vector3.zero;
             }
         }
     }
 
     public void OnExit()
     {
+        _shooter.lastposition = new Vector3(0,0,0);
         Debug.Log("Search OnExit");
-    }
-
-    private Vector3 GetRandomSearchPoint()
-    {
-        float radius = 5f;
-        Vector3 randomDirection = Random.insideUnitSphere * radius;
-        randomDirection.y = 0;
-        Vector3 candidate = _shooter.player.position + randomDirection;
-
-        if (NavMesh.SamplePosition(candidate, out NavMeshHit hit, radius, NavMesh.AllAreas))
-        {
-            float distToPlayer = Vector3.Distance(hit.position, _shooter.player.position);
-            if (distToPlayer <= _shooter.attackRange)
-                return hit.position;
-        }
-        return _shooter.transform.position;
     }
 }

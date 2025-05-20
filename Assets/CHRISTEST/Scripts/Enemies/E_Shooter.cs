@@ -34,6 +34,7 @@ public class E_Shooter : Entity
     public bool isIdle = true;
     public bool WasHit;
     public bool isPatrolling;
+    public bool otherSeenPlayer;
     public float muchit;
 
     [Header("Player Detection")]
@@ -59,20 +60,14 @@ public class E_Shooter : Entity
     [Header("Zona")]
     public int zoneId;
 
-    [Header("Flank Logic")]
-    public float timeBeforeFlank = 5f;
-    public float flankTimer = 0f;
-    public Vector3 lastAttackPosition;
+    [Header("search")]
+    public Vector3 lastposition;
 
     #endregion
     public bool isincombatArena;
-    public bool canFlank;
-    public bool finishedMicroFlank;
     public float lastAttackTime;
 
     public int groupIndex;
-    [HideInInspector]
-    public bool isLeader;
 
     public Rigidbody rb;
 
@@ -85,16 +80,12 @@ public class E_Shooter : Entity
         fsm = new StateMachine();
         if (instance == null)
             instance = this;
-
-
-
     }
 
     #region start
     private void Start()
     {
         GameManager.instance.RegisterShooter(this);
-        isLeader = (groupIndex == 0);
 
         playerWeapon = FindObjectOfType<PlayerWeapon>();
 
@@ -113,24 +104,26 @@ public class E_Shooter : Entity
         // Definir las transiciones
         at(idle, patrol, () => !isIdle && !isDead);
         at(patrol, idle, () => !isPatrolling && !isDead);
-        at(patrol, chase, () => canSeePlayer && !playerInAttackRange && !isDead);
+        at(patrol, chase, () => canSeePlayer && !playerInAttackRange && !isDead || otherSeenPlayer && !playerInAttackRange && !isDead && lastposition == Vector3.zero);
         at(patrol, attack, () => canSeePlayer && playerInAttackRange && !isDead);
         at(chase, attack, () => playerInAttackRange && !isDead);
         at(attack, chase, () => !playerInAttackRange && !isDead);
-        at(attack, Search, () => !playerInAttackRange && !canSeePlayer && !isDead);
-        at(chase, Search, () => !canSeePlayer && !isDead);
+        at(attack, Search, () => !canSeePlayer && !isDead && lastposition != Vector3.zero);
+        at(chase, Search, () => !canSeePlayer && !isDead && lastposition != Vector3.zero);
         at(Onhit, strafe, () => !WasHit && !isDead);
         at(strafe, chase, () => !playerInAttackRange && !isDead);
         at(attack, strafe, () => alreadyAttacked && playerInAttackRange && !isDead);
         at(strafe, attack, () => !alreadyAttacked && !isDead);
-        at(Search, patrol, () => true && !isDead); // Despues de buscar vuelve a patrullar
-        any(death, () => currentHealth <= 0 && isDead); // Transición a Death desde cualquier estado
-        any(Onhit, () => WasHit && !isDead); // Transición a hit desde cualquier estado
-        at(Onhit, idle, () => !WasHit && !isDead); // Transición a idle desde hit
+        at(Search, patrol, () => true && !isDead);       // Despues de buscar vuelve a patrullar
+        at(Onhit, idle, () => !WasHit && !isDead);       // Transición a idle desde hit
         at(Onhit, patrol, () => !WasHit && !isDead);
         at(Onhit, chase, () => !WasHit && !isDead);
         at(Onhit, Search, () => !WasHit && !isDead);
         at(Onhit, attack, () => !WasHit && !isDead);
+
+        any(death, () => currentHealth <= 0 && isDead); // Transición a Death desde cualquier estado
+        any(Onhit, () => WasHit && !isDead);            // Transición a hit desde cualquier estado
+
         fsm.SetState(idle);
     }
 
@@ -170,7 +163,8 @@ public class E_Shooter : Entity
 
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
                 {
-
+                    lastposition = player.position;
+                    GameManager.instance.oneseeplayer(zoneId);
                     return true;
                 }
                 else

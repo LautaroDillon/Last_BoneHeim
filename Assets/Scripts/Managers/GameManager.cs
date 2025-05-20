@@ -65,17 +65,16 @@ public class GameManager : MonoBehaviour
         list.Add(shooter);
     }
 
-    public E_Shooter GetGroupLeader(int groupId)
+    public void oneseeplayer(int id)
     {
-        if (_groups.TryGetValue(groupId, out var list) && list.Count > 0)
-            return list[0];                  // el primero es el leader
-        return null;
+        if (_groups.TryGetValue(id, out List<E_Shooter> shooters))
+        {
+            foreach (var shooter in shooters)
+            {
+                shooter.canSeePlayer = true; // o cualquier otro bool
+                shooter.otherSeenPlayer = true; // o cualquier otro bool
+            }
+        }
     }
 
-    public List<E_Shooter> GetGroup(int groupId)
-    {
-        if (_groups.TryGetValue(groupId, out var list))
-            return list;
-        return new List<E_Shooter>();
-    }
 }

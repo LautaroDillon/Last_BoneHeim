@@ -133,12 +133,10 @@ public class PlayerMovement : MonoBehaviour
 
         if (normalSpeed == true)
         {
-            jumpForce = 15;
             walkSpeed = 12;
         }
         else
         {
-            jumpForce = 0;
             walkSpeed = 3;
         }
 
@@ -185,7 +183,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (grounded && isIdle)
         {
-            rb.drag = groundDrag * 5f;
+            //rb.drag = groundDrag * 5f;
         }
         else if (state == MovementState.walking || state == MovementState.sprinting)
         {

@@ -13,6 +13,7 @@ public class EventAnim : MonoBehaviour
     private bool isFollowing = false;
 
     private PlayerWeapon playerWeapon;
+    private PlayerMovement playerMovement;
 
     private void Awake()
     {
@@ -20,6 +21,7 @@ public class EventAnim : MonoBehaviour
         organs.SetActive(false);
         heartPosition.SetActive(false);
         playerWeapon = FindObjectOfType<PlayerWeapon>();
+        playerMovement = FindObjectOfType<PlayerMovement>();
     }
 
     public void HeartEventActive()

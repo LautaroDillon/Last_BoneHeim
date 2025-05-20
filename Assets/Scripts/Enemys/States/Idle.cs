@@ -24,6 +24,7 @@ public class Idle : IState
         Debug.Log("Idle OnEnter");
         _Shooter.anim.SetBool("Idle", true);
         _Shooter.isIdle = true;
+        _idleTimer = 0f; // Reiniciar el temporizador
     }
 
     public void Tick()

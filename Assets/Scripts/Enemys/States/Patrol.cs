@@ -61,16 +61,7 @@ public class Patrol : IState
         }
         else
         {
-            // Fin de ruta o sin ruta: idle anim, cuenta tiempo de espera
-            _shooter.anim.SetFloat("Horizontal", 0f, 0.1f, Time.deltaTime);
-            _shooter.anim.SetFloat("Vertical", 0f, 0.1f, Time.deltaTime);
-
-            _waitTimer += Time.deltaTime;
-            if (_waitTimer >= _waitDuration)
-            {
-                _waitTimer = 0f;
-                ChooseRandomNodeInZone();
-            }
+            _shooter.isPatrolling = false;
         }
     }
 
@@ -78,8 +69,8 @@ public class Patrol : IState
     {
         //Debug.Log($"[{_shooter.name}] Patrol OnExit");
         // Frenar anim y movimiento
-        _shooter.rb.velocity = Vector3.zero;
         _shooter.isPatrolling = false;
+        _shooter.rb.velocity = Vector3.zero;
         _shooter.anim.SetFloat("Horizontal", 0f);
         _shooter.anim.SetFloat("Vertical", 0f);
     }

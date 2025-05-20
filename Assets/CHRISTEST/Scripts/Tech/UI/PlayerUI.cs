@@ -7,16 +7,19 @@ public class PlayerUI : MonoBehaviour
 {
     [Header("Organs")]
     public PlayerMovement pm;
-    public Image heart;
-    public Image lungs;
+    public GameObject heart;
+    public GameObject lungs;
+    public GameObject stomach;
 
     private bool lastNormalSpeed;
     private bool lastCanDash;
+    private bool lastCanDoubleJump;
 
     private void Awake()
     {
         heart.gameObject.SetActive(false);
         lungs.gameObject.SetActive(false);
+        stomach.gameObject.SetActive(false);
 
         lastNormalSpeed = pm.normalSpeed;
         lastCanDash = pm.canDash;
@@ -26,11 +29,12 @@ public class PlayerUI : MonoBehaviour
 
     private void Update()
     {
-        if (pm.normalSpeed != lastNormalSpeed || pm.canDash != lastCanDash)
+        if (pm.normalSpeed != lastNormalSpeed || pm.canDash != lastCanDash || pm.canDoubleJump != lastCanDoubleJump)
         {
             UIUpdate();
             lastNormalSpeed = pm.normalSpeed;
             lastCanDash = pm.canDash;
+            lastCanDoubleJump = pm.canDoubleJump;
         }
     }
 
@@ -38,5 +42,6 @@ public class PlayerUI : MonoBehaviour
     {
         heart.gameObject.SetActive(pm.normalSpeed);
         lungs.gameObject.SetActive(pm.canDash);
+        stomach.gameObject.SetActive(pm.canDoubleJump);
     }
 }

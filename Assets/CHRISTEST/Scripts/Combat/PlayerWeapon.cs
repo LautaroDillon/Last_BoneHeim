@@ -139,7 +139,6 @@ public class PlayerWeapon : MonoBehaviour
     {
         if (isReloading || currentAmmo <= 0)
             return;
-
         CameraShake.Instance.ShakeOnce(1f, 1f, 0.1f, 1f);
         PlayerMovement.instance.animator.SetBool("Idle", false);
         StartCoroutine(ResetIdle());

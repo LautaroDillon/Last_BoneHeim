@@ -4,36 +4,47 @@ using UnityEngine;
 
 public class GunKickback : MonoBehaviour
 {
-    public Vector3 kickbackAmount = new Vector3(-0.1f, 0.0f, 0.0f);
-    public float returnSpeed = 10f;
+    [Header("Sway Settings")]
+    public float swayAmount = 0.05f;
+    public float swaySmoothness = 4f;
 
-    private Vector3 originalPosition;
-    private Quaternion originalRotation;
+    [Header("Kickback Settings")]
+    public Vector3 kickbackAmount = new Vector3(0f, 0f, -0.2f);
+    public float kickbackRecoverySpeed = 8f;
 
-    private Vector3 currentOffset;
-    private bool isKickedBack = false;
+    private Vector3 initialLocalPos;
+    private Vector3 currentKickbackOffset;
+    private Vector2 mouseInput;
 
     void Start()
     {
-        originalPosition = transform.localPosition;
-        originalRotation = transform.localRotation;
+        initialLocalPos = transform.localPosition;
     }
 
     void Update()
     {
-        if (isKickedBack)
-        {
-            transform.localPosition = Vector3.Lerp(transform.localPosition, originalPosition, Time.deltaTime * returnSpeed);
-            transform.localRotation = Quaternion.Lerp(transform.localRotation, originalRotation, Time.deltaTime * returnSpeed);
+        HandleSway();
+        RecoverKickback();
+    }
 
-            if (Vector3.Distance(transform.localPosition, originalPosition) < 0.001f)
-                isKickedBack = false;
-        }
+    void HandleSway()
+    {
+        mouseInput.x = Input.GetAxis("Mouse X");
+        mouseInput.y = Input.GetAxis("Mouse Y");
+
+        Vector3 swayOffset = new Vector3(-mouseInput.x, -mouseInput.y, 0f) * swayAmount;
+        Vector3 targetPos = initialLocalPos + swayOffset + currentKickbackOffset;
+
+        transform.localPosition = Vector3.Lerp(transform.localPosition, targetPos, Time.deltaTime * swaySmoothness);
+    }
+
+    void RecoverKickback()
+    {
+        currentKickbackOffset = Vector3.Lerp(currentKickbackOffset, Vector3.zero, Time.deltaTime * kickbackRecoverySpeed);
     }
 
     public void ApplyKickback()
     {
-        transform.localPosition += kickbackAmount;
-        isKickedBack = true;
+        currentKickbackOffset += kickbackAmount;
     }
 }

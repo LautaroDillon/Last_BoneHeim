@@ -19,7 +19,7 @@ public class Patrol : IState
     public void OnEnter()
     {
         _shooter.isPatrolling = true;
-       // Debug.Log($"[{_shooter.name}] Patrol OnEnter (zona {_shooter.zoneId})");
+        Debug.Log($"[{_shooter.name}] Patrol OnEnter (zona {_shooter.zoneId})");
         _waitTimer = 0f;
         ChooseRandomNodeInZone();
     }
@@ -50,7 +50,7 @@ public class Patrol : IState
             _shooter.anim.SetFloat("Vertical", local.z, 0.1f, Time.deltaTime);
 
             // Aplicar movimiento
-            _shooter.transform.position += movement;
+            //_shooter.transform.position += movement;
 
             // Avanzar al siguiente nodo si llegamos
             if (Vector3.Distance(_shooter.transform.position, node.transform.position)
@@ -81,7 +81,6 @@ public class Patrol : IState
         var zoneNodes = ManagerNode.Instance.GetNodesInZone(_shooter.zoneId);
         if (zoneNodes == null || zoneNodes.Count == 0)
         {
-            //Debug.LogError($"[PatrolState] Zona {_shooter.zoneId} sin nodos registrados.");
             return;
         }
 
@@ -89,7 +88,6 @@ public class Patrol : IState
         var start = ManagerNode.Instance.GetClosestNode(_shooter.transform.position, _shooter.zoneId);
         if (start == null)
         {
-           // Debug.LogError($"[PatrolState] No encontré nodo de inicio en zona {_shooter.zoneId}.");
             return;
         }
 
@@ -101,8 +99,6 @@ public class Patrol : IState
             dest = zoneNodes[Random.Range(0, zoneNodes.Count)];
             tries++;
         }
-
-       // Debug.Log($"[{_shooter.name}] Patrullando nodo {start.name} → {dest.name}");
 
         // 4) Calcular A y asignar ruta
         _shooter.path = ManagerNode.Instance.FindPath(start, dest);

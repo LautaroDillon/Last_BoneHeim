@@ -26,6 +26,7 @@ public class Chase : IState
 
     public void OnEnter()
     {
+        Debug.Log("Chase OnEnter");
         _shooter.velocity = Vector3.zero;
         _shooter.alreadyAttacked = false;
     }
@@ -67,6 +68,7 @@ public class Chase : IState
 
     public void OnExit()
     {
+        Debug.Log("Chase OnExit");
         _shooter.lastposition = GameManager.instance.thisIsPlayer.position;
         _shooter.anim.SetFloat("Horizontal", 0f);
         _shooter.anim.SetFloat("Vertical", 0f);

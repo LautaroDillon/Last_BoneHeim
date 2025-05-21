@@ -104,25 +104,25 @@ public class E_Shooter : Entity
         // Definir las transiciones
         at(idle, patrol, () => !isIdle && !isDead);
         at(patrol, idle, () => !isPatrolling && !isDead);
-        at(patrol, chase, () => canSeePlayer && !playerInAttackRange && !isDead || otherSeenPlayer && !playerInAttackRange && !isDead && lastposition == Vector3.zero);
+        at(patrol, chase, () => canSeePlayer && !playerInAttackRange && !isDead || otherSeenPlayer && !playerInAttackRange && !isDead);
         at(patrol, attack, () => canSeePlayer && playerInAttackRange && !isDead);
         at(chase, attack, () => playerInAttackRange && !isDead);
-        at(attack, chase, () => !playerInAttackRange && !isDead);
-        at(attack, Search, () => !canSeePlayer && !isDead && lastposition != Vector3.zero);
-        at(chase, Search, () => !canSeePlayer && !isDead && lastposition != Vector3.zero);
+        at(attack, chase, () => !playerInAttackRange && !isDead && canSeePlayer && otherSeenPlayer);
+        at(attack, Search, () => !canSeePlayer && !isDead && lastposition != Vector3.zero && otherSeenPlayer);
+        at(chase, Search, () => !canSeePlayer && !isDead && lastposition != Vector3.zero && otherSeenPlayer);
         at(Onhit, strafe, () => !WasHit && !isDead);
-        at(strafe, chase, () => !playerInAttackRange && !isDead);
+        at(strafe, chase, () => !playerInAttackRange && !isDead && canSeePlayer && otherSeenPlayer);
         at(attack, strafe, () => alreadyAttacked && playerInAttackRange && !isDead);
         at(strafe, attack, () => !alreadyAttacked && !isDead);
-        at(Search, patrol, () => true && !isDead);       // Despues de buscar vuelve a patrullar
+        at(Search, patrol, () => isPatrolling && !isDead);       // Despues de buscar vuelve a patrullar
         at(Onhit, idle, () => !WasHit && !isDead);       // Transición a idle desde hit
         at(Onhit, patrol, () => !WasHit && !isDead);
         at(Onhit, chase, () => !WasHit && !isDead);
         at(Onhit, Search, () => !WasHit && !isDead);
-        at(Onhit, attack, () => !WasHit && !isDead);
+        at(Onhit, attack, () => !WasHit && !isDead && lastposition != Vector3.zero);
 
-        any(death, () => currentHealth <= 0 && isDead); // Transición a Death desde cualquier estado
-        any(Onhit, () => WasHit && !isDead);            // Transición a hit desde cualquier estado
+        any(death, () => currentHealth <= 0 && isDead);  // Transición a Death desde cualquier estado
+        any(Onhit, () => WasHit && !isDead);             // Transición a hit desde cualquier estado
 
         fsm.SetState(idle);
     }
@@ -164,7 +164,10 @@ public class E_Shooter : Entity
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
                 {
                     lastposition = player.position;
-                    GameManager.instance.oneseeplayer(zoneId);
+                    if (otherSeenPlayer == false)
+                    {
+                        GameManager.instance.oneseeplayer(zoneId);
+                    }
                     return true;
                 }
                 else
@@ -247,6 +250,7 @@ public class E_Shooter : Entity
 
         }
     }
+
     public void Death()
     {
         if (isDead == true)
@@ -313,10 +317,10 @@ public class E_Shooter : Entity
         WasHit = false;
     }
 
-    public IEnumerator waittoendAnim(float time)
+    public IEnumerator longtime(float time)
     {
         yield return new WaitForSeconds(time);
-        alreadyAttacked = true;
+        otherSeenPlayer = false;
 
     }
 }

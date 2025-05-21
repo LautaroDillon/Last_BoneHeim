@@ -182,6 +182,7 @@ MonoBehaviour:
   isIdle: 1
   WasHit: 0
   isPatrolling: 0
+  otherSeenPlayer: 0
   muchit: 0
   obstructionMask:
     serializedVersion: 2
@@ -193,20 +194,17 @@ MonoBehaviour:
   goalNode: {fileID: 0}
   path: []
   pathIndex: 0
-  nodeReachDistance: 0.3
+  nodeReachDistance: 1.5
   moveSpeed: 3
   maxSpeed: 3
   arriveRadius: 3
   maxForce: 3
   velocity: {x: 0, y: 0, z: 0}
   zoneId: 0
-  timeBeforeFlank: 5
-  flankTimer: 0
-  lastAttackPosition: {x: 0, y: 0, z: 0}
+  lastposition: {x: 0, y: 0, z: 0}
   isincombatArena: 0
-  canFlank: 0
+  lastAttackTime: 0
   groupIndex: 0
-  isLeader: 0
   rb: {fileID: 0}
 --- !u!54 &9011733329996984528
 Rigidbody:

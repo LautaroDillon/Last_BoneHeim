@@ -7,6 +7,7 @@ using EZCameraShake;
 
 public class PlayerWeapon : MonoBehaviour
 {
+    #region Variables
     public static PlayerWeapon Instance;
 
     public enum FireMode { SemiAuto, Burst, FullAuto, Shotgun }
@@ -52,6 +53,9 @@ public class PlayerWeapon : MonoBehaviour
     private float nextTimeToFire = 0f;
 
     int bulletIndex;
+    #endregion
+
+    #region Awake/Start/Update
 
     private void Awake()
     {
@@ -86,6 +90,9 @@ public class PlayerWeapon : MonoBehaviour
             currentAmmo = magazineSize;
     }
 
+    #endregion
+
+    #region Reload/Shooting Mode Inputs
     void Reloading()
     {
         if (isReloading)
@@ -134,7 +141,9 @@ public class PlayerWeapon : MonoBehaviour
                 break;
         }
     }
+    #endregion
 
+    #region Shoot Methods
     public void Shoot()
     {
         if (isReloading || currentAmmo <= 0)
@@ -233,6 +242,9 @@ public class PlayerWeapon : MonoBehaviour
         UpdateBulletDisplay();
         Debug.Log("Shotgun fired from finger " + bulletIndex + "! Ammo left: " + currentAmmo);
     }
+    #endregion
+
+    #region Animation/UI Methods
 
     [Preserve]
     public void FireBulletFromAnimation()
@@ -308,6 +320,7 @@ public class PlayerWeapon : MonoBehaviour
         yield return new WaitForSeconds(fireModeDisplayTime);
         fireModeText.gameObject.SetActive(false);
     }
+    #endregion
 
     IEnumerator Reload()
     {

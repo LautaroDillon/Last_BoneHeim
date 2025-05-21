@@ -11,6 +11,7 @@ public enum SurfaceType
 
 public class PlayerMovement : MonoBehaviour
 {
+    #region Variables
     private SurfaceType currentSurface;
 
     public Animator animator;
@@ -45,6 +46,16 @@ public class PlayerMovement : MonoBehaviour
     public float speedIncreaseMultiplier;
     public float slopeIncreaseMultiplier;
 
+    [Header("Damping")]
+    public float dampingFactor = 5f;
+
+    [Header("Momentum")]
+    public float momentum = 0f;
+    public float maxMomentum = 10f;
+    public float momentumBuildRate = 2f;
+    public float momentumDecayRate = 1f;
+    public float momentumSpeedMultiplier = 0.5f;
+
     [Header("Jumping")]
     public float jumpForce;
     public float jumpCooldown;
@@ -56,6 +67,10 @@ public class PlayerMovement : MonoBehaviour
     [Header("Coyote Time")]
     public float coyoteTime = 0.2f;
     private float coyoteTimeCounter;
+
+    [Header("Jump Buffering")]
+    public float jumpBufferTime = 0.2f;
+    private float jumpBufferCounter;
 
     [Header("Airtime")]
     public Transform arms;
@@ -93,15 +108,19 @@ public class PlayerMovement : MonoBehaviour
 
     float horizontalInput;
     float verticalInput;
+    private Vector2 smoothedInput;
     private float stepRate = 0.5f;
     private float stepCoolDown;
     bool isWalking;
+    public float inputSmoothSpeed = 10f;
 
     Vector3 moveDirection;
 
     Rigidbody rb;
 
     public MovementState state;
+
+    #endregion
 
     public enum MovementState
     {
@@ -116,6 +135,8 @@ public class PlayerMovement : MonoBehaviour
         vaulting,
         air
     }
+
+    #region Start/Update
 
     private void Start()
     {
@@ -148,13 +169,14 @@ public class PlayerMovement : MonoBehaviour
         if (PauseManager.isPaused || PlayerHealth.hasDied)
             return;
 
+        jumpBufferCounter -= Time.deltaTime;
+
         Vector3 camForward = mainCam.transform.forward;
         camForward.y = 0f;
 
         if (camForward.sqrMagnitude > 0.01f)
             orientation.forward = camForward.normalized;
 
-        // ground check
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
         sprintSpeed = walkSpeed;
@@ -172,12 +194,26 @@ public class PlayerMovement : MonoBehaviour
         {
             currentSurface = GetSurfaceType();
             jumpCount = 0;
+            coyoteTimeCounter = coyoteTime;
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+
+        if (grounded && jumpBufferCounter > 0f && readyToJump)
+        {
+            jumpBufferCounter = 0f;
+            Jump();
+            readyToJump = false;
+            Invoke(nameof(ResetJump), jumpCooldown);
         }
 
         MyInput();
         SpeedControl();
         StateHandler();
         Airtime();
+        HandleMomentum();
 
         bool isIdle = Mathf.Approximately(horizontalInput, 0f) && Mathf.Approximately(verticalInput, 0f);
 
@@ -195,15 +231,34 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+
     private void FixedUpdate()
     {
         MovePlayer();
+        ApplyCounterMovement();
+        if (grounded && moveDirection.magnitude < 0.1f)
+        {
+            Vector3 dampedVel = new Vector3(
+                Mathf.Lerp(rb.velocity.x, 0, Time.fixedDeltaTime * dampingFactor),
+                rb.velocity.y,
+                Mathf.Lerp(rb.velocity.z, 0, Time.fixedDeltaTime * dampingFactor)
+            );
+            rb.velocity = dampedVel;
+        }
     }
+
+    #endregion
 
     private void MyInput()
     {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
+        Vector2 targetInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        smoothedInput = Vector2.Lerp(smoothedInput, targetInput, Time.deltaTime * inputSmoothSpeed);
+
+        horizontalInput = smoothedInput.x;
+        verticalInput = smoothedInput.y;
+
+        if (Input.GetKeyDown(jumpKey))
+            jumpBufferCounter = jumpBufferTime;
 
         if (Input.GetKeyDown(jumpKey) && readyToJump)
         {
@@ -221,6 +276,8 @@ public class PlayerMovement : MonoBehaviour
     private float lastDesiredMoveSpeed;
     private MovementState lastState;
     private bool keepMomentum;
+
+    #region Movement States
 
     private void StateHandler()
     {
@@ -245,17 +302,14 @@ public class PlayerMovement : MonoBehaviour
             state = MovementState.climbing;
             desiredMoveSpeed = climbSpeed;
         }
-
-        if (dashing)
+        else if (dashing)
         {
             state = MovementState.dashing;
             desiredMoveSpeed = dashSpeed;
             speedChangeFactor = dashSpeedChangeFactor;
         }
-
-        if (sliding && grounded)
+        else if (sliding && grounded)
         {
-            // Prevent sliding on stairs by checking the tag
             if (OnSlope() && rb.velocity.y < 0.1f)
             {
                 if (slopeHit.collider.CompareTag("Stairs"))
@@ -313,34 +367,10 @@ public class PlayerMovement : MonoBehaviour
         lastState = state;
     }
 
-    private float speedChangeFactor;
-    private IEnumerator SmoothlyLerpMoveSpeed()
-    {
-        // smoothly lerp movementSpeed to desired value
-        float time = 0;
-        float difference = Mathf.Abs(desiredMoveSpeed - moveSpeed);
-        float startValue = moveSpeed;
+    #endregion
 
-        while (time < difference)
-        {
-            moveSpeed = Mathf.Lerp(startValue, desiredMoveSpeed, time / difference);
-
-            if (OnSlope())
-            {
-                float slopeAngle = Vector3.Angle(Vector3.up, slopeHit.normal);
-                float slopeAngleIncrease = 1 + (slopeAngle / 90f);
-
-                time += Time.deltaTime * speedIncreaseMultiplier * slopeIncreaseMultiplier * slopeAngleIncrease;
-            }
-            else
-                time += Time.deltaTime * speedIncreaseMultiplier;
-
-            yield return null;
-        }
-
-        moveSpeed = desiredMoveSpeed;
-    }
-
+    #region Movement Methods
+    #region Main Movement
     private void MovePlayer()
     {
         if (playerClimb.exitingWall)
@@ -388,6 +418,40 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.velocity = Vector3.zero;
         }
+
+        if (!grounded)
+        {
+            Vector3 airMove = moveDirection.normalized * moveSpeed * airMultiplier;
+            Vector3 flatVel = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+            Vector3 airForce = airMove - flatVel;
+            rb.AddForce(airForce, ForceMode.Force);
+            rb.AddForce(Vector3.down * extraAirGravity, ForceMode.Force);
+        }
+    }
+
+    private void Jump()
+    {
+        exitingSlope = true;
+
+        // reset y velocity
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        coyoteTimeCounter = 0f;
+        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+
+        PlayJumpSound();
+    }
+    #endregion
+
+    #region Movement Tech
+
+    private void ApplyCounterMovement()
+    {
+        if (!grounded || moveDirection.magnitude > 0.1f)
+            return;
+
+        Vector3 flatVel = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+        Vector3 counterForce = -flatVel * 10f; // Adjust factor to taste
+        rb.AddForce(counterForce, ForceMode.Force);
     }
 
     private void Airtime()
@@ -437,22 +501,53 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector3(rb.velocity.x, maxYSpeed, rb.velocity.z);
     }
 
-    private void Jump()
-    {
-        exitingSlope = true;
-
-        // reset y velocity
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-        coyoteTimeCounter = 0f;
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-
-        PlayJumpSound();
-    }
-
     private void ResetJump()
     {
         readyToJump = true;
         exitingSlope = false;
+    }
+
+    private void HandleMomentum()
+    {
+        if ((dashing || sliding) && moveDirection.magnitude > 0.1f)
+        {
+            momentum += momentumBuildRate * Time.deltaTime;
+        }
+        else if (momentum > 0f)
+        {
+            momentum -= momentumDecayRate * Time.deltaTime;
+        }
+
+        momentum = Mathf.Clamp(momentum, 0f, maxMomentum);
+        moveSpeed += momentum * momentumSpeedMultiplier;
+    }
+
+    private float speedChangeFactor;
+    private IEnumerator SmoothlyLerpMoveSpeed()
+    {
+        // smoothly lerp movementSpeed to desired value
+        float time = 0;
+        float difference = Mathf.Abs(desiredMoveSpeed - moveSpeed);
+        float startValue = moveSpeed;
+
+        while (time < difference)
+        {
+            moveSpeed = Mathf.Lerp(startValue, desiredMoveSpeed, time / difference);
+
+            if (OnSlope())
+            {
+                float slopeAngle = Vector3.Angle(Vector3.up, slopeHit.normal);
+                float slopeAngleIncrease = 1 + (slopeAngle / 90f);
+
+                time += Time.deltaTime * speedIncreaseMultiplier * slopeIncreaseMultiplier * slopeAngleIncrease;
+            }
+            else
+                time += Time.deltaTime * speedIncreaseMultiplier;
+
+            yield return null;
+        }
+
+        moveSpeed = desiredMoveSpeed;
     }
 
     public bool OnSlope()
@@ -478,6 +573,10 @@ public class PlayerMovement : MonoBehaviour
         float mult = Mathf.Pow(10.0f, (float)digits);
         return Mathf.Round(value * mult) / mult;
     }
+    #endregion
+    #endregion
+
+    #region Feedback
 
     private void PlayStepSound()
     {
@@ -546,6 +645,8 @@ public class PlayerMovement : MonoBehaviour
         return SurfaceType.Default;
     }
 
+    #endregion
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Heart")
@@ -583,5 +684,4 @@ public class PlayerMovement : MonoBehaviour
 
         }
     }
-
 }

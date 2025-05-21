@@ -13,12 +13,18 @@ public class PlayerDash : MonoBehaviour
 
     private Rigidbody rb;
     private PlayerMovement pm;
+    private float dashBufferTime = 0.15f;
+    private float dashBufferCounter = 0f;
 
     [Header("Dashing")]
     public float dashForce;
     public float dashUpwardForce;
     public float maxDashYSpeed;
     public float dashDuration;
+
+    [Header("Dash Cancel")]
+    public float dashCancelCheckDistance = 1f;
+    public LayerMask whatIsGround;
 
     [Header("CameraEffects")]
     public PlayerCamera cam;
@@ -51,10 +57,43 @@ public class PlayerDash : MonoBehaviour
         if (PauseManager.isPaused || PlayerHealth.hasDied)
             return;
 
-        if (Input.GetKeyDown(dashKey) && pm.canDash)
-            Dash();
+        if (Input.GetKeyDown(dashKey))
+            dashBufferCounter = dashBufferTime;
+
+        if (dashBufferCounter > 0f)
+        {
+            dashBufferCounter -= Time.deltaTime;
+
+            if (dashCdTimer <= 0f && pm.canDash)
+            {
+                Dash();
+                dashBufferCounter = 0f;
+            }
+        }
 
         DashCooldown();
+    }
+
+    private void FixedUpdate()
+    {
+        if (pm.dashing)
+        {
+            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+            if (flatVel.magnitude > dashForce)
+            {
+                Vector3 limitedVel = flatVel.normalized * dashForce;
+                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+            }
+        }
+
+        if (pm.dashing)
+        {
+            if (Physics.Raycast(transform.position, GetDirection(useCameraForward ? playerCam : orientation), dashCancelCheckDistance, whatIsGround))
+            {
+                CancelInvoke(nameof(ResetDash));
+                ResetDash();
+            }
+        }
     }
 
     private void DashCooldown()
@@ -63,7 +102,7 @@ public class PlayerDash : MonoBehaviour
             dashCdTimer -= Time.deltaTime;
 
         dashCdtarget = dashCdTimer / dashCd;
-        _dashCdBar.fillAmount = Mathf.MoveTowards(_dashCdBar.fillAmount, dashCdtarget, dashCdReduceSpeed * Time.deltaTime);
+        _dashCdBar.fillAmount = Mathf.Lerp(_dashCdBar.fillAmount, dashCdtarget, Time.deltaTime * 10f);
     }
 
     private void Dash()

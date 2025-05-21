@@ -4,53 +4,57 @@ using UnityEngine;
 
 public class PlayerWallrun : MonoBehaviour
 {
+    #region Variables
     [Header("Wallrunning")]
     public LayerMask whatIsWall;
     public LayerMask whatIsGround;
-    public float wallRunForce;
-    public float wallJumpUpForce;
-    public float wallJumpSideForce;
-    public float wallClimbSpeed;
-    public float maxWallRunTime;
+    public float wallRunForce = 600f;
+    public float wallJumpUpForce = 8f;
+    public float wallJumpSideForce = 8f;
+    public float wallClimbSpeed = 4f;
+    public float maxWallRunTime = 1.5f;
     private float wallRunTimer;
-    private float currentTilt = 0f;
-    private bool hasWallJumped;
 
     [Header("Camera")]
     public float wallRunFov = 100f;
     public float normalFov = 90f;
+    private float currentTilt = 0f;
 
     [Header("Input")]
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode upwardsRunKey = KeyCode.LeftShift;
     public KeyCode downwardsRunKey = KeyCode.LeftControl;
+
     private bool upwardsRunning;
     private bool downwardsRunning;
     private float horizontalInput;
     private float verticalInput;
 
     [Header("Detection")]
-    public float wallCheckDistance;
-    public float minJumpHeight;
+    public float wallCheckDistance = 0.6f;
+    public float minJumpHeight = 1.5f;
     private RaycastHit leftWallhit;
     private RaycastHit rightWallhit;
     private bool wallLeft;
     private bool wallRight;
 
     [Header("Exiting")]
-    public float exitWallTime;
+    public float exitWallTime = 0.3f;
     private float exitWallTimer;
     private bool exitingWall;
 
     [Header("Gravity")]
-    public bool useGravity;
-    public float gravityCounterForce;
+    public bool useGravity = true;
+    public float gravityCounterForce = 20f;
 
     [Header("References")]
     public Transform orientation;
     public PlayerCamera cam;
     private PlayerMovement pm;
     private Rigidbody rb;
+    #endregion
+
+    #region Start/Update
 
     private void Start()
     {
@@ -61,7 +65,7 @@ public class PlayerWallrun : MonoBehaviour
     private void Update()
     {
         CheckForWall();
-        StateMachine();
+        HandleStateMachine();
     }
 
     private void FixedUpdate()
@@ -69,6 +73,10 @@ public class PlayerWallrun : MonoBehaviour
         if (pm.wallrunning)
             WallRunningMovement();
     }
+
+    #endregion
+
+    #region Wallrunning Methods
 
     private void CheckForWall()
     {
@@ -81,49 +89,37 @@ public class PlayerWallrun : MonoBehaviour
         return !Physics.Raycast(transform.position, Vector3.down, minJumpHeight, whatIsGround);
     }
 
-    private void StateMachine()
+    private void HandleStateMachine()
     {
-        // Getting Inputs
+        // Get inputs
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
-
         upwardsRunning = Input.GetKey(upwardsRunKey);
         downwardsRunning = Input.GetKey(downwardsRunKey);
 
-        // State 1 - Wallrunning
+        // Start wallrun
         if ((wallLeft || wallRight) && verticalInput > 0 && AboveGround() && !exitingWall)
         {
             if (!pm.wallrunning)
                 StartWallRun();
 
-            // wallrun timer
             if (wallRunTimer > 0)
                 wallRunTimer -= Time.deltaTime;
+            else
+                ExitWallRun();
 
-            if (wallRunTimer <= 0 && pm.wallrunning)
-            {
-                exitingWall = true;
-                exitWallTimer = exitWallTime;
-            }
-
-            // wall jump
-            if (Input.GetKeyDown(jumpKey)) WallJump();
+            if (Input.GetKeyDown(jumpKey))
+                WallJump();
         }
-
-        // State 2 - Exiting
         else if (exitingWall)
         {
             if (pm.wallrunning)
                 StopWallRun();
 
-            if (exitWallTimer > 0)
-                exitWallTimer -= Time.deltaTime;
-
+            exitWallTimer -= Time.deltaTime;
             if (exitWallTimer <= 0)
                 exitingWall = false;
         }
-
-        // State 3 - None
         else
         {
             if (pm.wallrunning)
@@ -133,21 +129,16 @@ public class PlayerWallrun : MonoBehaviour
 
     private void StartWallRun()
     {
-        if (!pm.wallrunning)
-        {
-            cam.DoFov(wallRunFov);
+        cam.DoFov(wallRunFov);
 
-            float targetTilt = wallLeft ? -5f : wallRight ? 5f : 0f;
-            if (currentTilt != targetTilt)
-            {
-                cam.DoTilt(targetTilt);
-                currentTilt = targetTilt;
-            }
-        }
+        currentTilt = wallLeft ? -5f : wallRight ? 5f : 0f;
+        cam.DoTilt(currentTilt);
 
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+        rb.drag = 0f; // Prevent artificial friction
         pm.wallrunning = true;
         wallRunTimer = maxWallRunTime;
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
     }
 
     private void WallRunningMovement()
@@ -155,57 +146,75 @@ public class PlayerWallrun : MonoBehaviour
         rb.useGravity = useGravity;
 
         Vector3 wallNormal = wallRight ? rightWallhit.normal : leftWallhit.normal;
-
         Vector3 wallForward = Vector3.Cross(wallNormal, transform.up);
 
-        if ((orientation.forward - wallForward).magnitude > (orientation.forward - -wallForward).magnitude)
+        if (Vector3.Dot(orientation.forward, wallForward) < Vector3.Dot(orientation.forward, -wallForward))
             wallForward = -wallForward;
 
-        // forward force
-        rb.AddForce(wallForward * wallRunForce, ForceMode.Force);
+        rb.AddForce(wallForward * wallRunForce * Time.fixedDeltaTime, ForceMode.Force);
 
-        // upwards/downwards force
+        // Climb up/down
         if (upwardsRunning)
             rb.velocity = new Vector3(rb.velocity.x, wallClimbSpeed, rb.velocity.z);
-        if (downwardsRunning)
+        else if (downwardsRunning)
             rb.velocity = new Vector3(rb.velocity.x, -wallClimbSpeed, rb.velocity.z);
 
-        // push to wall force
-        if (!(wallLeft && horizontalInput > 0) && !(wallRight && horizontalInput < 0))
-            rb.AddForce(-wallNormal * 100, ForceMode.Force);
+        // Stick to wall
+        bool pushingAway = (wallLeft && horizontalInput > 0) || (wallRight && horizontalInput < 0);
+        if (!pushingAway)
+            rb.AddForce(-wallNormal * 100f, ForceMode.Force);
 
-        // weaken gravity
+        // Counteract gravity
         if (useGravity)
             rb.AddForce(transform.up * gravityCounterForce, ForceMode.Force);
     }
 
     private void StopWallRun()
     {
-        if (pm.wallrunning)
-        {
-            pm.wallrunning = false;
-            cam.DoFov(normalFov);
-            cam.DoTilt(0f);
-        }
+        pm.wallrunning = false;
+        cam.DoFov(normalFov);
+        cam.DoTilt(0f);
+
+        rb.useGravity = true;
+        rb.drag = 1f; // Restore natural air drag
+
+        currentTilt = 0f;
+    }
+
+    private void ExitWallRun()
+    {
+        exitingWall = true;
+        exitWallTimer = exitWallTime;
     }
 
     private void WallJump()
     {
-        exitingWall = true;
-        exitWallTimer = exitWallTime;
-        hasWallJumped = true;
+        ExitWallRun();
 
         Vector3 wallNormal = wallRight ? rightWallhit.normal : leftWallhit.normal;
-        Vector3 forceToApply = transform.up * wallJumpUpForce + wallNormal * wallJumpSideForce;
+        Vector3 wallForward = Vector3.Cross(wallNormal, Vector3.up);
 
+        if (Vector3.Dot(orientation.forward, wallForward) < Vector3.Dot(orientation.forward, -wallForward))
+            wallForward = -wallForward;
+
+        // Optional: Slight upward bias to maintain vertical control
+        Vector3 jumpDirection = (wallForward + Vector3.up * 0.5f).normalized;
+
+        // Reset vertical velocity before jump
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-        rb.AddForce(forceToApply, ForceMode.Impulse);
+
+        // Add jump force in desired direction
+        rb.AddForce(jumpDirection * wallJumpSideForce + Vector3.up * wallJumpUpForce, ForceMode.Impulse);
+
+        // Add small wall pushback to ensure clearance from surface
+        rb.AddForce(wallNormal * 2f, ForceMode.Impulse);
     }
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.blue;
+        Gizmos.color = Color.cyan;
         Gizmos.DrawRay(transform.position, orientation.right * wallCheckDistance);
         Gizmos.DrawRay(transform.position, -orientation.right * wallCheckDistance);
     }
+    #endregion
 }

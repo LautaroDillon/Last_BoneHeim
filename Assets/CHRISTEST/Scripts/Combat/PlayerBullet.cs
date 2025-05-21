@@ -52,6 +52,7 @@ public class PlayerBullet : MonoBehaviour
         {
             other.GetComponent<E_Shooter>().TakeDamage(damage);
             Instantiate(enemyHitEffect, transform.position, Quaternion.identity);
+            FindObjectOfType<HitmarkerController>().ShowHitmarker();
             AudioManager.instance.PlaySFXOneShot("Bullet Enemy Impact", 1f);
         }
         if (other.CompareTag("Wall"))

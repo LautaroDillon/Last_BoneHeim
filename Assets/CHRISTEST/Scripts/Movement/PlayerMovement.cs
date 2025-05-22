@@ -162,6 +162,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         armsInitialPos = arms.localPosition;
+        animator.SetLayerWeight(1, 1f);
     }
 
     private void Update()
@@ -427,6 +428,9 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(airForce, ForceMode.Force);
             rb.AddForce(Vector3.down * extraAirGravity, ForceMode.Force);
         }
+
+        bool isMoving = moveDirection.magnitude > 0.1f && grounded;
+        animator.SetBool("isWalking", isMoving);
     }
 
     private void Jump()

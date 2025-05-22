@@ -34,18 +34,18 @@ public class Chase : IState
     public void Tick()
     {
 
-        // 1) Siempre sigue al jugador directamente
+        // Siempre sigue al jugador directamente
         Vector3 targetPos = _shooter.player.position;
 
-        // 2) Calcular dirección usando Seek y evitar obstáculos
+        // Calcular dirección usando Seek y evitar obstáculos
         Vector3 steer = _shooter.Seek(targetPos) + _shooter.ObstacleAvoidance();
         _shooter.AddForce(steer);
 
-        // 3) Movimiento físico
+        // Movimiento físico
         Vector3 delta = _shooter.velocity * Time.deltaTime;
         _shooter.rb.MovePosition(_shooter.rb.position + delta);
 
-        // 4) Rotación y animación
+        // Rotación y animación
         if (delta.sqrMagnitude > 0.001f)
         {
             Vector3 flat = new Vector3(delta.x, 0, delta.z).normalized;
@@ -58,7 +58,7 @@ public class Chase : IState
         _shooter.anim.SetFloat("Horizontal", local.x, 0.1f, Time.deltaTime);
         _shooter.anim.SetFloat("Vertical", local.z, 0.1f, Time.deltaTime);
 
-        // 5) Si está en rango de ataque, marcarlo
+        // Si está en rango de ataque, marcarlo
         float dist = Vector3.Distance(_shooter.transform.position, _shooter.player.position);
         if (dist <= _shooter.attackRange)
         {

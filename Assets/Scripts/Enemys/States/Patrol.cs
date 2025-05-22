@@ -19,7 +19,7 @@ public class Patrol : IState
     public void OnEnter()
     {
         _shooter.isPatrolling = true;
-        Debug.Log($"[{_shooter.name}] Patrol OnEnter (zona {_shooter.zoneId})");
+       // Debug.Log($"[{_shooter.name}] Patrol OnEnter (zona {_shooter.zoneId})");
         _waitTimer = 0f;
         ChooseRandomNodeInZone();
     }
@@ -48,9 +48,6 @@ public class Patrol : IState
             Vector3 local = _shooter.transform.InverseTransformDirection(dir);
             _shooter.anim.SetFloat("Horizontal", local.x, 0.1f, Time.deltaTime);
             _shooter.anim.SetFloat("Vertical", local.z, 0.1f, Time.deltaTime);
-
-            // Aplicar movimiento
-            //_shooter.transform.position += movement;
 
             // Avanzar al siguiente nodo si llegamos
             if (Vector3.Distance(_shooter.transform.position, node.transform.position)

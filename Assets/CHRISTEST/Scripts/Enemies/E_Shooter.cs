@@ -36,6 +36,7 @@ public class E_Shooter : Entity
     public bool isPatrolling;
     public bool otherSeenPlayer;
     public float muchit;
+    public bool finishsearching;
 
     [Header("Player Detection")]
     [SerializeField] public LayerMask obstructionMask;
@@ -109,13 +110,13 @@ public class E_Shooter : Entity
         at(chase, attack, () => playerInAttackRange && !isDead);
         at(attack, chase, () => !playerInAttackRange && !isDead && canSeePlayer && otherSeenPlayer);
         at(attack, Search, () => !canSeePlayer && !isDead && lastposition != Vector3.zero && otherSeenPlayer);
-        at(chase, Search, () => !canSeePlayer && !isDead && lastposition != Vector3.zero && otherSeenPlayer);
+        at(chase, Search, () => !canSeePlayer && !isDead && lastposition != Vector3.zero && !otherSeenPlayer);
         at(Onhit, strafe, () => !WasHit && !isDead);
         at(strafe, chase, () => !playerInAttackRange && !isDead && canSeePlayer && otherSeenPlayer);
         at(attack, strafe, () => alreadyAttacked && playerInAttackRange && !isDead);
         at(strafe, attack, () => !alreadyAttacked && !isDead);
-        at(Search, patrol, () => isPatrolling && !isDead);       // Despues de buscar vuelve a patrullar
-        at(Onhit, idle, () => !WasHit && !isDead);       // Transición a idle desde hit
+        at(Search, patrol, () => finishsearching && !isDead);       // Despues de buscar vuelve a patrullar
+        at(Onhit, idle, () => !WasHit && !isDead);               // Transición a idle desde hit
         at(Onhit, patrol, () => !WasHit && !isDead);
         at(Onhit, chase, () => !WasHit && !isDead);
         at(Onhit, Search, () => !WasHit && !isDead);
@@ -240,7 +241,7 @@ public class E_Shooter : Entity
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        if (currentHealth > 0 && currentHealth <= (maxHealth / 3))
+        if (currentHealth > 0 && currentHealth <= (maxHealth / 2))
         {
             WasHit = true;
         }
@@ -317,10 +318,4 @@ public class E_Shooter : Entity
         WasHit = false;
     }
 
-    public IEnumerator longtime(float time)
-    {
-        yield return new WaitForSeconds(time);
-        otherSeenPlayer = false;
-
-    }
 }

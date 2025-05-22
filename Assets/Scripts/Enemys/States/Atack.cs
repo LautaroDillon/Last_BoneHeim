@@ -57,9 +57,9 @@ public class Atack : IState
             _cooldownTimer = _shooter.shotCooldown;
         }
 
-        // Reducir cooldown
+       /* // Reducir cooldown
         if (_shooter.alreadyAttacked && _cooldownTimer > 0f)
-            _cooldownTimer -= Time.deltaTime;
+            _cooldownTimer -= Time.deltaTime;*/
     }
 
     public void OnExit()
@@ -69,12 +69,16 @@ public class Atack : IState
 
     private void FaceTarget()
     {
-        var dir = (_shooter.player.position - _shooter.transform.position).normalized;
+        Vector3 dir = (_shooter.player.position - _shooter.transform.position);
         dir.y = 0;
+
+        // Seguridad: evitar vectores demasiado pequeños
+        if (dir.sqrMagnitude < 0.01f)
+            return;
+
+        Quaternion rot = Quaternion.LookRotation(dir.normalized);
         _shooter.transform.rotation = Quaternion.Slerp(
-            _shooter.transform.rotation,
-            Quaternion.LookRotation(dir),
-            10 * Time.deltaTime
+            _shooter.transform.rotation, rot, 10 * Time.deltaTime
         );
     }
 

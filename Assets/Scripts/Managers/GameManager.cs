@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
             {
                 shooter.canSeePlayer = true; // o cualquier otro bool
                 shooter.otherSeenPlayer = true; // o cualquier otro bool
-                StartCoroutine(shooter.longtime(8));
+               // StartCoroutine(shooter.longtime(8));
             }
         }
     }

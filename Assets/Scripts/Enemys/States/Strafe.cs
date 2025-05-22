@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,19 +9,9 @@ public class Strafe : IState
     private E_Shooter _shooter;
     private StateMachine _fsm;
 
-    private float _timer;
-    private float _duration;
-    private float _speed;          // velocidad de strafe
-    private int _direction;      // +1 = derecha, -1 = izquierda
-    private float _noiseOffset;
+    private float _waitDuration = 2f;
+    private float _waitTimer = 0f;
 
-    // Parámetros ajustables
-    private const float MinDuration = 0.8f;
-    private const float MaxDuration = 1.5f;
-    private const float MinSpeedMult = 1.0f;
-    private const float MaxSpeedMult = 1.4f;
-    private const float JitterAmp = 0.5f;
-    private const float ForwardBias = 0.3f;
 
     public Strafe(E_Shooter shooter, StateMachine fsm)
     {
@@ -30,62 +21,98 @@ public class Strafe : IState
 
     public void OnEnter()
     {
-        // Duración y velocidad aleatorias
-        _duration = Random.Range(MinDuration, MaxDuration);
-        _speed = _shooter.strafeSpeed * Random.Range(MinSpeedMult, MaxSpeedMult);
-        _direction = Random.value < .5f ? 1 : -1;
-        _timer = 0f;
-        _noiseOffset = Random.value * 100f;
-
-        // Trigger de animación de strafe
-        _shooter.anim.SetTrigger("Strafe");
+        ChooseRandomNodeInZone();
     }
 
     public void Tick()
     {
-        _timer += Time.deltaTime;
-        if (_timer >= _duration)
+        float distance = Vector3.Distance(_shooter.transform.position, _shooter.player.position);
+        if(_waitTimer < _waitDuration)
         {
-            _shooter.alreadyAttacked = false;
+            _waitTimer += Time.deltaTime;
+        }
+        else if (distance < _shooter.attackRange)
+        {
+            _shooter.playerInAttackRange = true;
+        }
+
+        if (_shooter.path != null && _shooter.pathIndex < _shooter.path.Count && _waitTimer < _waitDuration)
+        {
+            var node = _shooter.path[_shooter.pathIndex];
+            Vector3 dir = (node.transform.position - _shooter.transform.position).normalized;
+
+            // Movimiento real
+            Vector3 movement = dir * _shooter.moveSpeed * Time.deltaTime;
+            _shooter.rb.MovePosition(_shooter.rb.position + movement);
+
+            // Rotación hacia la dirección de movimiento
+            if (movement.sqrMagnitude > 0.001f)
+            {
+                Vector3 flat = new Vector3(movement.x, 0, movement.z).normalized;
+                Quaternion rot = Quaternion.LookRotation(flat);
+                _shooter.transform.rotation = Quaternion.Slerp(
+                    _shooter.transform.rotation, rot, Time.deltaTime * 5f);
+            }
+
+            // Animaciones
+            Vector3 local = _shooter.transform.InverseTransformDirection(dir);
+            _shooter.anim.SetFloat("Horizontal", local.x, 0.1f, Time.deltaTime);
+            _shooter.anim.SetFloat("Vertical", local.z, 0.1f, Time.deltaTime);
+
+            // Avanzar al siguiente nodo si llegamos
+            if (Vector3.Distance(_shooter.transform.position, node.transform.position)
+                < _shooter.nodeReachDistance)
+            {
+                _shooter.pathIndex++;
+            }
+        }
+        else if (_shooter.path == null)
+        {
+            // Si no hay más nodos, elegir uno nuevo
+            ChooseRandomNodeInZone();
             return;
         }
-
-        // 1) construís tu moveDir orgánico (como antes)…
-        Vector3 toPlayer = (_shooter.player.position - _shooter.transform.position).normalized;
-        Vector3 lateral = Vector3.Cross(Vector3.up, toPlayer) * _direction;
-        Vector3 forwardBack = toPlayer * Random.Range(-ForwardBias, ForwardBias);
-        float noise = (Mathf.PerlinNoise(Time.time * 1.5f, _noiseOffset) - 0.5f) * 2f;
-        Vector3 jitter = lateral * (noise * JitterAmp);
-        Vector3 moveDir = (lateral + forwardBack + jitter).normalized;
-
-        // 2) Calculás el desplazamiento
-        Vector3 displacement = moveDir * _speed * Time.deltaTime;
-
-        // 3) Mueves con el Rigidbody
-        _shooter.rb.MovePosition(_shooter.rb.position + displacement);
-
-        // 4) Rotación suave si necesitas:
-        if (displacement.sqrMagnitude > 0.001f)
+        else
         {
-            Vector3 flat = new Vector3(displacement.x, 0, displacement.z).normalized;
-            var look = Quaternion.LookRotation(flat);
-            _shooter.transform.rotation = Quaternion.Slerp(
-                _shooter.transform.rotation, look, Time.deltaTime * 8f);
+            
         }
 
-        // 5) Animaciones igual que antes…
-        Vector3 local = _shooter.transform.InverseTransformDirection(moveDir);
-        _shooter.anim.SetFloat("Horizontal", local.x, 0.1f, Time.deltaTime);
-        _shooter.anim.SetFloat("Vertical", local.z, 0.1f, Time.deltaTime);
+
+
     }
 
     public void OnExit()
     {
-        // Limpiar animaciones
-        _shooter.anim.ResetTrigger("Strafe");
-        _shooter.anim.SetFloat("Horizontal", 0f);
-        _shooter.anim.SetFloat("Vertical", 0f);
+        _shooter.path = null;
     }
 
+    private void ChooseRandomNodeInZone()
+    {
+        // Obtener lista de nodos de la zona
+        var zoneNodes = ManagerNode.Instance.GetNodesInZone(_shooter.zoneId);
+        if (zoneNodes == null || zoneNodes.Count == 0)
+        {
+            return;
+        }
 
+        // Nodo de inicio más cercano
+        var start = ManagerNode.Instance.GetClosestNode(_shooter.transform.position, _shooter.zoneId);
+        if (start == null)
+        {
+            return;
+        }
+
+        // Nodo destino aleatorio distinto al inicio
+        NodePathfinding dest = start;
+        int tries = 0;
+        while (dest == start && tries < 10)
+        {
+            dest = zoneNodes[Random.Range(0, zoneNodes.Count)];
+            tries++;
+        }
+
+        // Calcular A y asignar ruta
+        _shooter.path = ManagerNode.Instance.FindPath(start, dest);
+        _shooter.pathIndex = 0;
+    }
 }

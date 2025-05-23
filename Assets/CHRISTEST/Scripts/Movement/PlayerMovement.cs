@@ -14,7 +14,8 @@ public class PlayerMovement : MonoBehaviour
     #region Variables
     private SurfaceType currentSurface;
 
-    public Animator animator;
+    public Animator handAnimator;
+    public Animator legAnimator;
     public static PlayerMovement instance;
 
     [Header("Abilites")]
@@ -162,7 +163,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         armsInitialPos = arms.localPosition;
-        animator.SetLayerWeight(1, 1f);
+        legAnimator.SetLayerWeight(1, 1f);
     }
 
     private void Update()
@@ -381,6 +382,7 @@ public class PlayerMovement : MonoBehaviour
 
         // calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+        
 
         if (OnSlope() && !exitingSlope)
         {
@@ -430,7 +432,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         bool isMoving = moveDirection.magnitude > 0.1f && grounded;
-        animator.SetBool("isWalking", isMoving);
+        legAnimator.SetBool("isWalking", isMoving);
     }
 
     private void Jump()
@@ -655,7 +657,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.gameObject.tag == "Heart")
         {
-            animator.SetTrigger("Organ");
+            handAnimator.SetTrigger("Organ");
             //animator.SetBool("Idle", false);
             walkSpeed = 12;
             jumpForce = 20;
@@ -667,22 +669,22 @@ public class PlayerMovement : MonoBehaviour
 
         if (other.gameObject.tag == "Stomach")
         {
-            animator.SetTrigger("Organ");
-            animator.SetBool("Idle", false);
+            handAnimator.SetTrigger("Organ");
+            handAnimator.SetBool("Idle", false);
             canDoubleJump = true;
             AudioManager.instance.PlaySFXOneShot("Stomach", 1f);
-            animator.SetBool("Idle", true);
+            handAnimator.SetBool("Idle", true);
             lungsPosition.SetActive(true);
             Destroy(other.gameObject);
 
         }
         if (other.gameObject.tag == "Lungs")
         {
-            animator.SetTrigger("Organ");
-            animator.SetBool("Idle", false);
+            handAnimator.SetTrigger("Organ");
+            handAnimator.SetBool("Idle", false);
             canDash = true;
             AudioManager.instance.PlaySFXOneShot("Lungs", 1f);
-            animator.SetBool("Idle", true);
+            handAnimator.SetBool("Idle", true);
             stomachPosition.SetActive(true);
             Destroy(other.gameObject);
 

@@ -149,7 +149,7 @@ public class PlayerWeapon : MonoBehaviour
         if (isReloading || currentAmmo <= 0)
             return;
         CameraShake.Instance.ShakeOnce(1f, 1f, 0.1f, 1f);
-        PlayerMovement.instance.animator.SetBool("Idle", false);
+        PlayerMovement.instance.handAnimator.SetBool("Idle", false);
         StartCoroutine(ResetIdle());
 
         int bulletIndex = currentAmmo - 1;
@@ -163,7 +163,7 @@ public class PlayerWeapon : MonoBehaviour
         if (bulletIndex >= 0 && bulletIndex < fireAnimations.Count)
         {
             string animTrigger = fireAnimations[bulletIndex];
-            PlayerMovement.instance.animator.SetTrigger(animTrigger);
+            PlayerMovement.instance.handAnimator.SetTrigger(animTrigger);
         }
 
         currentAmmo--;
@@ -192,10 +192,10 @@ public class PlayerWeapon : MonoBehaviour
         {
             string animTrigger = fireAnimations[bulletIndex];
             if (!string.IsNullOrEmpty(animTrigger))
-                PlayerMovement.instance.animator.SetTrigger(animTrigger);
+                PlayerMovement.instance.handAnimator.SetTrigger(animTrigger);
         }
 
-        PlayerMovement.instance.animator.SetBool("Idle", false);
+        PlayerMovement.instance.handAnimator.SetBool("Idle", false);
         StartCoroutine(ResetIdle());
 
         CameraShake.Instance.ShakeOnce(1.5f, 1.5f, 0.1f, 1f);
@@ -348,6 +348,6 @@ public class PlayerWeapon : MonoBehaviour
     IEnumerator ResetIdle()
     {
         yield return new WaitForSeconds(0.1f);
-        PlayerMovement.instance.animator.SetBool("Idle", true);
+        PlayerMovement.instance.handAnimator.SetBool("Idle", true);
     }
 }

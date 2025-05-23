@@ -22,19 +22,12 @@ public class GameManager : MonoBehaviour
     public Dictionary<int, List<E_Shooter>> _groups = new Dictionary<int, List<E_Shooter>>();
 
 
-    private void Update()
-    {
-
-    }
-
     private void Awake()
     {
         isRunning = true;
-    }
-    void Start()
-    {
         instance = this;
     }
+
     public void AddToList(GameObject t)
     {
         enemies.Add(t);

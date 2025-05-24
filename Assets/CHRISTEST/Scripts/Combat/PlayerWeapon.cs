@@ -71,6 +71,10 @@ public class PlayerWeapon : MonoBehaviour
 
     void Start()
     {
+        if (fireModeText == null)
+        {
+            fireModeText = GameObject.Find("FireModeText")?.GetComponent<TextMeshProUGUI>();
+        }
         currentAmmo = magazineSize;
         UpdateBulletDisplay();
         UpdateAmmoUI();
@@ -309,12 +313,20 @@ public class PlayerWeapon : MonoBehaviour
 
     void ShowFireModeText(string message)
     {
+        if (fireModeText == null)
+        {
+            Debug.LogWarning("FireModeText is not assigned!");
+            return;
+        }
         StopAllCoroutines();
         StartCoroutine(DisplayFireModeText(message));
     }
 
     IEnumerator DisplayFireModeText(string message)
     {
+        if (fireModeText == null)
+            yield break;
+
         fireModeText.text = message;
         fireModeText.gameObject.SetActive(true);
         yield return new WaitForSeconds(fireModeDisplayTime);

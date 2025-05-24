@@ -6,9 +6,14 @@ using EZCameraShake;
 
 public class PlayerMelee : MonoBehaviour
 {
+    [Header("Abilities")]
+    public bool canThrow;
+
+    [Header("References")]
     public PlayerMovement pm;
     public PlayerWeapon pw;
     public ThrowableObject throwable;
+    public GameObject throwObject;
     private float initialSpeed;
     private float initialJump;
 
@@ -39,7 +44,8 @@ public class PlayerMelee : MonoBehaviour
     public float throwCooldown = 1.5f;
     private float nextThrowTime = 0f;
 
-    [Header("Cooldown UI")]
+    [Header("UI")]
+    public GameObject throwUI;
     public Image meleeCooldownUI;
     public Image throwCooldownUI;
 
@@ -65,12 +71,12 @@ public class PlayerMelee : MonoBehaviour
 
         if (!isThrowableAway)
         {
-            if (Input.GetKeyDown(throwKey) && Time.time >= nextThrowTime)
+            if (canThrow && Input.GetKeyDown(throwKey) && Time.time >= nextThrowTime)
             {
                 isHoldingToThrow = true;
             }
 
-            if (Input.GetKeyUp(throwKey) && isHoldingToThrow)
+            if (canThrow && Input.GetKeyUp(throwKey) && isHoldingToThrow)
             {
                 pm.walkSpeed = initialSpeed;
                 pm.jumpForce = initialJump;
@@ -85,7 +91,7 @@ public class PlayerMelee : MonoBehaviour
         }
         else
         {
-            if (Input.GetKeyDown(throwKey) && Time.time > timeThrown + recallDelay)
+            if (canThrow && Input.GetKeyDown(throwKey) && Time.time > timeThrown + recallDelay)
             {
                 isRecalling = true;
             }
@@ -107,6 +113,9 @@ public class PlayerMelee : MonoBehaviour
             float throwTimeLeft = Mathf.Clamp(nextThrowTime - Time.time, 0, throwCooldown);
             throwCooldownUI.fillAmount = 1 - (throwTimeLeft / throwCooldown);
         }
+
+        if (throwUI != null)
+            throwUI.gameObject.SetActive(canThrow);
     }
 
     void HandleMeleeAttack()
@@ -222,6 +231,15 @@ public class PlayerMelee : MonoBehaviour
             canMelee = true;
             hasPlayedRecallSound = false;
             nextThrowTime = Time.time + throwCooldown;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Arm")
+        {
+            canThrow = true;
+            Destroy(throwObject);
         }
     }
 

@@ -1228,7 +1228,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4ec8f974cb753c45b2687bcfec389f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 9166547986876990401}
+  handAnimator: {fileID: 9166547986876990401}
+  legAnimator: {fileID: 492675326858068227}
   canDoubleJump: 1
   canDash: 1
   normalSpeed: 1
@@ -1353,7 +1354,7 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 128
-  wallRunForce: 200
+  wallRunForce: 400
   wallJumpUpForce: 0
   wallJumpSideForce: 0
   wallClimbSpeed: 10

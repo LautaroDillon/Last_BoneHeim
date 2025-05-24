@@ -4,38 +4,52 @@ using UnityEngine;
 
 public class Lava : MonoBehaviour
 {
-    public float damage;
-    public PlayerHealth damagableInterface;
+    public float damage = 10f;
+    public float damageInterval = 1f;
+
+    private PlayerHealth damagableInterface;
+    private Coroutine damageCoroutine;
 
     private void Start()
     {
-        damagableInterface = GameManager.instance.player.GetComponent<PlayerHealth>();
+        if (GameManager.instance != null && GameManager.instance.player != null)
+        {
+            damagableInterface = GameManager.instance.player.GetComponent<PlayerHealth>();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Lava Triggered");
         if (other.gameObject.layer == 3 && damagableInterface != null)
         {
-            Debug.Log("Lava Damage");
-            StartCoroutine(waitforsecond(1f));
+            Debug.Log("Player entered lava");
+            if (damageCoroutine == null)
+            {
+                damageCoroutine = StartCoroutine(ApplyLavaDamage());
+            }
         }
-    }
-
-    public IEnumerator waitforsecond(float time)
-    {
-        yield return new WaitForSeconds(time);
-        Debug.Log("wait for second");
-        damagableInterface.TakeDamage(damage);
-        StartCoroutine(waitforsecond(1f));
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.layer == 3)
         {
-            Debug.Log("Lava Exit");
-            StopAllCoroutines();
+            Debug.Log("Player exited lava");
+            if (damageCoroutine != null)
+            {
+                StopCoroutine(damageCoroutine);
+                damageCoroutine = null;
+            }
+        }
+    }
+
+    private IEnumerator ApplyLavaDamage()
+    {
+        while (true)
+        {
+            damagableInterface.TakeDamage(damage);
+            Debug.Log("Lava applied damage: " + damage);
+            yield return new WaitForSeconds(damageInterval);
         }
     }
 }

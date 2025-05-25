@@ -432,7 +432,17 @@ public class PlayerMovement : MonoBehaviour
         }
 
         bool isMoving = moveDirection.magnitude > 0.1f && grounded;
-        legAnimator.SetBool("isWalking", isMoving);
+        Debug.LogError(isMoving);
+        if (isMoving)
+        {
+            legAnimator.SetBool("Idle", false);
+            legAnimator.SetBool("iswalking", isMoving);
+        }
+        if (!isMoving)
+        {
+            legAnimator.SetBool("Idle", true);
+            legAnimator.SetBool("iswalking", false);
+        }
     }
 
     private void Jump()

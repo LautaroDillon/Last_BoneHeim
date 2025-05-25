@@ -20,7 +20,7 @@ public class ManagerNode : MonoBehaviour
         Debug.Log($"[ManagerNode] {nodes.Count} nodos cargados");
     }
 
-    private void Start()
+    /*private void Start()
     {
         foreach (var a in nodes)
         {
@@ -53,7 +53,7 @@ public class ManagerNode : MonoBehaviour
             }
             Debug.Log($"[ManagerNode] Nodo {a.name} tiene {connected} vecinos.");
         }
-    }
+    }*/
 
 
 

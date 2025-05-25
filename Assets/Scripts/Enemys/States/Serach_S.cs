@@ -108,7 +108,6 @@ public class Serach_S : IState
         _shooter.AddForce(steering);
 
         Vector3 delta = _shooter.velocity * Time.deltaTime;
-        _shooter.rb.MovePosition(_shooter.rb.position + delta);
 
         if (delta.sqrMagnitude > 0.001f)
         {

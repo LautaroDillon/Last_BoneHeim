@@ -30,7 +30,6 @@ public class Atack : IState
         _shooter.anim.SetFloat("Vertical",0);
         _cooldownTimer = 0f;
         _shooter.alreadyAttacked = false;
-        _shooter.anim.SetBool("Walk", false);
         attackDelay = Random.Range(0.1f, 0.4f);
     }
 

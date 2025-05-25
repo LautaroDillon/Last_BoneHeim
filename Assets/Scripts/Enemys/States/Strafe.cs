@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class Strafe : IState
 {
@@ -12,6 +11,7 @@ public class Strafe : IState
     private float _waitDuration = 2f;
     private float _waitTimer = 0f;
 
+    bool gotoplayer;
 
     public Strafe(E_Shooter shooter, StateMachine fsm)
     {
@@ -26,15 +26,26 @@ public class Strafe : IState
 
     public void Tick()
     {
-        float distance = Vector3.Distance(_shooter.transform.position, _shooter.player.position);
+
         if(_waitTimer < _waitDuration)
         {
             _waitTimer += Time.deltaTime;
         }
-        else if (distance < _shooter.attackRange)
+        else if (_waitTimer >= _waitDuration)
+        {
+            getrandomNum();
+            _shooter.anim.SetFloat("Horizontal", 0);
+            _shooter.anim.SetFloat("Vertical", 0);
+            _waitTimer = 0f;
+        }
+
+        // Comprobar si el jugador está en rango de ataque
+        float distance = Vector3.Distance(_shooter.transform.position, _shooter.player.position);
+        if (distance < _shooter.attackRange)
         {
             _shooter.playerInAttackRange = true;
         }
+
 
         if (_shooter.path != null && _shooter.pathIndex < _shooter.path.Count && _waitTimer < _waitDuration)
         {
@@ -42,13 +53,13 @@ public class Strafe : IState
             Vector3 dir = (node.transform.position - _shooter.transform.position).normalized;
 
             // Movimiento real
-            Vector3 movement = dir * _shooter.moveSpeed * Time.deltaTime;
-            _shooter.rb.MovePosition(_shooter.rb.position + movement);
+            Vector3 force = dir * _shooter.maxForce;
+            _shooter.rb.AddForce(force, ForceMode.Acceleration);
 
             // Rotación hacia la dirección de movimiento
-            if (movement.sqrMagnitude > 0.001f)
+            if (force.sqrMagnitude > 0.001f)
             {
-                Vector3 flat = new Vector3(movement.x, 0, movement.z).normalized;
+                Vector3 flat = new Vector3(force.x, 0, force.z).normalized;
                 Quaternion rot = Quaternion.LookRotation(flat);
                 _shooter.transform.rotation = Quaternion.Slerp(
                     _shooter.transform.rotation, rot, Time.deltaTime * 5f);
@@ -65,19 +76,22 @@ public class Strafe : IState
             {
                 _shooter.pathIndex++;
             }
+
         }
         else if (_shooter.path == null)
         {
-            // Si no hay más nodos, elegir uno nuevo
+            // Si no hay más nodos, elegir uno nuevo y
+            // preguntar si el enemigo busca al jugador
             ChooseRandomNodeInZone();
+            getrandomNum();
             return;
         }
-        else
+
+        // si gotoplayer es verdadero, el enemigo se mueve hacia el jugador
+        if (gotoplayer)
         {
-            
+            _shooter.voyaPlayer = true;
         }
-
-
 
     }
 
@@ -114,5 +128,10 @@ public class Strafe : IState
         // Calcular A y asignar ruta
         _shooter.path = ManagerNode.Instance.FindPath(start, dest);
         _shooter.pathIndex = 0;
+    }
+
+    public void getrandomNum()
+    {
+        GameManager.instance.StartCoroutine(GameManager.instance.randomeNum(0.5f, _shooter.maxPos, _shooter.minPos, _shooter.chance));
     }
 }

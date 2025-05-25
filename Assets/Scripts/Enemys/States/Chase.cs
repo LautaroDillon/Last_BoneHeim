@@ -8,15 +8,6 @@ public class Chase : IState
     E_Shooter _shooter;
     StateMachine _FSM;
 
-    private static readonly Vector3[] FormationOffsets = {
-        Vector3.zero,
-        new Vector3( 2f, 0,  1f),
-        new Vector3(-2f, 0,  1f),
-        new Vector3( 0f, 0, -2f),
-        new Vector3( 3f, 0,  1f),
-        new Vector3(-3f, 0,  1f)
-    };
-
     public Chase( E_Shooter shooter, StateMachine fSM)
     {
 
@@ -41,20 +32,16 @@ public class Chase : IState
         Vector3 steer = _shooter.Seek(targetPos) + _shooter.ObstacleAvoidance();
         _shooter.AddForce(steer);
 
-        // Movimiento físico
-        Vector3 delta = _shooter.velocity * Time.deltaTime;
-        _shooter.rb.MovePosition(_shooter.rb.position + delta);
+        Vector3 velocity = _shooter.rb.velocity;
+        Vector3 flatVel = new Vector3(velocity.x, 0, velocity.z);
 
-        // Rotación y animación
-        if (delta.sqrMagnitude > 0.001f)
+        if (flatVel.sqrMagnitude > 0.01f)
         {
-            Vector3 flat = new Vector3(delta.x, 0, delta.z).normalized;
-            Quaternion rot = Quaternion.LookRotation(flat);
-            _shooter.transform.rotation = Quaternion.Slerp(
-                _shooter.transform.rotation, rot, Time.deltaTime * 8f);
+            Quaternion rot = Quaternion.LookRotation(flatVel.normalized);
+            _shooter.transform.rotation = Quaternion.Slerp(_shooter.transform.rotation, rot, Time.deltaTime * 8f);
         }
 
-        Vector3 local = _shooter.transform.InverseTransformDirection(delta.normalized);
+        Vector3 local = _shooter.transform.InverseTransformDirection(flatVel.normalized);
         _shooter.anim.SetFloat("Horizontal", local.x, 0.1f, Time.deltaTime);
         _shooter.anim.SetFloat("Vertical", local.z, 0.1f, Time.deltaTime);
 

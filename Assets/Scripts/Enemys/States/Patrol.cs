@@ -32,13 +32,13 @@ public class Patrol : IState
             Vector3 dir = (node.transform.position - _shooter.transform.position).normalized;
 
             // Movimiento real
-            Vector3 movement = dir * _shooter.moveSpeed * Time.deltaTime;
-            _shooter.rb.MovePosition(_shooter.rb.position + movement);
+            Vector3 force = dir * _shooter.maxForce;
+            _shooter.rb.AddForce(force, ForceMode.Acceleration);
 
             // Rotación hacia la dirección de movimiento
-            if (movement.sqrMagnitude > 0.001f)
+            if (force.sqrMagnitude > 0.001f)
             {
-                Vector3 flat = new Vector3(movement.x, 0, movement.z).normalized;
+                Vector3 flat = new Vector3(force.x, 0, force.z).normalized;
                 Quaternion rot = Quaternion.LookRotation(flat);
                 _shooter.transform.rotation = Quaternion.Slerp(
                     _shooter.transform.rotation, rot, Time.deltaTime * 5f);
@@ -60,6 +60,7 @@ public class Patrol : IState
         {
             _shooter.isPatrolling = false;
         }
+
     }
 
     public void OnExit()

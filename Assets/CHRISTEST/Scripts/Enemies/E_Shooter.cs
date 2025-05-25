@@ -37,6 +37,7 @@ public class E_Shooter : Entity
     public bool otherSeenPlayer;
     public float muchit;
     public bool finishsearching;
+    public int randomNum;
 
     [Header("Player Detection")]
     [SerializeField] public LayerMask obstructionMask;
@@ -64,6 +65,13 @@ public class E_Shooter : Entity
     [Header("search")]
     public Vector3 lastposition;
 
+    [Header("strafe")]
+    public bool canAtack;
+    public bool voyaPlayer;
+    public int maxPos;
+    public int minPos;
+    public int chance;
+
     #endregion
     public bool isincombatArena;
     public float lastAttackTime;
@@ -71,6 +79,10 @@ public class E_Shooter : Entity
     public int groupIndex;
 
     public Rigidbody rb;
+    public float stepUpForce = 5f;
+    public float maxStepHeight = 0.5f;
+    public float stairDetectDistance = 1f;
+    public Transform rayFoot;
 
     private void Awake()
     {
@@ -104,26 +116,39 @@ public class E_Shooter : Entity
 
         // Definir las transiciones
         at(idle, patrol, () => !isIdle && !isDead);
+
+        //transiciones de patrol a los demas estados
         at(patrol, idle, () => !isPatrolling && !isDead);
         at(patrol, chase, () => canSeePlayer && !playerInAttackRange && !isDead || otherSeenPlayer && !playerInAttackRange && !isDead);
         at(patrol, attack, () => canSeePlayer && playerInAttackRange && !isDead);
+
+        //transiciones de chase a los demas estados
         at(chase, attack, () => playerInAttackRange && !isDead);
+        at(chase, Search, () => !canSeePlayer && !isDead && lastposition != Vector3.zero && !otherSeenPlayer);
+
+        //transiciones de atack a los demas estados
         at(attack, chase, () => !playerInAttackRange && !isDead && canSeePlayer && otherSeenPlayer);
         at(attack, Search, () => !canSeePlayer && !isDead && lastposition != Vector3.zero && otherSeenPlayer);
-        at(chase, Search, () => !canSeePlayer && !isDead && lastposition != Vector3.zero && !otherSeenPlayer);
-        at(Onhit, strafe, () => !WasHit && !isDead);
-        at(strafe, chase, () => !playerInAttackRange && !isDead && canSeePlayer && otherSeenPlayer);
         at(attack, strafe, () => alreadyAttacked && playerInAttackRange && !isDead);
-        at(strafe, attack, () => !alreadyAttacked && !isDead);
-        at(Search, patrol, () => finishsearching && !isDead);       // Despues de buscar vuelve a patrullar
-        at(Onhit, idle, () => !WasHit && !isDead);               // Transición a idle desde hit
+
+        //transiciones de starfe a los demas estados
+        at(strafe, chase, () => !isDead && voyaPlayer);
+        at(strafe, attack, () => !alreadyAttacked && playerInAttackRange && !isDead);
+
+        //transiciones de search a los demas estados
+        at(Search, patrol, () => finishsearching && !isDead);
+
+        //transiciones de hit a los demas estados
+        at(Onhit, idle, () => !WasHit && !isDead);                 
         at(Onhit, patrol, () => !WasHit && !isDead);
+        at(Onhit, strafe, () => !WasHit && !isDead);
         at(Onhit, chase, () => !WasHit && !isDead);
         at(Onhit, Search, () => !WasHit && !isDead);
         at(Onhit, attack, () => !WasHit && !isDead && lastposition != Vector3.zero);
 
+        //transiciones de estados a death o a onhit
         any(death, () => currentHealth <= 0 && isDead);  // Transición a Death desde cualquier estado
-        any(Onhit, () => WasHit && !isDead);             // Transición a hit desde cualquier estado
+        any(Onhit, () => WasHit && !isDead);            // Transición a hit desde cualquier estado
 
         fsm.SetState(idle);
     }
@@ -309,6 +334,7 @@ public class E_Shooter : Entity
         Gizmos.DrawWireSphere(transform.position, chaseDistance);
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, checkRadius);
+
     }
 
     public IEnumerator waitforsecond(float time)

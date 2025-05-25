@@ -75,7 +75,6 @@ public class PlayerWeapon : MonoBehaviour
         {
             fireModeText = GameObject.Find("FireModeText")?.GetComponent<TextMeshProUGUI>();
         }
-        currentAmmo = magazineSize;
         UpdateBulletDisplay();
         UpdateAmmoUI();
     }
@@ -253,11 +252,15 @@ public class PlayerWeapon : MonoBehaviour
     [Preserve]
     public void FireBulletFromAnimation()
     {
+        Debug.Log("FireBulletFromAnimation() called");
+
         if (queuedFirePoint == null)
         {
             Debug.LogWarning("No fire point queued when animation event triggered.");
             return;
         }
+
+        Debug.Log("Spawning bullet at: " + queuedFirePoint.name);
 
         Transform selectedFirePoint = queuedFirePoint;
         queuedFirePoint = null; // Clear after use

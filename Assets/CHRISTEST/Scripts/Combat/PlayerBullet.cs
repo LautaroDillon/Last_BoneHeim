@@ -10,25 +10,27 @@ public class PlayerBullet : MonoBehaviour
     [Header("References")]
     public Rigidbody rb;
 
-    [Header("Variables")]
+    [Header("Lifetime")]
+    public float lifetime = 5f;
     private float counter;
-    public float lifetime;
 
-    [Header("Particle")]
+    [Header("Particles")]
     public GameObject wallHitEffect;
     public GameObject enemyHitEffect;
 
     void Update()
     {
-        Lifetime();
-        if (rb.velocity != Vector3.zero)
+        HandleLifetime();
+
+        if (rb != null && rb.velocity != Vector3.zero)
+        {
             transform.rotation = Quaternion.LookRotation(rb.velocity);
+        }
     }
 
-    public void Lifetime()
+    void HandleLifetime()
     {
         counter += Time.deltaTime;
-
         if (counter >= lifetime)
         {
             Destroy(gameObject);
@@ -42,21 +44,37 @@ public class PlayerBullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        // Ignore self and player
+        if (other.CompareTag("Player") || other.CompareTag("Bullet"))
             return;
 
-        if (other.CompareTag("Bullet"))
-            return;
-
+        // Enemy hit logic
         if (other.CompareTag("Enemy"))
         {
-            other.GetComponent<E_Shooter>().TakeDamage(damage);
-            Instantiate(enemyHitEffect, transform.position, Quaternion.identity);
-            FindObjectOfType<HitmarkerController>().ShowHitmarker();
-            AudioManager.instance.PlaySFXOneShot("Bullet Enemy Impact", 1f);
+            E_Shooter enemy = other.GetComponent<E_Shooter>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage);
+            }
+
+            if (enemyHitEffect != null)
+                Instantiate(enemyHitEffect, transform.position, Quaternion.identity);
+
+            if (AudioManager.instance != null)
+                AudioManager.instance.PlaySFXOneShot("Bullet Enemy Impact", 1f);
+
+            HitmarkerController hitmarker = FindObjectOfType<HitmarkerController>();
+            if (hitmarker != null)
+                hitmarker.ShowHitmarker();
         }
+
+        // Wall hit logic
         if (other.CompareTag("Wall"))
-            Instantiate(wallHitEffect, transform.position, Quaternion.identity);
+        {
+            if (wallHitEffect != null)
+                Instantiate(wallHitEffect, transform.position, Quaternion.identity);
+        }
+
         Destroy(gameObject);
     }
 }

@@ -71,17 +71,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public IEnumerator randomeNum(float time, int maxChan, int minChan, int chance)
+    public bool randomeNum(float time, int maxChan, int minChan, int chance)
     {
         var result = Random.Range(minChan, maxChan);
         if (result <= chance)
         {
-            yield return true;
+             return true;
         }
-        else
-        {
-            yield return false;
-        }
-        yield return new WaitForSeconds(time);
+
+             return false;
+        
     }
 }

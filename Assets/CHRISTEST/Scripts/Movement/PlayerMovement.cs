@@ -432,7 +432,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         bool isMoving = moveDirection.magnitude > 0.1f && grounded;
-        Debug.LogError(isMoving);
+        //Debug.LogError(isMoving);
         if (isMoving)
         {
             legAnimator.SetBool("Idle", false);

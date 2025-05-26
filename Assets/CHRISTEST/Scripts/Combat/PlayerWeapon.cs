@@ -38,6 +38,7 @@ public class PlayerWeapon : MonoBehaviour
     public GameObject bulletPrefab;
     public float bulletSpeed = 20f;
     public TextMeshProUGUI ammoText;
+    public GameObject shootParticle;
     private Transform queuedFirePoint;
 
     [Header("UI References")]
@@ -67,6 +68,7 @@ public class PlayerWeapon : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
         currentAmmo = magazineSize;
+        shootParticle.transform.position = firePoint.transform.position;
     }
 
     void Start()
@@ -237,6 +239,7 @@ public class PlayerWeapon : MonoBehaviour
             ) * directionToCenter;
 
             GameObject bullet = Instantiate(bulletPrefab, selectedFirePoint.position, Quaternion.LookRotation(spreadDirection));
+            
 
             float falloffMultiplier = 1f;
             if (baseDistance > falloffStartDistance)
@@ -294,6 +297,8 @@ public class PlayerWeapon : MonoBehaviour
         Debug.DrawRay(selectedFirePoint.position, directionToCenter * 5f, Color.red, 2f);
 
         GameObject bullet = Instantiate(bulletPrefab, selectedFirePoint.position, Quaternion.LookRotation(directionToCenter));
+        GameObject particle = Instantiate(shootParticle, selectedFirePoint.position, selectedFirePoint.rotation);
+        Destroy(particle, 1.5f);
 
         if (bullet.TryGetComponent(out PlayerBullet bulletScript))
             bulletScript.SetDamage(damage);

@@ -84,6 +84,8 @@ public class E_Shooter : Entity
     public float stairDetectDistance = 1f;
     public Transform rayFoot;
     public CapsuleCollider col;
+    public bool gotoplayer;
+
 
     private void Awake()
     {

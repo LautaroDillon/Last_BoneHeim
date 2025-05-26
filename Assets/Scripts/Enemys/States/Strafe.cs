@@ -11,7 +11,6 @@ public class Strafe : IState
     private float _waitDuration = 2f;
     private float _waitTimer = 0f;
 
-    bool gotoplayer;
     float count;
 
     public Strafe(E_Shooter shooter, StateMachine fsm)
@@ -24,36 +23,18 @@ public class Strafe : IState
     {
         ChooseRandomNodeInZone();
         count = 0;
-        gotoplayer = false;
+        _shooter.gotoplayer = false;
     }
 
     public void Tick()
     {
 
-        if(_waitTimer < _waitDuration)
-        {
-            _waitTimer += Time.deltaTime;
-        }
-        else if (_waitTimer >= _waitDuration)
-        {
-            getrandomNum();
-            _shooter.anim.SetFloat("Horizontal", 0);
-            _shooter.anim.SetFloat("Vertical", 0);
-            _waitTimer = 0f;
-        }
-
-        // Comprobar si el jugador está en rango de ataque
-        float distance = Vector3.Distance(_shooter.transform.position, _shooter.player.position);
-        if (distance < _shooter.attackRange)
-        {
-            _shooter.playerInAttackRange = true;
-        }
-
-
         if (_shooter.path != null && _shooter.pathIndex < _shooter.path.Count && _waitTimer < _waitDuration)
         {
             var node = _shooter.path[_shooter.pathIndex];
             Vector3 dir = (node.transform.position - _shooter.transform.position).normalized;
+
+            TryStepUp(dir);
 
             // Movimiento real
             Vector3 force = dir * _shooter.maxForce;
@@ -90,11 +71,31 @@ public class Strafe : IState
             return;
         }
 
+        if (_waitTimer < _waitDuration)
+        {
+            _waitTimer += Time.deltaTime;
+        }
+        else if (_waitTimer >= _waitDuration)
+        {
+            getrandomNum();
+            _shooter.anim.SetFloat("Horizontal", 0);
+            _shooter.anim.SetFloat("Vertical", 0);
+            _waitTimer = 0f;
+        }
+
+        // Comprobar si el jugador está en rango de ataque
+        float distance = Vector3.Distance(_shooter.transform.position, _shooter.player.position);
+        if (distance < _shooter.attackRange)
+        {
+            if (GameManager.instance.randomeNum(0.5f, _shooter.maxPos, _shooter.minPos, 4))
+                _shooter.playerInAttackRange = true;
+        }
+
         // si gotoplayer es verdadero, el enemigo se mueve hacia el jugador
-        if (gotoplayer)
+        if (_shooter.gotoplayer)
         {
             _shooter.voyaPlayer = true;
-            gotoplayer = false;
+            _shooter.gotoplayer = false;
         }
 
     }
@@ -130,6 +131,7 @@ public class Strafe : IState
         }
 
         // Calcular A y asignar ruta
+        Debug.LogError("calculando path");
         _shooter.path = ManagerNode.Instance.FindPath(start, dest);
         _shooter.pathIndex = 0;
     }
@@ -140,10 +142,39 @@ public class Strafe : IState
 
         if(count >= 3)
         {
-            gotoplayer = true;
+            _shooter.gotoplayer = true;
             _shooter.voyaPlayer = true;
+            count = 0;
             return;
         }
-        GameManager.instance.StartCoroutine(GameManager.instance.randomeNum(0.5f, _shooter.maxPos, _shooter.minPos, _shooter.chance));
+        _shooter.gotoplayer = GameManager.instance.randomeNum(0.5f, _shooter.maxPos, _shooter.minPos, _shooter.chance);
+
     }
+    private void TryStepUp(Vector3 dir)
+    {
+        if (_shooter.col == null) return;
+
+        CapsuleCollider col = _shooter.col;
+
+        // Origen desde la base del collider (ligeramente elevado para no tocar el suelo directamente)
+        Vector3 rayOrigin = _shooter.rayFoot.position;
+        float rayDistance = 1f;
+
+        // Visualización del raycast
+        Debug.DrawRay(rayOrigin, dir.normalized * rayDistance, Color.red);
+
+        if (Physics.Raycast(rayOrigin, dir, out RaycastHit hit, rayDistance, ~LayerMask.GetMask("Enemy")))
+        {
+            Vector3 normal = hit.normal;
+            float angle = Vector3.Angle(normal, Vector3.up);
+
+            if (angle > 40f && angle < 80f)
+            {
+                // Aplica impulso vertical leve para subir la rampa/escalón
+                Vector3 upwardBoost = Vector3.up * 4f + dir.normalized * 1f;
+                _shooter.rb.AddForce(upwardBoost, ForceMode.VelocityChange);
+            }
+        }
+    }
+
 }

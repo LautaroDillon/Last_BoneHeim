@@ -28,6 +28,8 @@ public class Chase : IState
         // Siempre sigue al jugador directamente
         Vector3 targetPos = _shooter.player.position;
 
+        TryStepUp(targetPos);
+
         // Calcular dirección usando Seek y evitar obstáculos
         Vector3 steer = _shooter.Seek(targetPos) + _shooter.ObstacleAvoidance();
         _shooter.AddForce(steer);
@@ -59,5 +61,32 @@ public class Chase : IState
         _shooter.lastposition = GameManager.instance.thisIsPlayer.position;
         _shooter.anim.SetFloat("Horizontal", 0f);
         _shooter.anim.SetFloat("Vertical", 0f);
+    }
+
+    private void TryStepUp(Vector3 dir)
+    {
+        if (_shooter.col == null) return;
+
+        CapsuleCollider col = _shooter.col;
+
+        // Origen desde la base del collider (ligeramente elevado para no tocar el suelo directamente)
+        Vector3 rayOrigin = _shooter.rayFoot.position;
+        float rayDistance = 1f;
+
+        // Visualización del raycast
+        Debug.DrawRay(rayOrigin, dir.normalized * rayDistance, Color.red);
+
+        if (Physics.Raycast(rayOrigin, dir, out RaycastHit hit, rayDistance, ~LayerMask.GetMask("Enemy")))
+        {
+            Vector3 normal = hit.normal;
+            float angle = Vector3.Angle(normal, Vector3.up);
+
+            if (angle > 40f && angle < 80f)
+            {
+                // Aplica impulso vertical leve para subir la rampa/escalón
+                Vector3 upwardBoost = Vector3.up * 4f + dir.normalized * 1f;
+                _shooter.rb.AddForce(upwardBoost, ForceMode.VelocityChange);
+            }
+        }
     }
 }

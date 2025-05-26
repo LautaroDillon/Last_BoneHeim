@@ -238,9 +238,9 @@ MonoBehaviour:
   lastposition: {x: 0, y: 0, z: 0}
   canAtack: 0
   voyaPlayer: 0
-  maxPos: 0
+  maxPos: 6
   minPos: 0
-  chance: 0
+  chance: 2
   isincombatArena: 0
   lastAttackTime: 0
   groupIndex: 0
@@ -250,6 +250,7 @@ MonoBehaviour:
   stairDetectDistance: 3
   rayFoot: {fileID: 7790965572632958592}
   col: {fileID: 0}
+  gotoplayer: 0
 --- !u!54 &9011733329996984528
 Rigidbody:
   m_ObjectHideFlags: 0

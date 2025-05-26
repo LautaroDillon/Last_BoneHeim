@@ -88,9 +88,22 @@ public class PlayerWeapon : MonoBehaviour
         Shooting();
         UpdateAmmoUI();
         HandleFireModeSwitching();
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            Debug.Log("Mouse0 pressed");
+            if (PlayerMovement.instance != null)
+                Debug.Log("PlayerMovement exists");
+            else
+                Debug.LogError("PlayerMovement.instance is null");
 
-        if (currentAmmo > magazineSize)
-            currentAmmo = magazineSize;
+            if (PlayerMovement.instance.handAnimator != null)
+            {
+                Debug.Log("Hand Animator exists");
+                PlayerMovement.instance.handAnimator.SetTrigger("TestFire");
+            }
+            else
+                Debug.LogError("Hand Animator is null");
+        }
     }
 
     #endregion

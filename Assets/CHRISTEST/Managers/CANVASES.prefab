@@ -461,7 +461,7 @@ RectTransform:
   m_Father: {fileID: 1543968250713300965}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: -0.000030517578, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -493,7 +493,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: aa6a2322a30074f4b8161709ca0f9c06, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b8acd87c6c7cf934bad5c583c155b159, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1551,7 +1551,7 @@ RectTransform:
   m_Father: {fileID: 8306146802418900502}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: -0.000030517578, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1989,7 +1989,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2901572858598571729
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3219,7 +3219,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 2880500782773652127}
-  m_FillRect: {fileID: 0}
+  m_FillRect: {fileID: 315159042008859095}
   m_HandleRect: {fileID: 3428562551086779586}
   m_Direction: 0
   m_MinValue: 0.0001
@@ -4277,7 +4277,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 5915623823812442374}
-  m_FillRect: {fileID: 0}
+  m_FillRect: {fileID: 3308088307028196804}
   m_HandleRect: {fileID: 7150855684802180521}
   m_Direction: 0
   m_MinValue: 0.0001
@@ -4428,7 +4428,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &789002531574040707
 Transform:
   m_ObjectHideFlags: 0
@@ -6457,7 +6457,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 1784781079468224845}
-  m_FillRect: {fileID: 0}
+  m_FillRect: {fileID: 6211982564840309105}
   m_HandleRect: {fileID: 6668063142752077151}
   m_Direction: 0
   m_MinValue: 0.0001
@@ -6512,7 +6512,7 @@ RectTransform:
   m_Father: {fileID: 5141540205307449535}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: -0.000030517578, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

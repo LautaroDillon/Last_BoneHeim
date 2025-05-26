@@ -12,6 +12,7 @@ public class Strafe : IState
     private float _waitTimer = 0f;
 
     bool gotoplayer;
+    float count;
 
     public Strafe(E_Shooter shooter, StateMachine fsm)
     {
@@ -22,6 +23,8 @@ public class Strafe : IState
     public void OnEnter()
     {
         ChooseRandomNodeInZone();
+        count = 0;
+        gotoplayer = false;
     }
 
     public void Tick()
@@ -91,6 +94,7 @@ public class Strafe : IState
         if (gotoplayer)
         {
             _shooter.voyaPlayer = true;
+            gotoplayer = false;
         }
 
     }
@@ -132,6 +136,14 @@ public class Strafe : IState
 
     public void getrandomNum()
     {
+        count++;
+
+        if(count >= 3)
+        {
+            gotoplayer = true;
+            _shooter.voyaPlayer = true;
+            return;
+        }
         GameManager.instance.StartCoroutine(GameManager.instance.randomeNum(0.5f, _shooter.maxPos, _shooter.minPos, _shooter.chance));
     }
 }

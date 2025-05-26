@@ -83,12 +83,14 @@ public class E_Shooter : Entity
     public float maxStepHeight = 0.5f;
     public float stairDetectDistance = 1f;
     public Transform rayFoot;
+    public CapsuleCollider col;
 
     private void Awake()
     {
         maxHealth = EnemyFlyweight.Shooter.maxLife;
         currentHealth = maxHealth;
         numberOfBulletsOnDeath = Random.Range(1, 4);
+        col = GetComponent<CapsuleCollider>();
         rb = GetComponent<Rigidbody>();
         fsm = new StateMachine();
         if (instance == null)

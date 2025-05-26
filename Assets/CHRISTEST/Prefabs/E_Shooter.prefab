@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 1036291276871711494}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.889, z: 0.097}
+  m_LocalPosition: {x: 0, y: -0.775, z: 0.097}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -206,17 +206,18 @@ MonoBehaviour:
   projectileSpeed: 5
   strafeSpeed: 5
   wasKilledByThrowable: 0
-  chaseDistance: 20
+  chaseDistance: 58
   attackRange: 15
   playerInSightRange: 0
   playerInAttackRange: 0
   canSeePlayer: 0
-  isIdle: 1
+  isIdle: 0
   WasHit: 0
-  isPatrolling: 0
+  isPatrolling: 1
   otherSeenPlayer: 0
   muchit: 0
   finishsearching: 0
+  randomNum: 0
   obstructionMask:
     serializedVersion: 2
     m_Bits: 17088
@@ -235,14 +236,20 @@ MonoBehaviour:
   velocity: {x: 0, y: 0, z: 0}
   zoneId: 0
   lastposition: {x: 0, y: 0, z: 0}
+  canAtack: 0
+  voyaPlayer: 0
+  maxPos: 0
+  minPos: 0
+  chance: 0
   isincombatArena: 0
   lastAttackTime: 0
   groupIndex: 0
   rb: {fileID: 0}
   stepUpForce: 5
-  maxStepHeight: 1
-  stairDetectDistance: 0.5
+  maxStepHeight: 2
+  stairDetectDistance: 3
   rayFoot: {fileID: 7790965572632958592}
+  col: {fileID: 0}
 --- !u!54 &9011733329996984528
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -252,7 +259,7 @@ Rigidbody:
   m_GameObject: {fileID: 8323795386488884064}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 5
+  m_Drag: 10
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -898,6 +905,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: adb8759f1dd60934e891d3809d3e6a68, type: 2}
+    - target: {fileID: 5866666021909216657, guid: baec98b1518be3c43a8c1123d94ae7e6, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6536684796296375508, guid: baec98b1518be3c43a8c1123d94ae7e6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.062391955

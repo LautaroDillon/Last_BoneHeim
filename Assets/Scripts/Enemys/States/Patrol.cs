@@ -30,6 +30,8 @@ public class Patrol : IState
             var node = _shooter.path[_shooter.pathIndex];
             Vector3 dir = (node.transform.position - _shooter.transform.position).normalized;
 
+            TryStepUp(dir);
+
             Vector3 force = dir * _shooter.maxForce;
             _shooter.rb.AddForce(force, ForceMode.Acceleration);
 
@@ -100,6 +102,33 @@ public class Patrol : IState
         for (int i = 0; i < _shooter.path.Count - 1; i++)
         {
             Debug.DrawLine(_shooter.path[i].transform.position, _shooter.path[i + 1].transform.position, Color.green, 2f);
+        }
+    }
+
+    private void TryStepUp(Vector3 dir)
+    {
+        if (_shooter.col == null) return;
+
+        CapsuleCollider col = _shooter.col;
+
+        // Origen desde la base del collider (ligeramente elevado para no tocar el suelo directamente)
+        Vector3 rayOrigin = _shooter.rayFoot.position;
+        float rayDistance = 1f;
+
+        // Visualización del raycast
+        Debug.DrawRay(rayOrigin, dir.normalized * rayDistance, Color.red);
+
+        if (Physics.Raycast(rayOrigin, dir, out RaycastHit hit, rayDistance, ~LayerMask.GetMask("Enemy")))
+        {
+            Vector3 normal = hit.normal;
+            float angle = Vector3.Angle(normal, Vector3.up);
+
+            if (angle > 40f && angle < 80f)
+            {
+                // Aplica impulso vertical leve para subir la rampa/escalón
+                Vector3 upwardBoost = Vector3.up * 4f + dir.normalized * 1f;
+                _shooter.rb.AddForce(upwardBoost, ForceMode.VelocityChange);
+            }
         }
     }
 }

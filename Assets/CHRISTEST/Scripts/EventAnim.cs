@@ -71,10 +71,8 @@ public class EventAnim : MonoBehaviour
     public void StomachEventActive()
     {
         stomachOrgan.SetActive(true);
-        playerMovement.enabled = false;
-        playerDash.enabled = false;
-        playerSlide.enabled = false;
-        playerWeapon.enabled = false;
+        PlayerMovement.instance.whatorgan.SetActive(false);
+
     }
 
     public void StomachEventDeactive()
@@ -84,19 +82,13 @@ public class EventAnim : MonoBehaviour
         stomachOrgan.transform.SetParent(null);
         stomachOrgan.SetActive(false);
         stomachPosition.SetActive(true);
-        playerMovement.enabled = true;
-        playerDash.enabled = true;
-        playerSlide.enabled = true;
-        playerWeapon.enabled = true;
     }
 
     public void LungsEventActive()
     {
         lungsOrgan.SetActive(true);
-        playerMovement.enabled = false;
-        playerDash.enabled = false;
-        playerSlide.enabled = false;
-        playerWeapon.enabled = false;
+        PlayerMovement.instance.whatorgan.SetActive(false);
+
     }
 
     public void lungsEventDeactive()
@@ -106,10 +98,6 @@ public class EventAnim : MonoBehaviour
         lungsOrgan.transform.SetParent(null);
         lungsOrgan.SetActive(false);
         lungsPosition.SetActive(true);
-        playerMovement.enabled = true;
-        playerDash.enabled = true;
-        playerSlide.enabled = true;
-        playerWeapon.enabled = true;
     }
 
     [Preserve]

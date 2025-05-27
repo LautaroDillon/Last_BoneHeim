@@ -385,7 +385,6 @@ GameObject:
   - component: {fileID: 9082736920714613950}
   - component: {fileID: 2441742532972286732}
   - component: {fileID: 2591418916602080734}
-  - component: {fileID: 7465757374424194233}
   m_Layer: 11
   m_Name: Right Arm
   m_TagString: Player
@@ -547,34 +546,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 10.27934, y: 8.079448, z: 2.1148152}
   m_Center: {x: -1.7536516, y: 1.0245056, z: 0.0000001177755}
---- !u!114 &7465757374424194233
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2274620222270433167}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e6c481cfedf56048a9a033de358e5d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bulletprefab: {fileID: 3963558588678754370, guid: e5db85985806d5e4796aebf3d1712301, type: 3}
-  bulletSpawnPoint:
-  - {fileID: 8247710997761500781}
-  - {fileID: 2628960151537805549}
-  - {fileID: 8976652835305726406}
-  - {fileID: 3726967391790635596}
-  - {fileID: 1775529228788807572}
-  - {fileID: 6416768393740857628}
-  - {fileID: 9002056644989268508}
-  - {fileID: 3795427113290771795}
-  - {fileID: 6773729483441978782}
-  - {fileID: 4400684603982224824}
-  bulletSpeed: 30
-  lifetime: 3
-  shootButton: 316
-  reloadButton: 114
 --- !u!1 &2666784652176524148
 GameObject:
   m_ObjectHideFlags: 0
@@ -1267,6 +1238,7 @@ MonoBehaviour:
   climbing: 0
   inputSmoothSpeed: 20
   state: 0
+  whatorgan: {fileID: 0}
 --- !u!114 &8378892350964853826
 MonoBehaviour:
   m_ObjectHideFlags: 0

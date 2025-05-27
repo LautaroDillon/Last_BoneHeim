@@ -18,6 +18,8 @@ public class PlayerMovement : MonoBehaviour
     public Animator legAnimator;
     public static PlayerMovement instance;
 
+
+
     [Header("Abilites")]
     public bool canDoubleJump = false;
     public bool canDash = false;
@@ -120,6 +122,9 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody rb;
 
     public MovementState state;
+
+    [Header("anime")]
+    public GameObject whatorgan;
 
     #endregion
 
@@ -674,7 +679,8 @@ public class PlayerMovement : MonoBehaviour
             normalSpeed = true;
             AudioManager.instance.PlaySFXOneShot("Heartbeat", 1f);
             AudioManager.instance.PlayMusic("Background Music", 1f);
-            Destroy(other.gameObject);
+            whatorgan = other.gameObject;
+            //Destroy(other.gameObject);
         }
 
         if (other.gameObject.tag == "Stomach")
@@ -685,7 +691,7 @@ public class PlayerMovement : MonoBehaviour
             AudioManager.instance.PlaySFXOneShot("Stomach", 1f);
             handAnimator.SetBool("Idle", true);
             lungsPosition.SetActive(true);
-            Destroy(other.gameObject);
+            //Destroy(other.gameObject);
 
         }
         if (other.gameObject.tag == "Lungs")
@@ -696,7 +702,7 @@ public class PlayerMovement : MonoBehaviour
             AudioManager.instance.PlaySFXOneShot("Lungs", 1f);
             handAnimator.SetBool("Idle", true);
             stomachPosition.SetActive(true);
-            Destroy(other.gameObject);
+            //Destroy(other.gameObject);
 
         }
     }

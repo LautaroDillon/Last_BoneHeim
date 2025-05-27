@@ -9,6 +9,7 @@ public class EventAnim : MonoBehaviour
 
     public GameObject organPoint;
 
+    [Header("Organs")]
     public GameObject heartOrgan;
     public GameObject lungsOrgan;
     public GameObject stomachOrgan;
@@ -17,7 +18,10 @@ public class EventAnim : MonoBehaviour
     public GameObject lungsPosition;
     public GameObject stomachPosition;
 
+
+
     private bool isFollowing = false;
+    [Header("Player")]
     private PlayerMovement playerMovement;
     private PlayerDash playerDash;
     private PlayerSlide playerSlide;
@@ -48,6 +52,7 @@ public class EventAnim : MonoBehaviour
         playerDash.enabled = false;
         playerSlide.enabled = false;
         playerWeapon.enabled = false;
+        PlayerMovement.instance.whatorgan.SetActive(false);
     }
 
     public void HeartEventDeactive()

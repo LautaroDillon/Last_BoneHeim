@@ -17,16 +17,11 @@ public class HotbarPlayer : MonoBehaviour
 
     public KeyCode selectorgan = KeyCode.Q;
 
-   /* [SerializeField] GameObject lung;
-    [SerializeField] GameObject kidney;
-    [SerializeField] GameObject liver;
-    [SerializeField] GameObject stomach;*/
-
     public DataOrgan[] dataOrgans;
 
     public Dictionary<ItemType, GameObject> dataOrgansDict = new Dictionary<ItemType, GameObject>();
 
-   // private Dictionary<ItemType, GameObject> hotbar = new Dictionary<ItemType, GameObject>();
+    // private Dictionary<ItemType, GameObject> hotbar = new Dictionary<ItemType, GameObject>();
 
     void Start()
     {
@@ -38,10 +33,24 @@ public class HotbarPlayer : MonoBehaviour
 
     void Update()
     {
-        var axis = Input.GetAxis("Mouse ScrollWheel");
+        if (Input.inputString != null)
+        {
+            bool isnumber = int.TryParse(Input.inputString, out int number);
+            if (isnumber && number > 0 && number <= hotbarlist.Count)
+            {
+                Debug.Log("Selected item: " + number);
+                selecteditem = number - 1; // Convert to zero-based index
+                newselected();
+            }
+        }
+
+
+        /*var axis = Input.GetAxis("Mouse ScrollWheel");
         if (axis < 0)
         {
             ScrollPos += speedscroll * Time.deltaTime;
+            organselect = !organselect;
+            newselected();
 
             if (ScrollPos >= 1)
             {
@@ -52,6 +61,8 @@ public class HotbarPlayer : MonoBehaviour
         else if(axis > 0)
         {
             ScrollNeg += speedscroll * Time.deltaTime;
+            organselect = !organselect;
+            newselected();
 
             if (ScrollNeg >= 1)
             {
@@ -63,40 +74,48 @@ public class HotbarPlayer : MonoBehaviour
         if (selecteditem <= 0.5f)  
         {
             selecteditem = dataOrgansDict.Count;
-        }else if (selecteditem >= dataOrgansDict.Count && dataOrgansDict.Count + 1 > 0)
+        }
+        else if (selecteditem >= dataOrgansDict.Count && dataOrgansDict.Count + 1 > 0)
         {
             selecteditem = 0;
-        }
-        if (Input.GetKeyDown(selectorgan))
-        {
-            newselected();
-        }
-        else return;
-        if (Input.GetMouseButtonDown(1) && organselect )
+        }*/
+
+        if (Input.GetKeyDown(selectorgan) && organselect)
         {
             useselected();
         }
-    }
 
+    }
     void newselected()
     {
-        foreach (var item in dataOrgans)
+        if (hotbarlist.Count == 0 || selecteditem < 0 || selecteditem >= hotbarlist.Count)
+            return;
+
+        ItemType currentType = hotbarlist[selecteditem];
+
+        foreach (var organ in dataOrgans)
         {
-            if (dataOrgansDict.ContainsKey(item.type))
-                dataOrgansDict[item.type].SetActive(false);
+            bool isSelected = organ.type == currentType;
+            dataOrgansDict[organ.type].SetActive(isSelected);
+            organselect = true;
         }
-                Debug.Log(selecteditem);
-        dataOrgansDict[hotbarlist[selecteditem]].SetActive(true);
-        organselect = true; 
     }
 
 
     void useselected()
     {
-        foreach (var item in dataOrgans)
+        /*if (hotbarlist.Count == 0 || selecteditem < 0 || selecteditem >= hotbarlist.Count)
+            return;*/
+        Debug.Log("Using selected item: " + selecteditem);
+
+        ItemType currentType = hotbarlist[selecteditem];
+
+        foreach (var organ in dataOrgans)
         {
-            if (dataOrgansDict.ContainsKey(item.type))
-                dataOrgansDict[item.type].SetActive(false);
+            bool isSelected = organ.type == currentType;
+            dataOrgansDict[organ.type].SetActive(false);
+            organselect = false;
+            RemoveToHotbar(currentType);
         }
 
         //hacer el llamdo para el funcionamiento de los organos
@@ -114,32 +133,6 @@ public class HotbarPlayer : MonoBehaviour
             else
                 Debug.Log("Item already exists in dictionary: " + item.type);
         }
-        
-
-       // dataOrgansDict[a].SetActive(true);
-        /*switch (a)
-        {
-            case ItemType.O_Lungs:
-                hotbarlist.Add(a);
-                hotbar.Add(a, lung);
-                Debug.Log("Added Lungs");
-                break;
-            case ItemType.O_Kidney:
-                hotbarlist.Add(a);
-                hotbar.Add(a, kidney);
-                Debug.Log("Added Kidney");
-                break;
-            case ItemType.O_Liver:
-                hotbarlist.Add(a);
-                hotbar.Add(a, liver);
-                Debug.Log("Added Liver");
-                break;
-            case ItemType.O_Stomach:
-                hotbarlist.Add(a);
-                hotbar.Add(a, stomach);
-                Debug.Log("Added Stomach");
-                break;
-        }*/
 
     }
 
@@ -155,28 +148,6 @@ public class HotbarPlayer : MonoBehaviour
             else
                 Debug.Log("Item not exists in dictionary: " + item.type);
         }
-
-        /*Debug.Log("Adding to hotbar: " + a);
-        switch (a)
-        {
-            case ItemType.O_Lungs:
-                hotbar.Remove(a);
-                Debug.Log("Added Lungs");
-                break;
-            case ItemType.O_Kidney:
-                hotbar.Remove(a);
-                Debug.Log("Added Kidney");
-                break;
-            case ItemType.O_Liver:
-                hotbar.Remove(a);
-                Debug.Log("Added Liver");
-                break;
-            case ItemType.O_Stomach:
-                hotbar.Remove(a);
-                Debug.Log("Added Stomach");
-                break;
-        }
-        */
     }
 }
 

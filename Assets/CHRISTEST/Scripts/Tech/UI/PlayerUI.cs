@@ -44,4 +44,9 @@ public class PlayerUI : MonoBehaviour
         lungs.gameObject.SetActive(pm.canDash);
         stomach.gameObject.SetActive(pm.canDoubleJump);
     }
+
+    public void isselected()
+    {
+        
+    }
 }

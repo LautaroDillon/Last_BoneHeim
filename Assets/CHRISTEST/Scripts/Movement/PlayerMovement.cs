@@ -681,6 +681,14 @@ public class PlayerMovement : MonoBehaviour
             AudioManager.instance.PlayMusic("Background Music", 1f);
             whatorgan = other.gameObject;
             //Destroy(other.gameObject);
+
+            if (other.TryGetComponent(out OrganTypeHolder holder))
+            {
+                Debug.LogError("Adding stomach to hotbar: " + holder.type);
+
+                HotbarPlayer.Instance.AddToHotbar(holder.type);
+            }
+
         }
 
         if (other.gameObject.tag == "Stomach")
@@ -693,6 +701,12 @@ public class PlayerMovement : MonoBehaviour
             lungsPosition.SetActive(true);
             //Destroy(other.gameObject);
 
+            if (other.TryGetComponent(out OrganTypeHolder holder))
+            {
+                Debug.Log("Adding stomach to hotbar: " + holder.type);
+                HotbarPlayer.Instance.AddToHotbar(holder.type);
+            }
+
         }
         if (other.gameObject.tag == "Lungs")
         {
@@ -703,6 +717,11 @@ public class PlayerMovement : MonoBehaviour
             handAnimator.SetBool("Idle", true);
             stomachPosition.SetActive(true);
             //Destroy(other.gameObject);
+
+            if (other.TryGetComponent(out OrganTypeHolder holder))
+            {
+                HotbarPlayer.Instance.AddToHotbar(holder.type);
+            }
 
         }
     }

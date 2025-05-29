@@ -196,7 +196,7 @@ public class E_Shooter : Entity
                     lastposition = player.position;
                     if (otherSeenPlayer == false)
                     {
-                        GameManager.instance.oneseeplayer(zoneId);
+                        //GameManager.instance.oneseeplayer(zoneId);
                     }
                     return true;
                 }

@@ -6,45 +6,51 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+
     public KeyCode Pause = KeyCode.Escape;
 
     [Header("Assign Player")]
     public Transform thisIsPlayer;
     public GameObject player;
-    public List<GameObject> enemies;
+    public List<GameObject> enemies = new List<GameObject>();
 
     [Header("Time Scale Check")]
     public bool isRunning;
 
     public LayerMask maskWall;
 
-    [InspectorName("Grups Enemys ")]
+    [InspectorName("Groups Enemies")]
     public Dictionary<int, List<E_Shooter>> _groups = new Dictionary<int, List<E_Shooter>>();
 
+    [Range(0, 5f)]
+    public float weightSeparation = 4f;
+
+    [Range(0, 5f)]
+    public float weightAlingment = 3f;
 
     private void Awake()
     {
-        isRunning = true;
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         instance = this;
+        DontDestroyOnLoad(gameObject);
+        isRunning = true;
     }
 
     public void AddToList(GameObject t)
     {
-        enemies.Add(t);
+        if (!enemies.Contains(t))
+            enemies.Add(t);
     }
 
-    [Range(0, 5f)]
-    //El peso que va a tener cada metodo. Cual quiero que sea mas prioritario
-    public float weightSeparation = 4f; 
-    [Range(0, 5f)]
-    public float weightAlingment = 3f;
-
-    public bool InLineOfSight(Vector3 start, Vector3 end)//lo tengo a simple vista? 
+    public bool InLineOfSight(Vector3 start, Vector3 end)
     {
-        var dir = end - start;
-        //Si no hay ningun objeto de con la layer "maskWall" entonces
-        //quiere decir que estoy viendo a mi objetico (por eso lo invierto para que me de True)
-        return !Physics.Raycast(start, dir, dir.magnitude, maskWall); 
+        Vector3 dir = end - start;
+        // Returns true if no obstacle between start and end
+        return !Physics.Raycast(start, dir, dir.magnitude, maskWall);
     }
 
     public void RegisterShooter(E_Shooter shooter)
@@ -54,32 +60,48 @@ public class GameManager : MonoBehaviour
             list = new List<E_Shooter>();
             _groups[shooter.zoneId] = list;
         }
-        shooter.groupIndex = list.Count;      // le damos su posición en la formación
+        shooter.groupIndex = list.Count; // Assign index in the group
         list.Add(shooter);
     }
 
-    public void oneseeplayer(int id)
+    public void RemoveShooter(E_Shooter shooter)
+    {
+        if (_groups.TryGetValue(shooter.zoneId, out var list))
+        {
+            list.Remove(shooter);
+            // Optionally, update groupIndex for remaining shooters
+            for (int i = 0; i < list.Count; i++)
+            {
+                list[i].groupIndex = i;
+            }
+        }
+    }
+
+    public void OnOneSeePlayer(int id)
     {
         if (_groups.TryGetValue(id, out List<E_Shooter> shooters))
         {
             foreach (var shooter in shooters)
             {
-                shooter.canSeePlayer = true; // o cualquier otro bool
-                shooter.otherSeenPlayer = true; // o cualquier otro bool
-               // StartCoroutine(shooter.longtime(8));
+                shooter.canSeePlayer = true;
+                shooter.otherSeenPlayer = true;
             }
         }
     }
 
-    public bool randomeNum(float time, int maxChan, int minChan, int chance)
+    public bool RandomChance(int min, int max, int threshold)
     {
-        var result = Random.Range(minChan, maxChan);
-        if (result <= chance)
-        {
-             return true;
-        }
+        int result = Random.Range(min, max);
+        return result <= threshold;
+    }
 
-             return false;
-        
+    private void Update()
+    {
+        // Pause toggle logic example
+        if (Input.GetKeyDown(Pause))
+        {
+            isRunning = !isRunning;
+            Time.timeScale = isRunning ? 1f : 0f;
+        }
     }
 }

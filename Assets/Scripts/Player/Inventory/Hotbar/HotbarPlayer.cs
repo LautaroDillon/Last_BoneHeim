@@ -26,8 +26,6 @@ public class HotbarPlayer : MonoBehaviour
     void Start()
     {
         Instance = this;
-
-
     }
 
 
@@ -86,6 +84,7 @@ public class HotbarPlayer : MonoBehaviour
         }
 
     }
+
     void newselected()
     {
         if (hotbarlist.Count == 0 || selecteditem < 0 || selecteditem >= hotbarlist.Count)

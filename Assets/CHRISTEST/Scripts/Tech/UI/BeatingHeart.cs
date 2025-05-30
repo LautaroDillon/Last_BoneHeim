@@ -40,7 +40,7 @@ public class BeatingHeart : MonoBehaviour
     void Update()
     {
         if (playerHealth == null)
-         return;
+            return;
 
         float healthPercent = Mathf.Clamp01(playerHealth.currentHealth / playerHealth.maxHealth);
 
@@ -48,7 +48,7 @@ public class BeatingHeart : MonoBehaviour
         float scaleAmount = Mathf.Lerp(maxScaleAmount, baseScaleAmount, healthPercent);
 
         time += Time.deltaTime * beatSpeed;
-        float curveValue = beatCurve.Evaluate(time % 1f); 
+        float curveValue = beatCurve.Evaluate(time % 1f);
 
         float scaleFactor = 1f + curveValue * scaleAmount;
         transform.localScale = originalScale * scaleFactor;

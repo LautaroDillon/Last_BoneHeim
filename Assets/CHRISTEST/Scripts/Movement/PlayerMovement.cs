@@ -387,7 +387,7 @@ public class PlayerMovement : MonoBehaviour
 
         // calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
-        
+
 
         if (OnSlope() && !exitingSlope)
         {

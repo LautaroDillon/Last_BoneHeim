@@ -47,6 +47,9 @@ public class PlayerUI : MonoBehaviour
 
     public void isselected()
     {
-        
+        /*if (HotbarPlayer.Instance.)
+        {
+
+        }*/
     }
 }

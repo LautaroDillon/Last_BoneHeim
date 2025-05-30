@@ -171,13 +171,13 @@ public class E_Shooter : Entity
     public virtual IEnumerator FOVRoutime()
     {
         WaitForSeconds wait = new WaitForSeconds(0.2f);
-
         while (true)
         {
             yield return wait;
             canSeePlayer = FieldOfViewCheck();
         }
     }
+
     public virtual bool FieldOfViewCheck()
     {
         Collider[] rangeChecks = Physics.OverlapSphere(transform.position, checkRadius, whatIsPlayer);
@@ -194,6 +194,7 @@ public class E_Shooter : Entity
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
                 {
                     lastposition = player.position;
+                    canSeePlayer = true;
                     if (otherSeenPlayer == false)
                     {
                         //GameManager.instance.oneseeplayer(zoneId);

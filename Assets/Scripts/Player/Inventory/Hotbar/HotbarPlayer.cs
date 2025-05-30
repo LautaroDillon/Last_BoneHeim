@@ -94,6 +94,7 @@ public class HotbarPlayer : MonoBehaviour
 
         foreach (var organ in dataOrgans)
         {
+            if (!dataOrgansDict.ContainsKey(currentType)) continue;
             bool isSelected = organ.type == currentType;
             dataOrgansDict[organ.type].SetActive(isSelected);
             organselect = true;
@@ -112,7 +113,7 @@ public class HotbarPlayer : MonoBehaviour
         foreach (var organ in dataOrgans)
         {
             bool isSelected = organ.type == currentType;
-            dataOrgansDict[organ.type].SetActive(false);
+            dataOrgansDict[currentType].SetActive(false);
             organselect = false;
             RemoveToHotbar(currentType);
         }
@@ -127,8 +128,8 @@ public class HotbarPlayer : MonoBehaviour
 
         foreach (var item in dataOrgans)
         {
-            if (!dataOrgansDict.ContainsKey(item.type))
-                dataOrgansDict.Add(item.type, item.objectType);
+            if (!dataOrgansDict.ContainsKey(a))
+                dataOrgansDict.Add(a, item.objectType);
             else
                 Debug.Log("Item already exists in dictionary: " + item.type);
         }
@@ -142,8 +143,8 @@ public class HotbarPlayer : MonoBehaviour
 
         foreach (var item in dataOrgans)
         {
-            if (dataOrgansDict.ContainsKey(item.type))
-                dataOrgansDict.Remove(item.type);
+            if (dataOrgansDict.ContainsKey(a))
+                dataOrgansDict.Remove(a);
             else
                 Debug.Log("Item not exists in dictionary: " + item.type);
         }

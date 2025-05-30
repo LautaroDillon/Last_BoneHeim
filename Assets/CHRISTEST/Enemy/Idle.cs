@@ -35,6 +35,8 @@ public class Idle : IState
         if (_idleTimer >= _idleDuration)
         {
             Debug.Log("Idle duration expired");
+            _shooter.isIdle = false;
+            _shooter.isPatrolling = true;
         }
     }
 

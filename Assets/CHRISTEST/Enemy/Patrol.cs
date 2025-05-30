@@ -20,6 +20,7 @@ public class Patrol : IState
     {
         _shooter.isPatrolling = true;
         _waitTimer = 0f;
+        _shooter.isIdle = false;
         ChooseRandomNodeInZone();
     }
 

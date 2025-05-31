@@ -22,7 +22,7 @@ public class EventAnim : MonoBehaviour
 
     private bool isFollowing = false;
     [Header("Player")]
-    private PlayerMovement playerMovement;
+    public PlayerMovement playerMovement;
     private PlayerDash playerDash;
     private PlayerSlide playerSlide;
     private PlayerWeapon playerWeapon;
@@ -47,21 +47,36 @@ public class EventAnim : MonoBehaviour
 
     public void HeartEventActive()
     {
-        heartOrgan.SetActive(true);
         playerMovement.enabled = false;
         playerDash.enabled = false;
         playerSlide.enabled = false;
         playerWeapon.enabled = false;
         PlayerMovement.instance.whatorgan.SetActive(false);
+        if(playerMovement.tagname == "Heart")
+        {
+            heartOrgan.SetActive(true);
+        }
+        else if (playerMovement.tagname == "Stomach")
+        {
+            stomachOrgan.SetActive(true);
+        }
+        else if (playerMovement.tagname == "Lungs")
+        {
+            lungsOrgan.SetActive(true);
+        }
     }
 
     public void HeartEventDeactive()
     {
         Debug.Log("Deactive");
+        playerMovement.freeze = false;
         isFollowing = false;
         heartOrgan.transform.SetParent(null);
+        //desactivate the organs
         heartOrgan.SetActive(false);
-        heartPosition.SetActive(true);
+        lungsOrgan.SetActive(false);
+        stomachOrgan.SetActive(false);
+
         playerMovement.enabled = true;
         playerDash.enabled = true;
         playerSlide.enabled = true;
@@ -70,8 +85,7 @@ public class EventAnim : MonoBehaviour
 
     public void StomachEventActive()
     {
-        stomachOrgan.SetActive(true);
-        PlayerMovement.instance.whatorgan.SetActive(false);
+
 
     }
 
@@ -86,18 +100,7 @@ public class EventAnim : MonoBehaviour
 
     public void LungsEventActive()
     {
-        lungsOrgan.SetActive(true);
-        PlayerMovement.instance.whatorgan.SetActive(false);
 
-    }
-
-    public void lungsEventDeactive()
-    {
-        Debug.Log("Deactive");
-        isFollowing = false;
-        lungsOrgan.transform.SetParent(null);
-        lungsOrgan.SetActive(false);
-        lungsPosition.SetActive(true);
     }
 
     [Preserve]

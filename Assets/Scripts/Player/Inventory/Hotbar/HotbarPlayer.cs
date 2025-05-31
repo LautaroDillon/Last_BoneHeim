@@ -92,31 +92,46 @@ public class HotbarPlayer : MonoBehaviour
 
         ItemType currentType = hotbarlist[selecteditem];
 
+        if (!dataOrgansDict.TryGetValue(currentType, out GameObject selectedOrgan))
+        {
+            Debug.LogWarning("Organ not found in dictionary: " + currentType);
+            return;
+        }
+
+        // Activar solo el órgano seleccionado
         foreach (var organ in dataOrgans)
         {
-            if (!dataOrgansDict.ContainsKey(currentType)) continue;
-            bool isSelected = organ.type == currentType;
-            dataOrgansDict[organ.type].SetActive(isSelected);
-            organselect = true;
+            if (dataOrgansDict.TryGetValue(organ.type, out GameObject obj))
+            {
+                obj.SetActive(organ.type == currentType);
+            }
         }
+
+        organselect = true;
     }
 
 
     void useselected()
     {
-        /*if (hotbarlist.Count == 0 || selecteditem < 0 || selecteditem >= hotbarlist.Count)
-            return;*/
-        Debug.Log("Using selected item: " + selecteditem);
+        if (hotbarlist.Count == 0 || selecteditem < 0 || selecteditem >= hotbarlist.Count)
+            return;
 
         ItemType currentType = hotbarlist[selecteditem];
 
-        foreach (var organ in dataOrgans)
+        // desactivá el GameObject si existe
+        if (dataOrgansDict.TryGetValue(currentType, out GameObject organGO))
         {
-            bool isSelected = organ.type == currentType;
-            dataOrgansDict[currentType].SetActive(false);
-            organselect = false;
-            RemoveToHotbar(currentType);
+            organGO.SetActive(false);
         }
+        else
+        {
+            Debug.LogWarning("El órgano seleccionado no está en el diccionario: " + currentType);
+        }
+
+        //eleminar el organo de la lista de hotbar
+        RemoveToHotbar(currentType);
+
+        organselect = false;
 
         //hacer el llamdo para el funcionamiento de los organos
     }
@@ -126,12 +141,15 @@ public class HotbarPlayer : MonoBehaviour
         Debug.Log("Adding to hotbar: " + a);
         hotbarlist.Add(a);
 
+        //miro si el organo ya existe en el diccionario
         foreach (var item in dataOrgans)
         {
-            if (!dataOrgansDict.ContainsKey(a))
+            //si el organo no existe en el diccionario, lo agrego
+            if (item.type == a && !dataOrgansDict.ContainsKey(a))
+            {
                 dataOrgansDict.Add(a, item.objectType);
-            else
-                Debug.Log("Item already exists in dictionary: " + item.type);
+                break;
+            }
         }
 
     }

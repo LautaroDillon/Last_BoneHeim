@@ -668,23 +668,29 @@ public class PlayerMovement : MonoBehaviour
 
     #endregion
 
+    public string tagname;
     private void OnTriggerEnter(Collider other)
     {
+
+        tagname = other.gameObject.tag;
+        whatorgan = other.gameObject;
+
         if (other.gameObject.tag == "Heart")
         {
             handAnimator.SetTrigger("Organ");
+            freeze = true;
+
             //animator.SetBool("Idle", false);
             walkSpeed = 12;
             jumpForce = 20;
             normalSpeed = true;
             AudioManager.instance.PlaySFXOneShot("Heartbeat", 1f);
             AudioManager.instance.PlayMusic("Background Music", 1f);
-            whatorgan = other.gameObject;
             //Destroy(other.gameObject);
 
             if (other.TryGetComponent(out OrganTypeHolder holder))
             {
-                Debug.LogError("Adding stomach to hotbar: " + holder.type);
+                //Debug.LogError("Adding stomach to hotbar: " + holder.type);
 
                 HotbarPlayer.Instance.AddToHotbar(holder.type);
             }
@@ -693,6 +699,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (other.gameObject.tag == "Stomach")
         {
+            freeze = true;
             handAnimator.SetTrigger("Organ");
             handAnimator.SetBool("Idle", false);
             canDoubleJump = true;
@@ -710,6 +717,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if (other.gameObject.tag == "Lungs")
         {
+            freeze = true;
             handAnimator.SetTrigger("Organ");
             handAnimator.SetBool("Idle", false);
             canDash = true;

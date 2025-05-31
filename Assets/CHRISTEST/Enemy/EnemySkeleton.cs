@@ -144,15 +144,87 @@ public class EnemySkeleton : MonoBehaviour
             return;
 
         Vector3 target = currentPath[pathIndex];
-        Vector3 dir = (target - transform.position).normalized;
+        Vector3 toTarget = target - transform.position;
+        toTarget.y = 0; // Stay on XZ plane
 
-        transform.position += dir * moveSpeed * Time.deltaTime;
-        transform.rotation = Quaternion.LookRotation(dir);
+        float distanceToTarget = toTarget.magnitude;
 
-        if (Vector3.Distance(transform.position, target) < 0.3f)
+        // Advance to next path point if we're close enough
+        if (distanceToTarget < 0.3f)
         {
             pathIndex++;
+            return;
         }
+
+        Vector3 moveDir = toTarget.normalized;
+
+        // Smooth rotation
+        if (moveDir != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(moveDir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 6f * Time.deltaTime);
+        }
+
+        // Smooth movement
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            Vector3 velocity = moveDir * moveSpeed;
+            Vector3 newPosition = rb.position + velocity * Time.deltaTime;
+            rb.MovePosition(newPosition);
+        }
+        /* if (currentPath == null || pathIndex >= currentPath.Count)
+             return;
+
+         Vector3 target = currentPath[pathIndex];
+         Vector3 horizontalDir = (target - transform.position);
+         horizontalDir.y = 0; // only move in XZ plane
+
+         if (horizontalDir.magnitude < 0.1f)
+         {
+             pathIndex++;
+             return;
+         }
+
+         Vector3 moveDir = horizontalDir.normalized;
+         Vector3 newPosition = transform.position + moveDir * moveSpeed * Time.deltaTime;
+
+         // Ground alignment
+         RaycastHit hit;
+         Vector3 origin = transform.position + Vector3.up * 1f; // start raycast above the enemy
+         if (Physics.Raycast(origin, Vector3.down, out hit, 3f))
+         {
+             newPosition.y = hit.point.y; // snap to ground
+
+             // Apply movement using Rigidbody
+             Rigidbody rb = GetComponent<Rigidbody>();
+             if (rb != null)
+             {
+                 rb.MovePosition(newPosition);
+
+                 // Rotate to face movement direction
+                 if (moveDir != Vector3.zero)
+                 {
+                     Quaternion targetRotation = Quaternion.LookRotation(moveDir);
+                     rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, 10f * Time.deltaTime));
+                 }
+             }
+             else
+             {
+                 Debug.LogWarning("Enemy has no Rigidbody component!");
+             }
+         }
+         else
+         {
+             Debug.LogWarning("AI lost ground! Possibly stepping off the map.");
+         }
+
+         // Advance to next path point if close
+         if (Vector3.Distance(transform.position, target) < 0.5f)
+         {
+             pathIndex++;
+         }
+        */
     }
 
     private bool HasLineOfSight()

@@ -19,11 +19,17 @@ public class NodeGrid : MonoBehaviour
     public List<Node> GeneratedNodes => generatedNodes;
     public bool showGizmos = true;
 
+    // Gizmo cache
+    private List<Vector3> gizmoNodePositions = new List<Vector3>();
+    private List<(Vector3 from, Vector3 to)> gizmoConnections = new List<(Vector3, Vector3)>();
+
     [ContextMenu("Generate and Connect Nodes")]
     public void GenerateAndConnectNodes()
     {
         ClearOldNodes();
         generatedNodes.Clear();
+        gizmoNodePositions.Clear();
+        gizmoConnections.Clear();
 
         if (allowedAreas == null || allowedAreas.Length == 0)
         {
@@ -68,6 +74,9 @@ public class NodeGrid : MonoBehaviour
                             {
                                 generatedNodes.Add(node);
                                 node.connections.Clear();
+
+                                // Cache gizmo position
+                                gizmoNodePositions.Add(groundPos);
                             }
                         }
                     }
@@ -79,10 +88,15 @@ public class NodeGrid : MonoBehaviour
         {
             foreach (Node otherNode in generatedNodes)
             {
-                if (node != otherNode && Vector3.Distance(node.Position, otherNode.Position) <= connectionRange)
+                if (node == otherNode) continue;
+
+                if (Vector3.Distance(node.Position, otherNode.Position) <= connectionRange)
                 {
                     if (!node.connections.Contains(otherNode))
                         node.connections.Add(otherNode);
+
+                    // Cache gizmo connection
+                    gizmoConnections.Add((node.Position, otherNode.Position));
                 }
             }
         }
@@ -95,6 +109,8 @@ public class NodeGrid : MonoBehaviour
     {
         ClearOldNodes();
         generatedNodes.Clear();
+        gizmoNodePositions.Clear();
+        gizmoConnections.Clear();
         Debug.Log("All nodes cleared.");
     }
 
@@ -109,20 +125,18 @@ public class NodeGrid : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (!showGizmos || generatedNodes == null) return;
+        if (!showGizmos) return;
 
         Gizmos.color = Color.green;
-        foreach (Node node in generatedNodes)
-        {
-            Gizmos.DrawSphere(node.transform.position, 0.1f);
 
-            if (node.connections != null)
-            {
-                foreach (Node conn in node.connections)
-                {
-                    Gizmos.DrawLine(node.transform.position, conn.transform.position);
-                }
-            }
+        foreach (Vector3 pos in gizmoNodePositions)
+        {
+            Gizmos.DrawSphere(pos, 0.1f);
+        }
+
+        foreach (var (from, to) in gizmoConnections)
+        {
+            Gizmos.DrawLine(from, to);
         }
     }
 }

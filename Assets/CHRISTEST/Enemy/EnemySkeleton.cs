@@ -1,16 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
-public class EnemyAI : MonoBehaviour
+public enum AIState { Patrolling, Chasing, Attacking }
+public class EnemySkeleton : MonoBehaviour
 {
-    public enum AIState { Patrolling, Chasing, Attacking }
     public AIState currentState = AIState.Patrolling;
 
     [Header("References")]
     public Transform player;
     public LayerMask visionMask;
     public AStarManager pathfinder;
+    public NodeGrid nodeGenerator;
 
     [Header("Stats")]
     public float moveSpeed;
@@ -20,17 +22,15 @@ public class EnemyAI : MonoBehaviour
     public float attackRange = 2f;
     public float updatePathInterval = 0.5f;
 
-    [Header("Patrol")]
-    public Transform[] patrolPoints;
-    private int patrolIndex = 0;
+    [Header("Alert Settings")]
+    public float alertRadius = 10f;
+    private Vector3 lastKnownPlayerPos;
 
     private List<Vector3> currentPath = new List<Vector3>();
     private int pathIndex = 0;
     private float lastPathUpdateTime;
 
-    [Header("Alert Settings")]
-    public float alertRadius = 10f;
-    private Vector3 lastKnownPlayerPos;
+    private Node currentPatrolNode;
 
     private void Start()
     {
@@ -39,7 +39,13 @@ public class EnemyAI : MonoBehaviour
 
         pathfinder = AStarManager.instance;
 
-        GoToNextPatrolPoint();
+        if (nodeGenerator == null || nodeGenerator.GeneratedNodes == null || nodeGenerator.GeneratedNodes.Count == 0)
+        {
+            Debug.LogWarning("No patrol nodes found!");
+            return;
+        }
+
+        GoToRandomPatrolNode();
     }
 
     private void Update()
@@ -78,16 +84,26 @@ public class EnemyAI : MonoBehaviour
 
         MoveAlongPath();
 
-        if (Vector3.Distance(transform.position, patrolPoints[patrolIndex].position) < 1f)
+        if (Vector3.Distance(transform.position, currentPatrolNode.Position) < 1f)
         {
-            patrolIndex = (patrolIndex + 1) % patrolPoints.Length;
-            GoToNextPatrolPoint();
+            GoToRandomPatrolNode();
         }
     }
 
-    private void GoToNextPatrolPoint()
+    private void GoToRandomPatrolNode()
     {
-        currentPath = pathfinder.FindPath(transform.position, patrolPoints[patrolIndex].position);
+        if (nodeGenerator == null || nodeGenerator.GeneratedNodes.Count == 0)
+            return;
+
+        Node newNode;
+        do
+        {
+            newNode = nodeGenerator.GeneratedNodes[Random.Range(0, nodeGenerator.GeneratedNodes.Count)];
+        }
+        while (newNode == currentPatrolNode && nodeGenerator.GeneratedNodes.Count > 1);
+
+        currentPatrolNode = newNode;
+        currentPath = pathfinder.FindPath(transform.position, currentPatrolNode.Position);
         pathIndex = 0;
     }
 
@@ -119,7 +135,7 @@ public class EnemyAI : MonoBehaviour
             return;
         }
 
-        Attack(); // Placeholder
+        Attack();
     }
 
     private void MoveAlongPath()
@@ -148,7 +164,7 @@ public class EnemyAI : MonoBehaviour
     private void Attack()
     {
         Debug.Log("Enemy attacks the player!");
-        // Add actual attack logic/animation/event
+        // Add attack logic, animation, or event here
     }
 
     private void AlertNearbyEnemies()
@@ -156,7 +172,7 @@ public class EnemyAI : MonoBehaviour
         Collider[] hits = Physics.OverlapSphere(transform.position, alertRadius);
         foreach (var hit in hits)
         {
-            EnemyAI otherAI = hit.GetComponent<EnemyAI>();
+            EnemySkeleton otherAI = hit.GetComponent<EnemySkeleton>();
             if (otherAI != null && otherAI != this)
             {
                 otherAI.OnAlerted(player.position);

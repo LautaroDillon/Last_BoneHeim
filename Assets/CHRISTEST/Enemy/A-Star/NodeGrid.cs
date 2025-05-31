@@ -16,6 +16,7 @@ public class NodeGrid : MonoBehaviour
     public float connectionRange = 1.5f;
 
     private List<Node> generatedNodes = new List<Node>();
+    public List<Node> GeneratedNodes => generatedNodes;
     public bool showGizmos = true;
 
     [ContextMenu("Generate and Connect Nodes")]
@@ -60,7 +61,7 @@ public class NodeGrid : MonoBehaviour
                         if (areaBounds.Contains(groundPos) && !Physics.CheckSphere(groundPos, nodeCheckRadius, obstacleMask))
                         {
                             GameObject nodeObj = Instantiate(nodePrefab, groundPos, Quaternion.identity, transform);
-                            nodeObj.SetActive(false); // Keep it inactive to reduce editor overhead
+                            nodeObj.SetActive(false);
 
                             Node node = nodeObj.GetComponent<Node>();
                             if (node != null)

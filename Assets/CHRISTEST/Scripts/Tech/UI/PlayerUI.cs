@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine.UI;
 
 public class PlayerUI : MonoBehaviour
 {
+    public static PlayerUI instance;
+
     [Header("Organs")]
     public PlayerMovement pm;
     public GameObject heart;
@@ -24,7 +27,13 @@ public class PlayerUI : MonoBehaviour
         lastNormalSpeed = pm.normalSpeed;
         lastCanDash = pm.canDash;
 
+
+
         UIUpdate();
+    }
+    private void Start()
+    {
+        instance = this;
     }
 
     private void Update()
@@ -45,11 +54,36 @@ public class PlayerUI : MonoBehaviour
         stomach.gameObject.SetActive(pm.canDoubleJump);
     }
 
-    public void isselected()
+    public void isSelected(string organtype)
     {
-        /*if (HotbarPlayer.Instance.)
+        switch (organtype)
         {
+            case "Heart":
 
-        }*/
+                break;
+            case "Lungs":
+
+                break;
+            case "Stomach":
+
+                break;
+        }
+    }
+
+
+    public void isUsed(string organtype)
+    {
+        switch (organtype)
+        {
+            case "Heart":
+                pm.normalSpeed = true;
+                break;
+            case "Lungs":
+                pm.canDash = false;
+                break;
+            case "Stomach":
+                pm.canDoubleJump = false;
+                break;
+        }
     }
 }

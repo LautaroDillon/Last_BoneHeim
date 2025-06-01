@@ -19,4 +19,5 @@ public class TorsoUI : MonoBehaviour
         float angle = Mathf.Sin(Time.time * frequency) * angleRange;
         transform.localRotation = initialRotation * Quaternion.Euler(0f, angle, 0f);
     }
+
 }

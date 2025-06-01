@@ -43,40 +43,25 @@ public class HotbarPlayer : MonoBehaviour
         }
 
 
-        /*var axis = Input.GetAxis("Mouse ScrollWheel");
-        if (axis < 0)
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+
+        if (scroll > 0f)
         {
-            ScrollPos += speedscroll * Time.deltaTime;
-            organselect = !organselect;
+            selecteditem--;
+            if (selecteditem < 0)
+                selecteditem = hotbarlist.Count - 1;
+
             newselected();
-
-            if (ScrollPos >= 1)
-            {
-                ScrollPos = 0;
-                selecteditem++;
-            }
         }
-        else if(axis > 0)
+        else if (scroll < 0f)
         {
-            ScrollNeg += speedscroll * Time.deltaTime;
-            organselect = !organselect;
+            selecteditem++;
+            if (selecteditem >= hotbarlist.Count)
+                selecteditem = 0;
+
             newselected();
-
-            if (ScrollNeg >= 1)
-            {
-                ScrollNeg = 0;
-                selecteditem--;
-            }    
         }
 
-        if (selecteditem <= 0.5f)  
-        {
-            selecteditem = dataOrgansDict.Count;
-        }
-        else if (selecteditem >= dataOrgansDict.Count && dataOrgansDict.Count + 1 > 0)
-        {
-            selecteditem = 0;
-        }*/
 
         if (Input.GetKeyDown(selectorgan) && organselect)
         {
@@ -127,7 +112,9 @@ public class HotbarPlayer : MonoBehaviour
         {
             Debug.LogWarning("El órgano seleccionado no está en el diccionario: " + currentType);
         }
+        string organName = currentType.ToString();
 
+        PlayerUI.instance.isUsed(organName);
         //eleminar el organo de la lista de hotbar
         RemoveToHotbar(currentType);
 

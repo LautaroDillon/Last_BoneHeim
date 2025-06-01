@@ -14,9 +14,16 @@ public class PlayerUI : MonoBehaviour
     public GameObject lungs;
     public GameObject stomach;
 
+    [Header("Materials Organs")]
+    public GameObject heartMaterial;
+    public GameObject lungsMaterial;
+    public GameObject stomachMaterial;
+
     private bool lastNormalSpeed;
     private bool lastCanDash;
     private bool lastCanDoubleJump;
+
+    public KeyCode OpenUI = KeyCode.Tab;
 
     private void Awake()
     {
@@ -27,10 +34,9 @@ public class PlayerUI : MonoBehaviour
         lastNormalSpeed = pm.normalSpeed;
         lastCanDash = pm.canDash;
 
-
-
         UIUpdate();
     }
+
     private void Start()
     {
         instance = this;
@@ -59,12 +65,21 @@ public class PlayerUI : MonoBehaviour
         switch (organtype)
         {
             case "Heart":
+                heart.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+                lungs.transform.localScale = new Vector3(1f, 1f, 1f);
+                stomach.transform.localScale = new Vector3(1f, 1f, 1f);
 
                 break;
             case "Lungs":
+                lungs.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+                heart.transform.localScale = new Vector3(1f, 1f, 1f);
+                stomach.transform.localScale = new Vector3(1f, 1f, 1f);
 
                 break;
             case "Stomach":
+                stomach.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+                heart.transform.localScale = new Vector3(1f, 1f, 1f);
+                lungs.transform.localScale = new Vector3(1f, 1f, 1f);
 
                 break;
         }
@@ -78,10 +93,10 @@ public class PlayerUI : MonoBehaviour
             case "Heart":
                 pm.normalSpeed = true;
                 break;
-            case "Lungs":
+            case "O_Lungs":
                 pm.canDash = false;
                 break;
-            case "Stomach":
+            case "O_Stomach":
                 pm.canDoubleJump = false;
                 break;
         }

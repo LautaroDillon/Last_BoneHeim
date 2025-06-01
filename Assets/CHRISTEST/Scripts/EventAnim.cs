@@ -71,7 +71,7 @@ public class EventAnim : MonoBehaviour
         Debug.Log("Deactive");
         playerMovement.freeze = false;
         isFollowing = false;
-        heartOrgan.transform.SetParent(null);
+        //heartOrgan.transform.SetParent(null);
         //desactivate the organs
         heartOrgan.SetActive(false);
         lungsOrgan.SetActive(false);

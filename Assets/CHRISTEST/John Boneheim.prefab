@@ -397,7 +397,7 @@ Transform:
   m_GameObject: {fileID: 1828472555514165720}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7132015, y: -0.35666808, z: -0.39839777, w: -0.4532226}
-  m_LocalPosition: {x: 0.099473886, y: 0.27332354, z: -0.07974418}
+  m_LocalPosition: {x: -0.0129, y: 0.0563, z: -0.1482}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -572,7 +572,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 34816
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
@@ -1028,7 +1028,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 34816
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
@@ -1057,6 +1057,7 @@ GameObject:
   - component: {fileID: 4615370192834907068}
   - component: {fileID: 8012495331682462058}
   - component: {fileID: 3889202759188512740}
+  - component: {fileID: 7455868910008990301}
   m_Layer: 3
   m_Name: John Boneheim
   m_TagString: Player
@@ -1185,7 +1186,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &7592187122004267865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1218,9 +1219,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handAnimator: {fileID: 9166547986876990401}
   legAnimator: {fileID: 492675326858068227}
-  canDoubleJump: 0
-  canDash: 0
-  normalSpeed: 0
+  canDoubleJump: 1
+  canDash: 1
+  normalSpeed: 1
   orientation: {fileID: 5495434876042881451}
   mainCam: {fileID: 6174852390792161049}
   cam: {fileID: 5912975175020226424}
@@ -1273,6 +1274,7 @@ MonoBehaviour:
   inputSmoothSpeed: 20
   state: 0
   whatorgan: {fileID: 0}
+  tagname: 
 --- !u!114 &8378892350964853826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1446,6 +1448,30 @@ MonoBehaviour:
   meleeCooldownUI: {fileID: 0}
   throwCooldownUI: {fileID: 0}
   enemyHitEffect: {fileID: 9160994265675421395, guid: d8e6d7a18bb01e148904bb0c060666d8, type: 3}
+--- !u!114 &7455868910008990301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5247402987687501777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e626777e4d4ad984291f8abab839b02c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speedscroll: 0
+  hotbarlist: 
+  selecteditem: 0
+  organselect: 0
+  selectorgan: 113
+  dataOrgans:
+  - type: 0
+    objectType: {fileID: 3463554571547775212}
+  - type: 2
+    objectType: {fileID: 8238827812097290380}
+  - type: 3
+    objectType: {fileID: 4658844698649854484}
 --- !u!1 &5837443760537717767
 GameObject:
   m_ObjectHideFlags: 0
@@ -2319,6 +2345,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Stomach
       objectReference: {fileID: 0}
+    - target: {fileID: 6583803723332351589, guid: fd9190a6ee51bce4492f23f43bea575b, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7602550646055828949, guid: fd9190a6ee51bce4492f23f43bea575b, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2557,7 +2591,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5881734178681694298, guid: 46b63b7668e77934ea4e18bf839a46cf, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8439207994633795191, guid: 46b63b7668e77934ea4e18bf839a46cf, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2607,6 +2641,11 @@ PrefabInstance:
 --- !u!4 &6262319988761882273 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8439207994633795191, guid: 46b63b7668e77934ea4e18bf839a46cf, type: 3}
+  m_PrefabInstance: {fileID: 2591307207084759254}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8238827812097290380 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5881734178681694298, guid: 46b63b7668e77934ea4e18bf839a46cf, type: 3}
   m_PrefabInstance: {fileID: 2591307207084759254}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3340698380335627856
@@ -3669,6 +3708,7 @@ MonoBehaviour:
   heartPosition: {fileID: 718847505081117090}
   lungsPosition: {fileID: 9111052440050964414}
   stomachPosition: {fileID: 3236910262448566015}
+  playerMovement: {fileID: 7949670869836013094}
 --- !u!114 &527497661895908338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3894,7 +3934,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8142339825293136439, guid: adb3922fb4993bc49b2ee4845ece759f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3904,6 +3944,11 @@ PrefabInstance:
 --- !u!4 &276506038316601636 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3715105450928963847, guid: adb3922fb4993bc49b2ee4845ece759f, type: 3}
+  m_PrefabInstance: {fileID: 3483794344150929443}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4658844698649854484 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8142339825293136439, guid: adb3922fb4993bc49b2ee4845ece759f, type: 3}
   m_PrefabInstance: {fileID: 3483794344150929443}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4928302235821329813
@@ -3960,13 +4005,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8391855706473356665, guid: 9f2c7da213c1dc14bb3af9d66c899d78, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f2c7da213c1dc14bb3af9d66c899d78, type: 3}
+--- !u!1 &3463554571547775212 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8391855706473356665, guid: 9f2c7da213c1dc14bb3af9d66c899d78, type: 3}
+  m_PrefabInstance: {fileID: 4928302235821329813}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7814686189971152926 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2888935372476476811, guid: 9f2c7da213c1dc14bb3af9d66c899d78, type: 3}
@@ -3983,6 +4033,14 @@ PrefabInstance:
     - target: {fileID: 82724631375391373, guid: c5f2eec7f2a0df14c9fe9dba50cbbe9a, type: 3}
       propertyPath: m_Name
       value: Lungs
+      objectReference: {fileID: 0}
+    - target: {fileID: 82724631375391373, guid: c5f2eec7f2a0df14c9fe9dba50cbbe9a, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 704292471993563113, guid: c5f2eec7f2a0df14c9fe9dba50cbbe9a, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4538909513079056316, guid: c5f2eec7f2a0df14c9fe9dba50cbbe9a, type: 3}
       propertyPath: m_LocalPosition.x

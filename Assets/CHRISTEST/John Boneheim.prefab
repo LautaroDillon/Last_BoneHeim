@@ -1199,7 +1199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6efc8cd0521c47b48b60fdd1c401eed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 3.402823e+38
   currentHealth: 0
   isDead: 0
   deathUI: {fileID: 0}
@@ -1219,9 +1219,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handAnimator: {fileID: 9166547986876990401}
   legAnimator: {fileID: 492675326858068227}
-  canDoubleJump: 1
-  canDash: 1
-  normalSpeed: 1
+  canDoubleJump: 0
+  canDash: 0
+  normalSpeed: 0
   orientation: {fileID: 5495434876042881451}
   mainCam: {fileID: 6174852390792161049}
   cam: {fileID: 5912975175020226424}
@@ -1408,6 +1408,10 @@ MonoBehaviour:
   heart: {fileID: 0}
   lungs: {fileID: 0}
   stomach: {fileID: 0}
+  heartMaterial: {fileID: 0}
+  lungsMaterial: {fileID: 0}
+  stomachMaterial: {fileID: 0}
+  OpenUI: 9
 --- !u!114 &3889202759188512740
 MonoBehaviour:
   m_ObjectHideFlags: 0

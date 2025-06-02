@@ -38,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
     public float sprintSpeed;
     public float slideSpeed;
     public float dashSpeed;
+    public float wallrunSpeed;
     private float moveSpeed;
     public float climbSpeed;
     public float vaultSpeed;
@@ -314,6 +315,11 @@ public class PlayerMovement : MonoBehaviour
             state = MovementState.dashing;
             desiredMoveSpeed = dashSpeed;
             speedChangeFactor = dashSpeedChangeFactor;
+        }
+        else if (wallrunning)
+        {
+            state = MovementState.wallrunning;
+            desiredMoveSpeed = wallrunSpeed;
         }
         else if (sliding && grounded)
         {

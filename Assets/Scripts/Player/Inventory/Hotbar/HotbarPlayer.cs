@@ -21,8 +21,6 @@ public class HotbarPlayer : MonoBehaviour
 
     public Dictionary<ItemType, GameObject> dataOrgansDict = new Dictionary<ItemType, GameObject>();
 
-    // private Dictionary<ItemType, GameObject> hotbar = new Dictionary<ItemType, GameObject>();
-
     void Start()
     {
         Instance = this;

@@ -11,7 +11,7 @@ public class PlayerWallrun : MonoBehaviour
     public float wallRunForce = 600f;
     public float wallJumpUpForce = 8f;
     public float wallJumpSideForce = 8f;
-    public float wallClimbSpeed = 4f;
+    public float wallClimbSpeed = 8f;
     public float maxWallRunTime = 1.5f;
     private float wallRunTimer;
 
@@ -46,6 +46,7 @@ public class PlayerWallrun : MonoBehaviour
     [Header("Gravity")]
     public bool useGravity = true;
     public float gravityCounterForce = 20f;
+    public float fallControlForce = 400f;
 
     [Header("References")]
     public Transform orientation;
@@ -162,11 +163,11 @@ public class PlayerWallrun : MonoBehaviour
         // Stick to wall
         bool pushingAway = (wallLeft && horizontalInput > 0) || (wallRight && horizontalInput < 0);
         if (!pushingAway)
-            rb.AddForce(-wallNormal * 100f, ForceMode.Force);
+            rb.AddForce(-wallNormal * 200, ForceMode.Force);
 
         // Counteract gravity
         if (useGravity)
-            rb.AddForce(transform.up * gravityCounterForce, ForceMode.Force);
+            rb.AddForce(Vector3.up * fallControlForce, ForceMode.Force);
     }
 
     private void StopWallRun()

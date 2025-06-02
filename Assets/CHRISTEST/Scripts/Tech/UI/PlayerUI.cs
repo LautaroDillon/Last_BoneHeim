@@ -51,6 +51,10 @@ public class PlayerUI : MonoBehaviour
             lastCanDash = pm.canDash;
             lastCanDoubleJump = pm.canDoubleJump;
         }
+        if (Input.GetKeyDown(OpenUI))
+        {
+            //agregrar funciones del UIinfo
+        }
     }
 
     public void UIUpdate()

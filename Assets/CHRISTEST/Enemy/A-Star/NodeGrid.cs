@@ -90,13 +90,25 @@ public class NodeGrid : MonoBehaviour
             {
                 if (node == otherNode) continue;
 
-                if (Vector3.Distance(node.Position, otherNode.Position) <= connectionRange)
-                {
-                    if (!node.connections.Contains(otherNode))
-                        node.connections.Add(otherNode);
+                Vector3 delta = otherNode.Position - node.Position;
 
-                    // Cache gizmo connection
-                    gizmoConnections.Add((node.Position, otherNode.Position));
+                float horizontalDistance = new Vector2(delta.x, delta.z).magnitude;
+                float verticalDifference = Mathf.Abs(delta.y);
+
+                // Allow vertical steps (e.g. 0.5–1.2m) for stairs and check for clear connection
+                if (horizontalDistance <= connectionRange && verticalDifference <= 1.2f)
+                {
+                    // Optional: Add a raycast to ensure clear walkable path (no ceiling)
+                    Vector3 direction = (otherNode.Position - node.Position).normalized;
+                    float distance = Vector3.Distance(node.Position + Vector3.up * 0.2f, otherNode.Position + Vector3.up * 0.2f);
+
+                    if (!Physics.Raycast(node.Position + Vector3.up * 0.2f, direction, distance, obstacleMask))
+                    {
+                        if (!node.connections.Contains(otherNode))
+                            node.connections.Add(otherNode);
+
+                        gizmoConnections.Add((node.Position, otherNode.Position));
+                    }
                 }
             }
         }
@@ -123,6 +135,24 @@ public class NodeGrid : MonoBehaviour
         }
     }
 
+    public Node GetClosestGroundNode(Vector3 position)
+    {
+        Node closest = null;
+        float closestDist = float.MaxValue;
+
+        foreach (Node node in generatedNodes)
+        {
+            float dist = Vector3.Distance(position, node.Position);
+            if (dist < closestDist)
+            {
+                closest = node;
+                closestDist = dist;
+            }
+        }
+
+        return closest;
+    }
+
     private void OnDrawGizmos()
     {
         if (!showGizmos) return;
@@ -136,6 +166,13 @@ public class NodeGrid : MonoBehaviour
 
         foreach (var (from, to) in gizmoConnections)
         {
+            Gizmos.DrawLine(from, to);
+        }
+
+        foreach (var (from, to) in gizmoConnections)
+        {
+            float yDiff = Mathf.Abs(from.y - to.y);
+            Gizmos.color = yDiff > 0.2f ? Color.cyan : Color.green;
             Gizmos.DrawLine(from, to);
         }
     }

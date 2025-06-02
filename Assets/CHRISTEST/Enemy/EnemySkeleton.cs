@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 
 public enum AIState { Patrolling, Chasing, Attacking }
-public class EnemySkeleton : MonoBehaviour
+public class EnemySkeleton : Entity
 {
     public AIState currentState = AIState.Patrolling;
 
@@ -13,6 +13,9 @@ public class EnemySkeleton : MonoBehaviour
     public LayerMask visionMask;
     public AStarManager pathfinder;
     public NodeGrid nodeGenerator;
+    public GameObject bulletDrop;
+    public PlayerWeapon playerWeapon;
+
 
     [Header("Stats")]
     public float moveSpeed;
@@ -21,6 +24,8 @@ public class EnemySkeleton : MonoBehaviour
     public float detectionRadius = 10f;
     public float attackRange = 2f;
     public float updatePathInterval = 0.5f;
+    public float rotationSpeed = 6f;
+    public int numberOfBulletsOnDeath;
 
     [Header("Alert Settings")]
     public float alertRadius = 10f;
@@ -31,6 +36,16 @@ public class EnemySkeleton : MonoBehaviour
     private float lastPathUpdateTime;
 
     private Node currentPatrolNode;
+    private Animator animator;
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+        numberOfBulletsOnDeath = Random.Range(2, 4);
+
+        maxHealth = EnemyFlyweight.Shooter.maxLife;
+        currentHealth = maxHealth;
+    }
 
     private void Start()
     {
@@ -45,12 +60,19 @@ public class EnemySkeleton : MonoBehaviour
             return;
         }
 
+        // Snap to nearest node
+        Node nearestNode = nodeGenerator.GetClosestGroundNode(transform.position);
+        if (nearestNode != null)
+        {
+            transform.position = nearestNode.Position;
+        }
+
         GoToRandomPatrolNode();
     }
 
     private void Update()
     {
-        if (player == null || pathfinder == null)
+        if (player == null || pathfinder == null || isDead)
             return;
 
         switch (currentState)
@@ -66,7 +88,6 @@ public class EnemySkeleton : MonoBehaviour
                 break;
         }
 
-        // Transition to chasing if player is detected
         if (currentState != AIState.Attacking &&
             Vector3.Distance(transform.position, player.position) <= detectionRadius &&
             HasLineOfSight())
@@ -74,6 +95,67 @@ public class EnemySkeleton : MonoBehaviour
             currentState = AIState.Chasing;
             lastKnownPlayerPos = player.position;
             AlertNearbyEnemies();
+        }
+    }
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        AudioManager.instance.PlaySFXOneShot("ShooterDamage", 1f);
+        if (currentHealth <= 0)
+        {
+            animator.SetBool("isDead", true);
+            isDead = true;
+            Death();
+        }
+        else
+        {
+            animator.SetTrigger("isHit");
+        }
+    }
+
+    public void Death()
+    {
+        if (isDead == true)
+        {
+            AudioManager.instance.PlaySFXOneShot("ShooterDeath", 1f);
+            DropBullets();
+            // Optional: disable colliders or nav/AI logic
+            GetComponent<Collider>().enabled = false;
+            GetComponent<Rigidbody>().isKinematic = true;
+            Destroy(gameObject);
+        }
+    }
+
+    void DropBullets()
+    {
+        for (int i = 0; i < numberOfBulletsOnDeath; i++)
+        {
+            Vector3 dropOffset = new Vector3(
+                Random.Range(-0.3f, 0.3f),
+                0.5f,
+                Random.Range(-0.3f, 0.3f)
+            );
+
+            Vector3 dropPosition = transform.position + dropOffset;
+
+            GameObject bullet = Instantiate(bulletDrop, dropPosition, Quaternion.identity);
+
+            bullet.transform.position += Vector3.up * 0.3f;
+
+            // Add physics force in random arc
+            Rigidbody rb = bullet.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                Vector3 randomDirection = new Vector3(
+                    Random.Range(-1f, 1f),
+                    1f,
+                    Random.Range(-1f, 1f)
+                ).normalized;
+
+                float dropForce = Random.Range(3f, 6f);
+                rb.AddForce(randomDirection * dropForce, ForceMode.Impulse);
+                rb.AddTorque(Random.insideUnitSphere * 5f, ForceMode.Impulse);
+            }
         }
     }
 
@@ -125,23 +207,33 @@ public class EnemySkeleton : MonoBehaviour
         }
 
         MoveAlongPath();
+        RotateTowardsPlayer();
     }
 
     private void AttackPlayer()
     {
         if (Vector3.Distance(transform.position, player.position) > attackRange)
         {
+            animator.SetBool("IsAttacking", false);
             currentState = AIState.Chasing;
             return;
         }
 
+        RotateTowardsPlayer();
+        if (!animator.GetBool("IsAttacking"))
+        {
+            animator.SetBool("IsAttacking", true);
+        }
         Attack();
     }
 
     private void MoveAlongPath()
     {
         if (currentPath == null || pathIndex >= currentPath.Count)
+        {
+            animator.SetFloat("Speed", 0f);
             return;
+        }
 
         Vector3 target = currentPath[pathIndex];
         Vector3 toTarget = target - transform.position;
@@ -153,6 +245,7 @@ public class EnemySkeleton : MonoBehaviour
         if (distanceToTarget < 0.3f)
         {
             pathIndex++;
+            animator.SetFloat("Speed", 0f);
             return;
         }
 
@@ -162,7 +255,7 @@ public class EnemySkeleton : MonoBehaviour
         if (moveDir != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(moveDir);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 6f * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
 
         // Smooth movement
@@ -173,64 +266,25 @@ public class EnemySkeleton : MonoBehaviour
             Vector3 newPosition = rb.position + velocity * Time.deltaTime;
             rb.MovePosition(newPosition);
         }
-        /* if (currentPath == null || pathIndex >= currentPath.Count)
-             return;
-
-         Vector3 target = currentPath[pathIndex];
-         Vector3 horizontalDir = (target - transform.position);
-         horizontalDir.y = 0; // only move in XZ plane
-
-         if (horizontalDir.magnitude < 0.1f)
-         {
-             pathIndex++;
-             return;
-         }
-
-         Vector3 moveDir = horizontalDir.normalized;
-         Vector3 newPosition = transform.position + moveDir * moveSpeed * Time.deltaTime;
-
-         // Ground alignment
-         RaycastHit hit;
-         Vector3 origin = transform.position + Vector3.up * 1f; // start raycast above the enemy
-         if (Physics.Raycast(origin, Vector3.down, out hit, 3f))
-         {
-             newPosition.y = hit.point.y; // snap to ground
-
-             // Apply movement using Rigidbody
-             Rigidbody rb = GetComponent<Rigidbody>();
-             if (rb != null)
-             {
-                 rb.MovePosition(newPosition);
-
-                 // Rotate to face movement direction
-                 if (moveDir != Vector3.zero)
-                 {
-                     Quaternion targetRotation = Quaternion.LookRotation(moveDir);
-                     rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, 10f * Time.deltaTime));
-                 }
-             }
-             else
-             {
-                 Debug.LogWarning("Enemy has no Rigidbody component!");
-             }
-         }
-         else
-         {
-             Debug.LogWarning("AI lost ground! Possibly stepping off the map.");
-         }
-
-         // Advance to next path point if close
-         if (Vector3.Distance(transform.position, target) < 0.5f)
-         {
-             pathIndex++;
-         }
-        */
+        animator.SetFloat("Speed", moveSpeed);
     }
 
     private bool HasLineOfSight()
     {
         Vector3 dir = player.position - transform.position;
         return !Physics.Raycast(transform.position, dir.normalized, dir.magnitude, visionMask);
+    }
+
+    private void RotateTowardsPlayer()
+    {
+        Vector3 directionToPlayer = player.position - transform.position;
+        directionToPlayer.y = 0; // Keep rotation horizontal only
+
+        if (directionToPlayer.sqrMagnitude > 0.001f) // avoid zero direction
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
     }
 
     private void Attack()

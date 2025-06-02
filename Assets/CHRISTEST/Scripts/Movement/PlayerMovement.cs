@@ -673,10 +673,11 @@ public class PlayerMovement : MonoBehaviour
     {
 
         tagname = other.gameObject.tag;
-        whatorgan = other.gameObject;
 
         if (other.gameObject.tag == "Heart")
         {
+            whatorgan = other.gameObject;
+            rb.velocity = Vector3.zero;
             handAnimator.SetTrigger("Organ");
             freeze = true;
 
@@ -701,12 +702,14 @@ public class PlayerMovement : MonoBehaviour
         {
             freeze = true;
             handAnimator.SetTrigger("Organ");
+            rb.velocity = Vector3.zero;
             handAnimator.SetBool("Idle", false);
             canDoubleJump = true;
             AudioManager.instance.PlaySFXOneShot("Stomach", 1f);
             handAnimator.SetBool("Idle", true);
             lungsPosition.SetActive(true);
             //Destroy(other.gameObject);
+            whatorgan = other.gameObject;
 
             if (other.TryGetComponent(out OrganTypeHolder holder))
             {
@@ -719,12 +722,14 @@ public class PlayerMovement : MonoBehaviour
         {
             freeze = true;
             handAnimator.SetTrigger("Organ");
+            rb.velocity = Vector3.zero;
             handAnimator.SetBool("Idle", false);
             canDash = true;
             AudioManager.instance.PlaySFXOneShot("Lungs", 1f);
             handAnimator.SetBool("Idle", true);
             stomachPosition.SetActive(true);
             //Destroy(other.gameObject);
+            whatorgan = other.gameObject;
 
             if (other.TryGetComponent(out OrganTypeHolder holder))
             {

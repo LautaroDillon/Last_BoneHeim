@@ -36,11 +36,11 @@ public class EnemySkeleton : Entity
     private float lastPathUpdateTime;
 
     private Node currentPatrolNode;
-    private Animator animator;
+    public Animator animator;
 
     private void Awake()
     {
-        animator = GetComponent<Animator>();
+        //animator = GetComponent<Animator>();
         numberOfBulletsOnDeath = Random.Range(2, 4);
 
         maxHealth = EnemyFlyweight.Shooter.maxLife;

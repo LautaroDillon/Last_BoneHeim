@@ -51,7 +51,7 @@ public class PlayerBullet : MonoBehaviour
         // Enemy hit logic
         if (other.CompareTag("Enemy"))
         {
-            E_Shooter enemy = other.GetComponent<E_Shooter>();
+            EnemySkeleton enemy = other.GetComponent<EnemySkeleton>();
             if (enemy != null)
             {
                 enemy.TakeDamage(damage);

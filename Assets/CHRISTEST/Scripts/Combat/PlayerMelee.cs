@@ -197,7 +197,6 @@ public class PlayerMelee : MonoBehaviour
         pw.magazineSize = 5;
         isThrowableAway = true;
         canMelee = false;
-        
     }
 
     void RecallObject()

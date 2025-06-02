@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public enum AIState { Patrolling, Chasing, Attacking }
+public enum AIState { Patrolling, Chasing, Attacking, Dead }
+
 public class EnemySkeleton : Entity
 {
     public AIState currentState = AIState.Patrolling;
@@ -15,7 +16,8 @@ public class EnemySkeleton : Entity
     public NodeGrid nodeGenerator;
     public GameObject bulletDrop;
     public PlayerWeapon playerWeapon;
-
+    public GameObject attackColliderPrefab;
+    public Transform attackSpawnPoint;
 
     [Header("Stats")]
     public float moveSpeed;
@@ -33,18 +35,25 @@ public class EnemySkeleton : Entity
 
     private List<Vector3> currentPath = new List<Vector3>();
     private int pathIndex = 0;
-    private float lastPathUpdateTime;
+    private float lastPathUpdateTime = 0f; // Initialize to zero for first update
+    private bool isHit = false;
 
     private Node currentPatrolNode;
     public Animator animator;
 
+    private Rigidbody rb;
+
     private void Awake()
     {
-        //animator = GetComponent<Animator>();
         numberOfBulletsOnDeath = Random.Range(2, 4);
 
         maxHealth = EnemyFlyweight.Shooter.maxLife;
         currentHealth = maxHealth;
+
+        rb = GetComponent<Rigidbody>();
+
+        if (animator == null)
+            animator = GetComponent<Animator>();
     }
 
     private void Start()
@@ -53,6 +62,8 @@ public class EnemySkeleton : Entity
             player = GameManager.instance.player.transform;
 
         pathfinder = AStarManager.instance;
+
+        playerWeapon = FindObjectOfType<PlayerWeapon>();
 
         if (nodeGenerator == null || nodeGenerator.GeneratedNodes == null || nodeGenerator.GeneratedNodes.Count == 0)
         {
@@ -65,6 +76,7 @@ public class EnemySkeleton : Entity
         if (nearestNode != null)
         {
             transform.position = nearestNode.Position;
+            currentPatrolNode = nearestNode;
         }
 
         GoToRandomPatrolNode();
@@ -72,7 +84,7 @@ public class EnemySkeleton : Entity
 
     private void Update()
     {
-        if (player == null || pathfinder == null || isDead)
+        if (player == null || pathfinder == null || currentState == AIState.Dead)
             return;
 
         switch (currentState)
@@ -88,45 +100,62 @@ public class EnemySkeleton : Entity
                 break;
         }
 
-        if (currentState != AIState.Attacking &&
-            Vector3.Distance(transform.position, player.position) <= detectionRadius &&
-            HasLineOfSight())
+        // Check if should transition to Chasing state
+        if (currentState != AIState.Attacking && currentState != AIState.Dead)
         {
-            currentState = AIState.Chasing;
-            lastKnownPlayerPos = player.position;
-            AlertNearbyEnemies();
+            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+            if (distanceToPlayer <= detectionRadius && HasLineOfSight())
+            {
+                currentState = AIState.Chasing;
+                lastKnownPlayerPos = player.position;
+                AlertNearbyEnemies();
+            }
         }
     }
-    public void TakeDamage(int damage)
+
+    public override void TakeDamage(float dmg)
     {
-        currentHealth -= damage;
+        if (currentState == AIState.Dead)
+            return;
+
+        base.TakeDamage(dmg); // reduces health
+
         AudioManager.instance.PlaySFXOneShot("ShooterDamage", 1f);
-        if (currentHealth <= 0)
+
+        if (isDead)
         {
-            animator.SetBool("isDead", true);
-            isDead = true;
+            currentState = AIState.Dead;
+            animator.SetTrigger("isDead");
             Death();
         }
         else
         {
-            animator.SetTrigger("isHit");
+            isHit = true;
+            animator.SetTrigger("Hit");
         }
     }
 
-    public void Death()
+    private void Death()
     {
-        if (isDead == true)
-        {
-            AudioManager.instance.PlaySFXOneShot("ShooterDeath", 1f);
-            DropBullets();
-            // Optional: disable colliders or nav/AI logic
-            GetComponent<Collider>().enabled = false;
-            GetComponent<Rigidbody>().isKinematic = true;
-            Destroy(gameObject);
-        }
+        AudioManager.instance.PlaySFXOneShot("ShooterDeath", 1f);
+        DropBullets();
+
+        Collider col = GetComponent<Collider>();
+        if (col != null)
+            col.enabled = false;
+
+        if (rb != null)
+            rb.isKinematic = true;
+
+        Invoke(nameof(DestroyEnemy), 2f);
     }
 
-    void DropBullets()
+    private void DestroyEnemy()
+    {
+        Destroy(gameObject);
+    }
+
+    private void DropBullets()
     {
         for (int i = 0; i < numberOfBulletsOnDeath; i++)
         {
@@ -136,15 +165,12 @@ public class EnemySkeleton : Entity
                 Random.Range(-0.3f, 0.3f)
             );
 
-            Vector3 dropPosition = transform.position + dropOffset;
+            Vector3 dropPosition = transform.position + dropOffset + Vector3.up * 0.3f;
 
             GameObject bullet = Instantiate(bulletDrop, dropPosition, Quaternion.identity);
 
-            bullet.transform.position += Vector3.up * 0.3f;
-
-            // Add physics force in random arc
-            Rigidbody rb = bullet.GetComponent<Rigidbody>();
-            if (rb != null)
+            Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
+            if (bulletRb != null)
             {
                 Vector3 randomDirection = new Vector3(
                     Random.Range(-1f, 1f),
@@ -153,8 +179,8 @@ public class EnemySkeleton : Entity
                 ).normalized;
 
                 float dropForce = Random.Range(3f, 6f);
-                rb.AddForce(randomDirection * dropForce, ForceMode.Impulse);
-                rb.AddTorque(Random.insideUnitSphere * 5f, ForceMode.Impulse);
+                bulletRb.AddForce(randomDirection * dropForce, ForceMode.Impulse);
+                bulletRb.AddTorque(Random.insideUnitSphere * 5f, ForceMode.Impulse);
             }
         }
     }
@@ -196,6 +222,7 @@ public class EnemySkeleton : Entity
         if (distance <= attackRange)
         {
             currentState = AIState.Attacking;
+            animator.SetBool("isAttacking", false); // Reset attack anim trigger for fresh start
             return;
         }
 
@@ -212,18 +239,21 @@ public class EnemySkeleton : Entity
 
     private void AttackPlayer()
     {
-        if (Vector3.Distance(transform.position, player.position) > attackRange)
+        float distance = Vector3.Distance(transform.position, player.position);
+        if (distance > attackRange)
         {
-            animator.SetBool("IsAttacking", false);
+            animator.SetBool("isAttacking", false);
             currentState = AIState.Chasing;
             return;
         }
 
         RotateTowardsPlayer();
-        if (!animator.GetBool("IsAttacking"))
+
+        if (!animator.GetBool("isAttacking"))
         {
-            animator.SetBool("IsAttacking", true);
+            animator.SetBool("isAttacking", true);
         }
+
         Attack();
     }
 
@@ -231,42 +261,50 @@ public class EnemySkeleton : Entity
     {
         if (currentPath == null || pathIndex >= currentPath.Count)
         {
-            animator.SetFloat("Speed", 0f);
+            animator.SetFloat("Horizontal", 0f, 0.1f, Time.deltaTime);
+            animator.SetFloat("Vertical", 0f, 0.1f, Time.deltaTime);
             return;
         }
 
         Vector3 target = currentPath[pathIndex];
         Vector3 toTarget = target - transform.position;
-        toTarget.y = 0; // Stay on XZ plane
+        toTarget.y = 0;
 
         float distanceToTarget = toTarget.magnitude;
 
-        // Advance to next path point if we're close enough
         if (distanceToTarget < 0.3f)
         {
             pathIndex++;
-            animator.SetFloat("Speed", 0f);
+            animator.SetFloat("Horizontal", 0f, 0.1f, Time.deltaTime);
+            animator.SetFloat("Vertical", 0f, 0.1f, Time.deltaTime);
             return;
         }
 
         Vector3 moveDir = toTarget.normalized;
 
-        // Smooth rotation
         if (moveDir != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(moveDir);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
 
-        // Smooth movement
-        Rigidbody rb = GetComponent<Rigidbody>();
         if (rb != null)
         {
             Vector3 velocity = moveDir * moveSpeed;
             Vector3 newPosition = rb.position + velocity * Time.deltaTime;
             rb.MovePosition(newPosition);
         }
-        animator.SetFloat("Speed", moveSpeed);
+        else
+        {
+            // Fallback to transform movement if no Rigidbody
+            transform.position += moveDir * moveSpeed * Time.deltaTime;
+        }
+
+        float horizontal = Vector3.Dot(transform.right, moveDir);
+        float vertical = Vector3.Dot(transform.forward, moveDir);
+
+        animator.SetFloat("Horizontal", horizontal, 0.1f, Time.deltaTime);
+        animator.SetFloat("Vertical", vertical, 0.1f, Time.deltaTime);
     }
 
     private bool HasLineOfSight()
@@ -278,19 +316,39 @@ public class EnemySkeleton : Entity
     private void RotateTowardsPlayer()
     {
         Vector3 directionToPlayer = player.position - transform.position;
-        directionToPlayer.y = 0; // Keep rotation horizontal only
+        directionToPlayer.y = 0;
 
-        if (directionToPlayer.sqrMagnitude > 0.001f) // avoid zero direction
+        if (directionToPlayer.sqrMagnitude > 0.001f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
     }
 
-    private void Attack()
+    public void Attack()
     {
         Debug.Log("Enemy attacks the player!");
-        // Add attack logic, animation, or event here
+        /*
+        if (attackColliderPrefab != null)
+        {
+            Vector3 spawnPos = attackSpawnPoint != null ? attackSpawnPoint.position : transform.position + transform.forward;
+            Quaternion spawnRot = transform.rotation;
+
+            Instantiate(attackColliderPrefab, spawnPos, spawnRot);
+        }
+        */
+    }
+
+    public void SpawnAttackCollider()
+    {
+        if (attackColliderPrefab != null)
+        {
+            Vector3 spawnPos = attackSpawnPoint != null ? attackSpawnPoint.position : transform.position + transform.forward;
+            Quaternion spawnRot = transform.rotation;
+
+            Instantiate(attackColliderPrefab, spawnPos, spawnRot);
+            Debug.Log("Spawned attack collider from animation event");
+        }
     }
 
     private void AlertNearbyEnemies()
@@ -299,7 +357,7 @@ public class EnemySkeleton : Entity
         foreach (var hit in hits)
         {
             EnemySkeleton otherAI = hit.GetComponent<EnemySkeleton>();
-            if (otherAI != null && otherAI != this)
+            if (otherAI != null && otherAI != this && otherAI.currentState == AIState.Patrolling)
             {
                 otherAI.OnAlerted(player.position);
             }
@@ -321,5 +379,11 @@ public class EnemySkeleton : Entity
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, alertRadius);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, detectionRadius);
+
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 }

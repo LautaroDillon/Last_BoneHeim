@@ -40,6 +40,7 @@ public class EnemySkeleton : Entity
 
     private Node currentPatrolNode;
     public Animator animator;
+    private bool isAttacking = false;
 
     private Rigidbody rb;
 
@@ -243,14 +244,16 @@ public class EnemySkeleton : Entity
         if (distance > attackRange)
         {
             animator.SetBool("isAttacking", false);
+            isAttacking = false;
             currentState = AIState.Chasing;
             return;
         }
 
         RotateTowardsPlayer();
 
-        if (!animator.GetBool("isAttacking"))
+        if (!isAttacking)
         {
+            isAttacking = true;
             animator.SetBool("isAttacking", true);
         }
 
@@ -259,6 +262,14 @@ public class EnemySkeleton : Entity
 
     private void MoveAlongPath()
     {
+        if (isAttacking)
+        {
+            // Freeze movement during attack
+            animator.SetFloat("Horizontal", 0f, 0.1f, Time.deltaTime);
+            animator.SetFloat("Vertical", 0f, 0.1f, Time.deltaTime);
+            return;
+        }
+
         if (currentPath == null || pathIndex >= currentPath.Count)
         {
             animator.SetFloat("Horizontal", 0f, 0.1f, Time.deltaTime);
@@ -328,15 +339,12 @@ public class EnemySkeleton : Entity
     public void Attack()
     {
         Debug.Log("Enemy attacks the player!");
-        /*
-        if (attackColliderPrefab != null)
-        {
-            Vector3 spawnPos = attackSpawnPoint != null ? attackSpawnPoint.position : transform.position + transform.forward;
-            Quaternion spawnRot = transform.rotation;
+    }
 
-            Instantiate(attackColliderPrefab, spawnPos, spawnRot);
-        }
-        */
+    public void EndAttack()
+    {
+        isAttacking = false;
+        animator.SetBool("isAttacking", false);
     }
 
     public void SpawnAttackCollider()

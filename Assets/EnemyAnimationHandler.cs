@@ -11,4 +11,10 @@ public class EnemyAnimationHandler : MonoBehaviour
         if (enemySkeleton != null)
             enemySkeleton.SpawnAttackCollider();
     }
+
+    public void EndAttack()
+    {
+        if (enemySkeleton != null)
+            enemySkeleton.EndAttack();
+    }
 }

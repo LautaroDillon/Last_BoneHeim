@@ -19,7 +19,6 @@ public class PlayerMovement : MonoBehaviour
     public static PlayerMovement instance;
 
 
-
     [Header("Abilites")]
     public bool canDoubleJump = false;
     public bool canDash = false;
@@ -678,27 +677,21 @@ public class PlayerMovement : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
-        tagname = other.gameObject.tag;
-
         if (other.gameObject.tag == "Heart")
         {
+            tagname = other.gameObject.tag;
             whatorgan = other.gameObject;
             rb.velocity = Vector3.zero;
             handAnimator.SetTrigger("Organ");
             freeze = true;
-
-            //animator.SetBool("Idle", false);
             walkSpeed = 12;
             jumpForce = 20;
             normalSpeed = true;
             AudioManager.instance.PlaySFXOneShot("Heartbeat", 1f);
             AudioManager.instance.PlayMusic("Background Music", 1f);
-            //Destroy(other.gameObject);
 
             if (other.TryGetComponent(out OrganTypeHolder holder))
             {
-                //Debug.LogError("Adding stomach to hotbar: " + holder.type);
-
                 HotbarPlayer.Instance.AddToHotbar(holder.type);
             }
 
@@ -706,6 +699,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (other.gameObject.tag == "Stomach")
         {
+            tagname = other.gameObject.tag;
             freeze = true;
             handAnimator.SetTrigger("Organ");
             rb.velocity = Vector3.zero;
@@ -713,19 +707,17 @@ public class PlayerMovement : MonoBehaviour
             canDoubleJump = true;
             AudioManager.instance.PlaySFXOneShot("Stomach", 1f);
             handAnimator.SetBool("Idle", true);
-            lungsPosition.SetActive(true);
-            //Destroy(other.gameObject);
             whatorgan = other.gameObject;
 
             if (other.TryGetComponent(out OrganTypeHolder holder))
             {
-                Debug.Log("Adding stomach to hotbar: " + holder.type);
                 HotbarPlayer.Instance.AddToHotbar(holder.type);
             }
 
         }
         if (other.gameObject.tag == "Lungs")
         {
+            tagname = other.gameObject.tag;
             freeze = true;
             handAnimator.SetTrigger("Organ");
             rb.velocity = Vector3.zero;
@@ -733,8 +725,6 @@ public class PlayerMovement : MonoBehaviour
             canDash = true;
             AudioManager.instance.PlaySFXOneShot("Lungs", 1f);
             handAnimator.SetBool("Idle", true);
-            stomachPosition.SetActive(true);
-            //Destroy(other.gameObject);
             whatorgan = other.gameObject;
 
             if (other.TryGetComponent(out OrganTypeHolder holder))

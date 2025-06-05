@@ -14,6 +14,7 @@ public class EventAnim : MonoBehaviour
     public GameObject lungsOrgan;
     public GameObject stomachOrgan;
 
+    [Header("Organ Positions")]
     public GameObject heartPosition;
     public GameObject lungsPosition;
     public GameObject stomachPosition;
@@ -52,17 +53,20 @@ public class EventAnim : MonoBehaviour
         playerSlide.enabled = false;
         playerWeapon.enabled = false;
         PlayerMovement.instance.whatorgan.SetActive(false);
-        if(playerMovement.tagname == "Heart")
+        if (playerMovement.tagname == "Heart")
         {
             heartOrgan.SetActive(true);
+            PlayerUI.instance.lastNormalSpeed = true;
         }
         else if (playerMovement.tagname == "Stomach")
         {
             stomachOrgan.SetActive(true);
+            PlayerUI.instance.lastCanDoubleJump = true;
         }
         else if (playerMovement.tagname == "Lungs")
         {
             lungsOrgan.SetActive(true);
+            PlayerUI.instance.lastCanDash = true;
         }
     }
 
@@ -77,30 +81,23 @@ public class EventAnim : MonoBehaviour
         lungsOrgan.SetActive(false);
         stomachOrgan.SetActive(false);
 
+        if (playerMovement.tagname == "Heart")
+        {
+            heartPosition.SetActive(true);
+        }
+        else if (playerMovement.tagname == "Stomach")
+        {
+            stomachPosition.SetActive(true);
+        }
+        else if (playerMovement.tagname == "Lungs")
+        {
+            lungsPosition.SetActive(true);
+        }
+
         playerMovement.enabled = true;
         playerDash.enabled = true;
         playerSlide.enabled = true;
         playerWeapon.enabled = true;
-    }
-
-    public void StomachEventActive()
-    {
-
-
-    }
-
-    public void StomachEventDeactive()
-    {
-        Debug.Log("Deactive");
-        isFollowing = false;
-        stomachOrgan.transform.SetParent(null);
-        stomachOrgan.SetActive(false);
-        stomachPosition.SetActive(true);
-    }
-
-    public void LungsEventActive()
-    {
-
     }
 
     [Preserve]

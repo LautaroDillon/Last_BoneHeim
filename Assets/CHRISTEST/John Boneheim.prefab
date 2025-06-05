@@ -1232,6 +1232,7 @@ MonoBehaviour:
   sprintSpeed: 0
   slideSpeed: 15
   dashSpeed: 40
+  wallrunSpeed: 0
   climbSpeed: 0
   vaultSpeed: 0
   dashSpeedChangeFactor: 50
@@ -1360,6 +1361,7 @@ MonoBehaviour:
   exitWallTime: 0.2
   useGravity: 1
   gravityCounterForce: 30
+  fallControlForce: 400
   orientation: {fileID: 5495434876042881451}
   cam: {fileID: 5912975175020226424}
 --- !u!114 &4615370192834907068
@@ -1411,7 +1413,12 @@ MonoBehaviour:
   heartMaterial: {fileID: 0}
   lungsMaterial: {fileID: 0}
   stomachMaterial: {fileID: 0}
+  lastNormalSpeed: 0
+  lastCanDash: 0
+  lastCanDoubleJump: 0
   OpenUI: 9
+  UI_canvasInv: {fileID: 0}
+  IsOpenUI: 0
 --- !u!114 &3889202759188512740
 MonoBehaviour:
   m_ObjectHideFlags: 0

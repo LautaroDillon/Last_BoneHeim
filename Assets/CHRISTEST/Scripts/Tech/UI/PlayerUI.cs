@@ -19,11 +19,14 @@ public class PlayerUI : MonoBehaviour
     public GameObject lungsMaterial;
     public GameObject stomachMaterial;
 
-    private bool lastNormalSpeed;
-    private bool lastCanDash;
-    private bool lastCanDoubleJump;
+    public bool lastNormalSpeed;
+    public bool lastCanDash;
+    public bool lastCanDoubleJump;
 
+    [Header("UI Inventory")]
     public KeyCode OpenUI = KeyCode.Tab;
+    public GameObject UI_canvasInv;
+    public bool IsOpenUI;
 
     private void Awake()
     {
@@ -40,6 +43,8 @@ public class PlayerUI : MonoBehaviour
     private void Start()
     {
         instance = this;
+
+        UI_canvasInv.SetActive(false);
     }
 
     private void Update()
@@ -47,14 +52,9 @@ public class PlayerUI : MonoBehaviour
         if (pm.normalSpeed != lastNormalSpeed || pm.canDash != lastCanDash || pm.canDoubleJump != lastCanDoubleJump)
         {
             UIUpdate();
-            lastNormalSpeed = pm.normalSpeed;
-            lastCanDash = pm.canDash;
-            lastCanDoubleJump = pm.canDoubleJump;
         }
-        if (Input.GetKeyDown(OpenUI))
-        {
-            //agregrar funciones del UIinfo
-        }
+
+        Inventory();
     }
 
     public void UIUpdate()
@@ -105,4 +105,30 @@ public class PlayerUI : MonoBehaviour
                 break;
         }
     }
+
+    public void Inventory()
+    {
+        if (Input.GetKeyDown(OpenUI) && !IsOpenUI)
+        {
+            IsOpenUI = true;
+            UI_canvasInv.SetActive(true);
+
+            Time.timeScale = 0;
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else if (Input.GetKeyDown(OpenUI) && IsOpenUI)
+        {
+            IsOpenUI = false;
+            UI_canvasInv.SetActive(false);
+
+            Time.timeScale = 1;
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
+
+
 }

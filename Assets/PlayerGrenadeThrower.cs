@@ -59,7 +59,7 @@ public class PlayerGrenadeThrower : MonoBehaviour
         isCharging = false;
 
         // Stop camera shake
-        CameraShake.Instance.StopAllShakes();
+        //CameraShake.Instance.StopAllShakes();
 
         float normalizedCharge = currentCharge / maxChargeTime;
         float finalThrowForce = Mathf.Lerp(minThrowForce, maxThrowForce, normalizedCharge);

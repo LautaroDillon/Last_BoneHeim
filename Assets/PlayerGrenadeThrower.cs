@@ -37,9 +37,6 @@ public class PlayerGrenadeThrower : MonoBehaviour
     {
         isCharging = true;
         currentCharge = 0f;
-
-        // Start camera shake
-        CameraShake.Instance.StartShake(2f, 0.1f, 2f); // (magnitude, roughness, fadeInTime)
     }
 
     void ChargeThrow()
@@ -53,6 +50,7 @@ public class PlayerGrenadeThrower : MonoBehaviour
 
     void ThrowGrenade()
     {
+        CameraShake.Instance.StartShake(2f, 0.1f, 2f);
         if (!isCharging)
             return;
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OrganGrenade : MonoBehaviour
+public abstract class OrganGrenade : MonoBehaviour
 {
     [Header("Settings")]
     public float delay = 3f;
@@ -15,14 +15,14 @@ public class OrganGrenade : MonoBehaviour
     public GameObject explosionVFX;
     public AudioClip explosionSFX;
 
-    private bool hasExploded = false;
+    protected bool hasExploded = false;
 
-    private void Start()
+    protected virtual void Start()
     {
         Invoke(nameof(Explode), delay);
     }
 
-    void Explode()
+    protected virtual void Explode()
     {
         if (hasExploded) return;
         hasExploded = true;
@@ -33,19 +33,10 @@ public class OrganGrenade : MonoBehaviour
         if (explosionSFX)
             AudioSource.PlayClipAtPoint(explosionSFX, transform.position);
 
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, explosionRadius, damageMask);
-
-        foreach (var hit in hitColliders)
-        {
-            Rigidbody rb = hit.GetComponent<Rigidbody>();
-            if (rb != null)
-                rb.AddExplosionForce(explosionForce, transform.position, explosionRadius);
-
-            IDamagable damageable = hit.GetComponent<IDamagable>();
-            if (damageable != null)
-                damageable.TakeDamage(damage);
-        }
+        DoExplosion();
 
         Destroy(gameObject);
     }
+
+    protected abstract void DoExplosion();
 }

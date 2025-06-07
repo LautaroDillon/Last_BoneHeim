@@ -98,6 +98,7 @@ public class EventAnim : MonoBehaviour
         playerDash.enabled = true;
         playerSlide.enabled = true;
         playerWeapon.enabled = true;
+        FindObjectOfType<ColorRestorer>().RestoreColor();
     }
 
     [Preserve]

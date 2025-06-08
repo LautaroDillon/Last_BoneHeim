@@ -18,7 +18,7 @@ public class PlayerGrenadeThrower : MonoBehaviour
     private float currentCharge = 0f;
     private bool isCharging = false;
 
-    void Update()
+  /*  void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1)) currentGrenadeType = GrenadeType.Heart;
         if (Input.GetKeyDown(KeyCode.Alpha2)) currentGrenadeType = GrenadeType.Lung;
@@ -77,6 +77,20 @@ public class PlayerGrenadeThrower : MonoBehaviour
         {
             Vector3 throwDirection = playerCamera.transform.forward + playerCamera.transform.up * 0.1f;
             rb.velocity = throwDirection.normalized * finalThrowForce;
+        }
+    }*/
+
+    public void ThrowGrenadeInstant(GrenadeType type, float force)
+    {
+        GameObject prefab = GrenadeHandler.Instance.GetGrenadePrefab(type);
+        if (prefab == null) return;
+
+        GameObject grenade = ObjectPool.Instance.Get(prefab, throwPoint.position, Quaternion.identity);
+        Rigidbody rb = grenade.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            Vector3 throwDirection = playerCamera.transform.forward + playerCamera.transform.up * 0.1f;
+            rb.velocity = throwDirection.normalized * force;
         }
     }
 }

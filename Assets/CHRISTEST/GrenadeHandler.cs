@@ -20,8 +20,13 @@ public class GrenadeHandler : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
         prefabDict = grenadePrefabs.ToDictionary(x => x.type, x => x.prefab);
+    }
+
+    private void Start()
+    {
+        Instance = this;
+
     }
 
     public GameObject GetGrenadePrefab(GrenadeType type)

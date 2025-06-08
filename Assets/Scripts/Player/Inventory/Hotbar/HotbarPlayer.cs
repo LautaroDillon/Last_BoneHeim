@@ -21,6 +21,11 @@ public class HotbarPlayer : MonoBehaviour
 
     public Dictionary<ItemType, GameObject> dataOrgansDict = new Dictionary<ItemType, GameObject>();
 
+    public Transform throwSpawnPoint;
+    public float throwForce = 20f;
+    public PlayerGrenadeThrower playerGrenadeThrower;
+
+    #region Unity Methods
     void Start()
     {
         Instance = this;
@@ -67,7 +72,9 @@ public class HotbarPlayer : MonoBehaviour
         }
 
     }
+    #endregion
 
+    #region selection
     void newselected()
     {
         if (hotbarlist.Count == 0 || selecteditem < 0 || selecteditem >= hotbarlist.Count)
@@ -87,13 +94,15 @@ public class HotbarPlayer : MonoBehaviour
             if (dataOrgansDict.TryGetValue(organ.type, out GameObject obj))
             {
                 obj.SetActive(organ.type == currentType);
+
             }
         }
 
         organselect = true;
     }
+    #endregion
 
-
+    #region use selected organ
     void useselected()
     {
         if (hotbarlist.Count == 0 || selecteditem < 0 || selecteditem >= hotbarlist.Count)
@@ -101,26 +110,72 @@ public class HotbarPlayer : MonoBehaviour
 
         ItemType currentType = hotbarlist[selecteditem];
 
-        // desactivá el GameObject si existe
-        if (dataOrgansDict.TryGetValue(currentType, out GameObject organGO))
-        {
-            organGO.SetActive(false);
-        }
-        else
-        {
-            Debug.LogWarning("El órgano seleccionado no está en el diccionario: " + currentType);
-        }
         string organName = currentType.ToString();
+
+        foreach (var organ in dataOrgans)
+        {
+            if (dataOrgansDict.TryGetValue(organ.type, out GameObject obj))
+            {
+                obj.SetActive(false);
+
+            }
+        }
 
         PlayerUI.instance.isUsed(organName);
         //eleminar el organo de la lista de hotbar
         RemoveToHotbar(currentType);
 
+        ThrowOrganAsGrenade(currentType);
+        GrenadeType grenadeType = ConvertToGrenadeType(currentType);
+
+
         organselect = false;
 
         //hacer el llamdo para el funcionamiento de los organos
+        switch (currentType)
+        {
+            case ItemType.O_Lungs:
+                PlayerMovement.instance.canDash = false;
+                break;
+            case ItemType.O_Stomach:
+                PlayerMovement.instance.canDoubleJump = false;
+                break;
+            case ItemType.O_Heart:
+                break;
+
+        }
     }
 
+    GrenadeType ConvertToGrenadeType(ItemType item)
+    {
+        switch (item)
+        {
+            case ItemType.O_Lungs:
+                return GrenadeType.Lung;
+            case ItemType.O_Stomach:
+                return GrenadeType.Stomach;
+            case ItemType.O_Heart:
+                return GrenadeType.Heart;
+            default:
+                Debug.LogWarning("ItemType no tiene conversión definida: " + item);
+                return GrenadeType.Heart; // valor por defecto
+        }
+    }
+
+
+    void ThrowOrganAsGrenade(ItemType itemType)
+    {
+        GrenadeType grenadeType = ConvertToGrenadeType(itemType);
+
+        if (playerGrenadeThrower != null)
+        {
+            playerGrenadeThrower.ThrowGrenadeInstant(grenadeType, throwForce);
+        }
+    }
+
+    #endregion
+
+    #region adding/removing organs
     public void AddToHotbar(ItemType a)
     {
         Debug.Log("Adding to hotbar: " + a);
@@ -152,6 +207,7 @@ public class HotbarPlayer : MonoBehaviour
                 Debug.Log("Item not exists in dictionary: " + item.type);
         }
     }
+    #endregion
 }
 
 [System.Serializable]

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.5444161, g: 0.5070113, b: 0.5242729, a: 1}
+  m_IndirectSpecularColor: {r: 0.5444019, g: 0.50700164, b: 0.5242697, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -14927,12 +14927,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ad874498cd693049b14ee328cabf7c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grenadePrefab: {fileID: 2677847400781371949, guid: 16b9acc6ffecdab41b49156b0088f4dd, type: 3}
   throwPoint: {fileID: 496169868}
   minThrowForce: 50
   maxThrowForce: 100
   maxChargeTime: 2
   playerCamera: {fileID: 2064697331}
+  currentGrenadeType: 0
 --- !u!1 &931840859
 GameObject:
   m_ObjectHideFlags: 0

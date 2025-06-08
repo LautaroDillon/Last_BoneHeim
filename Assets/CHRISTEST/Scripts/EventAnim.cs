@@ -84,6 +84,7 @@ public class EventAnim : MonoBehaviour
         if (playerMovement.tagname == "Heart")
         {
             heartPosition.SetActive(true);
+            FindObjectOfType<ColorRestorer>().RestoreColor();
         }
         else if (playerMovement.tagname == "Stomach")
         {
@@ -98,7 +99,6 @@ public class EventAnim : MonoBehaviour
         playerDash.enabled = true;
         playerSlide.enabled = true;
         playerWeapon.enabled = true;
-        FindObjectOfType<ColorRestorer>().RestoreColor();
     }
 
     [Preserve]

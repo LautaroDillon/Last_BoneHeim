@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 1389897387497237379}
   - component: {fileID: 905453420869000004}
   - component: {fileID: 2437592315559015350}
-  - component: {fileID: 974629788206151160}
   - component: {fileID: 3759147008555103226}
+  - component: {fileID: 229431996541612744}
   m_Layer: 0
-  m_Name: Organ Grenade
+  m_Name: Heart Grenade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -107,27 +107,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &974629788206151160
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2677847400781371949}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18a80638e3c49674f8b63da3066fef57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  delay: 1
-  explosionRadius: 5
-  explosionForce: 700
-  damage: 100
-  damageMask:
-    serializedVersion: 2
-    m_Bits: 1024
-  explosionVFX: {fileID: 0}
-  explosionSFX: {fileID: 0}
 --- !u!54 &3759147008555103226
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -155,3 +134,24 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!114 &229431996541612744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2677847400781371949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16f48f409d6808e46958d34d13cf40fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delay: 3
+  explosionRadius: 5
+  explosionForce: 700
+  damage: 100
+  damageMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  explosionVFX: {fileID: 0}
+  explosionSFX: {fileID: 0}

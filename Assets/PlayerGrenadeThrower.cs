@@ -5,18 +5,25 @@ using EZCameraShake;
 
 public class PlayerGrenadeThrower : MonoBehaviour
 {
-    public GameObject grenadePrefab;
+    [Header("Throw Settings")]
     public Transform throwPoint;
     public float minThrowForce = 5f;
     public float maxThrowForce = 20f;
     public float maxChargeTime = 2f;
     public Camera playerCamera;
 
+    [Header("Grenade Type")]
+    public GrenadeType currentGrenadeType = GrenadeType.Heart;
+
     private float currentCharge = 0f;
     private bool isCharging = false;
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Alpha1)) currentGrenadeType = GrenadeType.Heart;
+        if (Input.GetKeyDown(KeyCode.Alpha2)) currentGrenadeType = GrenadeType.Lung;
+        if (Input.GetKeyDown(KeyCode.Alpha3)) currentGrenadeType = GrenadeType.Stomach;
+
         if (Input.GetKeyDown(KeyCode.G))
         {
             StartCharging();
@@ -41,33 +48,35 @@ public class PlayerGrenadeThrower : MonoBehaviour
 
     void ChargeThrow()
     {
-        if (isCharging)
-        {
-            currentCharge += Time.deltaTime;
-            currentCharge = Mathf.Clamp(currentCharge, 0f, maxChargeTime);
-        }
+        if (!isCharging) return;
+
+        currentCharge += Time.deltaTime;
+        currentCharge = Mathf.Clamp(currentCharge, 0f, maxChargeTime);
     }
 
     void ThrowGrenade()
     {
-        CameraShake.Instance.StartShake(2f, 0.1f, 2f);
-        if (!isCharging)
-            return;
+        if (!isCharging) return;
 
         isCharging = false;
 
-        // Stop camera shake
-        //CameraShake.Instance.StopAllShakes();
-
         float normalizedCharge = currentCharge / maxChargeTime;
         float finalThrowForce = Mathf.Lerp(minThrowForce, maxThrowForce, normalizedCharge);
-
-        GameObject grenade = Instantiate(grenadePrefab, throwPoint.position, Quaternion.identity);
-        Rigidbody rb = grenade.GetComponent<Rigidbody>();
-
-        Vector3 throwDirection = playerCamera.transform.forward + playerCamera.transform.up * 0.1f;
-        rb.velocity = throwDirection.normalized * finalThrowForce;
-
         currentCharge = 0f;
+
+        // Shake camera
+        CameraShake.Instance.ShakeOnce(2f, 0.1f, 1f, 1f);
+
+        GameObject prefab = GrenadeHandler.Instance.GetGrenadePrefab(currentGrenadeType);
+        if (prefab == null) return;
+
+        GameObject grenade = ObjectPool.Instance.Get(prefab, throwPoint.position, Quaternion.identity);
+
+        Rigidbody rb = grenade.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            Vector3 throwDirection = playerCamera.transform.forward + playerCamera.transform.up * 0.1f;
+            rb.velocity = throwDirection.normalized * finalThrowForce;
+        }
     }
 }

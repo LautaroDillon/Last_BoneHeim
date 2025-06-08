@@ -35,7 +35,9 @@ public abstract class OrganGrenade : MonoBehaviour
 
         DoExplosion();
 
-        Destroy(gameObject);
+        // Pooling instead of destroy
+        gameObject.SetActive(false);
+        ObjectPool.Instance.ReturnToPool(gameObject);
     }
 
     protected abstract void DoExplosion();

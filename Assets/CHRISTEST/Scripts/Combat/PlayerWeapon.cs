@@ -50,6 +50,15 @@ public class PlayerWeapon : MonoBehaviour
     [SerializeField] private List<Transform> firePoints;
     [SerializeField] private List<string> fireAnimations;
 
+    [Header("Regeneration Settings")]
+    public bool enableRegen = true;
+    public float regenDelay = 2f;         // Time after last shot before regen starts
+    public float regenInterval = 0.5f;    // Time between each bullet regen
+    public int regenAmountPerInterval = 1;
+
+    private float lastShotTime;
+    private Coroutine regenCoroutine;
+
     private bool isReloading = false;
     private float nextTimeToFire = 0f;
 
@@ -185,6 +194,8 @@ public class PlayerWeapon : MonoBehaviour
         }
 
         currentAmmo--;
+        lastShotTime = Time.time;
+        RestartRegen();
         UpdateBulletDisplay();
         UpdateAmmoUI();
 
@@ -258,6 +269,8 @@ public class PlayerWeapon : MonoBehaviour
         }
 
         currentAmmo--;
+        lastShotTime = Time.time;
+        RestartRegen();
         UpdateBulletDisplay();
         Debug.Log("Shotgun fired from finger " + bulletIndex + "! Ammo left: " + currentAmmo);
     }
@@ -358,12 +371,45 @@ public class PlayerWeapon : MonoBehaviour
     IEnumerator Reload()
     {
         isReloading = true;
+        if (regenCoroutine != null)
+        {
+            StopCoroutine(regenCoroutine);
+            regenCoroutine = null;
+        }
+
         Debug.Log("Reloading...");
         yield return new WaitForSeconds(reloadTime);
         currentAmmo = magazineSize;
         isReloading = false;
         UpdateBulletDisplay();
         Debug.Log("Reloaded!");
+    }
+
+    private void RestartRegen()
+    {
+        if (!enableRegen || isReloading)
+            return;
+
+        if (regenCoroutine != null)
+            StopCoroutine(regenCoroutine);
+
+        regenCoroutine = StartCoroutine(RegenerateAmmo());
+    }
+
+    private IEnumerator RegenerateAmmo()
+    {
+        yield return new WaitForSeconds(regenDelay);
+
+        while (currentAmmo < magazineSize && !isReloading)
+        {
+            currentAmmo += regenAmountPerInterval;
+            currentAmmo = Mathf.Min(currentAmmo, magazineSize);
+            UpdateAmmoUI();
+            UpdateBulletDisplay();
+            yield return new WaitForSeconds(regenInterval);
+        }
+
+        regenCoroutine = null;
     }
 
     IEnumerator FireBurst()

@@ -32,6 +32,9 @@ public class EnemySkeleton : Entity
     [Header("Alert Settings")]
     public float alertRadius = 10f;
     private Vector3 lastKnownPlayerPos;
+    private float patrolWaitTime = 2f;
+    private float patrolWaitTimer = 0f;
+    private bool waitingAtNode = false;
 
     private List<Vector3> currentPath = new List<Vector3>();
     private int pathIndex = 0;
@@ -41,6 +44,7 @@ public class EnemySkeleton : Entity
     private Node currentPatrolNode;
     public Animator animator;
     private bool isAttacking = false;
+    private bool isAttackInProgress = false;
 
     private Rigidbody rb;
 
@@ -52,6 +56,7 @@ public class EnemySkeleton : Entity
         currentHealth = maxHealth;
 
         rb = GetComponent<Rigidbody>();
+        rb.isKinematic = false; // Ensure movement works
 
         if (animator == null)
             animator = GetComponent<Animator>();
@@ -88,6 +93,10 @@ public class EnemySkeleton : Entity
         if (player == null || pathfinder == null || currentState == AIState.Dead)
             return;
 
+        if (isAttackInProgress)
+            return;
+
+        // Usual state machine
         switch (currentState)
         {
             case AIState.Patrolling:
@@ -101,15 +110,24 @@ public class EnemySkeleton : Entity
                 break;
         }
 
-        // Check if should transition to Chasing state
-        if (currentState != AIState.Attacking && currentState != AIState.Dead)
+        // Only check transitions if NOT attacking or attack finished
+        if (!isAttackInProgress)
         {
             float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-            if (distanceToPlayer <= detectionRadius && HasLineOfSight())
+            bool canSeePlayer = HasLineOfSight();
+
+            if (currentState == AIState.Patrolling && distanceToPlayer <= detectionRadius && canSeePlayer)
             {
                 currentState = AIState.Chasing;
                 lastKnownPlayerPos = player.position;
                 AlertNearbyEnemies();
+            }
+            else if (currentState == AIState.Attacking && (distanceToPlayer > detectionRadius || !canSeePlayer))
+            {
+                animator.SetBool("isAttacking", false);
+                isAttacking = false;
+                currentState = AIState.Patrolling;
+                GoToRandomPatrolNode();
             }
         }
     }
@@ -188,14 +206,29 @@ public class EnemySkeleton : Entity
 
     private void Patrol()
     {
+        if (waitingAtNode)
+        {
+            patrolWaitTimer += Time.deltaTime;
+            if (patrolWaitTimer >= patrolWaitTime)
+            {
+                waitingAtNode = false;
+                patrolWaitTimer = 0f;
+                GoToRandomPatrolNode();
+            }
+            return;
+        }
+
         if (currentPath == null || currentPath.Count == 0)
             return;
 
         MoveAlongPath();
 
-        if (Vector3.Distance(transform.position, currentPatrolNode.Position) < 1f)
+        // ADD NULL CHECK HERE
+        if (currentPatrolNode != null && Vector3.Distance(transform.position, currentPatrolNode.Position) < 1f)
         {
-            GoToRandomPatrolNode();
+            waitingAtNode = true;
+            animator.SetFloat("Horizontal", 0f, 0.1f, Time.deltaTime);
+            animator.SetFloat("Vertical", 0f, 0.1f, Time.deltaTime);
         }
     }
 
@@ -204,16 +237,36 @@ public class EnemySkeleton : Entity
         if (nodeGenerator == null || nodeGenerator.GeneratedNodes.Count == 0)
             return;
 
-        Node newNode;
-        do
+        float minDistance = 5f; // Minimum distance between nodes to patrol
+
+        Node newNode = null;
+        int attempts = 10;
+
+        for (int i = 0; i < attempts; i++)
         {
-            newNode = nodeGenerator.GeneratedNodes[Random.Range(0, nodeGenerator.GeneratedNodes.Count)];
+            Node candidate = nodeGenerator.GeneratedNodes[Random.Range(0, nodeGenerator.GeneratedNodes.Count)];
+            float distance = Vector3.Distance(candidate.Position, transform.position);
+
+            if (distance >= minDistance)
+            {
+                newNode = candidate;
+                break;
+            }
         }
-        while (newNode == currentPatrolNode && nodeGenerator.GeneratedNodes.Count > 1);
+
+        // Fallback in case no distant enough node is found
+        if (newNode == null)
+            newNode = nodeGenerator.GeneratedNodes[Random.Range(0, nodeGenerator.GeneratedNodes.Count)];
 
         currentPatrolNode = newNode;
+
         currentPath = pathfinder.FindPath(transform.position, currentPatrolNode.Position);
         pathIndex = 0;
+
+        if (currentPath == null || currentPath.Count == 0)
+        {
+            Debug.LogWarning("No path found to patrol node!");
+        }
     }
 
     private void ChasePlayer()
@@ -223,7 +276,22 @@ public class EnemySkeleton : Entity
         if (distance <= attackRange)
         {
             currentState = AIState.Attacking;
-            animator.SetBool("isAttacking", false); // Reset attack anim trigger for fresh start
+            animator.SetBool("isAttacking", false); // Reset attack animation trigger for fresh start
+
+            // Freeze Rigidbody movement on attack start
+            if (rb != null)
+            {
+                rb.velocity = Vector3.zero;
+                rb.isKinematic = true;
+            }
+            return;
+        }
+
+        // Prevent movement while attacking (if chase somehow still called)
+        if (isAttacking)
+        {
+            animator.SetFloat("Horizontal", 0f, 0.1f, Time.deltaTime);
+            animator.SetFloat("Vertical", 0f, 0.1f, Time.deltaTime);
             return;
         }
 
@@ -241,24 +309,36 @@ public class EnemySkeleton : Entity
     private void AttackPlayer()
     {
         float distance = Vector3.Distance(transform.position, player.position);
+
+        if (distance > detectionRadius || !HasLineOfSight())
+        {
+            animator.SetBool("isAttacking", false);
+            isAttackInProgress = false;  // reset in case
+            currentState = AIState.Patrolling;
+            GoToRandomPatrolNode();
+            return;
+        }
+
         if (distance > attackRange)
         {
             animator.SetBool("isAttacking", false);
-            isAttacking = false;
+            isAttackInProgress = false;  // reset in case
             currentState = AIState.Chasing;
             return;
         }
 
         RotateTowardsPlayer();
 
-        if (!isAttacking)
+        if (!isAttackInProgress)
         {
-            isAttacking = true;
+            isAttackInProgress = true;
+            currentState = AIState.Attacking;
             animator.SetBool("isAttacking", true);
         }
 
         Attack();
     }
+
 
     private void MoveAlongPath()
     {
@@ -344,7 +424,34 @@ public class EnemySkeleton : Entity
     public void EndAttack()
     {
         isAttacking = false;
+        isAttackInProgress = false;
         animator.SetBool("isAttacking", false);
+
+        if (rb != null)
+            rb.isKinematic = false;
+
+        if (player == null)
+        {
+            currentState = AIState.Patrolling;
+            GoToRandomPatrolNode();
+            return;
+        }
+
+        float distance = Vector3.Distance(transform.position, player.position);
+
+        if (distance <= attackRange && HasLineOfSight())
+        {
+            currentState = AIState.Attacking;
+        }
+        else if (distance <= detectionRadius)
+        {
+            currentState = AIState.Chasing;
+        }
+        else
+        {
+            currentState = AIState.Patrolling;
+            GoToRandomPatrolNode();
+        }
     }
 
     public void SpawnAttackCollider()
@@ -393,5 +500,14 @@ public class EnemySkeleton : Entity
 
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, attackRange);
+
+        if (currentPath != null && currentPath.Count > 1)
+        {
+            Gizmos.color = Color.cyan;
+            for (int i = 0; i < currentPath.Count - 1; i++)
+            {
+                Gizmos.DrawLine(currentPath[i], currentPath[i + 1]);
+            }
+        }
     }
 }

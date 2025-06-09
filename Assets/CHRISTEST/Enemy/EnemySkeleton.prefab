@@ -104,7 +104,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -138,7 +138,7 @@ MonoBehaviour:
   playerWeapon: {fileID: 0}
   attackColliderPrefab: {fileID: 3905568982165768539, guid: 69e15114ba16ef640815fbd930c67108, type: 3}
   attackSpawnPoint: {fileID: 3599700935174992012}
-  moveSpeed: 7
+  moveSpeed: 6
   detectionRadius: 10
   attackRange: 2
   updatePathInterval: 0.5
@@ -154,7 +154,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4264669023414958041}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 999
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}

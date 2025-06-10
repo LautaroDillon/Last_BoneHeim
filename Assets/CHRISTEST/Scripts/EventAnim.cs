@@ -27,6 +27,7 @@ public class EventAnim : MonoBehaviour
     private PlayerDash playerDash;
     private PlayerSlide playerSlide;
     private PlayerWeapon playerWeapon;
+    private ColorRestorer colorRestorer;
 
     private void Awake()
     {
@@ -44,6 +45,7 @@ public class EventAnim : MonoBehaviour
         playerMovement = FindObjectOfType<PlayerMovement>();
         playerSlide = FindAnyObjectByType<PlayerSlide>();
         playerDash = FindAnyObjectByType<PlayerDash>();
+        colorRestorer = FindAnyObjectByType<ColorRestorer>();
     }
 
     public void HeartEventActive()
@@ -84,7 +86,7 @@ public class EventAnim : MonoBehaviour
         if (playerMovement.tagname == "Heart")
         {
             heartPosition.SetActive(true);
-            FindObjectOfType<ColorRestorer>().RestoreColor();
+            colorRestorer.RestoreColor();
         }
         else if (playerMovement.tagname == "Stomach")
         {

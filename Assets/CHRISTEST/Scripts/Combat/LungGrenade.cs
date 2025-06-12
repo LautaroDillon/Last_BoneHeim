@@ -13,6 +13,7 @@ public class LungGrenade : OrganGrenade
 
         foreach (var hit in hitColliders)
         {
+            Debug.Log("Lung Grenade hit: " + hit.name);
             Rigidbody rb = hit.GetComponent<Rigidbody>();
             if (rb != null)
             {

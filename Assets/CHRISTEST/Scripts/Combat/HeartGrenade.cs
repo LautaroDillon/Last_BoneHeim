@@ -10,6 +10,7 @@ public class HeartGrenade : OrganGrenade
 
         foreach (var hit in hitColliders)
         {
+            Debug.Log("Heart Grenade hit: " + hit.name);
             Rigidbody rb = hit.GetComponent<Rigidbody>();
             if (rb != null)
                 rb.AddExplosionForce(explosionForce, transform.position, explosionRadius);

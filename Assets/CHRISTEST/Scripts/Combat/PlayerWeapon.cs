@@ -98,7 +98,7 @@ public class PlayerWeapon : MonoBehaviour
         if (PauseManager.isPaused)
             return;
 
-        Reloading();
+       // Reloading();
         Shooting();
         UpdateAmmoUI();
         HandleFireModeSwitching();
@@ -390,17 +390,6 @@ public class PlayerWeapon : MonoBehaviour
         isReloading = false;
         UpdateBulletDisplay();
         Debug.Log("Reloaded!");
-    }
-
-    private void RestartRegen()
-    {
-        if (!enableRegen || isReloading)
-            return;
-
-        if (regenCoroutine != null)
-            StopCoroutine(regenCoroutine);
-
-        //regenCoroutine = StartCoroutine(RegenerateAmmo());
     }
 
     private IEnumerator RegenerateAmmo()

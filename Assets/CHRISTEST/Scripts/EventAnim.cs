@@ -54,21 +54,20 @@ public class EventAnim : MonoBehaviour
         playerDash.enabled = false;
         playerSlide.enabled = false;
         playerWeapon.enabled = false;
+
         PlayerMovement.instance.whatorgan.SetActive(false);
+
         if (playerMovement.tagname == "Heart")
         {
             heartOrgan.SetActive(true);
-            PlayerUI.instance.lastNormalSpeed = true;
         }
         else if (playerMovement.tagname == "Stomach")
         {
             stomachOrgan.SetActive(true);
-            PlayerUI.instance.lastCanDoubleJump = true;
         }
         else if (playerMovement.tagname == "Lungs")
         {
             lungsOrgan.SetActive(true);
-            PlayerUI.instance.lastCanDash = true;
         }
     }
 
@@ -77,23 +76,25 @@ public class EventAnim : MonoBehaviour
         Debug.Log("Deactive");
         playerMovement.freeze = false;
         isFollowing = false;
-        //heartOrgan.transform.SetParent(null);
-        //desactivate the organs
+
         heartOrgan.SetActive(false);
         lungsOrgan.SetActive(false);
         stomachOrgan.SetActive(false);
 
         if (playerMovement.tagname == "Heart")
         {
+            PlayerUI.instance.lastNormalSpeed = true;
             heartPosition.SetActive(true);
             colorRestorer.RestoreColor();
         }
         else if (playerMovement.tagname == "Stomach")
         {
+            PlayerUI.instance.lastCanDoubleJump = true;
             stomachPosition.SetActive(true);
         }
         else if (playerMovement.tagname == "Lungs")
         {
+            PlayerUI.instance.lastCanDash = true;
             lungsPosition.SetActive(true);
         }
 

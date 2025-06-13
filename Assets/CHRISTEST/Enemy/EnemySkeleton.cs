@@ -15,7 +15,6 @@ public class EnemySkeleton : Entity
     public AStarManager pathfinder;
     public NodeGrid nodeGenerator;
     public GameObject bulletDrop;
-    public PlayerWeapon playerWeapon;
     public GameObject attackColliderPrefab;
     public Transform attackSpawnPoint;
 
@@ -68,8 +67,6 @@ public class EnemySkeleton : Entity
             player = GameManager.instance.player.transform;
 
         pathfinder = AStarManager.instance;
-
-        playerWeapon = FindObjectOfType<PlayerWeapon>();
 
         if (nodeGenerator == null || nodeGenerator.GeneratedNodes == null || nodeGenerator.GeneratedNodes.Count == 0)
         {

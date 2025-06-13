@@ -5030,17 +5030,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -6706057000106860987, guid: 38cfd4b96265f3645835b98ad91a5713, type: 3}
-      propertyPath: maxHealth
-      value: 1e+35
-      objectReference: {fileID: 0}
     - target: {fileID: 4264669023414958041, guid: 38cfd4b96265f3645835b98ad91a5713, type: 3}
       propertyPath: m_Name
       value: EnemySkeleton
-      objectReference: {fileID: 0}
-    - target: {fileID: 8539793577005014634, guid: 38cfd4b96265f3645835b98ad91a5713, type: 3}
-      propertyPath: m_Mass
-      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 8713080102566145984, guid: 38cfd4b96265f3645835b98ad91a5713, type: 3}
       propertyPath: m_LocalPosition.x

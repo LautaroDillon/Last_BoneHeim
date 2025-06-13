@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 286fba579baf8e8459726fc181609f0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 1e+35
   currentHealth: 0
   isDead: 0
   currentState: 0
@@ -135,7 +135,6 @@ MonoBehaviour:
   pathfinder: {fileID: 0}
   nodeGenerator: {fileID: 0}
   bulletDrop: {fileID: 3963558588678754370, guid: a64ccfd54ba88864a95a2dadff6093c3, type: 3}
-  playerWeapon: {fileID: 0}
   attackColliderPrefab: {fileID: 3905568982165768539, guid: 69e15114ba16ef640815fbd930c67108, type: 3}
   attackSpawnPoint: {fileID: 3599700935174992012}
   moveSpeed: 6
@@ -154,7 +153,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4264669023414958041}
   serializedVersion: 4
-  m_Mass: 999
+  m_Mass: 35
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}

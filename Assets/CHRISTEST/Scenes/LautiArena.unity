@@ -4435,7 +4435,7 @@ PrefabInstance:
       objectReference: {fileID: 1395731376}
     - target: {fileID: 2441742532972286732, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
       propertyPath: regenDelay
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2441742532972286732, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
       propertyPath: fireModeText
@@ -4447,7 +4447,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2441742532972286732, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
       propertyPath: regenInterval
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2441742532972286732, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
       propertyPath: firePoints.Array.size

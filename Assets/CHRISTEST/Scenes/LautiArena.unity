@@ -4434,33 +4434,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1395731376}
     - target: {fileID: 2441742532972286732, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
-      propertyPath: regenDelay
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2441742532972286732, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
       propertyPath: fireModeText
       value: 
       objectReference: {fileID: 2042933763}
-    - target: {fileID: 2441742532972286732, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
-      propertyPath: magazineSize
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2441742532972286732, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
-      propertyPath: regenInterval
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2441742532972286732, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
-      propertyPath: firePoints.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2441742532972286732, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
-      propertyPath: bulletDisplay.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2441742532972286732, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
-      propertyPath: fireAnimations.Array.size
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 2551412571509783989, guid: 8b5c954f5b192e3408cc8b53dbe92c53, type: 3}
       propertyPath: m_LocalPosition.x
       value: 10.651573

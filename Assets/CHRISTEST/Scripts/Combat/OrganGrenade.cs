@@ -17,7 +17,17 @@ public abstract class OrganGrenade : MonoBehaviour
 
     protected bool hasExploded = false;
 
-    protected virtual void Start()
+    protected virtual void OnEnable()
+    {
+        hasExploded = false;
+    }
+
+    protected virtual void OnDisable()
+    {
+        CancelInvoke();
+    }
+
+    public virtual void call()
     {
         Invoke(nameof(Explode), delay);
     }
@@ -36,6 +46,7 @@ public abstract class OrganGrenade : MonoBehaviour
         DoExplosion();
 
         // Pooling instead of destroy
+        delay = 3f; // Reset delay to prevent multiple calls
         gameObject.SetActive(false);
         ObjectPool.Instance.ReturnToPool(gameObject);
     }

@@ -117,11 +117,11 @@ public class HotbarPlayer : MonoBehaviour
             if (dataOrgansDict.TryGetValue(organ.type, out GameObject obj))
             {
                 obj.SetActive(false);
-
             }
         }
 
         PlayerUI.instance.isUsed(organName);
+        EventAnim.instance.organDesactive(organName);
         //eleminar el organo de la lista de hotbar
         RemoveToHotbar(currentType);
 

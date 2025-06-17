@@ -110,4 +110,22 @@ public class EventAnim : MonoBehaviour
         Debug.LogWarning("Shooting Event");
         playerWeapon.FireBulletFromAnimation();
     }
+
+    public void organDesactive(string organName)
+    {
+        if (organName == "O_Heart")
+        {
+            heartPosition.SetActive(false);
+        }
+        else if (organName == "O_Stomach")
+        {
+            PlayerUI.instance.lastCanDoubleJump = false;
+            stomachPosition.SetActive(false);
+        }
+        else if (organName == "O_Lungs")
+        {
+            PlayerUI.instance.lastCanDash = false;
+            lungsPosition.SetActive(false);
+        }
+    }
 }

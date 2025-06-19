@@ -3,6 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+public enum OrganType
+{
+    Heart,
+    Lungs,
+    Stomach
+}
+
+[System.Serializable]
+public class OrganSlot
+{
+    public OrganType type;
+    public bool hasOrgan;
+    public GameObject organPrefab;
+}
+
 public enum AIState { Patrolling, Chasing, Attacking, Dead }
 
 public class EnemySkeleton : Entity
@@ -37,7 +52,7 @@ public class EnemySkeleton : Entity
 
     private List<Vector3> currentPath = new List<Vector3>();
     private int pathIndex = 0;
-    private float lastPathUpdateTime = 0f; // Initialize to zero for first update
+    private float lastPathUpdateTime = 0f;
     private bool isHit = false;
 
     private Node currentPatrolNode;
@@ -47,6 +62,11 @@ public class EnemySkeleton : Entity
 
     private Rigidbody rb;
 
+    [Header("Organs")]
+    public List<OrganSlot> possibleOrgans = new List<OrganSlot>();
+    [Range(0f, 1f)]
+    public float organSpawnChance = 0.5f;
+
     private void Awake()
     {
         numberOfBulletsOnDeath = Random.Range(2, 4);
@@ -55,10 +75,12 @@ public class EnemySkeleton : Entity
         currentHealth = maxHealth;
 
         rb = GetComponent<Rigidbody>();
-        rb.isKinematic = false; // Ensure movement works
+        rb.isKinematic = false;
 
         if (animator == null)
             animator = GetComponent<Animator>();
+
+        InitializeOrgans();
     }
 
     private void Start()
@@ -155,6 +177,7 @@ public class EnemySkeleton : Entity
     {
         AudioManager.instance.PlaySFXOneShot("ShooterDeath", 1f);
         DropBullets();
+        DropOrgans();
 
         Collider col = GetComponent<Collider>();
         if (col != null)
@@ -197,6 +220,37 @@ public class EnemySkeleton : Entity
                 float dropForce = Random.Range(3f, 6f);
                 bulletRb.AddForce(randomDirection * dropForce, ForceMode.Impulse);
                 bulletRb.AddTorque(Random.insideUnitSphere * 5f, ForceMode.Impulse);
+            }
+        }
+    }
+
+    private void InitializeOrgans()
+    {
+        foreach (var slot in possibleOrgans)
+        {
+            slot.hasOrgan = Random.value <= organSpawnChance;
+        }
+    }
+
+    private void DropOrgans()
+    {
+        foreach (var slot in possibleOrgans)
+        {
+            if (slot.hasOrgan && slot.organPrefab != null)
+            {
+                Vector3 dropPos = transform.position + new Vector3(
+                    Random.Range(-0.3f, 0.3f),
+                    0.5f,
+                    Random.Range(-0.3f, 0.3f));
+
+                GameObject organDrop = Instantiate(slot.organPrefab, dropPos, Quaternion.identity);
+
+                Rigidbody rb = organDrop.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    Vector3 force = new Vector3(Random.Range(-1f, 1f), 1f, Random.Range(-1f, 1f)).normalized * Random.Range(2f, 5f);
+                    rb.AddForce(force, ForceMode.Impulse);
+                }
             }
         }
     }

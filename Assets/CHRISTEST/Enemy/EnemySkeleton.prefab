@@ -145,6 +145,17 @@ MonoBehaviour:
   numberOfBulletsOnDeath: 0
   alertRadius: 15
   animator: {fileID: 3795486845087534868}
+  possibleOrgans:
+  - type: 0
+    hasOrgan: 0
+    organPrefab: {fileID: 4307075381053329207, guid: 5c5cc0f47032e8b448c369e3441b2520, type: 3}
+  - type: 1
+    hasOrgan: 0
+    organPrefab: {fileID: 82724631375391373, guid: 93e9bf72df79aed4ab9f4ff880483f5c, type: 3}
+  - type: 2
+    hasOrgan: 0
+    organPrefab: {fileID: 6583803723332351589, guid: 0b120fbce0e669b44914d0d31e056079, type: 3}
+  organSpawnChance: 0.5
 --- !u!54 &8539793577005014634
 Rigidbody:
   m_ObjectHideFlags: 0

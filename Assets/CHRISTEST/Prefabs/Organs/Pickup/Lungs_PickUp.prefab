@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4538909513079056316}
   - component: {fileID: 5913821813871446607}
   - component: {fileID: 6230557889035485029}
+  - component: {fileID: 4924939162582345264}
   m_Layer: 15
   m_Name: Lungs_PickUp
   m_TagString: Lungs
@@ -28,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.11123657, y: -0.47821772, z: 0.93}
-  m_LocalScale: {x: 0.33989602, y: 0.33989605, z: 0.33989593}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6949188863874064193}
@@ -61,7 +62,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e93e0961c1ec81447a542c3abeaedec6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  organName: Lungs
+  icon: {fileID: 21300000, guid: 946c139d25f912e4ab8adf4f56c408b0, type: 3}
+  description: "Gracias a el aire que recibe permite un impulso \ncuando lo lances
+    este empujara a los enemigos haciendo que se puedan golpear"
+  isEquipped: 0
   type: 2
+--- !u!135 &4924939162582345264
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 82724631375391373}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.98
+  m_Center: {x: -0.0033607674, y: 0, z: 0}
 --- !u!1 &704292471993563113
 GameObject:
   m_ObjectHideFlags: 0

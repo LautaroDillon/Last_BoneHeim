@@ -34,6 +34,9 @@ public class HotbarPlayer : MonoBehaviour
 
     void Update()
     {
+        if(GameManager.instance.isRunning == false)
+            return;
+
         if (Input.inputString != null)
         {
             bool isnumber = int.TryParse(Input.inputString, out int number);
@@ -179,19 +182,20 @@ public class HotbarPlayer : MonoBehaviour
     public void AddToHotbar(ItemType a)
     {
         Debug.Log("Adding to hotbar: " + a);
-        hotbarlist.Add(a);
-
-        //miro si el organo ya existe en el diccionario
-        foreach (var item in dataOrgans)
+        if (!hotbarlist.Contains(a)) // Evita duplicados
         {
-            //si el organo no existe en el diccionario, lo agrego
-            if (item.type == a && !dataOrgansDict.ContainsKey(a))
+            hotbarlist.Add(a);
+
+            foreach (var item in dataOrgans)
             {
-                dataOrgansDict.Add(a, item.objectType);
-                break;
+                if (item.type == a && !dataOrgansDict.ContainsKey(a))
+                {
+                    dataOrgansDict.Add(a, item.objectType);
+                    break;
+                }
             }
         }
-
+        OrganInventoryUI.Instance.RefreshInventory(hotbarlist);
     }
 
     public void RemoveToHotbar(ItemType a)
@@ -206,6 +210,7 @@ public class HotbarPlayer : MonoBehaviour
             else
                 Debug.Log("Item not exists in dictionary: " + item.type);
         }
+        OrganInventoryUI.Instance.RefreshInventory(hotbarlist);
     }
     #endregion
 }

@@ -194,7 +194,7 @@ public class PlayerMelee : MonoBehaviour
         }
 
         CameraShake.Instance.ShakeOnce(2f, 2f, 0.1f, 0.3f);
-        pw.magazineSize = 5;
+       // pw.magazineSize = 5;
         isThrowableAway = true;
         canMelee = false;
     }
@@ -223,8 +223,8 @@ public class PlayerMelee : MonoBehaviour
             AudioManager.instance.PlaySFXOneShot("ArmRecovery", 1f);
 
             Destroy(currentThrowable);
-            pw.magazineSize = 10;
-            pw.currentAmmo += 10;
+           /* pw.magazineSize = 10;
+            pw.currentAmmo += 10;*/
             isThrowableAway = false;
             isRecalling = false;
             canMelee = true;

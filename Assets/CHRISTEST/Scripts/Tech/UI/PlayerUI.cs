@@ -44,7 +44,7 @@ public class PlayerUI : MonoBehaviour
     {
         instance = this;
 
-        UI_canvasInv.SetActive(false);
+       // UI_canvasInv.SetActive(false);
     }
 
     private void Update()
@@ -111,7 +111,8 @@ public class PlayerUI : MonoBehaviour
         if (Input.GetKeyDown(OpenUI) && !IsOpenUI)
         {
             IsOpenUI = true;
-            UI_canvasInv.SetActive(true);
+            //UI_canvasInv.SetActive(true);
+            GameManager.instance.isRunning = false;
 
             Time.timeScale = 0;
 
@@ -121,7 +122,7 @@ public class PlayerUI : MonoBehaviour
         else if (Input.GetKeyDown(OpenUI) && IsOpenUI)
         {
             IsOpenUI = false;
-            UI_canvasInv.SetActive(false);
+            GameManager.instance.isRunning = true;
 
             Time.timeScale = 1;
 

@@ -34,7 +34,7 @@ Transform:
   m_Children:
   - {fileID: 573296230964062681}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 75.077, y: -16.327, z: -25.421}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &7245401714786160346
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -75,7 +75,7 @@ MonoBehaviour:
   damageMask:
     serializedVersion: 2
     m_Bits: 1024
-  explosionVFX: {fileID: 4931581687840247007, guid: 502d3ecc8ef26e249a3e59014f600937, type: 3}
+  explosionVFX: {fileID: 7669652402007492288, guid: 94bc55db3a8a2164589a2848038b63dc, type: 3}
   explosionSFX: {fileID: 8300000, guid: 6ef83a08b3d1363498e5e681219115e1, type: 3}
   wallImpactDamage: 30
 --- !u!54 &-5859647783547982697

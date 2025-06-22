@@ -220,4 +220,8 @@ public struct DataOrgan
 {
     public ItemType type;
     public GameObject objectType;
+    [TextArea]
+    public string description;
+    public string organName;
+    public Sprite icon;
 }

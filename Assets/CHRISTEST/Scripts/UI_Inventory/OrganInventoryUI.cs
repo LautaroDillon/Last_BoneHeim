@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class OrganInventoryUI : MonoBehaviour
@@ -12,6 +13,8 @@ public class OrganInventoryUI : MonoBehaviour
     [Header("Slots")]
     public Transform contentParent;   // Content del ScrollView
     public GameObject slotPrefab;     // Prefab del Slot de órgano
+
+    public TextMeshProUGUI descriptionText;
 
     private void Awake()
     {
@@ -60,5 +63,22 @@ public class OrganInventoryUI : MonoBehaviour
                 slotUI.SetOrgan(organ);
             }
         }
+    }
+
+    public void ShowDescription(ItemType organType)
+    {
+        foreach (var organ in HotbarPlayer.Instance.dataOrgans)
+        {
+            if (organ.type == organType)
+            {
+                descriptionText.text = organ.description;
+                break;
+            }
+        }
+    }
+
+    public void hide()
+    {
+        descriptionText.text = "";
     }
 }

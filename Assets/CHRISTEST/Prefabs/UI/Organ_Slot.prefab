@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 4591095419865059236}
   - component: {fileID: 2859218718962411693}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: organ
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -167,8 +167,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 20
+  m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -331,7 +331,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7074414001594665098}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5288053948376019644}
+        m_TargetAssemblyTypeName: OrganSlotUI, Assembly-CSharp
+        m_MethodName: BTN_show
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &5288053948376019644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -346,3 +358,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   iconImage: {fileID: 2385808848210933241}
   nameText: {fileID: 2859218718962411693}
+  descriptionText: {fileID: 0}

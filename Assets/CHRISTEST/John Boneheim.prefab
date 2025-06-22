@@ -1469,10 +1469,21 @@ MonoBehaviour:
   dataOrgans:
   - type: 0
     objectType: {fileID: 3463554571547775212}
+    description: es la fuenta de la vida no lo vayas a perder
+    organName: Heart
+    icon: {fileID: 21300000, guid: e0a040b94b3b81f4eae49cf1ca192611, type: 3}
   - type: 2
     objectType: {fileID: 8238827812097290380}
+    description: "Gracias a el aire que recibe permite un impulso  \n\ncuando lo
+      lances este empujara a los enemigos haciendo que se puedan golpear"
+    organName: Lungs
+    icon: {fileID: 21300000, guid: 946c139d25f912e4ab8adf4f56c408b0, type: 3}
   - type: 3
     objectType: {fileID: 4658844698649854484}
+    description: "permite hacer un doble salto \n\nsi lo lanzas genera una explocion
+      de veneno "
+    organName: Stomach
+    icon: {fileID: 21300000, guid: b7a992d3f768289448e5f7566ea375af, type: 3}
   throwSpawnPoint: {fileID: 7140590220201480783}
   throwForce: 20
   playerGrenadeThrower: {fileID: 7137483664799531682}

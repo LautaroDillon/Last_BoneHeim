@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8197903010344747399}
   - component: {fileID: -6706057000106860987}
   - component: {fileID: 8539793577005014634}
+  - component: {fileID: 6901469998510991069}
   m_Layer: 10
   m_Name: EnemySkeleton
   m_TagString: Enemy
@@ -138,7 +139,7 @@ MonoBehaviour:
   attackColliderPrefab: {fileID: 3905568982165768539, guid: 69e15114ba16ef640815fbd930c67108, type: 3}
   attackSpawnPoint: {fileID: 3599700935174992012}
   moveSpeed: 6
-  detectionRadius: 10
+  detectionRadius: 20
   attackRange: 2
   updatePathInterval: 0.5
   rotationSpeed: 100
@@ -183,6 +184,21 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 1
+--- !u!114 &6901469998510991069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4264669023414958041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 157d95b113829a04b8ee8b061abb2ac8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 16448
 --- !u!1 &4700241109383468313
 GameObject:
   m_ObjectHideFlags: 0

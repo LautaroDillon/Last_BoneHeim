@@ -19,15 +19,13 @@ public class EventAnim : MonoBehaviour
     public GameObject lungsPosition;
     public GameObject stomachPosition;
 
-
-
     private bool isFollowing = false;
     [Header("Player")]
     public PlayerMovement playerMovement;
     private PlayerDash playerDash;
     private PlayerSlide playerSlide;
     private PlayerWeapon playerWeapon;
-    private ColorRestorer colorRestorer;
+    public ColorRestorer colorRestorer;
 
     private void Awake()
     {

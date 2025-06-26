@@ -29,6 +29,14 @@ public class PlayerMelee : MonoBehaviour
     private float recallDelay = 0.2f;
     private float timeThrown = 0f;
 
+    [Header("Kick Visuals")]
+    public GameObject kickPrefab;
+    public Transform kickSpawnPoint;
+    public float kickReach = 1.5f;
+    public float kickSpeed = 0.15f;
+    public float retractSpeed = 0.2f;
+    public Vector3 kickRotation = new Vector3(-60f, 0f, 0f);
+
     [Header("Knockback")]
     public float knockbackForce = 5f;
 
@@ -130,6 +138,8 @@ public class PlayerMelee : MonoBehaviour
 
     void PerformMeleeAttack()
     {
+        StartCoroutine(PlayKickVisual());
+
         Vector3 origin = transform.position;
         Vector3 direction = transform.forward;
         Vector3 sphereCenter = origin + direction * meleeRange;
@@ -160,6 +170,49 @@ public class PlayerMelee : MonoBehaviour
         }
 
         CameraShake.Instance.ShakeOnce(2f, 2f, 0.1f, 0.3f);
+    }
+
+    IEnumerator PlayKickVisual()
+    {
+        GameObject kick = Instantiate(kickPrefab, kickSpawnPoint.position, kickSpawnPoint.rotation, kickSpawnPoint);
+        kick.transform.localPosition = Vector3.zero;
+        kick.transform.localRotation = Quaternion.identity;
+
+        Vector3 startPos = kick.transform.localPosition;
+        Vector3 endPos = startPos + Vector3.forward * kickReach;
+
+        Quaternion startRot = kick.transform.localRotation;
+        Quaternion endRot = startRot * Quaternion.Euler(kickRotation);
+
+        float timer = 0f;
+
+        // Kick forward
+        while (timer < kickSpeed)
+        {
+            float t = timer / kickSpeed;
+            kick.transform.localPosition = Vector3.Lerp(startPos, endPos, t);
+            kick.transform.localRotation = Quaternion.Lerp(startRot, endRot, t);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        // Ensure it finishes at end position
+        kick.transform.localPosition = endPos;
+        kick.transform.localRotation = endRot;
+
+        timer = 0f;
+
+        // Retract smoothly
+        while (timer < retractSpeed)
+        {
+            float t = timer / retractSpeed;
+            kick.transform.localPosition = Vector3.Lerp(endPos, startPos, t);
+            kick.transform.localRotation = Quaternion.Lerp(endRot, startRot, t);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        Destroy(kick);
     }
 
     void ThrowObject()

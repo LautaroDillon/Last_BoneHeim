@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 2313539856767312061}
   - component: {fileID: 2911452434124150300}
   - component: {fileID: 5335035755420228526}
+  - component: {fileID: 8373725102914012119}
+  - component: {fileID: 1889008695624016882}
   m_Layer: 0
   m_Name: Puerta
   m_TagString: Untagged
@@ -83,3 +85,46 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8373725102914012119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2917288084280285456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e167df1ef4a5d743bdb952bdcc3e7ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  door: {fileID: 2917288084280285456}
+  player: {fileID: 0}
+  enemies:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  prefab: {fileID: 0}
+  forceStrength: 5
+  lootDrop: 0
+--- !u!65 &1889008695624016882
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2917288084280285456}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 52.128918, y: 527.76495, z: 380.71207}
+  m_Center: {x: 0, y: 0, z: 0}

@@ -23,6 +23,9 @@ public class PlayerSlide : MonoBehaviour
     public float slideYScale = 0.5f;
     private float startYScale;
 
+    [Header("Slide Visual")]
+    public GameObject slideVisual;
+
     [Header("Camera Slide")]
     public float slideCamYPos = 0.5f;
     private float startCamYPos;
@@ -40,6 +43,7 @@ public class PlayerSlide : MonoBehaviour
 
         startYScale = cc.height;
         startCamYPos = cameraHolder.localPosition.y;
+        slideVisual.SetActive(false);
     }
 
     private void Update()
@@ -91,7 +95,10 @@ public class PlayerSlide : MonoBehaviour
         slideTimer = maxSlideTime;
 
         AudioManager.instance.PlaySFX("Slide", 1f, false);
-        rb.AddForce(Vector3.down * 5f, ForceMode.Impulse); // stick to ground
+        rb.AddForce(Vector3.down * 5f, ForceMode.Impulse); // Stick to ground
+
+        if (slideVisual != null)
+            slideVisual.SetActive(true);
     }
 
     private void StopSlide()
@@ -101,6 +108,9 @@ public class PlayerSlide : MonoBehaviour
 
         pm.sliding = false;
         AudioManager.instance.StopSFX("Slide");
+
+        if (slideVisual != null)
+            slideVisual.SetActive(false);
     }
 
     private IEnumerator SlideCooldown()

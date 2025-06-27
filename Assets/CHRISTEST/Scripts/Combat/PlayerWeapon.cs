@@ -36,7 +36,6 @@ public class PlayerWeapon : MonoBehaviour
     [Header("References")]
     public Transform firePoint;
     public GameObject bulletPrefab;
-    [SerializeField] private List<GameObject> fingerPrefabs;
     public float bulletSpeed = 20f;
     public TextMeshProUGUI ammoText;
     public GameObject shootParticle;
@@ -99,7 +98,7 @@ public class PlayerWeapon : MonoBehaviour
         if (PauseManager.isPaused)
             return;
 
-       // Reloading();
+        // Reloading();
         Shooting();
         UpdateAmmoUI();
         HandleFireModeSwitching();
@@ -291,48 +290,43 @@ public class PlayerWeapon : MonoBehaviour
     {
         Debug.Log("FireBulletFromAnimation() called");
 
-        int bulletIndex = currentAmmo;
-        if (bulletIndex <= 0 || bulletIndex > bulletDisplay.Count || bulletIndex > fingerPrefabs.Count)
+        if (queuedFirePoint == null)
         {
-            Debug.LogWarning("Invalid bullet index for finger fire.");
+            Debug.LogWarning("No fire point queued when animation event triggered.");
             return;
         }
 
-        // 1. Hide finger on hand
-        GameObject handFinger = bulletDisplay[bulletIndex - 1];
-        handFinger.SetActive(false);
+        Debug.Log("Spawning bullet at: " + queuedFirePoint.name);
 
-        // 2. Get prefab and instantiate it
-        GameObject fingerPrefab = fingerPrefabs[bulletIndex - 1];
-        Transform firePoint = handFinger.transform;
-        GameObject clonedFinger = Instantiate(fingerPrefab, firePoint.position, firePoint.rotation);
+        Transform selectedFirePoint = queuedFirePoint;
+        queuedFirePoint = null; // Clear after use
 
-        // 3. Ensure physics is enabled
-        if (!clonedFinger.TryGetComponent(out Rigidbody rb))
-            rb = clonedFinger.AddComponent<Rigidbody>();
-
-        rb.isKinematic = false;
-        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
-
-        // 4. Aim toward screen center
+        // Get world position of center screen point
         Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 0f);
         Ray ray = Camera.main.ScreenPointToRay(screenCenter);
+
         Vector3 targetPoint = ray.GetPoint(1000f);
         if (Physics.Raycast(ray, out RaycastHit hit))
+        {
             targetPoint = hit.point;
+        }
 
-        Vector3 fireDirection = (targetPoint - firePoint.position).normalized;
+        // Calculate direction from fire point to screen center target point
+        Vector3 directionToCenter = (targetPoint - selectedFirePoint.position).normalized;
 
-        // 5. Fire!
-        rb.velocity = fireDirection * bulletSpeed;
+        Debug.DrawRay(selectedFirePoint.position, directionToCenter * 5f, Color.red, 2f);
 
-        // 6. Set damage (if component exists)
-        if (!clonedFinger.TryGetComponent(out PlayerBullet bulletScript))
-            bulletScript = clonedFinger.AddComponent<PlayerBullet>();
+        GameObject bullet = Instantiate(bulletPrefab, selectedFirePoint.position, Quaternion.LookRotation(directionToCenter));
+        GameObject particle = Instantiate(shootParticle, selectedFirePoint.position, selectedFirePoint.rotation);
+        Destroy(particle, 1.5f);
 
-        bulletScript.damage = damage;
+        if (bullet.TryGetComponent(out PlayerBullet bulletScript))
+            bulletScript.SetDamage(damage);
 
-        Debug.Log("Finger clone fired as projectile.");
+        if (bullet.TryGetComponent(out Rigidbody rb))
+            rb.velocity = directionToCenter * bulletSpeed;
+
+        Debug.Log("Bullet fired from animation event!");
     }
 
     void UpdateAmmoUI()

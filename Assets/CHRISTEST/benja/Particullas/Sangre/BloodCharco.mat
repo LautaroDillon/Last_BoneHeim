@@ -43,11 +43,13 @@ Material:
     m_Floats:
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _ScaleNoise: 40
+    - _ScaleNoise_1: 100
     - _Speed: 0
     m_Colors:
     - _BloodColor: {r: 1, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0.5754717, g: 0, b: 0, a: 0}
-    - _SpecularColor: {r: 238.85646, g: 0, b: 0, a: 0}
+    - _SpecularColor: {r: 0.7490194, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &5361076211046373466
 MonoBehaviour:

@@ -7,17 +7,20 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BloodCharco
-  m_Shader: {fileID: -6465566751694194690, guid: abd04cf4c0739c749986374a9632cb82, type: 3}
+  m_Name: Acido
+  m_Shader: {fileID: -6465566751694194690, guid: 803f5e99d6b69dc4c897574165463b9c, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _ALPHATEST_ON
+  - _SPECULAR_SETUP
   m_InvalidKeywords: []
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 2450
+  stringTagMap:
+    RenderType: TransparentCutout
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
@@ -41,15 +44,33 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AlphaClip: 1
+    - _AlphaToMask: 1
+    - _Blend: 0
+    - _BlendModePreserveSpecular: 1
+    - _CastShadows: 1
+    - _Cull: 0
+    - _DstBlend: 0
+    - _Multiply: 0
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Speed: 0
+    - _ReceiveShadows: 1
+    - _ScaleNoise: 0
+    - _ScaleNoise_1: 13.7
+    - _Speed: 0.1
+    - _SrcBlend: 1
+    - _Strenght: 1
+    - _Surface: 0
+    - _WorkflowMode: 0
+    - _ZTest: 4
+    - _ZWrite: 1
+    - _ZWriteControl: 0
     m_Colors:
-    - _BloodColor: {r: 1, g: 0, b: 0, a: 0}
-    - _EmissionColor: {r: 0.5754717, g: 0, b: 0, a: 0}
-    - _SpecularColor: {r: 238.85646, g: 0, b: 0, a: 0}
+    - _BloodColor: {r: 0.27626714, g: 0.972549, b: 0, a: 0}
+    - _EmissionColor: {r: 0.39403984, g: 0.8113208, b: 0, a: 0}
+    - _SpecularColor: {r: 0.8396226, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &5361076211046373466
+--- !u!114 &4910387703088258901
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
